@@ -1,4 +1,4 @@
-﻿using humanResourceProject.Domain.Entities;
+﻿using humanResourceProject.Domain.Entities.Concrete;
 using humanResourceProject.Infrastructure.EntityTypeConfig;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -17,7 +17,7 @@ namespace humanResourceProject.Infrastructure.Context
         {
 
         }
-        public DbSet<CompanyInformation> CompanyDetails { get; set; }
+        public DbSet<Company> Companies { get; set; }
         public DbSet<AppUser> AppUsers { get; set; }
 
 
