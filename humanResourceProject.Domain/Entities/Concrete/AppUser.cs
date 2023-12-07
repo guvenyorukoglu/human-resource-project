@@ -18,9 +18,6 @@ namespace humanResourceProject.Domain.Entities.Concrete
         public string PhoneNumber { get; set; }
         public string IdentificationNumber { get; set; }
         public BloodGroup BloodGroup { get; set; }
-
-        public string Password { get; set; }
-        public string ConfirmPassword { get; set; }
         public DateTime Birthdate { get; set; }
         public Title Title { get; set; }
         public string Job { get; set; }

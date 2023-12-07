@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace humanResourceProject.Infrastructure.EntityTypeConfig
 {
-    internal class AppUserConfig: BaseEntityConfig<AppUser>
+    public class AppUserConfig: BaseEntityConfig<AppUser>
     {
         public override void Configure(EntityTypeBuilder<AppUser> builder)
         {
@@ -21,8 +21,6 @@ namespace humanResourceProject.Infrastructure.EntityTypeConfig
             builder.Property(u => u.PhoneNumber).IsRequired().HasMaxLength(13);
             builder.Property(u => u.IdentificationNumber).IsRequired().HasMaxLength(11);
             builder.Property(u => u.BloodGroup).IsRequired();
-            builder.Property(u => u.Password).IsRequired().HasMaxLength(15);
-            builder.Property(u => u.ConfirmPassword).IsRequired().HasMaxLength(15);
             builder.Property(u => u.Birthdate).IsRequired();
             builder.Property(u => u.Title).IsRequired();
             builder.Property(u => u.Job).IsRequired().HasMaxLength(50);
