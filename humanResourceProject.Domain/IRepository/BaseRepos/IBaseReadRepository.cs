@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore.Query;
 using System.Linq.Expressions;
 
-namespace humanResourceProject.Domain.IRepository
+namespace humanResourceProject.Domain.IRepository.BaseRepos
 {
     public interface IBaseReadRepository<T> where T : class, IBaseEntity, new()
     {
@@ -12,8 +12,8 @@ namespace humanResourceProject.Domain.IRepository
         Task<List<T>> GetDefaults(Expression<Func<T, bool>> expression);
         Task<List<T>> GetAll();
         Task<TResult> GetFilteredFirstOrDefault<TResult>(
-            Expression<Func<T, TResult>> select, 
-            Expression<Func<T, bool>> where, 
+            Expression<Func<T, TResult>> select,
+            Expression<Func<T, bool>> where,
             Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null,
             Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null);
 
