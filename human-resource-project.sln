@@ -13,7 +13,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "humanResourceProject.Applic
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "humanResourceProject.API", "humanResourceProject.API\humanResourceProject.API.csproj", "{C4C2383A-AF34-4D37-87B2-B9255E80EDE6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "humanResourceProject.DTO", "humanResourceProject.DTO\humanResourceProject.DTO.csproj", "{70D96AFB-154D-4A27-BE9B-1CA077C79D65}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "humanResourceProject.DTO", "humanResourceProject.DTO\humanResourceProject.DTO.csproj", "{70D96AFB-154D-4A27-BE9B-1CA077C79D65}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "humanResourceProject.VM", "humanResourceProject.VM\humanResourceProject.VM.csproj", "{C074FA44-C341-44B4-89E0-E0005896D8EA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +47,10 @@ Global
 		{70D96AFB-154D-4A27-BE9B-1CA077C79D65}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{70D96AFB-154D-4A27-BE9B-1CA077C79D65}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{70D96AFB-154D-4A27-BE9B-1CA077C79D65}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C074FA44-C341-44B4-89E0-E0005896D8EA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C074FA44-C341-44B4-89E0-E0005896D8EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C074FA44-C341-44B4-89E0-E0005896D8EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C074FA44-C341-44B4-89E0-E0005896D8EA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
