@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using humanResourceProject.Domain.Entities.Concrete;
-using humanResourceProject.DTO.DTOs;
-using humanResourceProject.VM.VMs;
+using humanResourceProject.Models.DTOs;
+using humanResourceProject.Models.VMs;
 
 namespace humanResourceProject.Application.AutoMapper
 {

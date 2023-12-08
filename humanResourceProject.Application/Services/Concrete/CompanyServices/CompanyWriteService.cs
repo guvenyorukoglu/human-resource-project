@@ -2,12 +2,7 @@
 using humanResourceProject.Application.Services.Concrete.BaseServices;
 using humanResourceProject.Domain.Entities.Concrete;
 using humanResourceProject.Domain.IRepository.BaseRepos;
-using humanResourceProject.DTO.DTOs;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using humanResourceProject.Models.DTOs;
 
 namespace humanResourceProject.Application.Services.Concrete.CompanyServices
 {
