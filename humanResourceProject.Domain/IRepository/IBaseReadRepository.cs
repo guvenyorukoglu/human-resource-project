@@ -11,6 +11,7 @@ namespace humanResourceProject.Domain.IRepository
         Task<T> GetSingleDefault(Expression<Func<T, bool>> expression);
         Task<List<T>> GetDefaults(Expression<Func<T, bool>> expression);
         Task<List<T>> GetAll();
+        T GetById(Guid id);
         Task<TResult> GetFilteredFirstOrDefault<TResult>(
             Expression<Func<T, TResult>> select, 
             Expression<Func<T, bool>> where, 

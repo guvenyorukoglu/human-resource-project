@@ -18,6 +18,6 @@ namespace humanResourceProject.DTO.DTOs
 
         public string? ReturnUrl { get; set; }
 
-        public Status status { get; set; }
+        public Status Status { get; set; }
     }
 }

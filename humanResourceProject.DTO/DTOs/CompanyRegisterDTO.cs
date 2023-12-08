@@ -1,6 +1,7 @@
 ﻿using humanResourceProject.Domain.Enum;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
@@ -11,23 +12,24 @@ namespace humanResourceProject.DTO.DTOs
 {
     public class CompanyRegisterDTO
     {
-       
+        [Required(ErrorMessage = "Şirket Adı alanı boş geçilemez!")]
+        [DisplayName("Şirket Adı")]
         public string CompanyName { get; set; }
-       
-        public string Password { get; set; }
-
-        public string ConfirmedPassword { get; set; }
-
-        public string Adress { get; set; }
-
-        public string Email { get; set; }
-
-        public DateTime CreateDate { get; set; } = DateTime.Now;
-
-        public Status status => Status.Active;
-
+        [Required(ErrorMessage = "Adres alanı boş geçilemez!")]
+        [DisplayName("Adres")]
+        public string Address { get; set; }
+        [Required(ErrorMessage = "Vergi numarası alanı boş geçilemez!")]
+        [DisplayName("Vergi Numarası")]
         public string TaxNumber { get; set; }
+        [Required(ErrorMessage = "Vergi dairesi alanı boş geçilemez!")]
+        [DisplayName("Vergi Dairesi")]
+        public string TaxOffice { get; set; }
+        [Required(ErrorMessage = "Telefonu alanı boş geçilemez!")]
+        [DisplayName("Telefon")]
+        public string PhoneNumber { get; set; }
 
+        [Required(ErrorMessage = "Personel sayısı alanı boş geçilemez!")]
+        [DisplayName("Personel Sayısı")]
         public int NumberOfEmployees { get; set; }
 
     }
