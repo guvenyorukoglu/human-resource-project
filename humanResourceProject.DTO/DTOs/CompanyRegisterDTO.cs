@@ -9,23 +9,26 @@ using System.Xml.Linq;
 
 namespace humanResourceProject.DTO.DTOs
 {
-    public class RegisterDTO
+    public class CompanyRegisterDTO
     {
-        [Display(Name = "Kullanıcı Adı")]
-        [Required(ErrorMessage = "Kullanıcı adı boş olamaz")]
-        [MaxLength(50)]
-        [MinLength(3, ErrorMessage = "Kullanıcı Adı 3 karakterden az olamaz")]
-        public string UserName { get; set; }
-
-        [Display(Name = "Şifre")]
-        [Required(ErrorMessage = "Şifre alanı boş olamaz")]
-        [DataType(DataType.Password)]
+       
+        public string CompanyName { get; set; }
+       
         public string Password { get; set; }
+
         public string ConfirmedPassword { get; set; }
 
-        public string UserRole { get; set; } = "User";
+        public string Adress { get; set; }
+
         public string Email { get; set; }
+
         public DateTime CreateDate { get; set; } = DateTime.Now;
+
         public Status status => Status.Active;
+
+        public string TaxNumber { get; set; }
+
+        public int NumberOfEmployees { get; set; }
+
     }
 }
