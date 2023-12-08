@@ -2,7 +2,7 @@
 using humanResourceProject.Application.Services.AppUserServices;
 using humanResourceProject.Application.Services.Concrete.BaseServices;
 using humanResourceProject.Domain.Entities.Concrete;
-using humanResourceProject.Domain.IRepository;
+using humanResourceProject.Domain.IRepository.BaseRepos;
 using humanResourceProject.DTO.DTOs;
 using humanResourceProject.Infrastructure.Repositories.AppUserRepos;
 using Microsoft.AspNetCore.Identity;

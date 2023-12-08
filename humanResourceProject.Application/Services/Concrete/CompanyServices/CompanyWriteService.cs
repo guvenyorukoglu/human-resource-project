@@ -1,7 +1,7 @@
 ﻿using humanResourceProject.Application.Services.Abstract;
 using humanResourceProject.Application.Services.Concrete.BaseServices;
 using humanResourceProject.Domain.Entities.Concrete;
-using humanResourceProject.Domain.IRepository;
+using humanResourceProject.Domain.IRepository.BaseRepos;
 using humanResourceProject.DTO.DTOs;
 using System;
 using System.Collections.Generic;

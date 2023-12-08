@@ -1,5 +1,5 @@
 ﻿using humanResourceProject.Domain.Entities.Abstract;
-using humanResourceProject.Domain.IRepository;
+using humanResourceProject.Domain.IRepository.BaseRepos;
 using humanResourceProject.Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
 
