@@ -1,6 +1,6 @@
 ﻿using humanResourceProject.Domain.Entities.Abstract;
 
-namespace humanResourceProject.Domain.IRepository
+namespace humanResourceProject.Domain.IRepository.BaseRepos
 {
     public interface IBaseWriteRepository<T> where T : class, IBaseEntity, new()
     {
