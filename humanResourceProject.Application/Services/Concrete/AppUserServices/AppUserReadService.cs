@@ -1,20 +1,10 @@
-﻿using humanResourceProject.Application.Services.Abstract;
-using humanResourceProject.Application.Services.Abstract.IAppUserServices;
+﻿using humanResourceProject.Application.Services.Abstract.IAppUserServices;
 using humanResourceProject.Application.Services.Concrete.BaseServices;
 using humanResourceProject.Domain.Entities.Concrete;
 using humanResourceProject.Domain.IRepository.BaseRepos;
-using humanResourceProject.DTO.DTOs;
-using humanResourceProject.DTO.VMs;
-using humanResourceProject.Infrastructure.Repositories.AppUserRepos;
+using humanResourceProject.Models.DTOs;
+using humanResourceProject.Models.VMs;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Query;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace humanResourceProject.Application.Services.Concrete.AppUserServices
 {

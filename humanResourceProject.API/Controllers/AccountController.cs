@@ -1,5 +1,5 @@
 ﻿using humanResourceProject.Application.Services.Abstract.IAppUserServices;
-using humanResourceProject.DTO.DTOs;
+using humanResourceProject.Models.DTOs;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;

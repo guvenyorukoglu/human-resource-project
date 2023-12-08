@@ -2,14 +2,8 @@
 using humanResourceProject.Application.Services.Concrete.BaseServices;
 using humanResourceProject.Domain.Entities.Concrete;
 using humanResourceProject.Domain.IRepository.BaseRepos;
-using humanResourceProject.DTO.DTOs;
-using humanResourceProject.Infrastructure.Repositories.AppUserRepos;
+using humanResourceProject.Models.DTOs;
 using Microsoft.AspNetCore.Identity;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace humanResourceProject.Application.Services.Concrete.AppUserServices
 {
