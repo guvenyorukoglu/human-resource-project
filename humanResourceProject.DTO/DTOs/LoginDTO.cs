@@ -10,7 +10,5 @@ namespace humanResourceProject.DTO.DTOs
         public string Password { get; set; }
 
         public string? ReturnUrl { get; set; }
-
-        public Status Status { get; set; }
     }
 }
