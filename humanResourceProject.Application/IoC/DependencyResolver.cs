@@ -1,6 +1,10 @@
 ﻿using Autofac;
 using AutoMapper;
 using humanResourceProject.Application.AutoMapper;
+using humanResourceProject.Domain.IRepository.AppUserRepo;
+using humanResourceProject.Domain.IRepository.CompanyRepo;
+using humanResourceProject.Infrastructure.Repositories.AppUserRepos;
+using humanResourceProject.Infrastructure.Repositories.CompanyRepos;
 
 namespace humanResourceProject.Application.IoC
 {
@@ -15,10 +19,11 @@ namespace humanResourceProject.Application.IoC
 
 
             //Repositories Absrtact to Concrete
-
-            //builder.RegisterType<PostRepository>().As<IPostRepository>().InstancePerLifetimeScope();
-            //builder.RegisterType<GenreRepository>().As<IGenreRepository>().InstancePerLifetimeScope();
-            //builder.RegisterType<AuthorRepository>().As<IAuthorRepository>().InstancePerLifetimeScope();
+            builder.RegisterType<AppUserReadRepository>().As<IAppUserReadRepository>().InstancePerLifetimeScope();
+            builder.RegisterType<AppUserWriteRepository>().As<IAppUserWriteRepository>().InstancePerLifetimeScope();
+            builder.RegisterType<CompanyReadRepository>().As<ICompanyReadRepository>().InstancePerLifetimeScope();
+            builder.RegisterType<CompanyWriteRepository>().As<ICompanyWriteRepository>().InstancePerLifetimeScope();
+            builder.RegisterType<Mapper>().As<IMapper>().InstancePerLifetimeScope();
 
             #region AutoMapper //Copy-Paste
             builder.Register(context => new MapperConfiguration(cfg =>
