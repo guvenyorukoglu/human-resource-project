@@ -1,4 +1,4 @@
-﻿using humanResourceProject.Application.Services.Abstract;
+﻿using humanResourceProject.Application.Services.Abstract.IBaseServices;
 using humanResourceProject.Domain.Entities.Abstract;
 using humanResourceProject.Domain.IRepository.BaseRepos;
 using Microsoft.EntityFrameworkCore.Query;

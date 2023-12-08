@@ -7,11 +7,11 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace humanResourceProject.Application.Services.Abstract
+namespace humanResourceProject.Application.Services.Abstract.IBaseServices
 {
     public interface IBaseReadService<T> where T : class, IBaseEntity, new()
     {
- 
+
 
         /// <summary>
         /// Determines whether a sequence contains any elements.
