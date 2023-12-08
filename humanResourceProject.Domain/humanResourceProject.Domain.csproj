@@ -11,4 +11,9 @@
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.25" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="IRepository\AppUserRepo\" />
+    <Folder Include="IRepository\CompanyRepo\" />
+  </ItemGroup>
+
 </Project>

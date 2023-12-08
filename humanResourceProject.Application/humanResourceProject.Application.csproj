@@ -7,11 +7,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.25" />
+
     <PackageReference Include="Autofac" Version="7.1.0" />
     <PackageReference Include="AutoMapper" Version="12.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
     <PackageReference Include="Microsoft.Extensions.Identity.Core" Version="6.0.25" />
     <PackageReference Include="SixLabors.ImageSharp" Version="3.1.0" />
+
   </ItemGroup>
 
   <ItemGroup>
@@ -19,6 +22,7 @@
     <ProjectReference Include="..\humanResourceProject.DTO\humanResourceProject.DTO.csproj" />
     <ProjectReference Include="..\humanResourceProject.Infrastructure\humanResourceProject.Infrastructure.csproj" />
     <ProjectReference Include="..\humanResourceProject.VM\humanResourceProject.VM.csproj" />
+
   </ItemGroup>
 
 </Project>
