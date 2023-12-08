@@ -1,11 +1,4 @@
 ﻿using humanResourceProject.Domain.Enum;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Linq;
 
 namespace humanResourceProject.DTO.DTOs
 {
@@ -18,6 +11,6 @@ namespace humanResourceProject.DTO.DTOs
 
         public string? ReturnUrl { get; set; }
 
-        public Status status { get; set; }
+        public Status Status { get; set; }
     }
 }
