@@ -23,9 +23,10 @@ namespace humanResourceProject.Infrastructure.Context
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            builder.ApplyConfiguration(new AppUserConfig());
-
             base.OnModelCreating(builder);
+            builder.ApplyConfiguration(new AppUserConfig())
+                   .ApplyConfiguration(new CompanyConfig());
+
         }
     }
 }

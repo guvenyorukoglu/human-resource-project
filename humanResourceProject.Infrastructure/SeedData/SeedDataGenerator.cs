@@ -22,24 +22,25 @@ namespace humanResourceProject.Infrastructure.SeedData
                 AppDbContext context = serviceScope.ServiceProvider.GetService<AppDbContext>();
 
                 context.Database.Migrate();
-
                 await CreateRolesAsync(serviceScope);
-                await CreateSiteManagerAsync(serviceScope);
+
 
                 if (!await context.Companies.AnyAsync())
                 {
                     CreateFakeCompanies(maxCompanyCount);
-                    context.Companies.AddRangeAsync(companies);
+                    await context.Companies.AddRangeAsync(companies);
                 }
 
                 if (!await context.AppUsers.AnyAsync())
                 {
                     CreateFakeEmployeesAsync();
-                    context.AppUsers.AddRangeAsync(appUsers);
+                    await context.AppUsers.AddRangeAsync(appUsers);
                 }
-                context.SaveChangesAsync();
+                await context.SaveChangesAsync();
 
+                await CreateCompanyManagerAsync(serviceScope);
 
+                await CreateSiteManagerAsync(serviceScope);
 
                 void CreateFakeCompanies(int maxCompanyCount)
                 {
@@ -52,21 +53,21 @@ namespace humanResourceProject.Infrastructure.SeedData
                             .RuleFor(c => c.TaxNumber, f => f.Random.ULong(1000000000, 9999999999).ToString())
                             .RuleFor(c => c.TaxOffice, f => f.Address.City())
                             .RuleFor(c => c.Address, f => f.Address.FullAddress())
-                            .RuleFor(c => c.PhoneNumber, f => f.Phone.PhoneNumber())
+                            .RuleFor(c => c.PhoneNumber, f => f.Phone.PhoneNumber("+90##########"))
                             .RuleFor(c => c.CreateDate, f => f.Date.Past(1))
                             .RuleFor(c => c.Status, f => f.Random.Bool(0.9f) ? Status.Active : (f.Random.Bool(0.5f) ? Status.Modified : Status.Inactive));
 
                         companies.Add(companyFake.Generate());
-                        foreach (var company in companies)
+                    }
+                    foreach (var company in companies)
+                    {
+                        if (company.Status == Status.Inactive)
                         {
-                            if (company.Status == Status.Inactive)
-                            {
-                                company.DeleteDate = GetRandomDayAfterCreateDate(company.CreateDate);
-                            }
-                            if (company.Status == Status.Modified)
-                            {
-                                company.UpdateDate = GetRandomDayAfterCreateDate(company.CreateDate); ;
-                            }
+                            company.DeleteDate = GetRandomDayAfterCreateDate(company.CreateDate);
+                        }
+                        if (company.Status == Status.Modified)
+                        {
+                            company.UpdateDate = GetRandomDayAfterCreateDate(company.CreateDate); ;
                         }
                     }
                 }
@@ -84,7 +85,7 @@ namespace humanResourceProject.Infrastructure.SeedData
                             .RuleFor(e => e.MiddleName, f => f.Random.Bool(0.2f) ? f.Name.FirstName() : null)
                             .RuleFor(e => e.Email, f => f.Person.Email)
                             .RuleFor(e => e.Address, f => f.Address.FullAddress())
-                            .RuleFor(e => e.PhoneNumber, f => f.Phone.PhoneNumber())
+                            .RuleFor(e => e.PhoneNumber, f => f.Phone.PhoneNumber("+90##########"))
                             .RuleFor(e => e.IdentificationNumber, f => f.Random.ULong(10000000000, 99999999999).ToString())
                             .RuleFor(e => e.BloodGroup, f => f.PickRandom<BloodGroup>())
                             .RuleFor(e => e.Birthdate, f => f.Date.Past(50))
@@ -96,9 +97,6 @@ namespace humanResourceProject.Infrastructure.SeedData
 
                             appUsers.Add(employeeFake.Generate());
                         }
-
-                        var employee = appUsers.Where(x => x.CompanyId == company.Id).First();
-                        await CreateCompanyManager(serviceScope, employee);
 
                     }
                     foreach (var appUser in appUsers)
@@ -117,15 +115,22 @@ namespace humanResourceProject.Infrastructure.SeedData
             }
         }
 
-        private static async Task CreateCompanyManager(IServiceScope? serviceScope, AppUser employee)
+        private static async Task CreateCompanyManagerAsync(IServiceScope? serviceScope)
         {
-            var userManager = serviceScope.ServiceProvider.GetRequiredService<UserManager<AppUser>>();
-            string password = "Cm123+";
+            foreach (var company in companies)
+            {
+                var employee = appUsers.Where(x => x.CompanyId == company.Id).First();
+                if (employee != null)
+                {
+                    var userManager = serviceScope.ServiceProvider.GetRequiredService<UserManager<AppUser>>();
+                    string password = "Cm123+";
 
-            employee.Status = Status.Active;
+                    employee.Status = Status.Active;
 
-            await userManager.CreateAsync(employee, password);
-            await userManager.AddToRoleAsync(employee, "CompanyManager");
+                    await userManager.CreateAsync(employee, password);
+                    await userManager.AddToRoleAsync(employee, "CompanyManager");
+                }
+            }
         }
 
         private static DateTime GetRandomDayAfterCreateDate(DateTime createdDate)
@@ -138,18 +143,43 @@ namespace humanResourceProject.Infrastructure.SeedData
         private static async Task CreateSiteManagerAsync(IServiceScope serviceScope)
         {
             var userManager = serviceScope.ServiceProvider.GetRequiredService<UserManager<AppUser>>();
-            string email = "sitemanager@hra.com";
+            var _context = serviceScope.ServiceProvider.GetRequiredService<AppDbContext>();
+            string email = "sitemanager@monitorease.com";
             string password = "Sm123+";
 
             if (await userManager.FindByEmailAsync(email) == null)
             {
+                Company company = new Company()
+                {
+                    Id = Guid.NewGuid(),
+                    CompanyName = "MonitorEase",
+                    NumberOfEmployees = 1,
+                    TaxNumber = "1234567890",
+                    TaxOffice = "İstanbul",
+                    Address = "İstanbul",
+                    PhoneNumber = "+901234567890",
+                    CreateDate = DateTime.Now,
+                    Status = Status.Active
+                };
+                await _context.Companies.AddAsync(company);
+                await _context.SaveChangesAsync();
+
                 AppUser siteManager = new AppUser()
                 {
                     FirstName = "SiteManager",
                     LastName = "SiteManager",
+                    IdentificationNumber = "12345678901",
+                    BloodGroup = BloodGroup.OPositive,
+                    Birthdate = DateTime.Now,
+                    Title = Title.Mr,
+                    Job = "SiteManager",
+                    Address = "İstanbul",
+                    PhoneNumber = "901234567890",
+                    CreateDate = DateTime.Now,
                     Status = Status.Active,
                     UserName = "SiteManager",
-                    Email = email
+                    Email = email,
+                    CompanyId = company.Id
                 };
 
                 await userManager.CreateAsync(siteManager, password);
