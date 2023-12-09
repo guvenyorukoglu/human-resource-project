@@ -14,8 +14,11 @@ namespace humanResourceProject.Application.Services.Concrete.CompanyServices
 {
     public class CompanyReadService : BaseReadService<Company>, ICompanyReadService
     {
+
         public CompanyReadService(IBaseReadRepository<Company> readRepository) : base(readRepository)
         {
         }
+
+
     }
 }

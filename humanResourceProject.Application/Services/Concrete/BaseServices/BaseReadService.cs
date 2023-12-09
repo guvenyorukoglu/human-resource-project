@@ -21,7 +21,7 @@ namespace humanResourceProject.Application.Services.Concrete.BaseServices
         }
 
 
-        public Task<bool> Any(Expression<Func<T, bool>> expression)
+        public virtual Task<bool> Any(Expression<Func<T, bool>> expression)
         {
             return _readRepository.Any(expression);
         }
