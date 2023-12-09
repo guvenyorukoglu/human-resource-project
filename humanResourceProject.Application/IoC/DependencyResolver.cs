@@ -1,6 +1,10 @@
 ﻿using Autofac;
 using AutoMapper;
 using humanResourceProject.Application.AutoMapper;
+using humanResourceProject.Application.Services.Abstract.IAppUserServices;
+using humanResourceProject.Application.Services.Abstract.ICompanyServices;
+using humanResourceProject.Application.Services.Concrete.AppUserServices;
+using humanResourceProject.Application.Services.Concrete.CompanyServices;
 using humanResourceProject.Domain.IRepository.AppUserRepo;
 using humanResourceProject.Domain.IRepository.CompanyRepo;
 using humanResourceProject.Infrastructure.Repositories.AppUserRepos;
@@ -13,10 +17,10 @@ namespace humanResourceProject.Application.IoC
         protected override void Load(ContainerBuilder builder)
         {
             //Services Absrtact to Concrete
-
-            //builder.RegisterType<PostServices>().As<IPostService>().InstancePerLifetimeScope();
-            //builder.RegisterType<GenreService>().As<IGenreService>().InstancePerLifetimeScope();
-
+            builder.RegisterType<AppUserReadService>().As<IAppUserReadService>().InstancePerLifetimeScope();
+            builder.RegisterType<AppUserWriteService>().As<IAppUserWriteService>().InstancePerLifetimeScope();
+            builder.RegisterType<CompanyReadService>().As<ICompanyReadService>().InstancePerLifetimeScope();
+            builder.RegisterType<CompanyWriteService>().As<ICompanyWriteService>().InstancePerLifetimeScope();
 
             //Repositories Absrtact to Concrete
             builder.RegisterType<AppUserReadRepository>().As<IAppUserReadRepository>().InstancePerLifetimeScope();
