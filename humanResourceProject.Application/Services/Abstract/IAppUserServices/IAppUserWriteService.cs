@@ -8,6 +8,8 @@ namespace humanResourceProject.Application.Services.Abstract.IAppUserServices
     public interface IAppUserWriteService : IBaseWriteService<AppUser>
     {
         Task<IdentityResult> Register(UserRegisterDTO model);
+        Task<bool> Create(UserRegisterDTO model);
+        Task Update(UpdateUserDTO model);
 
     }
 }
