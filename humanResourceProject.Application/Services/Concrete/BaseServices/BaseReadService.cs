@@ -2,6 +2,7 @@
 using humanResourceProject.Domain.Entities.Abstract;
 using humanResourceProject.Domain.IRepository.BaseRepos;
 using Microsoft.EntityFrameworkCore.Query;
+using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,7 +21,7 @@ namespace humanResourceProject.Application.Services.Concrete.BaseServices
         }
 
 
-        public Task<bool> Any(Expression<Func<T, bool>> expression)
+        public virtual Task<bool> Any(Expression<Func<T, bool>> expression)
         {
             return _readRepository.Any(expression);
         }
@@ -28,6 +29,11 @@ namespace humanResourceProject.Application.Services.Concrete.BaseServices
         public Task<List<T>> GetAll()
         {
             return _readRepository.GetAll();
+        }
+
+        public T GetById(Guid id)
+        {
+            return _readRepository.GetById(id);
         }
 
         public Task<T> GetDefault(Expression<Func<T, bool>> expression)

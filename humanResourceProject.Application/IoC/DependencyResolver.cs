@@ -1,4 +1,4 @@
-﻿using Autofac;
+using Autofac;
 using AutoMapper;
 using humanResourceProject.Application.AutoMapper;
 using humanResourceProject.Application.Services.Abstract.IAppUserServices;
@@ -6,8 +6,10 @@ using humanResourceProject.Application.Services.Abstract.ICompanyServices;
 using humanResourceProject.Application.Services.Concrete.AppUserServices;
 using humanResourceProject.Application.Services.Concrete.CompanyServices;
 using humanResourceProject.Domain.IRepository.AppUserRepo;
+using humanResourceProject.Domain.IRepository.BaseRepos;
 using humanResourceProject.Domain.IRepository.CompanyRepo;
 using humanResourceProject.Infrastructure.Repositories.AppUserRepos;
+using humanResourceProject.Infrastructure.Repositories.BaseRepos;
 using humanResourceProject.Infrastructure.Repositories.CompanyRepos;
 
 namespace humanResourceProject.Application.IoC
@@ -23,13 +25,14 @@ namespace humanResourceProject.Application.IoC
             builder.RegisterType<CompanyWriteService>().As<ICompanyWriteService>().InstancePerLifetimeScope();
 
             //Repositories Absrtact to Concrete
-            builder.RegisterType<AppUserReadRepository>().As<IAppUserReadRepository>().InstancePerLifetimeScope();
-            builder.RegisterType<AppUserWriteRepository>().As<IAppUserWriteRepository>().InstancePerLifetimeScope();
-            builder.RegisterType<CompanyReadRepository>().As<ICompanyReadRepository>().InstancePerLifetimeScope();
-            builder.RegisterType<CompanyWriteRepository>().As<ICompanyWriteRepository>().InstancePerLifetimeScope();
+            builder.RegisterType<AppUserReadRepository>().As<IBaseReadRepository<AppUser>>().InstancePerLifetimeScope();
+            builder.RegisterType<AppUserWriteRepository>().As<IBaseWriteRepository<AppUser>>().InstancePerLifetimeScope();
+            builder.RegisterType<CompanyReadRepository>().As<IBaseReadRepository<Company>>().InstancePerLifetimeScope();
+            builder.RegisterType<CompanyWriteRepository>().As<IBaseWriteRepository<Company>>().InstancePerLifetimeScope();
+
+            //Mapper
             builder.RegisterType<Mapper>().As<IMapper>().InstancePerLifetimeScope();
 
-            #region AutoMapper //Copy-Paste
             builder.Register(context => new MapperConfiguration(cfg =>
             {
                 //Register Mapper Profile
@@ -46,7 +49,7 @@ namespace humanResourceProject.Application.IoC
             })
             .As<IMapper>()
             .InstancePerLifetimeScope();
-            #endregion
+
 
             base.Load(builder);
         }

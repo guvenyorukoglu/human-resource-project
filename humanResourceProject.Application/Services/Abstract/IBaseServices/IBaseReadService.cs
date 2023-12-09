@@ -21,6 +21,9 @@ namespace humanResourceProject.Application.Services.Abstract.IBaseServices
         Task<bool> Any(Expression<Func<T, bool>> expression);
 
 
+        T GetById(Guid id);
+
+
         /// <summary>
         /// Gets all entities.
         /// </summary>
