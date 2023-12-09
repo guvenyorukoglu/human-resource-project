@@ -1,11 +1,10 @@
-﻿using Autofac;
+using Autofac;
 using AutoMapper;
 using humanResourceProject.Application.AutoMapper;
 using humanResourceProject.Application.Services.Abstract.IAppUserServices;
 using humanResourceProject.Application.Services.Abstract.ICompanyServices;
 using humanResourceProject.Application.Services.Concrete.AppUserServices;
 using humanResourceProject.Application.Services.Concrete.CompanyServices;
-using humanResourceProject.Domain.Entities.Concrete;
 using humanResourceProject.Domain.IRepository.AppUserRepo;
 using humanResourceProject.Domain.IRepository.BaseRepos;
 using humanResourceProject.Domain.IRepository.CompanyRepo;
