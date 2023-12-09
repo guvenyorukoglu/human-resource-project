@@ -1,4 +1,5 @@
 ﻿using humanResourceProject.Application.Services.Abstract.IAppUserServices;
+using humanResourceProject.Models.DTOs;
 using Microsoft.AspNetCore.Mvc;
 
 namespace humanResourceProject.API.Controllers
@@ -37,9 +38,9 @@ namespace humanResourceProject.API.Controllers
 
 
         [HttpPut]
-        public async Task<IActionResult> UpdateEmployee([FromBody] UpdatePersonelDTO updatedPersonel)
+        public async Task<IActionResult> UpdateEmployee([FromBody] UpdateUserDTO updatedPersonel)
         {
-            await _appUserWriteService.UpdateEmployee(updatedPersonel);
+            await _appUserWriteService.Update(updatedPersonel);
             return Ok("Güncellenmiştir.");
         }
 

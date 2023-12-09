@@ -1,4 +1,5 @@
 ﻿using humanResourceProject.Application.Services.Abstract.ICompanyServices;
+using humanResourceProject.Models.DTOs;
 using Microsoft.AspNetCore.Mvc;
 
 namespace humanResourceProject.API.Controllers
@@ -29,16 +30,16 @@ namespace humanResourceProject.API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateCompany([FromBody] CreateCompanyDTO newCompany)
+        public async Task<IActionResult> CreateCompany([FromBody] CompanyRegisterDTO newCompany)
         {
-            await _companyWriteService.CreateCompany(newCompany);
+            await _companyWriteService.Create(newCompany);
             return Ok("Şirket oluşturuldu.");
         }
 
         [HttpPut]
         public async Task<IActionResult> UpdateCompany([FromBody] UpdateCompanyDTO updatedCompany)
         {
-            await _companyWriteService.UpdateCompany(updatedCompany);
+            await _companyWriteService.Update(updatedCompany);
             return Ok("Güncellenmiştir.");
         }
 
