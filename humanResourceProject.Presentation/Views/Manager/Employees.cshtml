@@ -1,0 +1,168 @@
+﻿@{
+    ViewData["Title"] = "Employees";
+    Layout = "~/Views/Shared/_HRLayout.cshtml";
+}
+@Model
+
+
+<head>
+
+</head>
+
+
+
+<body>
+    <div class="row">
+     
+       @Html.Partial("_PanelPartial");
+  
+
+        <div class="aside container mt-5 col-md-9 col-sm-9">
+            <div class="search-bar" style="display: flex">
+                <input type="text" id="searchInput" placeholder="Arama Yap" /><i class="fas fa-search mt-2"></i>
+            </div>
+            <hr />
+            @if (Model != null)
+            {
+                <a asp-action="Manager" asp-controller="Admin">
+                    <button class="custom-button">Personel Ekle</button>
+                </a>
+            }
+
+            <div class="pagintaion-container">
+                <table id="employee-table"
+                       class="table table-striped table-bordered w-100">
+                    <thead>
+                        <tr>
+                            <th style="width: 15%">Ad</th>
+                            <th style="width: 15%">Soyad</th>
+                            <th style="width: 20%">Telefon</th>
+                            <th style="width: 20%">E-posta</th>
+                            <th style="width: 10%">Ünvan</th>
+                            <th style="width: 10%">Meslek</th>
+                            <th style="width: 10%"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model != null)
+                        {
+                            foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>@item.FirstName</td>
+                                    <td>@item.LastName</td>
+                                    <td>@item.Phone</td>
+                                    <td>@item.E-mail</td>
+                                    <td>@item.Title</td>
+                                    <td>@item.Job</td>
+                                    <td>
+                                        <a asp-action="EditEmployee"
+                                           asp-controller="Admin"
+                                           asp-route-id="@item.Id">
+                                            <button class="btn btn-secondary btn-sm d-inline-flex bg-primary">
+                                                <i class="fa fa-pen"></i>
+                                            </button>
+                                        </a>
+
+                                        <a asp-action="DeleteEmployee"
+                                           asp-controller="Admin"
+                                           asp-route-id="@item.Id">
+                                            <button class="btn btn-danger btn-sm d-inline-flex">
+                                                <i class="fa fa-trash"></i>
+                                            </button>
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+                <div class="pagination"></div>
+
+                <script>
+                    window.onload = function () {
+                        var itemsPerPage = 10;
+                        var currentPage = 1;
+
+                        var container = document.querySelector('.table');
+                        var pagination = document.querySelector('.pagination');
+
+                        var employee = Array.from(container.querySelectorAll('tr'));
+                        employee.forEach(function (item) {
+                            item.style.width = "420px";
+                        });
+
+                        function renderPage(page) {
+                            var start = (page - 1) * itemsPerPage;
+                            var end = start + itemsPerPage;
+
+                            container.innerHTML = '';
+
+
+                            for (var i = start; i < Math.min(end, employee.length); i++) {
+                                container.appendChild(employee[i]);
+                            }
+                        }
+
+                        function renderPagination() {
+                            var pageCount = Math.ceil(employee.length / itemsPerPage);
+                            var arrowleft = document.createElement('a');
+                            arrowleft.href = '#';
+                            arrowleft.innerText = '<';
+                            arrowleft.addEventListener('click', function (e) {
+                                e.preventDefault();
+                                currentPage--;
+                                if (currentPage < 1) {
+                                    currentPage = 1;
+                                }
+                                renderPage(currentPage);
+                                renderPagination();
+                            });
+
+                            var arrowright = document.createElement('a');
+                            arrowright.href = '#';
+                            arrowright.innerText = '>';
+                            arrowright.addEventListener('click', function (e) {
+                                e.preventDefault();
+                                if (currentPage < pageCount) {
+                                    currentPage++;
+                                }
+                                renderPage(currentPage);
+                                renderPagination();
+                            });
+
+                            pagination.innerHTML = '';
+                            pagination.appendChild(arrowleft);
+
+                            for (var i = 1; i <= pageCount; i++) {
+                                var link = document.createElement('a');
+                                link.href = '#';
+                                link.innerText = i;
+                                link.addEventListener('click', function (e) {
+                                    e.preventDefault();
+                                    currentPage = parseInt(this.innerText);
+                                    renderPage(currentPage);
+                                    renderPagination();
+                                });
+                                if (i === currentPage) {
+                                    link.style.color = '#006836';
+                                }
+                                pagination.appendChild(link);
+                            }
+
+                            pagination.appendChild(arrowright);
+                        }
+
+                        renderPage(currentPage);
+                        renderPagination();
+                    };
+                </script>
+
+            </div>
+
+
+
+
+        </div>
+    </div>
+</body>
