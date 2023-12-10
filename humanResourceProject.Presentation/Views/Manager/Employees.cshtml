@@ -1,8 +1,9 @@
-﻿@{
+﻿@using humanResourceProject.Models.VMs;
+@{
     ViewData["Title"] = "Employees";
     Layout = "~/Views/Shared/_HRLayout.cshtml";
 }
-@Model
+@model List<PersonelVM>
 
 
 <head>
@@ -14,7 +15,7 @@
 <body>
     <div class="row">
      
-       @Html.Partial("_PanelPartial");
+       @Html.Partial("_PanelPartial")
   
 
         <div class="aside container mt-5 col-md-9 col-sm-9">
@@ -51,8 +52,8 @@
                                 <tr>
                                     <td>@item.FirstName</td>
                                     <td>@item.LastName</td>
-                                    <td>@item.Phone</td>
-                                    <td>@item.E-mail</td>
+                                    <td>@item.PhoneNumber</td>
+                                    <td>@item.Email</td>
                                     <td>@item.Title</td>
                                     <td>@item.Job</td>
                                     <td>
