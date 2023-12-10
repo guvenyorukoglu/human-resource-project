@@ -1,34 +1,29 @@
-﻿using humanResourceProject.Application.Services.Abstract.IAppUserServices;
-using humanResourceProject.Application.Services.Abstract.IBaseServices;
-using humanResourceProject.Application.Services.BaseServices;
-using humanResourceProject.Domain.Entities.Concrete;
+﻿using humanResourceProject.Domain.Entities.Concrete;
 using humanResourceProject.Models.DTOs;
+using humanResourceProject.Models.VMs;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
+using System.Text;
+using System.Text.Json;
 
 namespace humanResourceProject.Presentation.Controllers
 {
     public class AccountController : Controller
     {
-        private readonly UserManager<AppUser> _userManager;
-        private readonly IPasswordHasher<AppUser> _passwordHasher;
-        private readonly IBaseWriteService<AppUser> _appUserWriteService;
-        private readonly IBaseReadService<AppUser> _appUserReadService;
-        private readonly IAppUserWriteService _userWriteService;
-        private readonly IAppUserReadService _userReadService;
 
-        public AccountController(UserManager<AppUser> userManager, IPasswordHasher<AppUser> passwordHasher, IBaseWriteService<AppUser> appUserWriteService, IAppUserWriteService userWriteService, IAppUserReadService userReadService, IBaseReadService<AppUser> appUserReadService)
+        private readonly HttpClient _httpClient;
+        private readonly IConfiguration _configuration;
+
+        public AccountController(IConfiguration configuration)
         {
-            _userManager = userManager;
-            _passwordHasher = passwordHasher;
-            _appUserWriteService = appUserWriteService;
-            _userWriteService = userWriteService;
-            _userReadService = userReadService;
-            _appUserReadService = appUserReadService;
+            _configuration = configuration;
+            _httpClient = new HttpClient();
+            _httpClient.BaseAddress = new Uri("https://localhost:7255/");
+
         }
 
         [AllowAnonymous]
@@ -41,23 +36,29 @@ namespace humanResourceProject.Presentation.Controllers
         [HttpPost]
         public async Task<IActionResult> Register(UserRegisterDTO model) // VM kullanılabilir
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                IdentityResult identityResult = await _userWriteService.Register(model);
-
-                if (identityResult.Succeeded)
-                {
-                    return RedirectToAction("Login");
-                }
-                else
-                {
-                    foreach (IdentityError error in identityResult.Errors)
-                    {
-                        ModelState.AddModelError("", error.Description);
-                    }
-                }
+                return View(model); // Model valid değil ise validation errorları ile birlikte register sayfasına geri döner
             }
-            return View(model);
+
+            // Serialize the model to JSON
+            var json = JsonSerializer.Serialize(model);
+
+            // Create a StringContent from the serialized JSON
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            // Send a POST request to the API endpoint to create the resource
+            HttpResponseMessage response = await _httpClient.PostAsync("/api/Account/Register", content);
+
+            if (response.IsSuccessStatusCode)
+            {
+                return RedirectToAction("Login");
+            }
+            else
+            {
+                ModelState.AddModelError(string.Empty, "Failed to create the resource. Please try again.");
+                return View(model);
+            }
         }
 
         [AllowAnonymous]
@@ -71,36 +72,48 @@ namespace humanResourceProject.Presentation.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(LoginDTO model)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                var result = await _userReadService.Login(model);
-                if (result.Succeeded)
-                {
-
-                    AppUser appUser = await _appUserReadService.GetSingleDefault(x => x.Email == model.Email);
-
-                    List<Claim> claims = new List<Claim>();
-                    claims.Add(new Claim(ClaimTypes.NameIdentifier, appUser.Id.ToString()));
-                    claims.Add(new Claim(ClaimTypes.Email, appUser.Email));
-
-                    ClaimsIdentity identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-                    ClaimsPrincipal principal = new ClaimsPrincipal(identity);
-
-                    await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
-
-                    return Redirect(model.ReturnUrl ?? "/");
-                }
-                else
-                    ModelState.AddModelError("", "Email or password is wrong!");
+                return View(model);
             }
 
-            return View(model);
+            var json = JsonSerializer.Serialize(model);
+
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            HttpResponseMessage response = await _httpClient.PostAsync("/api/account/login", content);
+
+            if (response.IsSuccessStatusCode)
+            {
+                List<Claim> claims = new List<Claim>();
+                claims.Add(new Claim(ClaimTypes.Email, model.Email));
+
+                ClaimsIdentity identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                ClaimsPrincipal principal = new ClaimsPrincipal(identity);
+
+                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
+
+                return Redirect(model.ReturnUrl ?? "/");
+            }
+            else
+            {
+                ModelState.AddModelError(string.Empty, "Failed to create the resource. Please try again.");
+                return View(model);
+            }
         }
 
         public async Task<IActionResult> Logout()
         {
-            await _userReadService.Logout();
-            return RedirectToAction("Index", "Home");
+            HttpResponseMessage response = await _httpClient.GetAsync("/api/Account/Logout");
+
+            if (response.IsSuccessStatusCode)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            else
+            {
+                return BadRequest();
+            }
         }
 
 
