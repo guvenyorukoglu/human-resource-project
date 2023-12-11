@@ -1,4 +1,6 @@
-﻿using humanResourceProject.Domain.Enum;
+using humanResourceProject.Domain.Enum;
+using humanResourceProject.Models.VMs;
+using humanResourceProject.Models.Validations;
 using Microsoft.AspNetCore.Http;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
@@ -10,22 +12,29 @@ namespace humanResourceProject.Models.DTOs
         [Required(ErrorMessage = "İsim alanı boş geçilemez!")]
         [DisplayName("İsim")]
         public string FirstName { get; set; }
-        [DisplayName("İkinci İsim")]
-        public string MiddleName { get; set; }
+
+        [DisplayName("İkinci İsim-Boş Geçebilirsiniz")]
+        public string? MiddleName { get; set; }
+
         [Required(ErrorMessage = "Soyisim alanı boş geçilemez!")]
         [DisplayName("Soyisim")]
         public string LastName { get; set; }
         [Required(ErrorMessage = "Email alanı boş geçilemez!")]
         [DisplayName("Email")]
+        [EmailValidations(ErrorMessage = "Lütfen geçerli bir email adresi giriniz!")]
         public string Email { get; set; }
         [Required(ErrorMessage = "Şifre alanı boş geçilemez!")]
         [DisplayName("Şifre")]
+        [PasswordValidations(ErrorMessage = "Lütfen geçerli bir şifre belirleyin!")]
         public string Password { get; set; }
-        [Required(ErrorMessage = "Şifre alanı boş geçilemez!")]
-        [DisplayName("Şifre")]
+
+        [Required(ErrorMessage = "Şifre tekrarı alanı boş geçilemez!")]
+        [DisplayName("Şifre Tekrarı")]
+        [Compare("Password", ErrorMessage = "Bir önceki girilen şifreyle aynı olmalıdır!")]
         public string ConfirmPassword { get; set; }
         [Required(ErrorMessage = "Telefonu alanı boş geçilemez!")]
         [DisplayName("Telefon")]
+        [PhoneValidations(ErrorMessage = "Lütfen geçerli bir telefon numarası giriniz!")]
         public string PhoneNumber { get; set; }
         [Required(ErrorMessage = "Doğum tarihi boş geçilemez!")]
         [DisplayName("Doğum Tarihi")]
@@ -35,10 +44,11 @@ namespace humanResourceProject.Models.DTOs
 
         [Required(ErrorMessage = "Adres alanı boş geçilemez!")]
         [DisplayName("Adres")]
-        [StringLength(200, ErrorMessage = "Adres en fazla 200 karakter olmalıdır.", MinimumLength = 5)]
+        [StringLength(200, ErrorMessage = "Adres en fazla 200 en az 5 karakter olmalıdır.", MinimumLength = 5)]
         public string Address { get; set; }
         [Required(ErrorMessage = "TC No alanı boş geçilemez!")]
         [DisplayName("TC NO")]
+        [IdentityNumberValidations(ErrorMessage = "Lütfen geçerli bir telefon numarası giriniz!")]
         public string IdentificationNumber { get; set; }
         [Required(ErrorMessage = "Kan Grubu alanı boş geçilemez!")]
         [DisplayName("Kan Grubu")]
@@ -49,9 +59,14 @@ namespace humanResourceProject.Models.DTOs
         [Required(ErrorMessage = "Meslek alanı boş geçilemez!")]
         [DisplayName("Meslek")]
         public string Job { get; set; }
+        public string? ImagePath { get; set; }
 
         [DisplayName("Profil Fotoğrafı")]
-        public IFormFile UploadPath { get; set; }
+        public IFormFile? UploadPath { get; set; }
+        [Required(ErrorMessage = "Şirket alanı boş geçilemez!")]
+        [DisplayName("Şirket")]
+        public Guid CompanyId { get; set; }
+        public List<CompanyVM>? Companies { get; set; }
 
 
     }

@@ -15,19 +15,19 @@ namespace humanResourceProject.Application.Services.BaseServices
         /// Inserts the entity.
         /// </summary>
         /// <param name="entity">The entity</param>
-        Task Insert(T entity);
+        Task<bool> Insert(T entity);
 
         /// <summary>
         /// Updates the entity.
         /// </summary>
         /// <param name="entity"></param>
-        Task Update(T entity);
+        Task<bool> Update(T entity);
 
         /// <summary>
         /// Makes soft deletion the entity by it's identifier. Sets it's status to inactive. Does not delete the entity from database.
         /// </summary>
         /// <param name="id">Identifier</param>
-        Task Delete(Guid id);
+        Task<bool> Delete(Guid id);
 
 
     }
