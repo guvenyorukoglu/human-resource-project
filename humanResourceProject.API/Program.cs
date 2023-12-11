@@ -20,7 +20,7 @@ builder.Services.AddControllers();
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
 
-    options.UseSqlServer(builder.Configuration.GetConnectionString("TolgaSQLConnection"));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("CanSQLConnection"));
 
 });
 
