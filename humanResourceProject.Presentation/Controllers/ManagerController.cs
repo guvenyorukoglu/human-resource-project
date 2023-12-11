@@ -1,4 +1,4 @@
-﻿using Bogus.Bson;
+﻿ using Bogus.Bson;
 using humanResourceProject.Domain.Entities.Concrete;
 using humanResourceProject.Models.DTOs;
 using humanResourceProject.Models.VMs;
@@ -26,9 +26,11 @@ namespace humanResourceProject.Presentation.Controllers
 
         public async Task<IActionResult> Employees()
         {
+
             Guid id = Guid.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value);
             var res = await _httpClient.GetAsync($"api/AppUser/{id}");
             if (res.IsSuccessStatusCode)
+
             {
                 var content = await res.Content.ReadAsStringAsync();
                 var employee = JsonConvert.DeserializeObject<AppUser>(content);
@@ -53,6 +55,11 @@ namespace humanResourceProject.Presentation.Controllers
 
         [HttpPost]
         public async Task<IActionResult> DeleteEmployee(Guid id)
+        {
+            return Ok();
+        }
+
+
 
         {
             var response = await _httpClient.DeleteAsync($"api/AppUser/{id}");

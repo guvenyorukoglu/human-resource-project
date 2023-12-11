@@ -12,6 +12,8 @@ using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using System.Text.Json;
 using System.Text;
+using Newtonsoft.Json;
+using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace humanResourceProject.Presentation.Controllers
 {
@@ -39,7 +41,8 @@ namespace humanResourceProject.Presentation.Controllers
             {
 
                 var json = await response.Content.ReadAsStringAsync();
-                var companies = JsonSerializer.Deserialize<List<CompanyVM>>(json);
+                var companies = JsonConvert.DeserializeObject<List<CompanyVM>>(json);
+
 
                 return View(companies);
             }
@@ -68,7 +71,7 @@ namespace humanResourceProject.Presentation.Controllers
             }
 
            
-            var json = JsonSerializer.Serialize(model);
+            var json = System.Text.Json.JsonSerializer.Serialize(model);
 
             
             var content = new StringContent(json, Encoding.UTF8, "application/json");
@@ -82,59 +85,47 @@ namespace humanResourceProject.Presentation.Controllers
             }
             else
             {
-                ModelState.AddModelError(string.Empty, "Failed to create the resource. Please try again.");
+                ModelState.AddModelError(string.Empty, "Şirket Oluşturulamadı");
                 return View(model);
             }
         }
 
-        //[HttpGet]
-        //public IActionResult UpdateCompany(Guid id)
-        //{
-        //    var company = _companyReadService.GetById(id);
+        [HttpGet]
+        public async Task<IActionResult> UpdateCompany(Guid id)
+        {
 
-        //    if (company == null)
-        //    {
-        //        return NotFound();
-        //    }
+            var response = await _httpClient.GetAsync($"api/Company/GetUpdateCompanyDTO/{id}");
+            if (response.IsSuccessStatusCode)
+            {
+                var content = await response.Content.ReadAsStringAsync();
+                var company = JsonConvert.DeserializeObject<UpdateCompanyDTO>(content);
+                return View(company);
 
-        //    var companyUpdateDTO = new UpdateCompanyDTO
-        //    {
-        //        CompanyName = company.CompanyName,
-        //        Adress = company.Address,
-        //        PhoneNumber = company.PhoneNumber,
-        //        NumberOfEmployees = company.NumberOfEmployees
-        //    };
+            }
+            return View("Error");
 
-        //    return View(companyUpdateDTO);
-        //}
+
+        }
 
 
 
-        //[HttpPost]
-        //public async Task<IActionResult> UpdateCompany(UpdateCompanyDTO model)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        var json = JsonSerializer.Serialize(model);
+        [HttpPost]
+        public async Task<IActionResult> UpdateCompany(UpdateCompanyDTO model)
+        {
 
-        //        var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-        //        HttpResponseMessage response = await _httpClient.PostAsync("/api/Company/Update", content);
+            var json = JsonConvert.SerializeObject(model);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-        //        if (response.IsSuccessStatusCode)
-        //        {
-        //            return RedirectToAction(nameof(Companies));
-        //        }
-        //        else
-        //        {
-        //            ModelState.AddModelError(string.Empty, "Failed to update the resource. Please try again.");
-        //            return View("UpdateCompany", model);
-        //        }
-        //    }
+            var response = await _httpClient.PutAsync($"api/Company", content);
 
-            
-        //    return View("UpdateCompany", model);
-        //}
+            if (response.IsSuccessStatusCode)
+            {
+                return RedirectToAction("Companies");
+            }
+
+            return View("Error");
+        }
 
 
 
