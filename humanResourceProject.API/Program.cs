@@ -19,7 +19,7 @@ builder.Services.AddControllers();
 
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
-    options.UseSqlServer(builder.Configuration.GetConnectionString("GuvenSQLConnection"));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("CanSQLConnection"));
 });
 
 builder.Services.AddIdentity<AppUser, IdentityRole<Guid>>(options =>
