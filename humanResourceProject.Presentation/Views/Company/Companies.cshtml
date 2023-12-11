@@ -1,0 +1,50 @@
+﻿@using humanResourceProject.Models.VMs;
+
+@model List<CompanyVM>
+
+@{
+    ViewData["Title"] = "Companies";
+}
+
+<h2 class="text-center">Company Details</h2>
+
+@if (Model != null && Model.Any())
+{
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th scope="col">Company Name</th>
+                <th scope="col">Number of Employees</th>
+                <th scope="col">Tax Number</th>
+                <th scope="col">Tax Office</th>
+                <th scope="col">Address</th>
+                <th scope="col">Phone Number</th>
+                <th scope="col">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var company in Model)
+            {
+                <tr>
+                    <td>@company.CompanyName</td>
+                    <td>@company.NumberOfEmployees</td>
+                    <td>@company.TaxNumber</td>
+                    <td>@company.TaxOffice</td>
+                    <td>@company.Address</td>
+                    <td>@company.PhoneNumber</td>
+                    <td>
+                        <a asp-action="UpdateCompany" asp-controller="Company" asp-route-id="@company.Id" class="btn btn-primary">Edit</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <div class="text-center">
+        <a asp-action="Index" asp-controller="Home" class="btn btn-primary">Home</a>
+    </div>
+}
+else
+{
+    <p class="text-center">No companies found.</p>
+}

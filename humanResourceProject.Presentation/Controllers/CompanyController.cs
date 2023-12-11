@@ -1,5 +1,5 @@
 
-﻿using humanResourceProject.Application.Services.Abstract.IAppUserServices;
+using humanResourceProject.Application.Services.Abstract.IAppUserServices;
 using humanResourceProject.Application.Services.Abstract.IBaseServices;
 using humanResourceProject.Application.Services.Abstract.ICompanyServices;
 using humanResourceProject.Application.Services.BaseServices;
@@ -10,6 +10,8 @@ using humanResourceProject.Models.VMs;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
+using System.Text.Json;
+using System.Text;
 
 namespace humanResourceProject.Presentation.Controllers
 {
@@ -17,119 +19,157 @@ namespace humanResourceProject.Presentation.Controllers
     {
         private readonly ICompanyReadService _companyReadService;
         private readonly ICompanyWriteService _companyWriteService;
+        private readonly HttpClient _httpClient;
+        private readonly IConfiguration _configuration;
 
-        public CompanyController(ICompanyReadService companyReadService, ICompanyWriteService companyWriteService)
+        public CompanyController(IConfiguration configuration)
         {
-            _companyReadService = companyReadService;
-            _companyWriteService = companyWriteService;
+            _configuration = configuration;
+            _httpClient = new HttpClient();
+            _httpClient.BaseAddress = new Uri("https://localhost:7255/");
+
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Companies()
         {
-            var company= await _companyReadService.GetFilteredList(
-                select: x => new CompanyVM()
-                {
-                    Id = x.Id,
-                    CompanyName = x.CompanyName,
-                    NumberOfEmployees = x.NumberOfEmployees,
-                    TaxNumber = x.TaxNumber,
-                    TaxOffice = x.TaxOffice,
-                    Address = x.Address,
-                    PhoneNumber = x.PhoneNumber,
-                },
-                where: x => x.Id == Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value) && x.Status == Status.Active
-                );
-            return View(company);
+
+            HttpResponseMessage response = await _httpClient.GetAsync("/api/Company");
+
+            if (response.IsSuccessStatusCode)
+            {
+
+                var json = await response.Content.ReadAsStringAsync();
+                var companies = JsonSerializer.Deserialize<List<CompanyVM>>(json);
+
+                return View(companies);
+            }
+            else
+            {
+                return NotFound();
+            }
         }
 
 
-        public IActionResult Insert()
+
+
+        public IActionResult CreateCompany()
         {
             return View();
         }
 
         [HttpPost]
-        public IActionResult Insert(CompanyRegisterDTO model)
+        public async Task<IActionResult> CreateCompany(CompanyRegisterDTO model)
         {
-            if (ModelState.IsValid)
+            
+
+            if (!ModelState.IsValid)
             {
-                var company = new Company
-                {
-                    CompanyName = model.CompanyName,
-                    Address = model.Address,
-                    TaxNumber = model.TaxNumber,
-                    TaxOffice = model.TaxOffice,
-                    PhoneNumber = model.PhoneNumber,
-                    NumberOfEmployees = model.NumberOfEmployees
-                };
+                return View(model); // Model valid değil ise validation errorları ile birlikte register sayfasına geri döner
+            }
 
-                _companyWriteService.Insert(company);
+           
+            var json = JsonSerializer.Serialize(model);
 
+            
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+           
+            HttpResponseMessage response = await _httpClient.PostAsync("/api/Company/Create", content);
+
+            if (response.IsSuccessStatusCode)
+            {
+                return RedirectToAction("Home");
+            }
+            else
+            {
+                ModelState.AddModelError(string.Empty, "Failed to create the resource. Please try again.");
+                return View(model);
+            }
+        }
+
+        //[HttpGet]
+        //public IActionResult UpdateCompany(Guid id)
+        //{
+        //    var company = _companyReadService.GetById(id);
+
+        //    if (company == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    var companyUpdateDTO = new UpdateCompanyDTO
+        //    {
+        //        CompanyName = company.CompanyName,
+        //        Adress = company.Address,
+        //        PhoneNumber = company.PhoneNumber,
+        //        NumberOfEmployees = company.NumberOfEmployees
+        //    };
+
+        //    return View(companyUpdateDTO);
+        //}
+
+
+
+        //[HttpPost]
+        //public async Task<IActionResult> UpdateCompany(UpdateCompanyDTO model)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        var json = JsonSerializer.Serialize(model);
+
+        //        var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+        //        HttpResponseMessage response = await _httpClient.PostAsync("/api/Company/Update", content);
+
+        //        if (response.IsSuccessStatusCode)
+        //        {
+        //            return RedirectToAction(nameof(Companies));
+        //        }
+        //        else
+        //        {
+        //            ModelState.AddModelError(string.Empty, "Failed to update the resource. Please try again.");
+        //            return View("UpdateCompany", model);
+        //        }
+        //    }
+
+            
+        //    return View("UpdateCompany", model);
+        //}
+
+
+
+         [HttpPost]
+        public async Task<IActionResult> DeleteCompany(Guid id)
+        {
+            HttpResponseMessage response = await _httpClient.DeleteAsync($"/api/Company/{id}");
+
+            if (response.IsSuccessStatusCode)
+            {
                 return RedirectToAction(nameof(Index));
             }
-
-            return View(model);
-        }
-
-        
-        public IActionResult Update(Guid id)
-        {
-            var company = _companyReadService.GetById(id);
-
-            if (company == null)
+            else
             {
-                return NotFound();
-            }
+                // Silme işlemi başarısız olursa, hata mesajını ModelState'e ekleyebilirsiniz.
+                ModelState.AddModelError(string.Empty, "Failed to delete the resource. Please try again.");
 
-            var companyRegisterDTO = new CompanyRegisterDTO
-            {
-                CompanyName = company.CompanyName,
-                Address = company.Address,
-                TaxNumber = company.TaxNumber,
-                TaxOffice = company.TaxOffice,
-                PhoneNumber = company.PhoneNumber,
-                NumberOfEmployees = company.NumberOfEmployees
-            };
+                // Hata durumunda, mevcut sayfada kalabilir veya başka bir sayfaya yönlendirebilirsiniz.
+                HttpResponseMessage getResponse = await _httpClient.GetAsync($"/api/Company/{id}");
 
-            return View(companyRegisterDTO);
-        }
-
-
-        [HttpPost]
-        public IActionResult Update(CompanyRegisterDTO model)
-        {
-
-            if (ModelState.IsValid)
-            {
-                var company = new Company
+                if (getResponse.IsSuccessStatusCode)
                 {
-                    CompanyName = model.CompanyName,
-                    Address = model.Address,
-                    TaxNumber = model.TaxNumber,
-                    TaxOffice = model.TaxOffice,
-                    PhoneNumber = model.PhoneNumber,
-                    NumberOfEmployees = model.NumberOfEmployees
-                };
+                    var json = await getResponse.Content.ReadAsStringAsync();
+                    var company = JsonSerializer.Deserialize<CompanyVM>(json);
 
-                _companyWriteService.Update(company);
-
-                return RedirectToAction(nameof(Index));
+                    return View("Delete", company);
+                }
+                else
+                {
+                    return NotFound();
+                }
             }
-
-            return View(model);
         }
 
-        public IActionResult Delete(Guid id)
-        {
-            return View(_companyReadService.GetById(id));
-        }
 
-        [HttpPost]
-        public async Task<IActionResult> Delete(CompanyVM model)
-        {
-            await _companyWriteService.Delete(model.Id);
-            return RedirectToAction("Home");
-        } 
 
     }
 }
