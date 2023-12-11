@@ -1,4 +1,4 @@
-﻿using humanResourceProject.Domain.Enum;
+using humanResourceProject.Domain.Enum;
 using humanResourceProject.Models.Validations;
 using System;
 using System.Collections.Generic;
@@ -8,10 +8,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+
 namespace humanResourceProject.Models.DTOs
 {
     public class UpdateCompanyDTO
     {
+
+        public Guid Id { get; set; }
+
         [Required(ErrorMessage = "Şirket Adı alanı boş geçilemez!")]
         [DisplayName("Şirket Adı")]
         public string CompanyName { get; set; }
@@ -25,7 +29,8 @@ namespace humanResourceProject.Models.DTOs
         [Required(ErrorMessage = "Personel sayısı alanı boş geçilemez!")]
         [DisplayName("Personel Sayısı")]
         public int NumberOfEmployees { get; set; }
-        public DateTime UpdateDate { get; set; }
+        public DateTime UpdateDate => DateTime.Now;
+        public Status Status => Status.Modified;
 
     }
 }

@@ -4,8 +4,6 @@ namespace humanResourceProject.Presentation.Controllers
 {
     public class ManagerController : Controller
     {
-        
-
         public IActionResult Index()
         {
             return View();

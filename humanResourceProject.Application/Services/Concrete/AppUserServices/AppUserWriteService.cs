@@ -2,6 +2,7 @@
 using humanResourceProject.Application.Services.Abstract.IAppUserServices;
 using humanResourceProject.Application.Services.Concrete.BaseServices;
 using humanResourceProject.Domain.Entities.Concrete;
+using humanResourceProject.Domain.Enum;
 using humanResourceProject.Domain.IRepository.BaseRepos;
 using humanResourceProject.Models.DTOs;
 using Microsoft.AspNetCore.Identity;
@@ -11,33 +12,78 @@ namespace humanResourceProject.Application.Services.Concrete.AppUserServices
     public class AppUserWriteService : BaseWriteService<AppUser>, IAppUserWriteService
     {
         private readonly IBaseWriteRepository<AppUser> _writeRepository;
+        private readonly IBaseReadRepository<AppUser> _readRepository;
+        private readonly UserManager<AppUser> _userManager;
         private readonly IMapper _mapper;
-        public AppUserWriteService(IBaseWriteRepository<AppUser> writeRepository, IBaseReadRepository<AppUser> readRepository, IMapper mapper) : base(writeRepository, readRepository)
+        public AppUserWriteService(IBaseWriteRepository<AppUser> writeRepository, IBaseReadRepository<AppUser> readRepository, IMapper mapper, UserManager<AppUser> userManager, SignInManager<AppUser> signInManager) : base(writeRepository, readRepository)
         {
             _writeRepository = writeRepository;
+            _readRepository = readRepository;
             _mapper = mapper;
+            _userManager = userManager;
         }
 
-        public Task<IdentityResult> Register(UserRegisterDTO model)
+        public async Task<UpdateUserDTO> GetUpdateUserDTOById(Guid id)
         {
-            //ToDo : Mapping 
-            throw new NotImplementedException();
+            AppUser appUser = _readRepository.GetSingleDefault(x => x.Id == id).Result;
+            if (appUser == null)
+                return null;
+
+            UpdateUserDTO updateUserDTO = _mapper.Map<UpdateUserDTO>(appUser);
+            return updateUserDTO;
         }
-        public async Task<bool> Create(UserRegisterDTO model)
+
+        public async Task<IdentityResult> RegisterPersonel(UserRegisterDTO model)
         {
             if (model == null)
-                return false;
-            else
-            {
-                AppUser CreateUser = _mapper.Map<AppUser>(model);
-                await _writeRepository.Insert(CreateUser);
-                return true;
-            }
+                return IdentityResult.Failed();
+
+            AppUser newUser = _mapper.Map<AppUser>(model);
+            newUser.UserName = newUser.Email;
+            IdentityResult result = await _userManager.CreateAsync(newUser, model.Password);
+            if (result.Succeeded)
+                await _userManager.AddToRoleAsync(newUser, "Personel");
+            return result;
         }
-        public async Task Update(UpdateUserDTO model)
+
+        public async Task<IdentityResult> RegisterCompanyManager(UserRegisterDTO model)
         {
-            AppUser CreateUser = _mapper.Map<AppUser>(model);
-            await _writeRepository.Update(CreateUser);
+            if (model == null)
+                return IdentityResult.Failed();
+
+            AppUser newUser = _mapper.Map<AppUser>(model);
+            newUser.UserName = newUser.Email;
+            IdentityResult result = await _userManager.CreateAsync(newUser, model.Password);
+
+            if (result.Succeeded)
+                await _userManager.AddToRoleAsync(newUser, "CompanyManager");
+
+            return result;
+        }
+        public async Task<IdentityResult> Update(UpdateUserDTO model)
+        {
+            AppUser updatedUser = await _readRepository.GetSingleDefault(x => x.Id == model.Id);
+            if (updatedUser == null)
+                return IdentityResult.Failed();
+
+            updatedUser.Email = model.Email ?? updatedUser.Email;
+            updatedUser.LastName = model.LastName ?? updatedUser.LastName;
+            updatedUser.Address = model.Address ?? updatedUser.Address;
+            updatedUser.PhoneNumber = model.PhoneNumber ?? updatedUser.PhoneNumber;
+            updatedUser.Title = model.Title ?? updatedUser.Title;
+            updatedUser.Job = model.Job ?? updatedUser.Job;
+            updatedUser.CompanyId = model.CompanyId;
+            updatedUser.UpdateDate = DateTime.Now;
+            updatedUser.Status = Status.Modified;
+
+            if (await _writeRepository.Update(updatedUser))
+                return IdentityResult.Success;
+            else
+                return IdentityResult.Failed();
+
+
+
+
         }
 
 

@@ -16,22 +16,22 @@ namespace humanResourceProject.Infrastructure.Repositories.BaseRepos
             table = _context.Set<T>();
         }
 
-        public async Task Insert(T entity)
+        public async Task<bool> Insert(T entity)
         {
             await table.AddAsync(entity);
-            await _context.SaveChangesAsync();
+            return await _context.SaveChangesAsync() > 0;
         }
 
-        public async Task Update(T entity)
+        public async Task<bool> Update(T entity)
         {
             table.Update(entity);
-            await _context.SaveChangesAsync();
+            return await _context.SaveChangesAsync() > 0;
         }
 
-        public async Task Delete(Guid id)
+        public async Task<bool> Delete(Guid id)
         {
             //Delete operation will be made by changing entity's status in service layer.
-            await _context.SaveChangesAsync();
+            return await _context.SaveChangesAsync() > 0;
         }
 
         public Task<int> SaveChangesAsync()
