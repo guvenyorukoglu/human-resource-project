@@ -4,9 +4,9 @@ namespace humanResourceProject.Domain.IRepository.BaseRepos
 {
     public interface IBaseWriteRepository<T> where T : class, IBaseEntity, new()
     {
-        Task Insert(T entity);
-        Task Update(T entity);
-        Task Delete(Guid id);
+        Task<bool> Insert(T entity);
+        Task<bool> Update(T entity);
+        Task<bool> Delete(Guid id);
         Task<int> SaveChangesAsync();
 
     }
