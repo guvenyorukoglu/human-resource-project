@@ -22,7 +22,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 
 
-    options.UseSqlServer(builder.Configuration.GetConnectionString("CanSQLConnection"));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("TarikSQLConnection"));
 
 });
 

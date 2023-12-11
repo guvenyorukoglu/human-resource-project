@@ -1,4 +1,4 @@
-﻿using Bogus.Bson;
+﻿ using Bogus.Bson;
 using humanResourceProject.Domain.Entities.Concrete;
 using humanResourceProject.Models.DTOs;
 using Microsoft.AspNetCore.Mvc;
@@ -24,8 +24,8 @@ namespace humanResourceProject.Presentation.Controllers
 
         public async Task<IActionResult> Employees()
         {
-                   
-           
+
+
             var response = await _httpClient.GetAsync("api/AppUser");
             if (response.IsSuccessStatusCode)
             {
@@ -38,20 +38,23 @@ namespace humanResourceProject.Presentation.Controllers
         }
 
 
-        
+
 
         [HttpPost]
         public async Task<IActionResult> DeleteEmployee(Guid id)
+        {
+            return Ok();
+        }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index(Guid id)
 
         {
             var response = await _httpClient.DeleteAsync($"api/AppUser/{id}");
 
             if (response.IsSuccessStatusCode)
             {
-                
-                return RedirectToAction("Employees"); 
+
+                return RedirectToAction("Employees");
             }
 
             return View("Error");
@@ -79,7 +82,7 @@ namespace humanResourceProject.Presentation.Controllers
         [HttpPut]
         public async Task<IActionResult> EditEmployee(Guid id, UpdateUserDTO updateUserDTO)
         {
-           
+
             var json = JsonConvert.SerializeObject(updateUserDTO);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
 
