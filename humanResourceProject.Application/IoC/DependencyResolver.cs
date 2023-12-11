@@ -6,6 +6,8 @@ using humanResourceProject.Application.Services.Abstract.ICompanyServices;
 using humanResourceProject.Application.Services.Concrete.AppUserServices;
 using humanResourceProject.Application.Services.Concrete.CompanyServices;
 using humanResourceProject.Domain.Entities.Concrete;
+
+
 using humanResourceProject.Domain.IRepository.BaseRepos;
 using humanResourceProject.Infrastructure.Repositories.AppUserRepos;
 using humanResourceProject.Infrastructure.Repositories.CompanyRepos;

@@ -20,7 +20,7 @@ namespace humanResourceProject.Models.Validations
                 return false;
             }
 
-            if (checkValue.EndsWith("@bilgeadam.com") || checkValue.EndsWith("@gmail.com") || checkValue.EndsWith("@hotmail.com") || checkValue.EndsWith("@outlook.com") || checkValue.EndsWith("@yahoo.com") || checkValue.EndsWith("@bilgeadamboost.com"))
+            if (checkValue.EndsWith("@bilgeadam.com") || checkValue.EndsWith("@gmail.com") || checkValue.EndsWith("@hotmail.com") || checkValue.EndsWith("@outlook.com") || checkValue.EndsWith("@yahoo.com") || checkValue.EndsWith("@monitorease.com") || checkValue.EndsWith("@bilgeadamboost.com"))
                 return true;
 
             return false;

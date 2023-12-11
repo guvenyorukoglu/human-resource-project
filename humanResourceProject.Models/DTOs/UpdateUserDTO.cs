@@ -17,12 +17,12 @@ namespace humanResourceProject.Models.DTOs
         [EmailValidations(ErrorMessage = "Lütfen geçerli bir email adresi giriniz!")]
         public string Email { get; set; }
         public string LastName { get; set; }
-        public string Adress { get; set; }
+        public string Address { get; set; }
         [Required(ErrorMessage = "Telefonu alanı boş geçilemez!")]
         [DisplayName("Telefon")]
         [PhoneValidations(ErrorMessage = "Lütfen geçerli bir telefon numarası giriniz!")]
         public string PhoneNumber { get; set; }
-        public Title Title { get; set; }
+        public Title? Title { get; set; }
         public string Job { get; set; }
         public Guid CompanyId { get; set; }
         public List<CompanyVM>? Companies { get; set; }
