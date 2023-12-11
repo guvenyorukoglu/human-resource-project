@@ -42,7 +42,7 @@ namespace humanResourceProject.Application.Services.Concrete.AppUserServices
             AppUser appUser = await _readRepository.GetSingleDefault(x => x.Email == model.Email);
             if (appUser == null)
                 return SignInResult.Failed;
-            return await _signInManager.PasswordSignInAsync(appUser, model.Password, false, false);
+            return await _signInManager.PasswordSignInAsync(model.Email, model.Password, false, false);
         }
 
         public async Task Logout()

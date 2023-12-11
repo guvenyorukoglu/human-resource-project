@@ -121,7 +121,9 @@ namespace humanResourceProject.Presentation.Controllers
             {
                 List<Claim> claims = new List<Claim>();
                 claims.Add(new Claim(ClaimTypes.Email, model.Email));
+                claims.Add(new Claim(ClaimTypes.NameIdentifier, model.Id.ToString()));
 
+    
                 ClaimsIdentity identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
                 ClaimsPrincipal principal = new ClaimsPrincipal(identity);
 
@@ -131,7 +133,7 @@ namespace humanResourceProject.Presentation.Controllers
             }
             else
             {
-                ModelState.AddModelError(string.Empty, "Failed to create the resource. Please try again.");
+                ModelState.AddModelError(string.Empty, "Login işlemi başarısız. Tekrar deneyin...");
                 return View(model);
             }
         }

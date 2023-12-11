@@ -1,8 +1,10 @@
 ﻿using Bogus.Bson;
 using humanResourceProject.Domain.Entities.Concrete;
 using humanResourceProject.Models.DTOs;
+using humanResourceProject.Models.VMs;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using System.Security.Claims;
 using System.Text;
 
 namespace humanResourceProject.Presentation.Controllers
@@ -24,34 +26,41 @@ namespace humanResourceProject.Presentation.Controllers
 
         public async Task<IActionResult> Employees()
         {
-                   
-           
-            var response = await _httpClient.GetAsync("api/AppUser");
-            if (response.IsSuccessStatusCode)
+            Guid id = Guid.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value);
+            var res = await _httpClient.GetAsync($"api/AppUser/{id}");
+            if (res.IsSuccessStatusCode)
             {
-                var content = await response.Content.ReadAsStringAsync();
-                var employees = JsonConvert.DeserializeObject<List<AppUser>>(content);
-                return View(employees);
+                var content = await res.Content.ReadAsStringAsync();
+                var employee = JsonConvert.DeserializeObject<AppUser>(content);
 
+
+
+
+                var response = await _httpClient.GetAsync($"api/AppUser/GetEmployeesByCompanyId/{employee.CompanyId}");
+                if (response.IsSuccessStatusCode)
+                {
+                    var cont = await response.Content.ReadAsStringAsync();
+                    var employees = JsonConvert.DeserializeObject<List<PersonelVM>>(cont);
+                    return View(employees);
+
+                }
             }
-            return View("Error");
+            return View();
         }
 
 
-        
+
 
         [HttpPost]
         public async Task<IActionResult> DeleteEmployee(Guid id)
-
-        public IActionResult Index()
 
         {
             var response = await _httpClient.DeleteAsync($"api/AppUser/{id}");
 
             if (response.IsSuccessStatusCode)
             {
-                
-                return RedirectToAction("Employees"); 
+
+                return RedirectToAction("Employees");
             }
 
             return View("Error");
@@ -64,7 +73,7 @@ namespace humanResourceProject.Presentation.Controllers
         [HttpGet]
         public async Task<IActionResult> EditEmployee(Guid id)
         {
-            var response = await _httpClient.GetAsync($"api/AppUser/{id}");
+            var response = await _httpClient.GetAsync($"api/AppUser/GetUpdateUserDTO/{id}");
             if (response.IsSuccessStatusCode)
             {
                 var content = await response.Content.ReadAsStringAsync();
@@ -76,21 +85,22 @@ namespace humanResourceProject.Presentation.Controllers
 
         }
 
-        [HttpPut]
-        public async Task<IActionResult> EditEmployee(Guid id, UpdateUserDTO updateUserDTO)
+        [HttpPost]
+        public async Task<IActionResult> EditEmployee(UpdateUserDTO updateUserDTO)
         {
-           
+
             var json = JsonConvert.SerializeObject(updateUserDTO);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-            var response = await _httpClient.PutAsync($"api/AppUser/{id}", content);
+            var response = await _httpClient.PutAsync($"api/AppUser", content);
 
             if (response.IsSuccessStatusCode)
             {
                 return RedirectToAction("Employees");
             }
 
-            return View("Error");
+            ModelState.AddModelError(response.StatusCode.ToString(), "Bir hata oluştu.");
+            return View(updateUserDTO);
         }
 
 
