@@ -48,7 +48,7 @@ namespace humanResourceProject.Models.DTOs
         public string Address { get; set; }
         [Required(ErrorMessage = "TC No alanı boş geçilemez!")]
         [DisplayName("TC NO")]
-        [IdentityNumberValidations(ErrorMessage = "Lütfen geçerli bir telefon numarası giriniz!")]
+        //[IdentityNumberValidations(ErrorMessage = "Lütfen geçerli bir telefon numarası giriniz!")]
         public string IdentificationNumber { get; set; }
         [Required(ErrorMessage = "Kan Grubu alanı boş geçilemez!")]
         [DisplayName("Kan Grubu")]

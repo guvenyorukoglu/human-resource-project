@@ -6,6 +6,7 @@ namespace humanResourceProject.Models.DTOs
 {
     public class LoginDTO
     {
+        public Guid Id { get; set; }
         [Required(ErrorMessage = "Email alanı boş geçilemez!")]
         [DisplayName("Email")]
         [EmailValidations(ErrorMessage = "Lütfen geçerli bir email adresi giriniz!")]
