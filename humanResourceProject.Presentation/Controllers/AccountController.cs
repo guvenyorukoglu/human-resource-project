@@ -1,10 +1,7 @@
-﻿using humanResourceProject.Domain.Entities.Concrete;
-using humanResourceProject.Models.DTOs;
-using humanResourceProject.Models.VMs;
+﻿using humanResourceProject.Models.DTOs;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using System.Text;
@@ -27,14 +24,51 @@ namespace humanResourceProject.Presentation.Controllers
         }
 
         [AllowAnonymous]
-        public IActionResult Register()
+        public IActionResult RegisterCompany() // İlk açılacak register view'i (şirket kaydı için)
         {
-            return View();
+            return View(new CompanyRegisterDTO());
+        }
+
+        [AllowAnonymous]
+        public IActionResult Register(Guid companyId) // İleri butonuna basıldığında açılacak şirket yöneticisi register view'i
+        {
+            UserRegisterDTO userRegisterDTO = new UserRegisterDTO();
+            userRegisterDTO.CompanyId = companyId;
+            return View(userRegisterDTO);
         }
 
         [AllowAnonymous]
         [HttpPost]
-        public async Task<IActionResult> Register(UserRegisterDTO model) // VM kullanılabilir
+        public async Task<IActionResult> RegisterCompany(CompanyRegisterDTO model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            var json = JsonSerializer.Serialize(model);
+
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            HttpResponseMessage response = await _httpClient.PostAsync("/api/Account/RegisterCompany", content);
+
+            if (response.IsSuccessStatusCode)
+            {
+                var companyId = await response.Content.ReadAsStringAsync();
+                companyId = companyId.Replace("\"", "");
+                Guid id = Guid.Parse(companyId);
+                return RedirectToAction("Register", new { companyId = id });
+            }
+            else
+            {
+                ModelState.AddModelError(string.Empty, "Bir hata oluştu. Tekrar deneyiniz!");
+                return View(model);
+            }
+        }
+
+        [AllowAnonymous]
+        [HttpPost]
+        public async Task<IActionResult> Register(UserRegisterDTO model)
         {
             if (!ModelState.IsValid)
             {
@@ -48,7 +82,7 @@ namespace humanResourceProject.Presentation.Controllers
             var content = new StringContent(json, Encoding.UTF8, "application/json");
 
             // Send a POST request to the API endpoint to create the resource
-            HttpResponseMessage response = await _httpClient.PostAsync("/api/Account/Register", content);
+            HttpResponseMessage response = await _httpClient.PostAsync("/api/Account/RegisterUser", content);
 
             if (response.IsSuccessStatusCode)
             {
@@ -56,7 +90,7 @@ namespace humanResourceProject.Presentation.Controllers
             }
             else
             {
-                ModelState.AddModelError(string.Empty, "Failed to create the resource. Please try again.");
+                ModelState.AddModelError(string.Empty, "Bir hata oluştu. Tekrar deneyiniz!");
                 return View(model);
             }
         }

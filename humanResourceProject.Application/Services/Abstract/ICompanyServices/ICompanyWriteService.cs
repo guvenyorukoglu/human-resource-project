@@ -1,13 +1,14 @@
 ﻿using humanResourceProject.Application.Services.BaseServices;
 using humanResourceProject.Domain.Entities.Concrete;
 using humanResourceProject.Models.DTOs;
+using Microsoft.AspNetCore.Identity;
 
 namespace humanResourceProject.Application.Services.Abstract.ICompanyServices
 {
     public interface ICompanyWriteService : IBaseWriteService<Company>
     {
-        Task Register(CompanyRegisterDTO model);
-        Task<bool> Create(CompanyRegisterDTO model);
-        Task Update(UpdateCompanyDTO model);
+        Task<IdentityResult> RegisterCompany(CompanyRegisterDTO model); // CompanyRegisterDTO modelini alır, veritabanına kaydeder.
+        Task<UpdateCompanyDTO> GetUpdateCompanyDTOById(Guid id); // Güncelleme sayfası için UpdateCompanyDTO döndürür.
+        Task<IdentityResult> Update(UpdateCompanyDTO model); // UpdateCompanyDTO modelini alır, veritabanında günceller.
     }
 }

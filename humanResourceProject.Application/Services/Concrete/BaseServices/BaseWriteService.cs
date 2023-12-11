@@ -26,7 +26,7 @@ namespace humanResourceProject.Application.Services.Concrete.BaseServices
             
         }
 
-        public Task Delete(Guid id)
+        public Task<bool> Delete(Guid id)
         {
             T entity = _readRepository.GetById(id);
             entity.DeleteDate = DateTime.Now;
@@ -34,16 +34,16 @@ namespace humanResourceProject.Application.Services.Concrete.BaseServices
             return _writeRepository.Delete(id);
         }
 
-        public async Task Insert(T entity)
+        public async Task<bool> Insert(T entity)
         {
-           await _writeRepository.Insert(entity);
+           return await _writeRepository.Insert(entity);
         }
 
 
 
-        public async Task Update(T entity)
+        public async Task<bool> Update(T entity)
         {
-            await _writeRepository.Update(entity);
+            return await _writeRepository.Update(entity);
         }
     }
 }

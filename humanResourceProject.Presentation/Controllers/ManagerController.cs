@@ -9,6 +9,7 @@ namespace humanResourceProject.Presentation.Controllers
 {
     public class ManagerController : Controller
     {
+
         private readonly HttpClient _httpClient;
         private readonly IConfiguration _configuration;
 
@@ -41,6 +42,9 @@ namespace humanResourceProject.Presentation.Controllers
 
         [HttpPost]
         public async Task<IActionResult> DeleteEmployee(Guid id)
+
+        public IActionResult Index()
+
         {
             var response = await _httpClient.DeleteAsync($"api/AppUser/{id}");
 

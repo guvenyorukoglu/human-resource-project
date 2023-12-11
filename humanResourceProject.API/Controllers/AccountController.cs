@@ -1,4 +1,6 @@
 ﻿using humanResourceProject.Application.Services.Abstract.IAppUserServices;
+using humanResourceProject.Application.Services.Abstract.ICompanyServices;
+using humanResourceProject.Application.Services.Concrete.CompanyServices;
 using humanResourceProject.Models.DTOs;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
@@ -14,13 +16,17 @@ namespace humanResourceProject.API.Controllers
     {
         private readonly IAppUserReadService _appUserReadService;
         private readonly IAppUserWriteService _appUserWriteService;
+        private readonly ICompanyWriteService _companyWriteService;
+        private readonly ICompanyReadService _companyReadService;
         private readonly IConfiguration _configuration;
 
-        public AccountController(IAppUserReadService appUserReadService, IConfiguration configuration, IAppUserWriteService appUserWriteService)
+        public AccountController(IAppUserReadService appUserReadService, IConfiguration configuration, IAppUserWriteService appUserWriteService, ICompanyWriteService companyWriteService, ICompanyReadService companyReadService)
         {
             _appUserReadService = appUserReadService;
             _appUserWriteService = appUserWriteService;
             _configuration = configuration;
+            _companyWriteService = companyWriteService;
+            _companyReadService = companyReadService;
         }
 
 
@@ -51,10 +57,27 @@ namespace humanResourceProject.API.Controllers
         }
 
         [HttpPost]
-        [Route("Register")]
-        public async Task<IActionResult> Register([FromBody] UserRegisterDTO model)
+        [Route("RegisterCompany")]
+        public async Task<IActionResult> RegisterCompany([FromBody] CompanyRegisterDTO model)
         {
-            return Ok(await _appUserWriteService.Register(model));
+            var result = await _companyWriteService.RegisterCompany(model);
+            if (!result.Succeeded)
+                return BadRequest(result.Errors);
+
+            var company = await _companyReadService.GetSingleDefault(x => x.CompanyName == model.CompanyName);
+
+            return Ok(company.Id);
+        }
+
+        [HttpPost]
+        [Route("RegisterUser")]
+        public async Task<IActionResult> RegisterUser([FromBody] UserRegisterDTO model)
+        {
+            var result = await _appUserWriteService.RegisterCompanyManager(model);
+            if (!result.Succeeded)
+                return BadRequest(result.Errors);
+
+            return Ok("Yeni şirket yöneticisi oluşturuldu.");
         }
 
         [HttpPost]
