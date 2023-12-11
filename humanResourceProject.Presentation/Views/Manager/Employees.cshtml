@@ -82,7 +82,7 @@
                                     <td>@item.Job</td>
                                     <td>
                                         <a asp-action="EditEmployee"
-                                           asp-controller="Admin"
+                                           asp-controller="Manager"
                                            asp-route-id="@item.Id">
                                             <button class="btn btn-secondary btn-sm d-inline-flex bg-primary">
                                                 <i class="fa fa-pen"></i>
@@ -90,7 +90,7 @@
                                         </a>
 
                                         <a asp-action="DeleteEmployee"
-                                           asp-controller="Admin"
+                                           asp-controller="Manager"
                                            asp-route-id="@item.Id">
                                             <button class="btn btn-danger btn-sm d-inline-flex">
                                                 <i class="fa fa-trash"></i>
