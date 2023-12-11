@@ -19,7 +19,9 @@ builder.Services.AddControllers();
 
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
+
     options.UseSqlServer(builder.Configuration.GetConnectionString("CanSQLConnection"));
+
 });
 
 builder.Services.AddIdentity<AppUser, IdentityRole<Guid>>(options =>
@@ -70,7 +72,7 @@ builder.Host.ConfigureContainer<ContainerBuilder>(builder =>
     builder.RegisterModule(new DependencyResolver());
 });
 
-//Swagger üzerinden login işlemi için.
+//Swagger Ã¼zerinden login iÃ¾lemi iÃ§in.
 builder.Services.AddSwaggerGen(option =>
 {
     option.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
@@ -80,7 +82,7 @@ builder.Services.AddSwaggerGen(option =>
         Scheme = "Bearer",
         BearerFormat = "JWT",
         In = ParameterLocation.Header,
-        Description = "Bearer şemasını kullanan JWT Yetkilendirme başlığı.\r\n\r\n Aşağıdaki metin girişine 'Bearer' [boşluk] ve ardından üretilen tokenı girin.\r\n\r\nÖrnek: \"Bearer 1safsfsdfdfd\""
+        Description = "Bearer Ã¾emasÃ½nÃ½ kullanan JWT Yetkilendirme baÃ¾lÃ½Ã°Ã½.\r\n\r\n AÃ¾aÃ°Ã½daki metin giriÃ¾ine 'Bearer' [boÃ¾luk] ve ardÃ½ndan Ã¼retilen tokenÃ½ girin.\r\n\r\nÃ–rnek: \"Bearer 1safsfsdfdfd\""
     });
     option.AddSecurityRequirement(new OpenApiSecurityRequirement
     {
