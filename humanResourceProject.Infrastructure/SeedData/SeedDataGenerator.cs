@@ -20,7 +20,7 @@ namespace humanResourceProject.Infrastructure.SeedData
             using (var serviceScope = app.ApplicationServices.CreateScope())
             {
                 AppDbContext context = serviceScope.ServiceProvider.GetService<AppDbContext>();
-
+                var userManager = serviceScope.ServiceProvider.GetRequiredService<UserManager<AppUser>>();
                 context.Database.Migrate();
                 await CreateRolesAsync(serviceScope);
 
@@ -33,8 +33,7 @@ namespace humanResourceProject.Infrastructure.SeedData
 
                 if (!await context.AppUsers.AnyAsync())
                 {
-                    CreateFakeEmployeesAsync();
-                    await context.AppUsers.AddRangeAsync(appUsers);
+                    await CreateFakeEmployeesAsync();
                 }
                 await context.SaveChangesAsync();
 
@@ -83,7 +82,11 @@ namespace humanResourceProject.Infrastructure.SeedData
                             .RuleFor(e => e.FirstName, f => f.Name.FirstName())
                             .RuleFor(e => e.LastName, f => f.Name.LastName())
                             .RuleFor(e => e.MiddleName, f => f.Random.Bool(0.2f) ? f.Name.FirstName() : null)
-                            .RuleFor(e => e.Email, f => f.Person.Email)
+                            .RuleFor(e => e.Email, (f, e) => f.Internet.Email(e.FirstName, e.LastName).ToLowerInvariant())
+                            .RuleFor(e => e.NormalizedEmail, (f, e) => e.Email.ToUpperInvariant())
+                            .RuleFor(e => e.EmailConfirmed, _ => true)
+                            .RuleFor(e => e.UserName, (f, e) => e.Email)
+                            .RuleFor(e => e.NormalizedUserName, (f, e) => e.UserName.ToUpperInvariant())
                             .RuleFor(e => e.Address, f => f.Address.FullAddress())
                             .RuleFor(e => e.PhoneNumber, f => f.Phone.PhoneNumber("+90##########"))
                             .RuleFor(e => e.IdentificationNumber, f => f.Random.ULong(10000000000, 99999999999).ToString())
@@ -109,6 +112,11 @@ namespace humanResourceProject.Infrastructure.SeedData
                         {
                             appUser.UpdateDate = GetRandomDayAfterCreateDate(appUser.CreateDate);
                         }
+
+                        string password = "Pr123+";
+                        await userManager.CreateAsync(appUser, password);
+                        await userManager.AddToRoleAsync(appUser, "Personel");
+
                     }
                 }
 
@@ -119,17 +127,38 @@ namespace humanResourceProject.Infrastructure.SeedData
         {
             foreach (var company in companies)
             {
-                var employee = appUsers.Where(x => x.CompanyId == company.Id).First();
-                if (employee != null)
-                {
-                    var userManager = serviceScope.ServiceProvider.GetRequiredService<UserManager<AppUser>>();
-                    string password = "Cm123+";
+                //var employee = appUsers.Where(x => x.CompanyId == company.Id).First();
+                //if (employee != null)
+                //{
+                var companyManagerFake = new Faker<AppUser>()
+                        .RuleFor(e => e.Id, f => f.Random.Guid())
+                        .RuleFor(e => e.FirstName, f => f.Name.FirstName())
+                        .RuleFor(e => e.LastName, f => f.Name.LastName())
+                        .RuleFor(e => e.MiddleName, f => f.Random.Bool(0.2f) ? f.Name.FirstName() : null)
+                        .RuleFor(e => e.Email, (f, e) => f.Internet.Email(e.FirstName, e.LastName).ToLowerInvariant())
+                        .RuleFor(e => e.NormalizedEmail, (f, e) => e.Email.ToUpperInvariant())
+                        .RuleFor(e => e.EmailConfirmed, _ => true)
+                        .RuleFor(e => e.UserName, (f, e) => e.Email)
+                        .RuleFor(e => e.NormalizedUserName, (f, e) => e.UserName.ToUpperInvariant())
+                        .RuleFor(e => e.Address, f => f.Address.FullAddress())
+                        .RuleFor(e => e.PhoneNumber, f => f.Phone.PhoneNumber("+90##########"))
+                        .RuleFor(e => e.IdentificationNumber, f => f.Random.ULong(10000000000, 99999999999).ToString())
+                        .RuleFor(e => e.BloodGroup, f => f.PickRandom<BloodGroup>())
+                        .RuleFor(e => e.Birthdate, f => f.Date.Past(50))
+                        .RuleFor(e => e.Title, f => f.PickRandom<Title>())
+                        .RuleFor(e => e.Job, f => f.Name.JobTitle())
+                        .RuleFor(c => c.CreateDate, f => f.Date.Past(1))
+                        .RuleFor(e => e.Status, _ => Status.Active)
+                        .RuleFor(e => e.CompanyId, company.Id);
 
-                    employee.Status = Status.Active;
+                AppUser companyManagerUser = companyManagerFake.Generate();
+                string password = "Cm123+";
 
-                    await userManager.CreateAsync(employee, password);
-                    await userManager.AddToRoleAsync(employee, "CompanyManager");
-                }
+                var userManager = serviceScope.ServiceProvider.GetRequiredService<UserManager<AppUser>>();
+
+                await userManager.CreateAsync(companyManagerUser, password);
+                await userManager.AddToRoleAsync(companyManagerUser, "CompanyManager");
+                //}
             }
         }
 

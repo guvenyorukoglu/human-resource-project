@@ -13,11 +13,6 @@
                         <input asp-for="Email" class="form-control" />
                         <span asp-validation-for="Email" class="text-danger"></span>
                     </div>
-
-                    <div class="mb-3">
-                        <input asp-for="Id" type="hidden" class="form-control" />
-                        <span asp-validation-for="Id" class="text-danger"></span>
-                    </div>
                        
                     <div class="mb-3">
                         <label asp-for="Password" class="form-label"></label>
@@ -33,10 +28,9 @@
 
                     <div class="mt-3 text-center">
                         <p>
-                            <a asp-controller="Account" asp-action="Register">Don't have an account? Register here!</a>
+                            <a asp-controller="Account" asp-action="RegisterCompany">Don't have an account? Register here!</a>
                         </p>
                     </div>
-
                     <input type="hidden" asp-for="ReturnUrl" />
                 </form>
             </div>

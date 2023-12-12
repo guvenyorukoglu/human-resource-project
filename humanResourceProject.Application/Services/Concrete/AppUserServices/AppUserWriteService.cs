@@ -66,7 +66,10 @@ namespace humanResourceProject.Application.Services.Concrete.AppUserServices
             if (updatedUser == null)
                 return IdentityResult.Failed();
 
-            updatedUser.Email = model.Email ?? updatedUser.Email;
+            updatedUser.Email = model.Email.Trim().ToLowerInvariant() ?? updatedUser.Email;
+            updatedUser.NormalizedEmail = model.Email.Trim().ToUpperInvariant() ?? updatedUser.NormalizedEmail;
+            updatedUser.UserName = model.Email.Trim().ToLowerInvariant() ?? updatedUser.UserName;
+            updatedUser.NormalizedUserName = model.Email.Trim().ToUpperInvariant() ?? updatedUser.NormalizedUserName;
             updatedUser.LastName = model.LastName ?? updatedUser.LastName;
             updatedUser.Address = model.Address ?? updatedUser.Address;
             updatedUser.PhoneNumber = model.PhoneNumber ?? updatedUser.PhoneNumber;
@@ -76,7 +79,8 @@ namespace humanResourceProject.Application.Services.Concrete.AppUserServices
             updatedUser.UpdateDate = DateTime.Now;
             updatedUser.Status = Status.Modified;
 
-            if (await _writeRepository.Update(updatedUser))
+            var result = await _writeRepository.Update(updatedUser);
+            if (result)
                 return IdentityResult.Success;
             else
                 return IdentityResult.Failed();
