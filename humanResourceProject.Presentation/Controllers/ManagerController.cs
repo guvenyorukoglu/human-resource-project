@@ -67,20 +67,13 @@ namespace humanResourceProject.Presentation.Controllers
             }
         }
 
-        [HttpPost]
+        [HttpGet]
         public async Task<IActionResult> DeleteEmployee(Guid id)
-        {
-            return Ok();
-        }
-
-
-
-        {
+        {        
             var response = await _httpClient.DeleteAsync($"api/AppUser/{id}");
 
             if (response.IsSuccessStatusCode)
             {
-
                 return RedirectToAction("Employees");
             }
 
