@@ -11,12 +11,14 @@ namespace humanResourceProject.Application.Services.Concrete.AppUserServices
     public class AppUserReadService : BaseReadService<AppUser>, IAppUserReadService
     {
         private readonly SignInManager<AppUser> _signInManager;
+        private readonly UserManager<AppUser> _userManager;
         private readonly IBaseReadRepository<AppUser> _readRepository;
 
-        public AppUserReadService(IBaseReadRepository<AppUser> readRepository, SignInManager<AppUser> signInManager) : base(readRepository)
+        public AppUserReadService(IBaseReadRepository<AppUser> readRepository, SignInManager<AppUser> signInManager, UserManager<AppUser> userManager) : base(readRepository)
         {
             _readRepository = readRepository;
             _signInManager = signInManager;
+            _userManager = userManager;
         }
 
         public async Task<List<PersonelVM>> GetEmployeesByCompanyId(Guid companyId)
@@ -39,10 +41,12 @@ namespace humanResourceProject.Application.Services.Concrete.AppUserServices
 
         public async Task<SignInResult> Login(LoginDTO model)
         {
-            AppUser appUser = await _readRepository.GetSingleDefault(x => x.Email == model.Email);
+            AppUser appUser = await _userManager.FindByEmailAsync(model.Email);
             if (appUser == null)
                 return SignInResult.Failed;
-            return await _signInManager.PasswordSignInAsync(model.Email, model.Password, false, false);
+
+            var result = await _signInManager.PasswordSignInAsync(appUser, model.Password, false, false);
+            return result;
         }
 
         public async Task Logout()

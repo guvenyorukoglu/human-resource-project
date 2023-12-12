@@ -1,22 +1,16 @@
-
-using humanResourceProject.Application.Services.Abstract.IAppUserServices;
-using humanResourceProject.Application.Services.Abstract.IBaseServices;
 using humanResourceProject.Application.Services.Abstract.ICompanyServices;
-using humanResourceProject.Application.Services.BaseServices;
-using humanResourceProject.Domain.Entities.Concrete;
-using humanResourceProject.Domain.Enum;
 using humanResourceProject.Models.DTOs;
 using humanResourceProject.Models.VMs;
-using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
-using System.Text.Json;
 using System.Text;
+using System.Text.Json;
 using Newtonsoft.Json;
 using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace humanResourceProject.Presentation.Controllers
 {
+    [Authorize(Roles = "SiteManager")]
     public class CompanyController : Controller
     {
         private readonly ICompanyReadService _companyReadService;
@@ -63,20 +57,16 @@ namespace humanResourceProject.Presentation.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateCompany(CompanyRegisterDTO model)
         {
-            
+
 
             if (!ModelState.IsValid)
             {
                 return View(model); // Model valid değil ise validation errorları ile birlikte register sayfasına geri döner
             }
 
-           
-            var json = System.Text.Json.JsonSerializer.Serialize(model);
-
-            
+            var json = JsonSerializer.Serialize(model);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-           
             HttpResponseMessage response = await _httpClient.PostAsync("/api/Company/Create", content);
 
             if (response.IsSuccessStatusCode)
@@ -124,12 +114,11 @@ namespace humanResourceProject.Presentation.Controllers
                 return RedirectToAction("Companies");
             }
 
+
             return View("Error");
         }
 
-
-
-         [HttpPost]
+        [HttpPost]
         public async Task<IActionResult> DeleteCompany(Guid id)
         {
             HttpResponseMessage response = await _httpClient.DeleteAsync($"/api/Company/{id}");

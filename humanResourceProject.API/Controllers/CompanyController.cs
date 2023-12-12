@@ -1,12 +1,12 @@
-﻿using humanResourceProject.Application.Services.Abstract.ICompanyServices;
+using humanResourceProject.Application.Services.Abstract.ICompanyServices;
 using humanResourceProject.Models.DTOs;
+using Microsoft.AspNetCore.Authorization;
 using humanResourceProject.Models.VMs;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace humanResourceProject.API.Controllers
 {
-    //[Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class CompanyController : ControllerBase

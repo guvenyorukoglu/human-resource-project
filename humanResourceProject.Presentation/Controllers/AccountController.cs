@@ -1,14 +1,18 @@
-﻿using humanResourceProject.Models.DTOs;
+﻿using humanResourceProject.Domain.Entities.Concrete;
+using humanResourceProject.Models.DTOs;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using System.Security.Claims;
 using System.Text;
 using System.Text.Json;
 
 namespace humanResourceProject.Presentation.Controllers
 {
+    [Authorize]
     public class AccountController : Controller
     {
 
@@ -21,7 +25,6 @@ namespace humanResourceProject.Presentation.Controllers
             _httpClient = new HttpClient();
             //_httpClient.BaseAddress = new Uri("https://monitoreaseapi.azurewebsites.net"); // Azure
             _httpClient.BaseAddress = new Uri("https://localhost:7255/"); // Local
-
         }
 
         [AllowAnonymous]
@@ -47,7 +50,7 @@ namespace humanResourceProject.Presentation.Controllers
                 return View(model);
             }
 
-            var json = JsonSerializer.Serialize(model);
+            var json = JsonConvert.SerializeObject(model);
 
             var content = new StringContent(json, Encoding.UTF8, "application/json");
 
@@ -77,7 +80,7 @@ namespace humanResourceProject.Presentation.Controllers
             }
 
             // Serialize the model to JSON
-            var json = JsonSerializer.Serialize(model);
+            var json = JsonConvert.SerializeObject(model);
 
             // Create a StringContent from the serialized JSON
             var content = new StringContent(json, Encoding.UTF8, "application/json");
@@ -112,7 +115,7 @@ namespace humanResourceProject.Presentation.Controllers
                 return View(model);
             }
 
-            var json = JsonSerializer.Serialize(model);
+            var json = System.Text.Json.JsonSerializer.Serialize(model);
 
             var content = new StringContent(json, Encoding.UTF8, "application/json");
 
@@ -120,9 +123,19 @@ namespace humanResourceProject.Presentation.Controllers
 
             if (response.IsSuccessStatusCode)
             {
+                var api_response = await response.Content.ReadAsStringAsync();
+                dynamic parsedResponse = JsonConvert.DeserializeObject(api_response);
+                string userId = parsedResponse.userId;
+                string name = parsedResponse.name;
+                string surname = parsedResponse.surname;
+                string companyId = parsedResponse.companyId;
+
                 List<Claim> claims = new List<Claim>();
                 claims.Add(new Claim(ClaimTypes.Email, model.Email));
-                claims.Add(new Claim(ClaimTypes.NameIdentifier, model.Id.ToString()));
+                claims.Add(new Claim(ClaimTypes.NameIdentifier, userId));
+                claims.Add(new Claim(ClaimTypes.Name, name));
+                claims.Add(new Claim(ClaimTypes.Surname, surname));
+                claims.Add(new Claim("CompanyId", companyId));
 
     
                 ClaimsIdentity identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
@@ -145,6 +158,7 @@ namespace humanResourceProject.Presentation.Controllers
 
             if (response.IsSuccessStatusCode)
             {
+                await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
                 return RedirectToAction("Index", "Home");
             }
             else
@@ -153,7 +167,7 @@ namespace humanResourceProject.Presentation.Controllers
             }
         }
 
-
+        [AllowAnonymous]
         public IActionResult AccessDenied()
         {
             return View();

@@ -1,6 +1,7 @@
 ﻿using humanResourceProject.Application.Services.Abstract.IAppUserServices;
 using humanResourceProject.Application.Services.Abstract.ICompanyServices;
 using humanResourceProject.Application.Services.Concrete.CompanyServices;
+using humanResourceProject.Domain.Entities.Concrete;
 using humanResourceProject.Models.DTOs;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
@@ -37,6 +38,12 @@ namespace humanResourceProject.API.Controllers
             var result = await _appUserReadService.Login(model);
             if (result.Succeeded)
             {
+
+                AppUser appUser = await _appUserReadService.GetSingleDefault(x => x.Email == model.Email);
+
+                if (appUser == null)
+                    return Unauthorized();
+
                 var authClaims = new List<Claim> {
                     new Claim(ClaimTypes.Email, model.Email),
                     new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
@@ -48,7 +55,11 @@ namespace humanResourceProject.API.Controllers
                 return Ok(new
                 {
                     token = new JwtSecurityTokenHandler().WriteToken(token),
-                    expiration = token.ValidTo
+                    expiration = token.ValidTo,
+                    userId = appUser.Id,
+                    name = appUser.FirstName,
+                    surname = appUser.LastName,
+                    companyId = appUser.CompanyId
                 });
             }
             else
@@ -81,7 +92,7 @@ namespace humanResourceProject.API.Controllers
             return Ok("Yeni şirket yöneticisi oluşturuldu.");
         }
 
-        [HttpPost]
+        [HttpGet]
         [Route("Logout")]
         public async Task Logout()
         {

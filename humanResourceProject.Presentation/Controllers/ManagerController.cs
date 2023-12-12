@@ -1,14 +1,14 @@
-﻿ using Bogus.Bson;
 using humanResourceProject.Domain.Entities.Concrete;
 using humanResourceProject.Models.DTOs;
 using humanResourceProject.Models.VMs;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using System.Security.Claims;
 using System.Text;
 
 namespace humanResourceProject.Presentation.Controllers
 {
+    [Authorize]
     public class ManagerController : Controller
     {
 
@@ -27,31 +27,45 @@ namespace humanResourceProject.Presentation.Controllers
         public async Task<IActionResult> Employees()
         {
 
-            Guid id = Guid.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value);
-            var res = await _httpClient.GetAsync($"api/AppUser/{id}");
-            if (res.IsSuccessStatusCode)
+            Guid companyId = Guid.Parse(User.Claims.FirstOrDefault(x => x.Type == "CompanyId").Value);
+            var json = JsonConvert.SerializeObject(companyId);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
 
+            var response = await _httpClient.PostAsync($"api/AppUser/GetEmployeesByCompanyId/", content);
+            if (response.IsSuccessStatusCode)
             {
-                var content = await res.Content.ReadAsStringAsync();
-                var employee = JsonConvert.DeserializeObject<AppUser>(content);
+                var cont = await response.Content.ReadAsStringAsync();
+                var employees = JsonConvert.DeserializeObject<List<PersonelVM>>(cont);
+                return View(employees);
 
-
-
-
-                var response = await _httpClient.GetAsync($"api/AppUser/GetEmployeesByCompanyId/{employee.CompanyId}");
-                if (response.IsSuccessStatusCode)
-                {
-                    var cont = await response.Content.ReadAsStringAsync();
-                    var employees = JsonConvert.DeserializeObject<List<PersonelVM>>(cont);
-                    return View(employees);
-
-                }
             }
+
             return View();
         }
 
+        [HttpGet]
+        public IActionResult CreatePersonel()
+        {
+            return View(new UserRegisterDTO());
+        }
 
+        [HttpPost]
+        public async Task<IActionResult> CreatePersonel(UserRegisterDTO model)
+        {
+            var json = JsonConvert.SerializeObject(model);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
 
+            var response = await _httpClient.PostAsync($"api/AppUser", content);
+            if (response.IsSuccessStatusCode)
+            {
+                return RedirectToAction("Employees");
+            }
+            else
+            {
+                ModelState.AddModelError(response.StatusCode.ToString(), "Bir hata oluştu.");
+                return View(model);
+            }
+        }
 
         [HttpPost]
         public async Task<IActionResult> DeleteEmployee(Guid id)
@@ -93,10 +107,10 @@ namespace humanResourceProject.Presentation.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> EditEmployee(UpdateUserDTO updateUserDTO)
+        public async Task<IActionResult> EditEmployee(UpdateUserDTO employee)
         {
 
-            var json = JsonConvert.SerializeObject(updateUserDTO);
+            var json = JsonConvert.SerializeObject(employee);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
 
             var response = await _httpClient.PutAsync($"api/AppUser", content);
@@ -107,7 +121,7 @@ namespace humanResourceProject.Presentation.Controllers
             }
 
             ModelState.AddModelError(response.StatusCode.ToString(), "Bir hata oluştu.");
-            return View(updateUserDTO);
+            return View(employee);
         }
 
 

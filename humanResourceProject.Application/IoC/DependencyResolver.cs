@@ -18,6 +18,7 @@ namespace humanResourceProject.Application.IoC
     {
         protected override void Load(ContainerBuilder builder)
         {
+
             //Services Absrtact to Concrete
             builder.RegisterType<AppUserReadService>().As<IAppUserReadService>().InstancePerLifetimeScope();
             builder.RegisterType<AppUserWriteService>().As<IAppUserWriteService>().InstancePerLifetimeScope();

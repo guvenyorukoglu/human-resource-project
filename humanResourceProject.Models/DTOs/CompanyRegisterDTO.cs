@@ -11,6 +11,7 @@ namespace humanResourceProject.Models.DTOs
         public string CompanyName { get; set; }
         [Required(ErrorMessage = "Adres alanı boş geçilemez!")]
         [DisplayName("Adres")]
+        [StringLength(200, ErrorMessage = "Adres alanı en fazla 200, en az 3 karakter olabilir!", MinimumLength = 3)]
         public string Address { get; set; }
         [Required(ErrorMessage = "Vergi numarası alanı boş geçilemez!")]
         [DisplayName("Vergi Numarası")]
@@ -18,6 +19,7 @@ namespace humanResourceProject.Models.DTOs
         public string TaxNumber { get; set; }
         [Required(ErrorMessage = "Vergi dairesi alanı boş geçilemez!")]
         [DisplayName("Vergi Dairesi")]
+        [StringLength(50, ErrorMessage = "Vergi dairesi alanı en fazla 50, en az 3 karakter olabilir!", MinimumLength = 3)]
         public string TaxOffice { get; set; }
         [Required(ErrorMessage = "Telefonu alanı boş geçilemez!")]
         [DisplayName("Telefon")]
