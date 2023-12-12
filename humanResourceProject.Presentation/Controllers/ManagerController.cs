@@ -1,4 +1,5 @@
-﻿using humanResourceProject.Models.DTOs;
+using humanResourceProject.Domain.Entities.Concrete;
+using humanResourceProject.Models.DTOs;
 using humanResourceProject.Models.VMs;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -25,6 +26,7 @@ namespace humanResourceProject.Presentation.Controllers
 
         public async Task<IActionResult> Employees()
         {
+
             Guid companyId = Guid.Parse(User.Claims.FirstOrDefault(x => x.Type == "CompanyId").Value);
             var json = JsonConvert.SerializeObject(companyId);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
@@ -67,6 +69,11 @@ namespace humanResourceProject.Presentation.Controllers
 
         [HttpPost]
         public async Task<IActionResult> DeleteEmployee(Guid id)
+        {
+            return Ok();
+        }
+
+
 
         {
             var response = await _httpClient.DeleteAsync($"api/AppUser/{id}");

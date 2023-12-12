@@ -1,6 +1,7 @@
-﻿using humanResourceProject.Application.Services.Abstract.ICompanyServices;
+using humanResourceProject.Application.Services.Abstract.ICompanyServices;
 using humanResourceProject.Models.DTOs;
 using Microsoft.AspNetCore.Authorization;
+using humanResourceProject.Models.VMs;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -22,7 +23,8 @@ namespace humanResourceProject.API.Controllers
         [HttpGet]
         public async Task<IActionResult> Companies()
         {
-            return Ok(await _companyReadService.GetAll());
+            var list = await _companyReadService.GetAll();
+            return Ok(list);
         }
 
         [HttpGet("{id}")]
