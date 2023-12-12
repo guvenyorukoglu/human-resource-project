@@ -65,7 +65,8 @@ namespace humanResourceProject.API.Controllers
             return Ok("Güncellenmiştir.");
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete]
+        [Route("{id}")]
         public async Task<IActionResult> DeleteEmployee(Guid id) // Personel Silme
         {
             var result = await _appUserWriteService.Delete(id);

@@ -35,7 +35,7 @@ namespace humanResourceProject.Application.Services.Concrete.AppUserServices
                     Title = x.Title,
                     Job = x.Job
                 },
-                where: x => x.CompanyId == companyId,
+                where: x => x.CompanyId == companyId && x.Status != Domain.Enum.Status.Inactive,
                 orderBy: x => x.OrderBy(x => x.FirstName));
         }
 
