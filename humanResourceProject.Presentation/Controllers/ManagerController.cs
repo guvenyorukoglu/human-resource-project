@@ -117,7 +117,10 @@ namespace humanResourceProject.Presentation.Controllers
             return View(employee);
         }
 
-
+        public async Task<IActionResult> Home()
+        {
+            return View();
+        }
 
     }
 }
