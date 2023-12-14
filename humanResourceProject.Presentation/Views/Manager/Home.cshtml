@@ -1,0 +1,226 @@
+﻿@{
+    ViewData["Title"] = "Home";
+    Layout = "~/Views/Shared/_HRLayout.cshtml";
+}
+
+
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Index</title>
+
+    <script src="
+https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.js
+"></script>
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.js"></script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
+
+    <script>
+        var eventName = [];
+        var start = [];
+        var end = [];
+
+        //Todo: push metotları yazılacak
+
+        document.addEventListener("DOMContentLoaded", function () {
+            var calendarEl = document.getElementById("calendar");
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: "dayGridMonth",
+                locale: "tr",
+                selectable: true,
+                selectHelper: true,
+                select: function () {
+                    $("#calendarEventModal").modal("toggle");
+                },
+                headerToolbar: {
+                    left: "prev,next today",
+                    center: "title",
+                    right: "dayGridMonth,timeGridWeek,timeGridDay",
+                },
+                events: [
+                    {
+                        title: eventName,
+                        start: start,
+                        end: end,
+                        color: "yellow",
+                    },
+                ],
+            });
+
+            calendar.render();
+        });
+    </script>
+
+
+
+</head>
+<body>
+
+    <div class="row">
+        @Html.Partial("_PanelPartial")
+
+        <div class="aside mt-5 col-md-9">
+            <div class="row text-center">
+                <div class="col-md-4 leave-info card">
+                    <h6>İZİN BİLGİLERİM</h6>
+
+                    <canvas id="myChart" style="margin:0 auto;" ></canvas>
+                    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+                    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.min.js"></script>
+                    <script>
+                        document.addEventListener("DOMContentLoaded", function () {
+                            const ctx = document.getElementById("myChart");
+                            var leaveType = [];
+                            var used = [];
+                            var remain = [];
+                            var futureDated = [];
+
+                            //Todo: push metotları yazılacak
+
+
+
+                            new Chart(ctx, {
+                                type: "doughnut",
+                                data:
+                                {
+                                    labels: ["KULLANILAN", "İLERi TARİHLİ", "KALAN"], //leaveType olarak düzelecek
+                                    datasets:
+                                        [
+                                            {
+                                                label: "",
+                                                data: [12, 19, 8],
+                                                borderWidth: 1,
+                                            },
+                                        ],
+                                },
+                                options: {},
+                            });
+                        });
+                    </script>
+                </div>
+
+                <div class="col-md-4 calender card">
+                    <div id="calendar" style="width: 90%"></div>
+                </div>
+
+                <div class="col-md-3 holiday-info card"><h6>RESMİ TATİLLER</h6></div>
+            </div>
+
+            <div class="row text-center">
+                <div class="col-md-4 upcoming-leave-info card"><h6>YAKLAŞAN İZİNLER</h6></div>
+                <div class="col-md-4 upcoming-birthday-info card"><h6>YAKLAŞAN DOĞUMGÜNLERİ</h6></div>
+                <div class="col-md-3 event-info card"><h6>ETKİNLİKLER</h6></div>
+            </div>
+        </div>
+
+        <div id="calendarEventModal" class="modal fade" role="dialog">
+            <div class="modal-dialog modal-md text-center">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">
+                            &times;
+                        </button>
+                        <h4 class="modal-title">Etkinlik Oluştur</h4>
+                    </div>
+                    <div class="modal-body">
+                        <form action="" class="form-control">
+                            <label for="Etkinlik">Etkinlik Adı</label>
+                            <input type="text" />
+                            <hr />
+                            <label for="Etkinlik">Etkinlik Başlangıç Zamanı</label>
+                            <input type="date" />
+                            <hr />
+                            <label for="Etkinlik">Etkinlik Bitiş Zamanı</label>
+                            <input type="date" />
+                            <hr />
+                            <button class="btn btn-primary">Kaydet</button>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">
+                            Close
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+
+<style>
+    .aside {
+        margin-top: 100px;
+        margin-left: 50px;
+    }
+
+    .card {
+        margin: 10px;
+        padding: 10px;
+        height: 22vw;
+    }
+
+    .leave-info {
+        background-color: #f1d184;
+    }
+
+    .calender {
+        background-color: #75cfa6;
+        overflow: auto;
+    }
+
+    .holiday-info {
+        background-color: #e48774;
+    }
+
+    .upcoming-leave-info {
+        background-color: #e48774;
+    }
+
+    .upcoming-birthday-info {
+        background-color: #f1d184;
+    }
+
+    .event-info {
+        background-color: #75cfa6;
+    }
+
+    h6 {
+        font-size: 1vw;
+        color: #ffffff;
+    }
+
+    /* CALENDAR */
+
+    #calendar a {
+        font-size: 0.7vw;
+        color: #000000;
+        text-decoration: none;
+    }
+
+    .fc .fc-toolbar.fc-header-toolbar {
+        font-size: 0.5vw;
+    }
+
+
+    .fc-theme-standard td,
+    .fc-theme-standard th {
+        border: none;
+    }
+
+    /* CHART */
+
+    #myChart {
+        max-width: 300px;
+        max-height: 300px;
+    }
+
+
+    
+</style>
+
