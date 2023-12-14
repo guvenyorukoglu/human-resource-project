@@ -104,5 +104,12 @@ namespace humanResourceProject.Presentation.Controllers
             ModelState.AddModelError(response.StatusCode.ToString(), "Bir hata oluştu.");
             return View(employee);
         }
+
+
+        public async Task<IActionResult> Home()
+        {
+            return View();
+        }
+
     }
 }
