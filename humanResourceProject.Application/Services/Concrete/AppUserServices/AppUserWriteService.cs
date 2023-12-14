@@ -12,6 +12,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 
+
 namespace humanResourceProject.Application.Services.Concrete.AppUserServices
 {
     public class AppUserWriteService : BaseWriteService<AppUser>, IAppUserWriteService

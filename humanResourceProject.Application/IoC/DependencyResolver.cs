@@ -15,13 +15,6 @@ using humanResourceProject.Application.Services.Concrete.BaseServices;
 using humanResourceProject.Application.Services.Concrete.AdvanceServices;
 using humanResourceProject.Application.Services.Concrete.AppUserServices;
 using humanResourceProject.Application.Services.Concrete.CompanyServices;
-using humanResourceProject.Application.Services.Concrete.DeparmentServices;
-using humanResourceProject.Application.Services.Concrete.DepartmentServices;
-using humanResourceProject.Application.Services.Concrete.ExpenseServices;
-using humanResourceProject.Application.Services.Concrete.ImageServices;
-using humanResourceProject.Application.Services.Concrete.JobServices;
-using humanResourceProject.Application.Services.Concrete.LeaveServices;
-using humanResourceProject.Application.Services.Concrete.MailServices;
 using humanResourceProject.Domain.Entities.Concrete;
 
 
@@ -48,6 +41,7 @@ namespace humanResourceProject.Application.IoC
 
             builder.RegisterType<CompanyReadService>().As<ICompanyReadService>().InstancePerLifetimeScope();
             builder.RegisterType<CompanyWriteService>().As<ICompanyWriteService>().InstancePerLifetimeScope();
+            builder.RegisterType<ImageService>().As<IImageService>().InstancePerLifetimeScope();
 
             builder.RegisterType<ImageService>().As<IImageService>().InstancePerLifetimeScope();
 
