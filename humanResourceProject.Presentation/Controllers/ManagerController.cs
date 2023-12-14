@@ -1,4 +1,3 @@
-using humanResourceProject.Domain.Entities.Concrete;
 using humanResourceProject.Models.DTOs;
 using humanResourceProject.Models.VMs;
 using Microsoft.AspNetCore.Authorization;
@@ -11,7 +10,6 @@ namespace humanResourceProject.Presentation.Controllers
     [Authorize]
     public class ManagerController : Controller
     {
-
         private readonly HttpClient _httpClient;
         private readonly IConfiguration _configuration;
 
@@ -20,13 +18,10 @@ namespace humanResourceProject.Presentation.Controllers
             _configuration = configuration;
             _httpClient = new HttpClient();
             _httpClient.BaseAddress = new Uri("https://localhost:7255/");
-
         }
-
 
         public async Task<IActionResult> Employees()
         {
-
             Guid companyId = Guid.Parse(User.Claims.FirstOrDefault(x => x.Type == "CompanyId").Value);
             var json = JsonConvert.SerializeObject(companyId);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
@@ -39,7 +34,6 @@ namespace humanResourceProject.Presentation.Controllers
                 return View(employees);
 
             }
-
             return View();
         }
 
@@ -69,7 +63,7 @@ namespace humanResourceProject.Presentation.Controllers
 
         [HttpGet]
         public async Task<IActionResult> DeleteEmployee(Guid id)
-        {        
+        {
             var response = await _httpClient.DeleteAsync($"api/AppUser/{id}");
 
             if (response.IsSuccessStatusCode)
@@ -79,10 +73,6 @@ namespace humanResourceProject.Presentation.Controllers
 
             return View("Error");
         }
-
-
-
-
 
         [HttpGet]
         public async Task<IActionResult> EditEmployee(Guid id)
@@ -96,13 +86,11 @@ namespace humanResourceProject.Presentation.Controllers
 
             }
             return View("Error");
-
         }
 
         [HttpPost]
         public async Task<IActionResult> EditEmployee(UpdateUserDTO employee)
         {
-
             var json = JsonConvert.SerializeObject(employee);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
 
@@ -116,6 +104,7 @@ namespace humanResourceProject.Presentation.Controllers
             ModelState.AddModelError(response.StatusCode.ToString(), "Bir hata oluştu.");
             return View(employee);
         }
+
 
         public async Task<IActionResult> Home()
         {

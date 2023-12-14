@@ -1,11 +1,14 @@
 ﻿using AutoMapper;
 using humanResourceProject.Application.Services.Abstract.IAppUserServices;
+using humanResourceProject.Application.Services.Abstract.IImageServices;
 using humanResourceProject.Application.Services.Concrete.BaseServices;
 using humanResourceProject.Domain.Entities.Concrete;
 using humanResourceProject.Domain.Enum;
 using humanResourceProject.Domain.IRepository.BaseRepos;
 using humanResourceProject.Models.DTOs;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Configuration;
+
 
 namespace humanResourceProject.Application.Services.Concrete.AppUserServices
 {
@@ -15,12 +18,16 @@ namespace humanResourceProject.Application.Services.Concrete.AppUserServices
         private readonly IBaseReadRepository<AppUser> _readRepository;
         private readonly UserManager<AppUser> _userManager;
         private readonly IMapper _mapper;
-        public AppUserWriteService(IBaseWriteRepository<AppUser> writeRepository, IBaseReadRepository<AppUser> readRepository, IMapper mapper, UserManager<AppUser> userManager, SignInManager<AppUser> signInManager) : base(writeRepository, readRepository)
+        private readonly IImageService _imageService;
+        private readonly IConfiguration _configuration;
+        public AppUserWriteService(IBaseWriteRepository<AppUser> writeRepository, IBaseReadRepository<AppUser> readRepository, IMapper mapper, UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, IImageService imageService, IConfiguration configuration) : base(writeRepository, readRepository)
         {
             _writeRepository = writeRepository;
             _readRepository = readRepository;
             _mapper = mapper;
             _userManager = userManager;
+            _imageService = imageService;
+            _configuration = configuration;
         }
 
         public async Task<UpdateUserDTO> GetUpdateUserDTOById(Guid id)
@@ -50,6 +57,8 @@ namespace humanResourceProject.Application.Services.Concrete.AppUserServices
         {
             if (model == null)
                 return IdentityResult.Failed();
+
+            model = await _imageService.UploadImageToAzure(model);
 
             AppUser newUser = _mapper.Map<AppUser>(model);
             newUser.UserName = newUser.Email;
@@ -85,11 +94,11 @@ namespace humanResourceProject.Application.Services.Concrete.AppUserServices
             else
                 return IdentityResult.Failed();
 
-
-
-
         }
 
-
+        //public async Task<IdentityResult> UpdateProfileImage(Guid id)
+        //{
+        //    AppUser user = await _readRepository.GetSingleDefault(x => x.Id == id);
+        //}
     }
 }

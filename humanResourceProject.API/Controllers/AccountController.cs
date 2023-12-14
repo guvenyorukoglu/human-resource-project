@@ -59,7 +59,8 @@ namespace humanResourceProject.API.Controllers
                     userId = appUser.Id,
                     name = appUser.FirstName,
                     surname = appUser.LastName,
-                    companyId = appUser.CompanyId
+                    companyId = appUser.CompanyId,
+                    imagePath = appUser.ImagePath
                 });
             }
             else
@@ -83,7 +84,7 @@ namespace humanResourceProject.API.Controllers
 
         [HttpPost]
         [Route("RegisterUser")]
-        public async Task<IActionResult> RegisterUser([FromBody] UserRegisterDTO model)
+        public async Task<IActionResult> RegisterUser([FromForm] UserRegisterDTO model)
         {
             var result = await _appUserWriteService.RegisterCompanyManager(model);
             if (!result.Succeeded)
@@ -113,7 +114,12 @@ namespace humanResourceProject.API.Controllers
             return token;
         }
 
-
+        //[HttpPost]
+        //[Route("UpdateProfileImage")]
+        //public async Task<IActionResult> UpdateProfileImage([FromBody] Guid id) 
+        //{
+        //    return Ok(await _appUserWriteService.UpdateProfileImage(id));
+        //}
 
     }
 }

@@ -67,7 +67,7 @@ namespace humanResourceProject.Models.DTOs
         [Required(ErrorMessage = "Şirket alanı boş geçilemez!")]
         [DisplayName("Şirket")]
         public Guid CompanyId { get; set; }
-        public List<CompanyVM>? Companies { get; set; }
+        //public List<CompanyVM>? Companies { get; set; }
 
 
     }
