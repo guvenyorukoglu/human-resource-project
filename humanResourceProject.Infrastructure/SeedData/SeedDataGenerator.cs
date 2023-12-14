@@ -96,6 +96,7 @@ namespace humanResourceProject.Infrastructure.SeedData
                             .RuleFor(e => e.Job, f => f.Name.JobTitle())
                             .RuleFor(c => c.CreateDate, f => f.Date.Past(1))
                             .RuleFor(e => e.Status, f => f.Random.Bool(0.9f) ? Status.Active : (f.Random.Bool(0.5f) ? Status.Modified : Status.Inactive))
+                            .RuleFor(e => e.ImagePath, _ => "https://ik.imagekit.io/7ypp4olwr/defaultprofile.jpg?tr=h-200,w-200")
                             .RuleFor(e => e.CompanyId, company.Id);
 
                             appUsers.Add(employeeFake.Generate());
@@ -149,6 +150,7 @@ namespace humanResourceProject.Infrastructure.SeedData
                         .RuleFor(e => e.Job, f => f.Name.JobTitle())
                         .RuleFor(c => c.CreateDate, f => f.Date.Past(1))
                         .RuleFor(e => e.Status, _ => Status.Active)
+                        .RuleFor(e => e.ImagePath, _ => "https://ik.imagekit.io/7ypp4olwr/defaultprofile.jpg?tr=h-200,w-200")
                         .RuleFor(e => e.CompanyId, company.Id);
 
                 AppUser companyManagerUser = companyManagerFake.Generate();
@@ -207,6 +209,7 @@ namespace humanResourceProject.Infrastructure.SeedData
                     CreateDate = DateTime.Now,
                     Status = Status.Active,
                     UserName = "SiteManager",
+                    ImagePath = "https://ik.imagekit.io/7ypp4olwr/defaultprofile.jpg?tr=h-200,w-200",
                     Email = email,
                     CompanyId = company.Id
                 };

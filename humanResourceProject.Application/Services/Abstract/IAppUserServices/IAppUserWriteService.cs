@@ -11,6 +11,7 @@ namespace humanResourceProject.Application.Services.Abstract.IAppUserServices
         Task<IdentityResult> RegisterCompanyManager(UserRegisterDTO model); // UserRegisterDTO modelini alır, veritabanına Şirket Yöneticisi olarak kaydeder.
         Task<UpdateUserDTO> GetUpdateUserDTOById(Guid id); // Güncelleme sayfası için UpdateUserDTO döndürür.
         Task<IdentityResult> Update(UpdateUserDTO model); // UpdateUserDTO modelini alır, veritabanında günceller.
+        //Task<IdentityResult> UpdateProfileImage(Guid id); // Profil resmini günceller.
 
     }
 }
