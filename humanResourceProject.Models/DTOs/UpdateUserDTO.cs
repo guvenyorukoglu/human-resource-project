@@ -16,6 +16,7 @@ namespace humanResourceProject.Models.DTOs
         [DisplayName("Email")]
         [EmailValidations(ErrorMessage = "Lütfen geçerli bir email adresi giriniz!")]
         public string Email { get; set; }
+        [RegularExpression(@"^[a-zA-Z]*$", ErrorMessage = "Yalnızca alfabetik karakterlere izin verilir.")]
         public string LastName { get; set; }
         public string Address { get; set; }
         [Required(ErrorMessage = "Telefonu alanı boş geçilemez!")]

@@ -14,7 +14,6 @@ namespace humanResourceProject.Models.DTOs
         [DisplayName("Şifre")]
         [PasswordValidations(ErrorMessage = "Lütfen geçerli bir şifre belirleyin!")]
         public string Password { get; set; }
-
         public string? ReturnUrl { get; set; }
     }
 }

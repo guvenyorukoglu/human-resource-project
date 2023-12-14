@@ -11,13 +11,16 @@ namespace humanResourceProject.Models.DTOs
     {
         [Required(ErrorMessage = "İsim alanı boş geçilemez!")]
         [DisplayName("İsim*")]
+        [RegularExpression(@"^[a-zA-Z]*$", ErrorMessage = "Yalnızca alfabetik karakterlere izin verilir.")]
         public string FirstName { get; set; }
 
         [DisplayName("İkinci İsim")]
+        [RegularExpression(@"^[a-zA-Z]*$", ErrorMessage = "Yalnızca alfabetik karakterlere izin verilir.")]
         public string? MiddleName { get; set; }
 
         [Required(ErrorMessage = "Soyisim alanı boş geçilemez!")]
         [DisplayName("Soyisim*")]
+        [RegularExpression(@"^[a-zA-Z]*$", ErrorMessage = "Yalnızca alfabetik karakterlere izin verilir.")]
         public string LastName { get; set; }
         [Required(ErrorMessage = "Email alanı boş geçilemez!")]
         [DisplayName("Email*")]
@@ -59,6 +62,7 @@ namespace humanResourceProject.Models.DTOs
         public Title Title { get; set; }
         [Required(ErrorMessage = "Meslek alanı boş geçilemez!")]
         [DisplayName("Meslek*")]
+        [RegularExpression(@"^[a-zA-Z]*$", ErrorMessage = "Yalnızca alfabetik karakterlere izin verilir.")]
         public string Job { get; set; }
         public string? ImagePath { get; set; }
 
