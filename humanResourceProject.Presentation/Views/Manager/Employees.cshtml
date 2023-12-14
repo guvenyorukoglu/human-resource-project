@@ -5,42 +5,34 @@
     Layout = "~/Views/Shared/_HRLayout.cshtml";
 }
 
-
 @model List<PersonelVM>
-
 
 <head>
 
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.css" />
 
- 
-
-
-
     <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.js"></script>
-
-    
-
-  
-
+    <style>
+        .panel {
+            height: 120vh;
+        }
+    </style>
 </head>
 
 <body>
-
     <div class="row">
-
         @Html.Partial("_PanelPartial")
 
 
         <div class="aside container mt-5 col-md-9 col-sm-9">
-           @* <div class="search-bar" style="display: flex">
-                <input type="text" id="searchInput" placeholder="Arama Yap" /><i class="fas fa-search mt-2"></i>
+            @* <div class="search-bar" style="display: flex">
+            <input type="text" id="searchInput" placeholder="Arama Yap" /><i class="fas fa-search mt-2"></i>
             </div>
             <hr /> *@
             @if (Model != null)
             {
                 <a asp-action="CreatePersonel" asp-controller="Manager">
-                    <button class="custom-button">Personel Ekle</button>
+                    <button class="custom-button custom-button--create-personel">Personel Ekle</button>
                 </a>
             }
 
@@ -49,11 +41,11 @@
                 <script>
                     $(document).ready(function () {
                         $('#employees').DataTable();
-                            });
+                    });
 
                 </script>
 
-                
+
                 <table id="employees"
                        class="display">
                     <thead>
@@ -101,19 +93,19 @@
                         }
                     </tbody>
                 </table>
-                
-            
-               @* @Html.PagedListPager((IPagedList)Model,page=>Url.Action("Employees", new {page}))*@
 
-              @*  <script>
-                    $(document).ready(function () {
-                        $("#searchInput").on("keyup", function () {
-                            var value = $(this).val().toLowerCase();
-                            $("tbody tr").filter(function () {
-                                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-                            });
-                        });
-                    });
+
+                @* @Html.PagedListPager((IPagedList)Model,page=>Url.Action("Employees", new {page}))*@
+
+                @*  <script>
+                $(document).ready(function () {
+                $("#searchInput").on("keyup", function () {
+                var value = $(this).val().toLowerCase();
+                $("tbody tr").filter(function () {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                });
+                });
+                });
                 </script>*@
 
 

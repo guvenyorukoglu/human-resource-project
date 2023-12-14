@@ -16,33 +16,43 @@
             align-items: center;
         }
 
-        .logo-container img {
-            max-width: 100%;
-            height: auto;
-        }
+            .logo-container img {
+                max-width: 100%;
+                height: auto;
+            }
 
         section {
             text-align: center;
         }
+
+        .panel-button {
+            background-color: #133a63;
+            padding: 5px 20px;
+            transition: all 0.3s ease-in-out;
+        }
+
+            .panel-button:hover {
+                background-color: snow;
+                color: #133a63;
+            }
     </style>
 </head>
 <body>
 
     <header>
         <div class="logo-container">
-           @* <h1>Monitorease</h1>*@
-            <h2 class="mt-5" style="z-index:999" >İnsan Kaynaklarınızı Yönetmenin Kolay ve Etkili Yolu!</h2>
-            <a asp-action="Home" asp-controller="Manager" class="mt-2" style="z-index:999"><button class="btn btn-primary">Panele Git</button></a>
-            
+            @* <h1>Monitorease</h1>*@
+            <h2 class="mt-5" style="z-index:999">İnsan Kaynaklarınızı Yönetmenin Kolay ve Etkili Yolu!</h2>
+            <a asp-action="Home" asp-controller="Manager" style="z-index:999"><button class="btn btn-primary mt-2 panel-button">Panele Git</button></a>
+
             <div class="banner vector">
                 <img src="~/ImagesLogo/HRBanner.png" alt="Monitorease Logo" style="width:75%;position:relative; top:-50px">
             </div>
-                   
+
         </div>
     </header>
 
     <section>
-       
     </section>
 
 </body>
