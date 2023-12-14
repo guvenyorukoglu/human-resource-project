@@ -81,16 +81,16 @@ namespace humanResourceProject.Presentation.Controllers
                 return View(model); // Model valid değil ise validation errorları ile birlikte register sayfasına geri döner
             }
 
-            string fileExtension = Path.GetExtension(model.UploadPath.FileName).ToLower();
-
-            if (fileExtension != ".png" && fileExtension != ".jpg" && fileExtension != ".jpeg")
-            {
-                ModelState.AddModelError(string.Empty, "Yüklediğiniz profil fotoğrafının uzantısı '.png', '.jpg' veya '.jpeg' olmalıdır.");
-                return View(model);
-            }
-
             if (model.UploadPath != null && model.UploadPath.Length > 0)
             {
+                string fileExtension = Path.GetExtension(model.UploadPath.FileName).ToLower();
+
+                if (fileExtension != ".png" && fileExtension != ".jpg" && fileExtension != ".jpeg")
+                {
+                    ModelState.AddModelError(string.Empty, "Yüklediğiniz profil fotoğrafının uzantısı '.png', '.jpg' veya '.jpeg' olmalıdır.");
+                    return View(model);
+                }
+
                 using var multipartContent = new MultipartFormDataContent
                 {
                     { new StringContent(model.FirstName, Encoding.UTF8, MediaTypeNames.Text.Plain), "FirstName" },
@@ -129,9 +129,26 @@ namespace humanResourceProject.Presentation.Controllers
             }
             else
             {
-                var json = JsonConvert.SerializeObject(model);
-                var content = new StringContent(json, Encoding.UTF8, "application/json");
-                HttpResponseMessage response = await _httpClient.PostAsync("/api/Account/RegisterUser", content);
+                using var multipartContent = new MultipartFormDataContent
+                {
+                    { new StringContent(model.FirstName, Encoding.UTF8, MediaTypeNames.Text.Plain), "FirstName" },
+                    { new StringContent(model.MiddleName ?? "", Encoding.UTF8, MediaTypeNames.Text.Plain), "MiddleName" },
+                    { new StringContent(model.LastName, Encoding.UTF8, MediaTypeNames.Text.Plain), "LastName" },
+                    { new StringContent(model.Email, Encoding.UTF8, MediaTypeNames.Text.Plain), "Email" },
+                    { new StringContent(model.Password, Encoding.UTF8, MediaTypeNames.Text.Plain), "Password" },
+                    { new StringContent(model.ConfirmPassword, Encoding.UTF8, MediaTypeNames.Text.Plain), "ConfirmPassword" },
+                    { new StringContent(model.PhoneNumber, Encoding.UTF8, MediaTypeNames.Text.Plain), "PhoneNumber" },
+                    { new StringContent(model.Birthdate.ToString(), Encoding.UTF8, MediaTypeNames.Text.Plain), "Birthdate" },
+                    { new StringContent(model.Address, Encoding.UTF8, MediaTypeNames.Text.Plain), "Address" },
+                    { new StringContent(model.IdentificationNumber, Encoding.UTF8, MediaTypeNames.Text.Plain), "IdentificationNumber" },
+                    { new StringContent(model.BloodGroup.ToString(), Encoding.UTF8, MediaTypeNames.Text.Plain), "BloodGroup" },
+                    { new StringContent(model.Title.ToString(), Encoding.UTF8, MediaTypeNames.Text.Plain), "Title" },
+                    { new StringContent(model.Job, Encoding.UTF8, MediaTypeNames.Text.Plain), "Job" },
+                    { new StringContent(model.ImagePath ?? "", Encoding.UTF8, MediaTypeNames.Text.Plain), "ImagePath" },
+                    { new StringContent(model.CompanyId.ToString(), Encoding.UTF8, MediaTypeNames.Text.Plain), "CompanyId" }
+                };
+
+                HttpResponseMessage response = await _httpClient.PostAsync("/api/Account/RegisterUser", multipartContent);
 
                 if (response.IsSuccessStatusCode)
                 {
