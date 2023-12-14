@@ -20,6 +20,7 @@ namespace humanResourceProject.Models.DTOs
         [Required(ErrorMessage = "Vergi dairesi alanı boş geçilemez!")]
         [DisplayName("Vergi Dairesi")]
         [StringLength(50, ErrorMessage = "Vergi dairesi alanı en fazla 50, en az 3 karakter olabilir!", MinimumLength = 3)]
+        [RegularExpression(@"^[a-zA-Z]*$", ErrorMessage = "Yalnızca alfabetik karakterlere izin verilir.")]
         public string TaxOffice { get; set; }
         [Required(ErrorMessage = "Telefonu alanı boş geçilemez!")]
         [DisplayName("Telefon")]
