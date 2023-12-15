@@ -2,10 +2,8 @@ using humanResourceProject.Application.Services.Abstract.IAppUserServices;
 using humanResourceProject.Application.Services.Abstract.IMailServices;
 using humanResourceProject.Domain.Entities.Concrete;
 using humanResourceProject.Models.DTOs;
-using humanResourceProject.Models.VMs;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.WebUtilities;
 using System.Text;
 
@@ -19,7 +17,7 @@ namespace humanResourceProject.API.Controllers
         private readonly IAppUserReadService _appUserReadService;
         private readonly IAppUserWriteService _appUserWriteService;
         private readonly IMailService _mailService;
-        private readonly UserManager<AppUser>  _userManager;
+        private readonly UserManager<AppUser> _userManager;
 
         public AppUserController(IAppUserReadService appUserReadService, IAppUserWriteService appUserWriteService, UserManager<AppUser> userManager, IMailService mailService)
         {
@@ -56,17 +54,17 @@ namespace humanResourceProject.API.Controllers
         }
 
         [HttpPost]
-         public async Task<IActionResult> CreatePersonel([FromBody] UserRegisterDTO model) // Yeni Personel Oluşturma
+        public async Task<IActionResult> CreatePersonel([FromBody] UserRegisterDTO model) // Yeni Personel Oluşturma
         {
             IdentityResult result = await _appUserWriteService.RegisterPersonel(model);
             if (!result.Succeeded)
                 return BadRequest(result.Errors);
 
             AppUser user = await _userManager.FindByEmailAsync(model.Email);
-            string token =await _userManager.GenerateEmailConfirmationTokenAsync(user);
+            string token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
 
             string url = "https://localhost:7255/Account/ResetPassword";
-            string action =url+"?"+"id="+user.Id+"&"+"token="+token;
+            string action = url + "?" + "id=" + user.Id + "&" + "token=" + token;
             await _mailService.SendMessageAsync(user, action);
 
             return Ok("Yeni personel oluşturuldu.");
@@ -92,7 +90,7 @@ namespace humanResourceProject.API.Controllers
 
             return Ok("Silme işlemi gerçekleşti.");
         }
-      
+
 
 
         [HttpPost]
@@ -106,9 +104,5 @@ namespace humanResourceProject.API.Controllers
 
             return Ok();
         }
-
-
-
-
     }
 }

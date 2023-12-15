@@ -2,13 +2,11 @@
 using humanResourceProject.Application.Services.Abstract.ICompanyServices;
 using humanResourceProject.Application.Services.Abstract.IMailServices;
 using humanResourceProject.Application.Services.BaseServices;
-using humanResourceProject.Application.Services.Concrete.CompanyServices;
 using humanResourceProject.Domain.Entities.Concrete;
 using humanResourceProject.Models.DTOs;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
-using Newtonsoft.Json.Linq;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -50,7 +48,6 @@ namespace humanResourceProject.API.Controllers
             var result = await _appUserReadService.Login(model);
             if (result.Succeeded)
             {
-
                 AppUser appUser = await _appUserReadService.GetSingleDefault(x => x.Email == model.Email);
 
                 if (appUser == null)
