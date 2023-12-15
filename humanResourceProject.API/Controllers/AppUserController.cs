@@ -67,7 +67,7 @@ namespace humanResourceProject.API.Controllers
 
             string url = "https://localhost:7255/Account/ResetPassword";
             string action =url+"?"+"id="+user.Id+"&"+"token="+token;
-            await _mailService.SendMessageAsync(model, action);
+            await _mailService.SendMessageAsync(user, action);
 
             return Ok("Yeni personel oluşturuldu.");
         }

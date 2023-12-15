@@ -1,9 +1,10 @@
-﻿using humanResourceProject.Models.DTOs;
+﻿using humanResourceProject.Domain.Entities.Concrete;
+using humanResourceProject.Models.DTOs;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.WebUtilities;
+using Microsoft.AspNetCore.Identity;
 using Newtonsoft.Json;
 using System.Net.Mime;
 using System.Security.Claims;
@@ -14,7 +15,6 @@ namespace humanResourceProject.Presentation.Controllers
     [Authorize]
     public class AccountController : Controller
     {
-
         private readonly HttpClient _httpClient;
         private readonly IConfiguration _configuration;
         private readonly UserManager<AppUser> _userManager;
@@ -257,7 +257,7 @@ namespace humanResourceProject.Presentation.Controllers
         //[AllowAnonymous]
         //public IActionResult ResetPassword(string token, Guid id)
         //{
-        
+
         //    if (token == null || id == null)
         //    {
         //        ModelState.AddModelError("", "Invalid password reset token");
@@ -271,9 +271,9 @@ namespace humanResourceProject.Presentation.Controllers
         //{
         //    if (ModelState.IsValid)
         //    {
-             
+
         //        AppUser user = await _userManager.FindByIdAsync(model.Id.ToString());
-                
+
         //        if (user != null)
         //        {
         //            var result = await _userManager.ResetPasswordAsync(user, model.Token, model.Password);
@@ -299,10 +299,10 @@ namespace humanResourceProject.Presentation.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public IActionResult ResetPassword(Guid id, string token )
+        public IActionResult ResetPassword(Guid id, string token)
         {
 
-            return token == null ? View("Error") : View(new ResetPasswordDTO() { Id=id,Token=token});
+            return token == null ? View("Error") : View(new ResetPasswordDTO() { Id = id, Token = token });
         }
 
         [HttpPost]
@@ -324,10 +324,10 @@ namespace humanResourceProject.Presentation.Controllers
             }
             else
             {
-                ModelState.AddModelError(string.Empty,"Bir Hata Oluştu Tekrar Deneyiniz!");
+                ModelState.AddModelError(string.Empty, "Bir Hata Oluştu Tekrar Deneyiniz!");
                 return View(model);
             }
-            }
+        }
 
 
         //[HttpGet]
