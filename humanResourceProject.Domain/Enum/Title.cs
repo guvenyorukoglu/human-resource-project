@@ -10,7 +10,7 @@ namespace humanResourceProject.Domain.Enum
         Ms,
         [Display(Name = "Mrs.")]
         Mrs,
-        [Display(Name = "Miss")]
+        [Display(Name = "Miss.")]
         Miss
     }
 }

@@ -27,8 +27,9 @@ namespace humanResourceProject.API.Controllers
         private readonly IMailService _mailService;
         private readonly UserManager<AppUser> _userManager;
         private readonly IBaseWriteService<AppUser> _baseAppUserWriteService;
+        private readonly IBaseWriteService<Company> _baseCompanyWriteService;
 
-        public AccountController(IAppUserReadService appUserReadService, IConfiguration configuration, IAppUserWriteService appUserWriteService, ICompanyWriteService companyWriteService, ICompanyReadService companyReadService, IMailService mailService, UserManager<AppUser> userManager, IBaseWriteService<AppUser> baseAppUserWriteService)
+        public AccountController(IAppUserReadService appUserReadService, IConfiguration configuration, IAppUserWriteService appUserWriteService, ICompanyWriteService companyWriteService, ICompanyReadService companyReadService, IMailService mailService, UserManager<AppUser> userManager, IBaseWriteService<AppUser> baseAppUserWriteService, IBaseWriteService<Company> baseCompanyWriteService)
         {
             _appUserReadService = appUserReadService;
             _appUserWriteService = appUserWriteService;
@@ -38,6 +39,7 @@ namespace humanResourceProject.API.Controllers
             _mailService = mailService;
             _userManager = userManager;
             _baseAppUserWriteService = baseAppUserWriteService;
+            _baseCompanyWriteService = baseCompanyWriteService;
         }
 
 
@@ -135,16 +137,21 @@ namespace humanResourceProject.API.Controllers
         {
             var user = await _userManager.FindByIdAsync(id.ToString());
             user.Status = Domain.Enum.Status.Active;
-            bool result = await _baseAppUserWriteService.Update(user);
-            if (result)
+
+            var company = await _companyReadService.GetSingleDefault(x => x.Id == user.CompanyId);
+            company.Status = Domain.Enum.Status.Active;
+
+            bool userUpdateResult = await _baseAppUserWriteService.Update(user);
+            bool companyUpdateResult = await _baseCompanyWriteService.Update(company);
+            if (userUpdateResult && companyUpdateResult)
             {
                 //Send Confirmation Email
                 string token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                 string action = Url.Action("ConfirmEmail", "Account", new { id = user.Id, token }, Request.Scheme);
                 await _mailService.SendAccountConfirmEmail(user, action);
 
-                var loginURL = "https://localhost:7180/account/login"; //Local
-                //var loginURL = "https://monitorease.azurewebsites.net/account/login"; //Azure
+                //var loginURL = "https://localhost:7180/account/login"; //Local
+                var loginURL = "https://monitorease.azurewebsites.net/account/login"; //Azure
 
                 return Redirect(loginURL);
             }
@@ -162,8 +169,8 @@ namespace humanResourceProject.API.Controllers
             var result = await _userManager.ConfirmEmailAsync(user, token);
             if (result.Succeeded)
             {
-                var loginUrl = "https://localhost:7180/account/login"; //Local
-                //var loginUrl = "https://monitorease.azurewebsites.net/account/login"; //Azure
+                //var loginUrl = "https://localhost:7180/account/login"; //Local
+                var loginUrl = "https://monitorease.azurewebsites.net/account/login"; //Azure
                 return Redirect(loginUrl);
             }
             else

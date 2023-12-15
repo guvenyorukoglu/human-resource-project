@@ -1,70 +1,68 @@
-﻿@using humanResourceProject.Domain.Enum
+﻿@using System.ComponentModel.DataAnnotations
+@using System.Reflection
+@using humanResourceProject.Domain.Enum
 @model humanResourceProject.Models.DTOs.UpdateUserDTO
 
 @{
     ViewData["Title"] = "EditEmployee";
 }
 
-<h1>Edit Employee</h1>
-
-<h4>UpdateUserDTO</h4>
+<h2>Personel Güncelleme</h2>
+<h4>Personel bilgilerini lütfen eksiksiz giriniz.</h4>
 <hr />
+
 <div class="row">
     <div class="col-md-4">
         <form asp-action="EditEmployee">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
+            <div class="form-group mb-3">
                 <label asp-for="Email" class="control-label"></label>
                 <input asp-for="Email" class="form-control" />
                 <span asp-validation-for="Email" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="form-group mb-3">
                 <label asp-for="LastName" class="control-label"></label>
                 <input asp-for="LastName" class="form-control" />
                 <span asp-validation-for="LastName" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="form-group mb-3">
                 <label asp-for="Address" class="control-label"></label>
                 <input asp-for="Address" class="form-control" />
                 <span asp-validation-for="Address" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="form-group mb-3">
                 <label asp-for="PhoneNumber" class="control-label"></label>
                 <input asp-for="PhoneNumber" class="form-control" />
                 <span asp-validation-for="PhoneNumber" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="form-group mb-3">
                 <label asp-for="Title" class="control-label"></label>
-                <input asp-for="Title" class="form-control" />
+                <select asp-for="Title" class="form-control">
+                    @{
+                        var enumTyp = typeof(Title);
+                        var enumValus = enumTyp.GetEnumValues();
+                        foreach (var enumValue in enumValus)
+                        {
+                            var displayAttribute = enumTyp.GetMember(enumValue.ToString())[0].GetCustomAttribute<DisplayAttribute>();
+                            var displayName = displayAttribute?.GetName() ?? enumValue.ToString();
+                            <option value="@enumValue">@displayName</option>
+                        }
+                    }
+                </select>
                 <span asp-validation-for="Title" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="form-group mb-3">
                 <label asp-for="Job" class="control-label"></label>
                 <input asp-for="Job" class="form-control" />
                 <span asp-validation-for="Job" class="text-danger"></span>
             </div>
-            @* <div class="form-group">
-                <label asp-for="UpdateDate" class="control-label"></label>
-                <input asp-for="UpdateDate" class="form-control" />
-                <span asp-validation-for="UpdateDate" class="text-danger"></span>
-            </div> *@
-            @* <div class="form-group">
-                <label asp-for="Status" class="control-label"></label>
-                <select asp-for="Status" class="form-control">
-                    @foreach (var status in Enum.GetValues(typeof(Status)))
-                    {
-                        <option value="@status">@status</option>
-                    }
-                </select>
-                <span asp-validation-for="Status" class="text-danger"></span>
-            </div> *@
-            <div class="form-group">
+            <div class="form-group mb-3">
                 <input value=@Model.CompanyId asp-for="CompanyId" type="hidden" class="form-control" />
                 <span asp-validation-for="CompanyId" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+            <div class="form-group d-grid mb-3">
+                <input type="submit" value="Güncelle" class="btn btn-primary" />
             </div>
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         </form>
     </div>
 </div>
