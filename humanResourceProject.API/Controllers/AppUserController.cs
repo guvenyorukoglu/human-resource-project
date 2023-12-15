@@ -52,8 +52,7 @@ namespace humanResourceProject.API.Controllers
         }
 
         [HttpPost]
- 
-        public async Task<IActionResult> CreatePersonel([FromBody] UserRegisterDTO model) // Yeni Personel Oluşturma
+         public async Task<IActionResult> CreatePersonel([FromBody] UserRegisterDTO model) // Yeni Personel Oluşturma
         {
             IdentityResult result = await _appUserWriteService.RegisterPersonel(model);
             if (!result.Succeeded)
@@ -62,7 +61,7 @@ namespace humanResourceProject.API.Controllers
             AppUser user = await _userManager.FindByEmailAsync(model.Email);
             string token =await _userManager.GenerateEmailConfirmationTokenAsync(user);
             string action = Url.Action("DeleteEmployee","AppUser", new { id = user.Id, token }, Request.Scheme);
-            await _mailService.SendMessageAsync(model, action);
+            await _mailService.SendMessageAsync(user, action);
             return Ok("Yeni personel oluşturuldu.");
         }
 
