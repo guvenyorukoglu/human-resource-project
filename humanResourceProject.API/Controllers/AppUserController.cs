@@ -2,8 +2,12 @@
 using humanResourceProject.Application.Services.Abstract.IMailServices;
 using humanResourceProject.Domain.Entities.Concrete;
 using humanResourceProject.Models.DTOs;
+using humanResourceProject.Models.VMs;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Routing;
+using Microsoft.AspNetCore.WebUtilities;
+using System.Text;
 
 namespace humanResourceProject.API.Controllers
 {
@@ -61,7 +65,8 @@ namespace humanResourceProject.API.Controllers
 
             AppUser user = await _userManager.FindByEmailAsync(model.Email);
             string token =await _userManager.GenerateEmailConfirmationTokenAsync(user);
-            string action = Url.Action("DeleteEmployee","AppUser", new { id = user.Id, token }, Request.Scheme);
+            string url = "https://localhost:7255/Account/ResetPassword";
+            string action =url+"?"+"id="+user.Id+"&"+"token="+token;
             await _mailService.SendMessageAsync(model, action);
             return Ok("Yeni personel oluşturuldu.");
         }
@@ -86,6 +91,21 @@ namespace humanResourceProject.API.Controllers
 
             return Ok("Silme işlemi gerçekleşti.");
         }
+      
+
+
+        [HttpPost]
+        [Route("ResetPassword")]
+        public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordDTO model)
+        {
+
+            AppUser user = await _userManager.FindByIdAsync(model.Id.ToString());
+            var token = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(model.Token));
+            var result = await _userManager.ResetPasswordAsync(user, token, model.Password);
+
+            return Ok();
+        }
+
 
 
 
