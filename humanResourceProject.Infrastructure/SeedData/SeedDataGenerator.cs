@@ -211,7 +211,8 @@ namespace humanResourceProject.Infrastructure.SeedData
                     UserName = "SiteManager",
                     ImagePath = "https://ik.imagekit.io/7ypp4olwr/defaultprofile.jpg?tr=h-200,w-200",
                     Email = email,
-                    CompanyId = company.Id
+                    CompanyId = company.Id,
+                    EmailConfirmed = true
                 };
 
                 await userManager.CreateAsync(siteManager, password);

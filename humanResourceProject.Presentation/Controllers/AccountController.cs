@@ -1,10 +1,8 @@
-﻿using humanResourceProject.Domain.Entities.Concrete;
-using humanResourceProject.Models.DTOs;
+﻿using humanResourceProject.Models.DTOs;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Identity;
 using Newtonsoft.Json;
 using System.Net.Mime;
 using System.Security.Claims;
@@ -17,15 +15,13 @@ namespace humanResourceProject.Presentation.Controllers
     {
         private readonly HttpClient _httpClient;
         private readonly IConfiguration _configuration;
-        private readonly UserManager<AppUser> _userManager;
 
-        public AccountController(IConfiguration configuration, UserManager<AppUser> userManager = null)
+        public AccountController(IConfiguration configuration)
         {
             _configuration = configuration;
             _httpClient = new HttpClient();
-            //_httpClient.BaseAddress = new Uri("https://monitoreaseapi.azurewebsites.net"); // Azure
-            _httpClient.BaseAddress = new Uri("https://localhost:7255/"); // Local
-            _userManager = userManager;
+            _httpClient.BaseAddress = new Uri("https://monitoreaseapi.azurewebsites.net"); // Azure
+            //_httpClient.BaseAddress = new Uri("https://localhost:7255/"); // Local
         }
         [HttpGet]
         [AllowAnonymous]
@@ -248,54 +244,6 @@ namespace humanResourceProject.Presentation.Controllers
         {
             return View();
         }
-
-
-
-
-
-        //[HttpGet]
-        //[AllowAnonymous]
-        //public IActionResult ResetPassword(string token, Guid id)
-        //{
-
-        //    if (token == null || id == null)
-        //    {
-        //        ModelState.AddModelError("", "Invalid password reset token");
-        //    }
-        //    return View();
-        //}
-
-        //[HttpPost]
-        //[AllowAnonymous]
-        //public async Task<IActionResult> ResetPassword(ResetPasswordDTO model)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-
-        //        AppUser user = await _userManager.FindByIdAsync(model.Id.ToString());
-
-        //        if (user != null)
-        //        {
-        //            var result = await _userManager.ResetPasswordAsync(user, model.Token, model.Password);
-        //            if (result.Succeeded)
-        //            {
-        //                return View("ResetPasswordConfirmation");
-        //            }
-
-        //            foreach (var error in result.Errors)
-        //            {
-        //                ModelState.AddModelError("", error.Description);
-        //            }
-        //            return View(model);
-        //        }
-
-        //        return View("ResetPasswordConfirmation");
-        //    }
-        //    return View(model);
-        //}
-
-
-
 
         [HttpGet]
         [AllowAnonymous]

@@ -17,7 +17,9 @@ namespace humanResourceProject.Models.Validations
                     age--;
                 }
 
-                return age >= 18;
+                return age >= 18 && age <= 85;
+
+
             }
 
             return false;

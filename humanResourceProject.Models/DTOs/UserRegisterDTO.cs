@@ -22,10 +22,12 @@ namespace humanResourceProject.Models.DTOs
         [DisplayName("Soyisim*")]
         [RegularExpression(@"^[a-zA-ZğĞıİşŞüÜöÖçÇ]*$", ErrorMessage = "Yalnızca alfabetik karakterlere izin verilir.")]
         public string LastName { get; set; }
+
         [Required(ErrorMessage = "Email alanı boş geçilemez!")]
         [DisplayName("Email*")]
         [EmailValidations(ErrorMessage = "Lütfen geçerli bir email adresi giriniz!")]
         public string Email { get; set; }
+
         [Required(ErrorMessage = "Şifre alanı boş geçilemez!")]
         [DisplayName("Şifre*")]
         [PasswordValidations(ErrorMessage = "Şifre en az bir büyük harf, bir küçük harf, bir rakam ve bir özel karakterden oluşmalıdır.")]
@@ -35,13 +37,15 @@ namespace humanResourceProject.Models.DTOs
         [DisplayName("Şifre Tekrarı*")]
         [Compare("Password", ErrorMessage = "Bir önceki girilen şifreyle aynı olmalıdır!")]
         public string ConfirmPassword { get; set; }
+
         [Required(ErrorMessage = "Telefonu alanı boş geçilemez!")]
         [DisplayName("Telefon*")]
         [PhoneValidations(ErrorMessage = "Lütfen geçerli bir telefon numarası giriniz!")]
         public string PhoneNumber { get; set; }
+
         [Required(ErrorMessage = "Doğum tarihi boş geçilemez!")]
         [DisplayName("Doğum Tarihi*")]
-        [BirthdateValidations(ErrorMessage ="18 yaşından küçük olamazsınız!")]
+        [BirthdateValidations(ErrorMessage ="18-85 yaş aralığında bir doğum tarihi giriniz!")]
         public DateTime Birthdate { get; set; }
 
         // public DateTime DateOfEmployment { get; set; }
@@ -50,20 +54,25 @@ namespace humanResourceProject.Models.DTOs
         [DisplayName("Adres*")]
         [StringLength(200, ErrorMessage = "Adres en fazla 200 en az 5 karakter olmalıdır.", MinimumLength = 5)]
         public string Address { get; set; }
+
         [Required(ErrorMessage = "TC No alanı boş geçilemez!")]
         [DisplayName("TC Kimlik Numarası*")]
-        //[IdentityNumberValidations(ErrorMessage = "Lütfen geçerli bir telefon numarası giriniz!")]
+        [IdentityNumberValidations(ErrorMessage = "Lütfen geçerli bir TC kimlik numarası giriniz!")]
         public string IdentificationNumber { get; set; }
+
         [Required(ErrorMessage = "Kan Grubu alanı boş geçilemez!")]
         [DisplayName("Kan Grubu*")]
         public BloodGroup BloodGroup { get; set; }
+
         [Required(ErrorMessage = "Ünvan alanı boş geçilemez!")]
         [DisplayName("Ünvan*")]
         public Title Title { get; set; }
+
         [Required(ErrorMessage = "Meslek alanı boş geçilemez!")]
         [DisplayName("Meslek*")]
         [RegularExpression(@"^[a-zA-ZğĞıİşŞüÜöÖçÇ\s]*$", ErrorMessage = "Yalnızca alfabetik karakterlere izin verilir.")]
         public string Job { get; set; }
+
         public string? ImagePath { get; set; }
 
         [DisplayName("Profil Fotoğrafı")]

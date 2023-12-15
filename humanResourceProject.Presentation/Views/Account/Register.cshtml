@@ -1,4 +1,6 @@
-﻿@using humanResourceProject.Domain.Enum
+﻿@using System.ComponentModel.DataAnnotations
+@using System.Reflection
+@using humanResourceProject.Domain.Enum
 @using humanResourceProject.Models.DTOs;
 @model UserRegisterDTO
 
@@ -77,10 +79,17 @@
             <div class="form-group mb-3">
                 <label asp-for="BloodGroup" class="control-label"></label>
                 <select asp-for="BloodGroup" class="form-control">
-                    @foreach (var bloodGroup in Enum.GetValues(typeof(BloodGroup)))
-                    {
-                        <option value="@bloodGroup">@bloodGroup</option>
+                    @{
+                        var enumType = typeof(BloodGroup);
+                        var enumValues = enumType.GetEnumValues();
+                        foreach (var enumValue in enumValues)
+                        {
+                            var displayAttribute = enumType.GetMember(enumValue.ToString())[0].GetCustomAttribute<DisplayAttribute>();
+                            var displayName = displayAttribute?.GetName() ?? enumValue.ToString();
+                            <option value="@enumValue">@displayName</option>
+                        }
                     }
+
                 </select>
                 <span asp-validation-for="BloodGroup" class="text-danger"></span>
             </div>
@@ -88,9 +97,15 @@
             <div class="form-group mb-3">
                 <label asp-for="Title" class="control-label"></label>
                 <select asp-for="Title" class="form-control">
-                    @foreach (var title in Enum.GetValues(typeof(Title)))
-                    {
-                        <option value="@title">@title</option>
+                    @{
+                        var enumTyp = typeof(Title);
+                        var enumValus = enumTyp.GetEnumValues();
+                        foreach (var enumValue in enumValus)
+                        {
+                            var displayAttribute = enumTyp.GetMember(enumValue.ToString())[0].GetCustomAttribute<DisplayAttribute>();
+                            var displayName = displayAttribute?.GetName() ?? enumValue.ToString();
+                            <option value="@enumValue">@displayName</option>
+                        }
                     }
                 </select>
                 <span asp-validation-for="Title" class="text-danger"></span>
@@ -116,7 +131,7 @@
             </div>
             <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
             <div class="form-group d-grid mb-3">
-                <input type="submit" value="Register" class="btn btn-primary" />
+                <input type="submit" value="Kayıt Ol" class="btn btn-primary" />
             </div>
         </form>
     </div>
