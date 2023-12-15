@@ -5,6 +5,7 @@
 @{
     ViewData["Title"] = "Register";
 }
+<link href="~/lib/toastr.js/toastr.min.css" rel="stylesheet" />
 
 <h2>Yönetici Kaydı</h2>
 <h4>Yönetici bilgilerini lütfen eksiksiz giriniz.</h4>
@@ -120,3 +121,26 @@
         </form>
     </div>
 </div>
+
+@section Scripts {
+    <script src="~/lib/toastr.js/toastr.min.js"></script>
+
+    @if (TempData["Result"] == "success")
+    {
+        <script>
+            toastr["success"]("Şirket kaydı gerçekleşmiştir.", "Başarılı")
+        </script>
+    }
+    else if (TempData["Result"] == "modelinvalid")
+    {
+        <script>
+            toastr["warning"]("Girdiğiniz bilgileri lütfen kontrol ediniz.", "Hatalı bilgi girişi!")
+        </script>
+    }
+    else if (TempData["Result"] == "error")
+    {
+        <script>
+            toastr["error"]("Şirket kaydı gerçekleşmemiştir.", "Bir hata oluştu!")
+        </script>
+    }
+}

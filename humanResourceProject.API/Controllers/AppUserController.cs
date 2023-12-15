@@ -1,4 +1,4 @@
-﻿using humanResourceProject.Application.Services.Abstract.IAppUserServices;
+using humanResourceProject.Application.Services.Abstract.IAppUserServices;
 using humanResourceProject.Application.Services.Abstract.IMailServices;
 using humanResourceProject.Domain.Entities.Concrete;
 using humanResourceProject.Models.DTOs;
@@ -56,8 +56,7 @@ namespace humanResourceProject.API.Controllers
         }
 
         [HttpPost]
- 
-        public async Task<IActionResult> CreatePersonel([FromBody] UserRegisterDTO model) // Yeni Personel Oluşturma
+         public async Task<IActionResult> CreatePersonel([FromBody] UserRegisterDTO model) // Yeni Personel Oluşturma
         {
             IdentityResult result = await _appUserWriteService.RegisterPersonel(model);
             if (!result.Succeeded)
@@ -65,9 +64,11 @@ namespace humanResourceProject.API.Controllers
 
             AppUser user = await _userManager.FindByEmailAsync(model.Email);
             string token =await _userManager.GenerateEmailConfirmationTokenAsync(user);
+
             string url = "https://localhost:7255/Account/ResetPassword";
             string action =url+"?"+"id="+user.Id+"&"+"token="+token;
             await _mailService.SendMessageAsync(model, action);
+
             return Ok("Yeni personel oluşturuldu.");
         }
 

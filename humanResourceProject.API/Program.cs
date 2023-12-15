@@ -21,7 +21,7 @@ builder.Services.AddControllers();
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
     //options.UseSqlServer(builder.Configuration.GetConnectionString("MonitorEase:SqlDb"));   //Azure
-    options.UseSqlServer(builder.Configuration.GetConnectionString("FeyzaSQLConnection")); //Local
+    options.UseSqlServer(builder.Configuration.GetConnectionString("GuvenSQLConnection")); //Local
 
 
 });
@@ -29,7 +29,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 builder.Services.AddIdentity<AppUser, IdentityRole<Guid>>(options =>
 {
-    options.SignIn.RequireConfirmedEmail = false;
+    options.SignIn.RequireConfirmedEmail = true;
     options.SignIn.RequireConfirmedPhoneNumber = false;
     options.SignIn.RequireConfirmedAccount = false;
     options.User.RequireUniqueEmail = true;

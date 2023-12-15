@@ -11,11 +11,13 @@ namespace humanResourceProject.Application.Services.Abstract.IMailServices
 {
     public interface IMailService
     {
-        Task SendMessage(string to, string subject, string body, bool isBodyHtml = true);
-        Task SendMessageAsync(UserRegisterDTO userRegister, string action);
+        //Task SendMessage(string to, string subject, string body, bool isBodyHtml = true);
+        Task SendMessageAsync(AppUser appUser, string action);
         // void SendMessageAsync(UserRegisterDTO userRegister);
         //Task Confirmation(Guid id, string token);
 
+        Task SendUserRegisteredEmail(AppUser appUser, string action);
+        Task SendAccountConfirmEmail(AppUser user, string action);
 
 
     }

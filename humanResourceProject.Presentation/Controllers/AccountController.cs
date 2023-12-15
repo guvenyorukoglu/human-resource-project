@@ -1,17 +1,13 @@
-﻿using humanResourceProject.Domain.Entities.Concrete;
-using humanResourceProject.Models.DTOs;
+﻿using humanResourceProject.Models.DTOs;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
 using Newtonsoft.Json;
-using System.Net.Http.Headers;
 using System.Net.Mime;
 using System.Security.Claims;
 using System.Text;
-using System.Text.Json;
 
 namespace humanResourceProject.Presentation.Controllers
 {
@@ -52,6 +48,7 @@ namespace humanResourceProject.Presentation.Controllers
         {
             if (!ModelState.IsValid)
             {
+                TempData["Result"] = "modelinvalid";
                 return View(model);
             }
 
@@ -66,11 +63,13 @@ namespace humanResourceProject.Presentation.Controllers
                 var companyId = await response.Content.ReadAsStringAsync();
                 companyId = companyId.Replace("\"", "");
                 Guid id = Guid.Parse(companyId);
+                TempData["Result"] = "success";
                 return RedirectToAction("Register", new { companyId = id });
             }
             else
             {
                 ModelState.AddModelError(string.Empty, "Bir hata oluştu. Tekrar deneyiniz!");
+                TempData["Result"] = "error";
                 return View(model);
             }
         }
@@ -81,6 +80,7 @@ namespace humanResourceProject.Presentation.Controllers
         {
             if (!ModelState.IsValid)
             {
+                TempData["Result"] = "modelinvalid";
                 return View(model); // Model valid değil ise validation errorları ile birlikte register sayfasına geri döner
             }
 
@@ -122,11 +122,13 @@ namespace humanResourceProject.Presentation.Controllers
 
                 if (response.IsSuccessStatusCode)
                 {
-                    return RedirectToAction("Login");
+                    TempData["Result"] = "success";
+                    return RedirectToAction("RegistrationSuccessful");
                 }
                 else
                 {
                     ModelState.AddModelError(string.Empty, "Bir hata oluştu. Tekrar deneyiniz!");
+                    TempData["Result"] = "error";
                     return View(model);
                 }
             }
@@ -155,7 +157,7 @@ namespace humanResourceProject.Presentation.Controllers
 
                 if (response.IsSuccessStatusCode)
                 {
-                    return RedirectToAction("Login");
+                    return RedirectToAction("RegistrationSuccessful");
                 }
                 else
                 {
@@ -241,6 +243,13 @@ namespace humanResourceProject.Presentation.Controllers
             return View();
         }
 
+        [AllowAnonymous]
+        public IActionResult RegistrationSuccessful()
+        {
+            return View();
+        }
+
+
 
 
 
@@ -320,6 +329,7 @@ namespace humanResourceProject.Presentation.Controllers
             }
             }
 
+
         //[HttpGet]
         //public IActionResult UpdateProfileImage(Guid id)
         //{
@@ -329,7 +339,6 @@ namespace humanResourceProject.Presentation.Controllers
         //    }
         //    return View("Error");
         //}
-
 
     }
 }

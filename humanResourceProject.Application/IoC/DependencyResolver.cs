@@ -5,7 +5,9 @@ using humanResourceProject.Application.Services.Abstract.IAppUserServices;
 using humanResourceProject.Application.Services.Abstract.ICompanyServices;
 using humanResourceProject.Application.Services.Abstract.IImageServices;
 using humanResourceProject.Application.Services.Abstract.IMailServices;
+using humanResourceProject.Application.Services.BaseServices;
 using humanResourceProject.Application.Services.Concrete.AppUserServices;
+using humanResourceProject.Application.Services.Concrete.BaseServices;
 using humanResourceProject.Application.Services.Concrete.CompanyServices;
 using humanResourceProject.Application.Services.Concrete.ImageServices;
 using humanResourceProject.Application.Services.Concrete.MailServices;
@@ -30,6 +32,7 @@ namespace humanResourceProject.Application.IoC
             builder.RegisterType<CompanyWriteService>().As<ICompanyWriteService>().InstancePerLifetimeScope();
             builder.RegisterType<ImageService>().As<IImageService>().InstancePerLifetimeScope();
             builder.RegisterType<MailService>().As<IMailService>().InstancePerLifetimeScope();
+            builder.RegisterType<BaseWriteService<AppUser>>().As<IBaseWriteService<AppUser>>().InstancePerLifetimeScope();
           
 
 

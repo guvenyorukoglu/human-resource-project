@@ -7,6 +7,7 @@ using MailKit.Net.Smtp;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using MimeKit;
+using System;
 using System.Net;
 using System.Net.Http;
 using System.Net.Mail;
@@ -16,18 +17,18 @@ namespace humanResourceProject.Application.Services.Concrete.MailServices
 {
     public class MailService : IMailService
     {
-        private readonly UserManager<AppUser> _userManager;
-        private readonly IMapper _mapper;
-        private readonly IConfiguration _configuration;
+        //private readonly UserManager<AppUser> _userManager;
+        //private readonly IMapper _mapper;
+        //private readonly IConfiguration _configuration;
 
 
 
-        public MailService(UserManager<AppUser> userManager, IMapper mapper, IConfiguration configuration)
-        {
-            _userManager = userManager;
-            _mapper = mapper;
-            _configuration = configuration;
-        }
+        //public MailService(UserManager<AppUser> userManager, IMapper mapper, IConfiguration configuration)
+        //{
+        //    _userManager = userManager;
+        //    _mapper = mapper;
+        //    _configuration = configuration;
+        //}
 
         //public async Task Confirmation(Guid id, string token)
         //{
@@ -45,54 +46,33 @@ namespace humanResourceProject.Application.Services.Concrete.MailServices
 
         //}
 
-        public async Task SendMessage(string to, string subject, string body, bool isBodyHtml = true)
-        {
+        //public async Task SendMessage(string to, string subject, string body, bool isBodyHtml = true)
+        //{
        
-            MailMessage mailMessage = new MailMessage();
+        //    MailMessage mailMessage = new MailMessage();
            
-            mailMessage.IsBodyHtml = isBodyHtml;
-            mailMessage.To.Add(to);
-            mailMessage.Subject = subject;
-            mailMessage.Body = body;
-            mailMessage.From = new MailAddress("monitorease@gmail.com");
+        //    mailMessage.IsBodyHtml = isBodyHtml;
+        //    mailMessage.To.Add(to);
+        //    mailMessage.Subject = subject;
+        //    mailMessage.Body = body;
+        //    mailMessage.From = new MailAddress("monitorease@gmail.com");
 
-            System.Net.Mail.SmtpClient smtpClient = new System.Net.Mail.SmtpClient();
-            smtpClient.Credentials = new NetworkCredential("monitorease@gmail.com", "tvhq axkn vyrb zzmc");
-            smtpClient.Port = 587;
-            smtpClient.EnableSsl = true;
-            smtpClient.Host = "smtp.gmail.com";
-            smtpClient.Send(mailMessage);
+        //    System.Net.Mail.SmtpClient smtpClient = new System.Net.Mail.SmtpClient();
+        //    smtpClient.Credentials = new NetworkCredential("monitorease@gmail.com", "tvhq axkn vyrb zzmc");
+        //    smtpClient.Port = 587;
+        //    smtpClient.EnableSsl = true;
+        //    smtpClient.Host = "smtp.gmail.com";
+        //    smtpClient.Send(mailMessage);
 
-        }
+        //}
 
-        public async Task SendMessageAsync(UserRegisterDTO model, string action)
+        public async Task SendMessageAsync(AppUser user, string action)
         {
-
-            AppUser user = new AppUser()
-            {
-                FirstName = model.FirstName,
-                LastName = model.LastName,
-                Address = model.Address,
-                PhoneNumber = model.PhoneNumber,
-                IdentificationNumber = model.IdentificationNumber,
-                BloodGroup = model.BloodGroup,
-                Birthdate = model.Birthdate,
-                Title = model.Title,
-                Job = model.Job,
-          
-                Email = model.Email,
-                CompanyId = model.CompanyId
-
-            };
-
-            //IdentityResult result = await _iAppUser.Register(registerDTO);
-
-            var token = _userManager.GenerateEmailConfirmationTokenAsync(user);
             var confirmationLink = action;
 
             MimeMessage mimeMessage = new MimeMessage();
-            MailboxAddress mailboxFrom = new MailboxAddress("Admin", "monitorease@gmail.com");
-            MailboxAddress mailboxTo = new MailboxAddress("User", user.Email);
+            MailboxAddress mailboxFrom = new MailboxAddress("Monitorease", "monitorease@gmail.com");
+            MailboxAddress mailboxTo = new MailboxAddress($"{user.FirstName} {user.LastName}", user.Email);
 
             mimeMessage.From.Add(mailboxFrom);
             mimeMessage.To.Add(mailboxTo);
@@ -109,8 +89,54 @@ namespace humanResourceProject.Application.Services.Concrete.MailServices
             smtpClient.Connect("smtp.gmail.com", 587, false);
             smtpClient.Authenticate("monitorease@gmail.com", "tvhq axkn vyrb zzmc");
             smtpClient.Send(mimeMessage);
-  
+        }
 
+        public async Task SendUserRegisteredEmail(AppUser user, string action)
+        {
+            var confirmationLink = action;
+
+            MimeMessage mimeMessage = new MimeMessage();
+            MailboxAddress mailboxFrom = new MailboxAddress("Monitorease", "monitorease@gmail.com");
+            MailboxAddress mailboxTo = new MailboxAddress("Admin", "yorukoglu.guven@gmail.com");
+
+            mimeMessage.From.Add(mailboxFrom);
+            mimeMessage.To.Add(mailboxTo);
+
+            var bodybuilder = new BodyBuilder();
+            bodybuilder.HtmlBody = $"<h1>Monitorease App</h1><p>Yeni kullanıcı uygulamaya kayıt olmuştur. Kullanıcıyı aktif duruma çekmek için linke tıklayınız: {confirmationLink}</p>";
+            mimeMessage.Body = bodybuilder.ToMessageBody();
+
+            mimeMessage.Subject = "Yeni Kullanıcı Kayıt Oldu!";
+
+            MailKit.Net.Smtp.SmtpClient smtpClient = new MailKit.Net.Smtp.SmtpClient();
+
+            smtpClient.Connect("smtp.gmail.com", 587, false);
+            smtpClient.Authenticate("monitorease@gmail.com", "tvhq axkn vyrb zzmc");
+            smtpClient.Send(mimeMessage);
+        }
+
+        public async Task SendAccountConfirmEmail(AppUser user, string action)
+        {
+            var confirmationLink = action;
+
+            MimeMessage mimeMessage = new MimeMessage();
+            MailboxAddress mailboxFrom = new MailboxAddress("Monitorease", "monitorease@gmail.com");
+            MailboxAddress mailboxTo = new MailboxAddress($"{user.FirstName} {user.LastName}", user.Email);
+
+            mimeMessage.From.Add(mailboxFrom);
+            mimeMessage.To.Add(mailboxTo);
+
+            var bodybuilder = new BodyBuilder();
+            bodybuilder.HtmlBody = $"<h2>Merhaba {user.FirstName} {user.LastName}</h2><br><p>Monitorease hesabınız başarılı bir şekilde oluşturulmuştur.</p><p>Hesabınızı doğrulamak için lütfen aşağıdaki doğrulama linkini tıklayınız.</p><p>{confirmationLink}</p><p>Bize her zaman monitorease@gmail.com adresinden ulaşabilirsiniz.</p><br><hr><br><h3>Team Monitorease</h3>";
+            mimeMessage.Body = bodybuilder.ToMessageBody();
+
+            mimeMessage.Subject = "Monitorease Hesabınızı Doğrulayınız!";
+
+            MailKit.Net.Smtp.SmtpClient smtpClient = new MailKit.Net.Smtp.SmtpClient();
+
+            smtpClient.Connect("smtp.gmail.com", 587, false);
+            smtpClient.Authenticate("monitorease@gmail.com", "tvhq axkn vyrb zzmc");
+            smtpClient.Send(mimeMessage);
         }
 
 
