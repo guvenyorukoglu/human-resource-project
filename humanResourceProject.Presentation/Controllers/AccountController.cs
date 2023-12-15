@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.WebUtilities;
 using Newtonsoft.Json;
 using System.Net.Mime;
 using System.Security.Claims;
@@ -16,13 +17,15 @@ namespace humanResourceProject.Presentation.Controllers
 
         private readonly HttpClient _httpClient;
         private readonly IConfiguration _configuration;
+        private readonly UserManager<AppUser> _userManager;
 
-        public AccountController(IConfiguration configuration)
+        public AccountController(IConfiguration configuration, UserManager<AppUser> userManager = null)
         {
             _configuration = configuration;
             _httpClient = new HttpClient();
             //_httpClient.BaseAddress = new Uri("https://monitoreaseapi.azurewebsites.net"); // Azure
             _httpClient.BaseAddress = new Uri("https://localhost:7255/"); // Local
+            _userManager = userManager;
         }
         [HttpGet]
         [AllowAnonymous]
@@ -245,6 +248,86 @@ namespace humanResourceProject.Presentation.Controllers
         {
             return View();
         }
+
+
+
+
+
+        //[HttpGet]
+        //[AllowAnonymous]
+        //public IActionResult ResetPassword(string token, Guid id)
+        //{
+        
+        //    if (token == null || id == null)
+        //    {
+        //        ModelState.AddModelError("", "Invalid password reset token");
+        //    }
+        //    return View();
+        //}
+
+        //[HttpPost]
+        //[AllowAnonymous]
+        //public async Task<IActionResult> ResetPassword(ResetPasswordDTO model)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+             
+        //        AppUser user = await _userManager.FindByIdAsync(model.Id.ToString());
+                
+        //        if (user != null)
+        //        {
+        //            var result = await _userManager.ResetPasswordAsync(user, model.Token, model.Password);
+        //            if (result.Succeeded)
+        //            {
+        //                return View("ResetPasswordConfirmation");
+        //            }
+
+        //            foreach (var error in result.Errors)
+        //            {
+        //                ModelState.AddModelError("", error.Description);
+        //            }
+        //            return View(model);
+        //        }
+
+        //        return View("ResetPasswordConfirmation");
+        //    }
+        //    return View(model);
+        //}
+
+
+
+
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult ResetPassword(Guid id, string token )
+        {
+
+            return token == null ? View("Error") : View(new ResetPasswordDTO() { Id=id,Token=token});
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        //[ValidateAntiForgeryToken]
+        public async Task<IActionResult> ResetPassword(ResetPasswordDTO model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+            var json = System.Text.Json.JsonSerializer.Serialize(model);
+
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+            HttpResponseMessage response = await _httpClient.PostAsync("/api/AppUser/ResetPassword", content);
+            if (response.IsSuccessStatusCode)
+            {
+                return View("ResetPasswordConfirmation");
+            }
+            else
+            {
+                ModelState.AddModelError(string.Empty,"Bir Hata Oluştu Tekrar Deneyiniz!");
+                return View(model);
+            }
+            }
 
 
         //[HttpGet]
