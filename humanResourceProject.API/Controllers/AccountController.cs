@@ -90,6 +90,8 @@ namespace humanResourceProject.API.Controllers
             if (!result.Succeeded)
                 return BadRequest(result.Errors);
 
+
+
             return Ok("Yeni şirket yöneticisi oluşturuldu.");
         }
 

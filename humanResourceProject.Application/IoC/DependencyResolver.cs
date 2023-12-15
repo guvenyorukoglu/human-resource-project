@@ -4,9 +4,11 @@ using humanResourceProject.Application.AutoMapper;
 using humanResourceProject.Application.Services.Abstract.IAppUserServices;
 using humanResourceProject.Application.Services.Abstract.ICompanyServices;
 using humanResourceProject.Application.Services.Abstract.IImageServices;
+using humanResourceProject.Application.Services.Abstract.IMailServices;
 using humanResourceProject.Application.Services.Concrete.AppUserServices;
 using humanResourceProject.Application.Services.Concrete.CompanyServices;
 using humanResourceProject.Application.Services.Concrete.ImageServices;
+using humanResourceProject.Application.Services.Concrete.MailServices;
 using humanResourceProject.Domain.Entities.Concrete;
 
 
@@ -27,6 +29,9 @@ namespace humanResourceProject.Application.IoC
             builder.RegisterType<CompanyReadService>().As<ICompanyReadService>().InstancePerLifetimeScope();
             builder.RegisterType<CompanyWriteService>().As<ICompanyWriteService>().InstancePerLifetimeScope();
             builder.RegisterType<ImageService>().As<IImageService>().InstancePerLifetimeScope();
+            builder.RegisterType<MailService>().As<IMailService>().InstancePerLifetimeScope();
+          
+
 
             //Repositories Absrtact to Concrete
             builder.RegisterType<AppUserReadRepository>().As<IBaseReadRepository<AppUser>>().InstancePerLifetimeScope();

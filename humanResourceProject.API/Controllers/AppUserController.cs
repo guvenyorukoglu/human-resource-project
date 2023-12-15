@@ -1,4 +1,6 @@
 ﻿using humanResourceProject.Application.Services.Abstract.IAppUserServices;
+using humanResourceProject.Application.Services.Abstract.IMailServices;
+using humanResourceProject.Domain.Entities.Concrete;
 using humanResourceProject.Models.DTOs;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -12,11 +14,15 @@ namespace humanResourceProject.API.Controllers
     {
         private readonly IAppUserReadService _appUserReadService;
         private readonly IAppUserWriteService _appUserWriteService;
+        private readonly IMailService _mailService;
+        private readonly UserManager<AppUser>  _userManager;
 
-        public AppUserController(IAppUserReadService appUserReadService, IAppUserWriteService appUserWriteService)
+        public AppUserController(IAppUserReadService appUserReadService, IAppUserWriteService appUserWriteService, UserManager<AppUser> userManager, IMailService mailService)
         {
             _appUserReadService = appUserReadService;
             _appUserWriteService = appUserWriteService;
+            _userManager = userManager;
+            _mailService = mailService;
         }
 
         [HttpGet]
@@ -46,12 +52,17 @@ namespace humanResourceProject.API.Controllers
         }
 
         [HttpPost]
+ 
         public async Task<IActionResult> CreatePersonel([FromBody] UserRegisterDTO model) // Yeni Personel Oluşturma
         {
             IdentityResult result = await _appUserWriteService.RegisterPersonel(model);
             if (!result.Succeeded)
                 return BadRequest(result.Errors);
 
+            AppUser user = await _userManager.FindByEmailAsync(model.Email);
+            string token =await _userManager.GenerateEmailConfirmationTokenAsync(user);
+            string action = Url.Action("DeleteEmployee","AppUser", new { id = user.Id, token }, Request.Scheme);
+            await _mailService.SendMessageAsync(model, action);
             return Ok("Yeni personel oluşturuldu.");
         }
 
