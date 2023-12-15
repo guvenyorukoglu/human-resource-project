@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using humanResourceProject.Application.Services.Abstract.IAppUserServices;
 using humanResourceProject.Application.Services.Abstract.IImageServices;
+using humanResourceProject.Application.Services.Abstract.IMailServices;
 using humanResourceProject.Application.Services.Concrete.BaseServices;
 using humanResourceProject.Domain.Entities.Concrete;
 using humanResourceProject.Domain.Enum;
@@ -8,7 +9,8 @@ using humanResourceProject.Domain.IRepository.BaseRepos;
 using humanResourceProject.Models.DTOs;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
-
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
 
 namespace humanResourceProject.Application.Services.Concrete.AppUserServices
 {
@@ -20,6 +22,8 @@ namespace humanResourceProject.Application.Services.Concrete.AppUserServices
         private readonly IMapper _mapper;
         private readonly IImageService _imageService;
         private readonly IConfiguration _configuration;
+        private readonly IMailService _mailService;
+  
         public AppUserWriteService(IBaseWriteRepository<AppUser> writeRepository, IBaseReadRepository<AppUser> readRepository, IMapper mapper, UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, IImageService imageService, IConfiguration configuration) : base(writeRepository, readRepository)
         {
             _writeRepository = writeRepository;
@@ -28,6 +32,7 @@ namespace humanResourceProject.Application.Services.Concrete.AppUserServices
             _userManager = userManager;
             _imageService = imageService;
             _configuration = configuration;
+          
         }
 
         public async Task<UpdateUserDTO> GetUpdateUserDTOById(Guid id)
@@ -49,7 +54,11 @@ namespace humanResourceProject.Application.Services.Concrete.AppUserServices
             newUser.UserName = newUser.Email;
             IdentityResult result = await _userManager.CreateAsync(newUser, model.Password);
             if (result.Succeeded)
+            {
+               
                 await _userManager.AddToRoleAsync(newUser, "Personel");
+               
+            }
             return result;
         }
 

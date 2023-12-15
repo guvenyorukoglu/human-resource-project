@@ -25,16 +25,16 @@ namespace humanResourceProject.Presentation.Controllers
         {
             _configuration = configuration;
             _httpClient = new HttpClient();
-            _httpClient.BaseAddress = new Uri("https://monitoreaseapi.azurewebsites.net"); // Azure
-            //_httpClient.BaseAddress = new Uri("https://localhost:7255/"); // Local
+            //_httpClient.BaseAddress = new Uri("https://monitoreaseapi.azurewebsites.net"); // Azure
+            _httpClient.BaseAddress = new Uri("https://localhost:7255/"); // Local
         }
-
+        [HttpGet]
         [AllowAnonymous]
         public IActionResult RegisterCompany() // İlk açılacak register view'i (şirket kaydı için)
         {
             return View(new CompanyRegisterDTO());
         }
-
+        [HttpGet]
         [AllowAnonymous]
         public IActionResult Register(Guid companyId) // İleri butonuna basıldığında açılacak şirket yöneticisi register view'i
         {
