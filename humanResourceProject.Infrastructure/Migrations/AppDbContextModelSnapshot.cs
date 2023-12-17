@@ -22,6 +22,49 @@ namespace humanResourceProject.Infrastructure.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
+            modelBuilder.Entity("humanResourceProject.Domain.Entities.Concrete.Advance", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("AdvanceStatus")
+                        .HasColumnType("int");
+
+                    b.Property<int>("AdvanceType")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("AmountOfAdvance")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime>("CreateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Currency")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("DeleteDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("EmployeeId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Explanation")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("UpdateDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EmployeeId");
+
+                    b.ToTable("Advances");
+                });
+
             modelBuilder.Entity("humanResourceProject.Domain.Entities.Concrete.AppUser", b =>
                 {
                     b.Property<Guid>("Id")
@@ -42,9 +85,6 @@ namespace humanResourceProject.Infrastructure.Migrations
                     b.Property<int>("BloodGroup")
                         .HasColumnType("int");
 
-                    b.Property<Guid>("CompanyId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
@@ -54,6 +94,10 @@ namespace humanResourceProject.Infrastructure.Migrations
 
                     b.Property<DateTime?>("DeleteDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("DepartmentId")
+                        .IsRequired()
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -68,6 +112,9 @@ namespace humanResourceProject.Infrastructure.Migrations
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
 
+                    b.Property<int>("Gender")
+                        .HasColumnType("int");
+
                     b.Property<string>("IdentificationNumber")
                         .IsRequired()
                         .HasMaxLength(11)
@@ -76,10 +123,9 @@ namespace humanResourceProject.Infrastructure.Migrations
                     b.Property<string>("ImagePath")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Job")
+                    b.Property<Guid?>("JobId")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("LastName")
                         .IsRequired()
@@ -91,6 +137,9 @@ namespace humanResourceProject.Infrastructure.Migrations
 
                     b.Property<DateTimeOffset?>("LockoutEnd")
                         .HasColumnType("datetimeoffset");
+
+                    b.Property<Guid?>("ManagerId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("MiddleName")
                         .HasMaxLength(30)
@@ -121,9 +170,6 @@ namespace humanResourceProject.Infrastructure.Migrations
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
-                    b.Property<int>("Title")
-                        .HasColumnType("int");
-
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("bit");
 
@@ -136,7 +182,11 @@ namespace humanResourceProject.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CompanyId");
+                    b.HasIndex("DepartmentId");
+
+                    b.HasIndex("JobId");
+
+                    b.HasIndex("ManagerId");
 
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
@@ -198,6 +248,170 @@ namespace humanResourceProject.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Companies");
+                });
+
+            modelBuilder.Entity("humanResourceProject.Domain.Entities.Concrete.Department", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("CompanyId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DeleteDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("DepartmentName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("UpdateDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CompanyId");
+
+                    b.ToTable("Departments");
+                });
+
+            modelBuilder.Entity("humanResourceProject.Domain.Entities.Concrete.Expense", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal>("AmountOfExpense")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime>("CreateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Currency")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("DateOfExpense")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DeleteDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("EmployeeId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("ExpenseStatus")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ExpenseType")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Explanation")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FilePath")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("UpdateDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EmployeeId");
+
+                    b.ToTable("Expenses");
+                });
+
+            modelBuilder.Entity("humanResourceProject.Domain.Entities.Concrete.Job", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DeleteDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<DateTime?>("UpdateDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Jobs");
+                });
+
+            modelBuilder.Entity("humanResourceProject.Domain.Entities.Concrete.Leave", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal>("DaysOfLeave")
+                        .HasColumnType("decimal(4,1)");
+
+                    b.Property<DateTime?>("DeleteDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("EmployeeId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("EndDateOfLeave")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Explanation")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("LeaveStatus")
+                        .HasColumnType("int");
+
+                    b.Property<int>("LeaveType")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("StartDateOfLeave")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("UpdateDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EmployeeId");
+
+                    b.ToTable("Leaves");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole<System.Guid>", b =>
@@ -331,15 +545,71 @@ namespace humanResourceProject.Infrastructure.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("humanResourceProject.Domain.Entities.Concrete.AppUser", b =>
+            modelBuilder.Entity("humanResourceProject.Domain.Entities.Concrete.Advance", b =>
                 {
-                    b.HasOne("humanResourceProject.Domain.Entities.Concrete.Company", "Company")
-                        .WithMany("Employees")
-                        .HasForeignKey("CompanyId")
+                    b.HasOne("humanResourceProject.Domain.Entities.Concrete.AppUser", "Employee")
+                        .WithMany("Advances")
+                        .HasForeignKey("EmployeeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Company");
+                    b.Navigation("Employee");
+                });
+
+            modelBuilder.Entity("humanResourceProject.Domain.Entities.Concrete.AppUser", b =>
+                {
+                    b.HasOne("humanResourceProject.Domain.Entities.Concrete.Department", "Department")
+                        .WithMany("Employees")
+                        .HasForeignKey("DepartmentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("humanResourceProject.Domain.Entities.Concrete.Job", "Job")
+                        .WithMany("Employees")
+                        .HasForeignKey("JobId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("humanResourceProject.Domain.Entities.Concrete.AppUser", "Manager")
+                        .WithMany("DepartmentEmployees")
+                        .HasForeignKey("ManagerId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Department");
+
+                    b.Navigation("Job");
+
+                    b.Navigation("Manager");
+                });
+
+            modelBuilder.Entity("humanResourceProject.Domain.Entities.Concrete.Department", b =>
+                {
+                    b.HasOne("humanResourceProject.Domain.Entities.Concrete.Company", null)
+                        .WithMany("Departments")
+                        .HasForeignKey("CompanyId");
+                });
+
+            modelBuilder.Entity("humanResourceProject.Domain.Entities.Concrete.Expense", b =>
+                {
+                    b.HasOne("humanResourceProject.Domain.Entities.Concrete.AppUser", "Employee")
+                        .WithMany("Expenses")
+                        .HasForeignKey("EmployeeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Employee");
+                });
+
+            modelBuilder.Entity("humanResourceProject.Domain.Entities.Concrete.Leave", b =>
+                {
+                    b.HasOne("humanResourceProject.Domain.Entities.Concrete.AppUser", "Employee")
+                        .WithMany("Leaves")
+                        .HasForeignKey("EmployeeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Employee");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
@@ -393,7 +663,28 @@ namespace humanResourceProject.Infrastructure.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("humanResourceProject.Domain.Entities.Concrete.AppUser", b =>
+                {
+                    b.Navigation("Advances");
+
+                    b.Navigation("DepartmentEmployees");
+
+                    b.Navigation("Expenses");
+
+                    b.Navigation("Leaves");
+                });
+
             modelBuilder.Entity("humanResourceProject.Domain.Entities.Concrete.Company", b =>
+                {
+                    b.Navigation("Departments");
+                });
+
+            modelBuilder.Entity("humanResourceProject.Domain.Entities.Concrete.Department", b =>
+                {
+                    b.Navigation("Employees");
+                });
+
+            modelBuilder.Entity("humanResourceProject.Domain.Entities.Concrete.Job", b =>
                 {
                     b.Navigation("Employees");
                 });

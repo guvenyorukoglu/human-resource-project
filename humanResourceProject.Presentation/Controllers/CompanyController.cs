@@ -1,4 +1,3 @@
-using humanResourceProject.Application.Services.Abstract.ICompanyServices;
 using humanResourceProject.Models.DTOs;
 using humanResourceProject.Models.VMs;
 using Microsoft.AspNetCore.Authorization;
@@ -12,8 +11,6 @@ namespace humanResourceProject.Presentation.Controllers
     [Authorize(Roles = "SiteManager")]
     public class CompanyController : Controller
     {
-        private readonly ICompanyReadService _companyReadService;
-        private readonly ICompanyWriteService _companyWriteService;
         private readonly HttpClient _httpClient;
         private readonly IConfiguration _configuration;
 
@@ -21,8 +18,8 @@ namespace humanResourceProject.Presentation.Controllers
         {
             _configuration = configuration;
             _httpClient = new HttpClient();
-            _httpClient.BaseAddress = new Uri("https://monitoreaseapi.azurewebsites.net"); // Azure
-            //_httpClient.BaseAddress = new Uri("https://localhost:7255/");
+            //_httpClient.BaseAddress = new Uri("https://monitoreaseapi.azurewebsites.net"); // Azure
+            _httpClient.BaseAddress = new Uri("https://localhost:7255/");
 
         }
 

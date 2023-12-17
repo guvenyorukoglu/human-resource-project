@@ -32,16 +32,18 @@ namespace humanResourceProject.Models.DTOs
         [PhoneValidations(ErrorMessage = "Lütfen geçerli bir telefon numarası giriniz!")]
         public string PhoneNumber { get; set; }
 
-        [Required(ErrorMessage = "Ünvan alanı boş geçilemez!")]
-        [DisplayName("Ünvan*")]
-        public Title Title { get; set; }
+        [Required(ErrorMessage = "Cinsiyet alanı boş geçilemez!")]
+        [DisplayName("Cinsiyet*")]
+        public Gender Gender { get; set; }
 
         [Required(ErrorMessage = "Meslek alanı boş geçilemez!")]
         [DisplayName("Meslek*")]
         [RegularExpression(@"^[a-zA-ZğĞıİşŞüÜöÖçÇ\s]*$", ErrorMessage = "Yalnızca alfabetik karakterlere izin verilir.")]
         public string Job { get; set; }
-        public Guid CompanyId { get; set; }
-        public List<CompanyVM>? Companies { get; set; }
+        public Guid DepartmentId { get; set; }
+        public List<DepartmentVM>? Departments { get; set; }
+        public Guid JobId { get; set; }
+        public List<JobVM>? Jobs { get; set; }
         public DateTime UpdateDate => DateTime.Now;
         public Status Status => Status.Modified;
 

@@ -1,15 +1,10 @@
 ﻿using humanResourceProject.Domain.Entities.Concrete;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace humanResourceProject.Infrastructure.EntityTypeConfig
 {
-    public class AppUserConfig: BaseEntityConfig<AppUser>
+    public class AppUserConfig : BaseEntityConfig<AppUser>
     {
         public override void Configure(EntityTypeBuilder<AppUser> builder)
         {
@@ -22,14 +17,14 @@ namespace humanResourceProject.Infrastructure.EntityTypeConfig
             builder.Property(u => u.IdentificationNumber).IsRequired().HasMaxLength(11);
             builder.Property(u => u.BloodGroup).IsRequired();
             builder.Property(u => u.Birthdate).IsRequired();
-            builder.Property(u => u.Title).IsRequired();
-            builder.Property(u => u.Job).IsRequired().HasMaxLength(50);
+            builder.Property(u => u.Gender).IsRequired();
             builder.Property(u => u.ImagePath).IsRequired(false);
-                
+            builder.Property(u => u.ManagerId).IsRequired(false);
 
+            builder.HasOne(u => u.Department).WithMany(d => d.Employees).HasForeignKey(u => u.DepartmentId);
+            builder.HasOne(u => u.Job).WithMany(j => j.Employees).HasForeignKey(u => u.JobId);
+            builder.HasOne(u => u.Manager).WithMany(m => m.DepartmentEmployees).HasForeignKey(u => u.ManagerId).OnDelete(DeleteBehavior.Restrict);
 
-            builder.HasOne(u=>u.Company).WithMany(c=>c.Employees).HasForeignKey(u=>u.CompanyId);
-          
             base.Configure(builder);
         }
     }

@@ -10,6 +10,7 @@ namespace humanResourceProject.Domain.Enum
     {
         Active = 1,
         Modified = 2,
-        Inactive = 3
+        Inactive = 3,
+        Deleted = 4
     }
 }

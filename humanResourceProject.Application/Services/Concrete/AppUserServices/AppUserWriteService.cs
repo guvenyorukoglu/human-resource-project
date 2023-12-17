@@ -91,9 +91,9 @@ namespace humanResourceProject.Application.Services.Concrete.AppUserServices
             updatedUser.LastName = model.LastName ?? updatedUser.LastName;
             updatedUser.Address = model.Address ?? updatedUser.Address;
             updatedUser.PhoneNumber = model.PhoneNumber ?? updatedUser.PhoneNumber;
-            updatedUser.Title = model.Title;
-            updatedUser.Job = model.Job ?? updatedUser.Job;
-            updatedUser.CompanyId = model.CompanyId;
+            updatedUser.Gender = model.Gender;
+            updatedUser.JobId = model.JobId;
+            updatedUser.DepartmentId = model.DepartmentId;
             updatedUser.UpdateDate = DateTime.Now;
             updatedUser.Status = Status.Modified;
 

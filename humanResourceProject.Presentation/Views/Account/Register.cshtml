@@ -95,10 +95,10 @@
             </div>
 
             <div class="form-group mb-3">
-                <label asp-for="Title" class="control-label"></label>
-                <select asp-for="Title" class="form-control">
+                <label asp-for="Gender" class="control-label"></label>
+                <select asp-for="Gender" class="form-control">
                     @{
-                        var enumTyp = typeof(Title);
+                        var enumTyp = typeof(Gender);
                         var enumValus = enumTyp.GetEnumValues();
                         foreach (var enumValue in enumValus)
                         {
@@ -108,7 +108,7 @@
                         }
                     }
                 </select>
-                <span asp-validation-for="Title" class="text-danger"></span>
+                <span asp-validation-for="Gender" class="text-danger"></span>
             </div>
 
             <div class="form-group mb-3">
