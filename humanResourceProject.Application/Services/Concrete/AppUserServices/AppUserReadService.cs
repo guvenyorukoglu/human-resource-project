@@ -5,6 +5,7 @@ using humanResourceProject.Domain.IRepository.BaseRepos;
 using humanResourceProject.Models.DTOs;
 using humanResourceProject.Models.VMs;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace humanResourceProject.Application.Services.Concrete.AppUserServices
 {
@@ -21,7 +22,7 @@ namespace humanResourceProject.Application.Services.Concrete.AppUserServices
             _userManager = userManager;
         }
 
-        public async Task<List<PersonelVM>> GetEmployeesByCompanyId(Guid companyId)
+        public async Task<List<PersonelVM>> GetEmployeesByDepartmentId(Guid departmentId)
         {
             return await _readRepository.GetFilteredList(
                 select: x => new PersonelVM()
@@ -32,11 +33,12 @@ namespace humanResourceProject.Application.Services.Concrete.AppUserServices
                     MiddleName = x.MiddleName,
                     Email = x.Email,
                     PhoneNumber = x.PhoneNumber,
-                    Title = x.Title,
-                    Job = x.Job
+                    Gender = x.Gender,
+                    JobTitle = x.Job.Title
                 },
-                where: x => x.CompanyId == companyId && x.Status != Domain.Enum.Status.Inactive,
-                orderBy: x => x.OrderBy(x => x.FirstName));
+                where: x => x.DepartmentId == departmentId && x.Status != Domain.Enum.Status.Inactive,
+                orderBy: x => x.OrderBy(x => x.FirstName),
+                include: x => x.Include(x => x.Job));
         }
 
         public async Task<SignInResult> Login(LoginDTO model)

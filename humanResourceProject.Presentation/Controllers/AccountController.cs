@@ -20,8 +20,8 @@ namespace humanResourceProject.Presentation.Controllers
         {
             _configuration = configuration;
             _httpClient = new HttpClient();
-            _httpClient.BaseAddress = new Uri("https://monitoreaseapi.azurewebsites.net"); // Azure
-            //_httpClient.BaseAddress = new Uri("https://localhost:7255/"); // Local
+            //_httpClient.BaseAddress = new Uri("https://monitoreaseapi.azurewebsites.net"); // Azure
+            _httpClient.BaseAddress = new Uri("https://localhost:7255/"); // Local
         }
         [HttpGet]
         [AllowAnonymous]
@@ -103,7 +103,7 @@ namespace humanResourceProject.Presentation.Controllers
                     { new StringContent(model.Address, Encoding.UTF8, MediaTypeNames.Text.Plain), "Address" },
                     { new StringContent(model.IdentificationNumber, Encoding.UTF8, MediaTypeNames.Text.Plain), "IdentificationNumber" },
                     { new StringContent(model.BloodGroup.ToString(), Encoding.UTF8, MediaTypeNames.Text.Plain), "BloodGroup" },
-                    { new StringContent(model.Title.ToString(), Encoding.UTF8, MediaTypeNames.Text.Plain), "Title" },
+                    { new StringContent(model.Gender.ToString(), Encoding.UTF8, MediaTypeNames.Text.Plain), "Gender" },
                     { new StringContent(model.Job, Encoding.UTF8, MediaTypeNames.Text.Plain), "Job" },
                     { new StringContent(model.ImagePath ?? "", Encoding.UTF8, MediaTypeNames.Text.Plain), "ImagePath" },
                     { new StringContent(model.CompanyId.ToString(), Encoding.UTF8, MediaTypeNames.Text.Plain), "CompanyId" }
@@ -143,7 +143,7 @@ namespace humanResourceProject.Presentation.Controllers
                     { new StringContent(model.Address, Encoding.UTF8, MediaTypeNames.Text.Plain), "Address" },
                     { new StringContent(model.IdentificationNumber, Encoding.UTF8, MediaTypeNames.Text.Plain), "IdentificationNumber" },
                     { new StringContent(model.BloodGroup.ToString(), Encoding.UTF8, MediaTypeNames.Text.Plain), "BloodGroup" },
-                    { new StringContent(model.Title.ToString(), Encoding.UTF8, MediaTypeNames.Text.Plain), "Title" },
+                    { new StringContent(model.Gender.ToString(), Encoding.UTF8, MediaTypeNames.Text.Plain), "Gender" },
                     { new StringContent(model.Job, Encoding.UTF8, MediaTypeNames.Text.Plain), "Job" },
                     { new StringContent(model.ImagePath ?? "", Encoding.UTF8, MediaTypeNames.Text.Plain), "ImagePath" },
                     { new StringContent(model.CompanyId.ToString(), Encoding.UTF8, MediaTypeNames.Text.Plain), "CompanyId" }

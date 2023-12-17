@@ -14,7 +14,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\humanResourceProject.Application\humanResourceProject.Application.csproj" />
     <ProjectReference Include="..\humanResourceProject.Models\humanResourceProject.Models.csproj" />
   </ItemGroup>
 

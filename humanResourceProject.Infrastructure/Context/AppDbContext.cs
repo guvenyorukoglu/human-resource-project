@@ -3,29 +3,37 @@ using humanResourceProject.Infrastructure.EntityTypeConfig;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace humanResourceProject.Infrastructure.Context
 {
-    public class AppDbContext:IdentityDbContext<AppUser, IdentityRole<Guid>, Guid>
-    { 
+    public class AppDbContext : IdentityDbContext<AppUser, IdentityRole<Guid>, Guid>
+    {
         public AppDbContext(DbContextOptions options) : base(options)
         {
 
         }
-        public DbSet<Company> Companies { get; set; }
         public DbSet<AppUser> AppUsers { get; set; }
-
+        public DbSet<Company> Companies { get; set; }
+        public DbSet<Department> Departments { get; set; }
+        public DbSet<Job> Jobs { get; set; }
+        public DbSet<Advance> Advances { get; set; }
+        public DbSet<Expense> Expenses { get; set; }
+        public DbSet<Leave> Leaves { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
-            builder.ApplyConfiguration(new AppUserConfig())
-                   .ApplyConfiguration(new CompanyConfig());
+            builder.ApplyConfiguration(new BaseEntityConfig<AppUser>())
+                   .ApplyConfiguration(new BaseEntityConfig<Company>())
+                   .ApplyConfiguration(new BaseEntityConfig<Department>())
+                   .ApplyConfiguration(new BaseEntityConfig<Job>())
+                   .ApplyConfiguration(new AppUserConfig())
+                   .ApplyConfiguration(new CompanyConfig())
+                   .ApplyConfiguration(new DepartmentConfig())
+                   .ApplyConfiguration(new JobConfig())
+                   .ApplyConfiguration(new AdvanceConfig())
+                   .ApplyConfiguration(new ExpenseConfig())
+                   .ApplyConfiguration(new LeaveConfig());
 
         }
     }

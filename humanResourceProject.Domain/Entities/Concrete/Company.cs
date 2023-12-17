@@ -12,7 +12,8 @@ namespace humanResourceProject.Domain.Entities.Concrete
     {
         public Company()
         {
-            Employees = new HashSet<AppUser>();
+            //Employees = new HashSet<AppUser>();
+            Departments = new HashSet<Department>();
         }
         public Guid Id { get; set; }
         public string CompanyName { get; set; }
@@ -22,10 +23,11 @@ namespace humanResourceProject.Domain.Entities.Concrete
         public string Address { get; set; }
         public string PhoneNumber { get; set; }
 
-        public ICollection<AppUser> Employees { get; set; }
+        //public ICollection<AppUser> Employees { get; set; }
+        public ICollection<Department> Departments { get; set; }
         public DateTime CreateDate { get; set; } = DateTime.Now;
         public DateTime? UpdateDate { get; set; }
         public DateTime? DeleteDate { get; set; }
-        public Status Status { get; set; } = Status.Inactive;
+        public Status Status { get; set; } = Status.Active;
     }
 }

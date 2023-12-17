@@ -50,7 +50,7 @@ namespace humanResourceProject.API.Controllers
         [Route("GetEmployeesByCompanyId")]
         public async Task<IActionResult> GetEmployeesByCompanyId([FromBody] Guid companyId) // Şirket Id'sine göre Personeller
         {
-            return Ok(await _appUserReadService.GetEmployeesByCompanyId(companyId));
+            return Ok(await _appUserReadService.GetEmployeesByDepartmentId(companyId));
         }
 
         [HttpPost]

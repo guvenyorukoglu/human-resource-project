@@ -3,7 +3,7 @@ using Autofac.Extensions.DependencyInjection;
 using humanResourceProject.Application.IoC;
 using humanResourceProject.Domain.Entities.Concrete;
 using humanResourceProject.Infrastructure.Context;
-using humanResourceProject.Infrastructure.SeedData;
+//using humanResourceProject.Infrastructure.SeedData;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -20,8 +20,8 @@ builder.Services.AddControllers();
 
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
-    options.UseSqlServer(builder.Configuration.GetConnectionString("MonitorEase:SqlDb"));   //Azure
-    //options.UseSqlServer(builder.Configuration.GetConnectionString("GuvenSQLConnection")); //Local
+    //options.UseSqlServer(builder.Configuration.GetConnectionString("MonitorEase:SqlDb"));   //Azure
+    options.UseSqlServer(builder.Configuration.GetConnectionString("GuvenSQLConnection")); //Local
 
 
 });
@@ -122,7 +122,7 @@ app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
 
-SeedDataGenerator.Seed(app, 10);
+//SeedDataGenerator.Seed(app, 10);
 
 app.MapControllers();
 

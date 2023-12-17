@@ -64,9 +64,9 @@ namespace humanResourceProject.Models.DTOs
         [DisplayName("Kan Grubu*")]
         public BloodGroup BloodGroup { get; set; }
 
-        [Required(ErrorMessage = "Ünvan alanı boş geçilemez!")]
-        [DisplayName("Ünvan*")]
-        public Title Title { get; set; }
+        [Required(ErrorMessage = "Cinsiyet alanı boş geçilemez!")]
+        [DisplayName("Cinsiyet*")]
+        public Gender Gender { get; set; }
 
         [Required(ErrorMessage = "Meslek alanı boş geçilemez!")]
         [DisplayName("Meslek*")]
