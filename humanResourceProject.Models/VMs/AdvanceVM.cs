@@ -1,4 +1,6 @@
-﻿namespace humanResourceProject.Models.VMs
+﻿using humanResourceProject.Domain.Enum;
+
+namespace humanResourceProject.Models.VMs
 {
     public class AdvanceVM
     {
@@ -9,5 +11,7 @@
         public decimal AdvanceAmount { get; set; }
         public DateTime AdvanceDate { get; set; }
         public string Description { get; set; }
+        public RequestStatus Status { get; set;}
+
     }
 }

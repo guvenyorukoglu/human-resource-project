@@ -6,7 +6,7 @@ namespace humanResourceProject.Application.Services.Abstract.IExpenseServices
 {
     public interface IExpenseReadService : IBaseReadService<Expense>
     {
-        ExpenseDTO GetExpenseById(Guid id);
+        Task<ExpenseDTO> GetExpenseById(Guid id);
 
         Task<List<ExpenseVM>> GetAllExpenses();
     }

@@ -7,7 +7,7 @@ namespace humanResourceProject.Application.Services.Abstract.IDepartmantServices
 {
     public interface IDepartmentReadService : IBaseReadService<Department>
     {
-        DepartmentDTO GetDepartmentById(Guid id);
+        Task<DepartmentDTO> GetDepartmentById(Guid id);
 
         Task<List<DepartmentVM>> GetAllDepartments();
     }
