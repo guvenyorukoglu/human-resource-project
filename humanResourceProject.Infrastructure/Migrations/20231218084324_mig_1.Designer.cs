@@ -12,7 +12,7 @@ using humanResourceProject.Infrastructure.Context;
 namespace humanResourceProject.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20231217160046_mig_1")]
+    [Migration("20231218084324_mig_1")]
     partial class mig_1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -50,6 +50,9 @@ namespace humanResourceProject.Infrastructure.Migrations
 
                     b.Property<Guid>("EmployeeId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("ExpiryDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Explanation")
                         .HasColumnType("nvarchar(max)");
@@ -258,7 +261,7 @@ namespace humanResourceProject.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("CompanyId")
+                    b.Property<Guid>("CompanyId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreateDate")
@@ -587,9 +590,13 @@ namespace humanResourceProject.Infrastructure.Migrations
 
             modelBuilder.Entity("humanResourceProject.Domain.Entities.Concrete.Department", b =>
                 {
-                    b.HasOne("humanResourceProject.Domain.Entities.Concrete.Company", null)
+                    b.HasOne("humanResourceProject.Domain.Entities.Concrete.Company", "Company")
                         .WithMany("Departments")
-                        .HasForeignKey("CompanyId");
+                        .HasForeignKey("CompanyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Company");
                 });
 
             modelBuilder.Entity("humanResourceProject.Domain.Entities.Concrete.Expense", b =>

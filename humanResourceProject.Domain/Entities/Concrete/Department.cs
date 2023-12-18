@@ -15,6 +15,8 @@ namespace humanResourceProject.Domain.Entities.Concrete
 
         //public AppUser Manager { get; set; }
         //public Guid? ManagerId { get; set; }
+        public Company Company { get; set; }
+        public Guid CompanyId { get; set; }
 
         public ICollection<AppUser> Employees { get; set; }
 
