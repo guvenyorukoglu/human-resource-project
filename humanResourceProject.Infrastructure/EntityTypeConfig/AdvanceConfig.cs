@@ -10,6 +10,7 @@ namespace humanResourceProject.Infrastructure.EntityTypeConfig
         {
             builder.Property(a => a.AmountOfAdvance).IsRequired().HasColumnType("decimal(18,2)");
             builder.Property(a => a.Explanation).IsRequired(false);
+            builder.Property(a => a.ExpiryDate).IsRequired().HasColumnType("datetime2");
 
             builder.HasOne(a => a.Employee).WithMany(e => e.Advances).HasForeignKey(a => a.EmployeeId);
         }
