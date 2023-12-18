@@ -1,6 +1,7 @@
 ﻿using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
 using humanResourceProject.Application.Services.Abstract.IImageServices;
+using humanResourceProject.Domain.Enum;
 using humanResourceProject.Models.DTOs;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -25,7 +26,7 @@ namespace humanResourceProject.Application.Services.Concrete.ImageServices
             if (model.UploadPath == null || model.UploadPath.FileName == null)
             {
                 //model.ImagePath = _configuration["AzureStorage:StorageUrl"] + "/defaultprofile.jpg";
-                model.ImagePath = "https://ik.imagekit.io/7ypp4olwr" + "/defaultprofile.jpg" + "?tr=h-200,w-200";
+                model.ImagePath = model.Gender == Gender.Male ? "https://ik.imagekit.io/7ypp4olwr" + "/maledefault.png?tr=h-200,w-200" : "https://ik.imagekit.io/7ypp4olwr" + "/femaledefault.png?tr=h-200,w-200";
                 return model;
             }
 
@@ -33,7 +34,7 @@ namespace humanResourceProject.Application.Services.Concrete.ImageServices
             if (fileExtension != ".jpg" && fileExtension != ".png" && fileExtension != ".jpeg")
             {
                 //model.ImagePath = _configuration["AzureStorage:StorageUrl"] + "/defaultprofile.jpg";
-                model.ImagePath = "https://ik.imagekit.io/7ypp4olwr" + "/defaultprofile.jpg" + "?tr=h-200,w-200";
+                model.ImagePath = model.Gender == Gender.Male ? "https://ik.imagekit.io/7ypp4olwr" + "/maledefault.png?tr=h-200,w-200" : "https://ik.imagekit.io/7ypp4olwr" + "/femaledefault.png?tr=h-200,w-200";
                 return model;
             }
 
