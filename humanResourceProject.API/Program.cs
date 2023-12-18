@@ -3,7 +3,7 @@ using Autofac.Extensions.DependencyInjection;
 using humanResourceProject.Application.IoC;
 using humanResourceProject.Domain.Entities.Concrete;
 using humanResourceProject.Infrastructure.Context;
-//using humanResourceProject.Infrastructure.SeedData;
+using humanResourceProject.Infrastructure.SeedData;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -122,7 +122,7 @@ app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
 
-//SeedDataGenerator.Seed(app, 10);
+SeedDataGenerator.Seed(app,25,5,20,100,5,10,10);
 
 app.MapControllers();
 
