@@ -1,14 +1,15 @@
 ﻿using humanResourceProject.Application.Services.BaseServices;
 using humanResourceProject.Domain.Entities.Concrete;
 using humanResourceProject.Models.DTOs;
+using Microsoft.AspNetCore.Identity;
 namespace humanResourceProject.Application.Services.Abstract.IExpenseServices
 {
     public interface IExpenseWriteService : IBaseWriteService<Expense>
     {
-        Task<bool> InsertExpense(ExpenseDTO model);
+        Task<IdentityResult> InsertExpense(ExpenseDTO model);
 
-        Task<bool> UpdateExpense(ExpenseDTO model);
+        Task<IdentityResult> UpdateExpense(ExpenseDTO model);
 
-        Task DeleteExpense(Guid id);
+        Task<IdentityResult> DeleteExpense(Guid id);
     }
 }

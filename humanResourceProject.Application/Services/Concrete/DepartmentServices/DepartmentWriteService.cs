@@ -5,6 +5,7 @@ using humanResourceProject.Domain.Entities.Concrete;
 using humanResourceProject.Domain.IRepository.BaseRepos;
 using humanResourceProject.Domain.IRepository.DepartmentRepo;
 using humanResourceProject.Models.DTOs;
+using Microsoft.AspNetCore.Identity;
 
 namespace humanResourceProject.Application.Services.Concrete.DepartmentServices
 {
@@ -22,33 +23,36 @@ namespace humanResourceProject.Application.Services.Concrete.DepartmentServices
             _mapper = mapper;
         }
 
-        public async Task DeleteDepartment(Guid id)
+        public async Task<IdentityResult> DeleteDepartment(Guid id)
         {
             Department department = await _baseReadRepository.GetById(id);
             department.Status = Domain.Enum.Status.Deleted;
             department.DeleteDate = DateTime.Now;
-            await _baseWriteRepository.Delete(id);
+            if(await _baseWriteRepository.Delete(id))
+                return IdentityResult.Success;
+            else
+                return IdentityResult.Failed();
         }
 
-        public async Task<bool> InsertDepartment(DepartmentDTO model)
+        public async Task<IdentityResult> InsertDepartment(DepartmentDTO model)
         {
             if (model == null)
-                return false;
+                return IdentityResult.Failed();
 
             Department newDepartment = _mapper.Map<Department>(model);
             newDepartment.Status = Domain.Enum.Status.Active;
             newDepartment.CreateDate = DateTime.Now;
             if (await _baseWriteRepository.Insert(newDepartment))
-                return true;
+                return IdentityResult.Success;
             else
-                return false;
+                return IdentityResult.Failed();
         }
 
-        public async Task<bool> UpdateDepartment(DepartmentDTO model)
+        public async Task<IdentityResult> UpdateDepartment(DepartmentDTO model)
         {
             Department department = await _baseReadRepository.GetSingleDefault(x => x.Id == model.Id);
             if (department == null)
-                return false;
+                return IdentityResult.Failed();
 
             DepartmentDTO departmentDTO = _mapper.Map<DepartmentDTO>(department);
 
@@ -58,9 +62,9 @@ namespace humanResourceProject.Application.Services.Concrete.DepartmentServices
             departmentDTO.UpdateDate = DateTime.Now;
 
             if (await _baseWriteRepository.Update(_mapper.Map<Department>(departmentDTO)))
-                return true;
+                return IdentityResult.Success;
             else
-                return false;
+                return IdentityResult.Failed();
         }
     }
 }

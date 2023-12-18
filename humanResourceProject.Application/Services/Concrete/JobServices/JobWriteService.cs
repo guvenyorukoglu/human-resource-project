@@ -6,6 +6,7 @@ using humanResourceProject.Domain.IRepository.BaseRepos;
 using humanResourceProject.Domain.IRepository.DepartmentRepo;
 using humanResourceProject.Domain.IRepository.JobRepo;
 using humanResourceProject.Models.DTOs;
+using Microsoft.AspNetCore.Identity;
 
 namespace humanResourceProject.Application.Services.Concrete.JobServices
 {
@@ -23,34 +24,37 @@ namespace humanResourceProject.Application.Services.Concrete.JobServices
             _mapper = mapper;
         }
 
-        public async Task DeleteJob(Guid id)
+        public async Task<IdentityResult> DeleteJob(Guid id)
         {
             Job job = await _baseReadRepository.GetById(id);
             job.Status = Domain.Enum.Status.Deleted;
             job.DeleteDate = DateTime.Now;
-            await _baseWriteRepository.Delete(id);
+            if(await _baseWriteRepository.Delete(id))
+                return IdentityResult.Success;
+            else
+                return IdentityResult.Failed();
         }
 
-        public async Task<bool> InsertJob(JobDTO model)
+        public async Task<IdentityResult> InsertJob(JobDTO model)
         {
             if (model == null)
-                return false;
+                return IdentityResult.Failed();
 
             Job newJob = _mapper.Map<Job>(model);
             newJob.Status = Domain.Enum.Status.Active;
             newJob.CreateDate = DateTime.Now;
             if (await _baseWriteRepository.Insert(newJob))
-                return true;
+                return IdentityResult.Success;
             else
-                return false;
+                return IdentityResult.Failed();
 
         }
 
-        public async Task<bool> UpdateJob(JobDTO model)
+        public async Task<IdentityResult> UpdateJob(JobDTO model)
         {
             Job job = await _baseReadRepository.GetSingleDefault(x => x.Id == model.Id);
             if (job == null)
-                return false;
+                return IdentityResult.Failed();
 
             JobDTO jobDTO = _mapper.Map<JobDTO>(job);
 
@@ -59,9 +63,9 @@ namespace humanResourceProject.Application.Services.Concrete.JobServices
             jobDTO.Status = Domain.Enum.Status.Modified;
 
             if (await _baseWriteRepository.Update(_mapper.Map<Job>(jobDTO)))
-                return true;
+                return IdentityResult.Success;
             else
-                return false;
+                return IdentityResult.Failed();
         }
     }
 }
