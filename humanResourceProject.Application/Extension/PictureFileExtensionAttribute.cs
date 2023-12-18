@@ -15,7 +15,7 @@ namespace humanResourceProject.Application.Extension
                 bool result = extensions.Any(x => x.EndsWith(extension));
 
                 if (!result)
-                    return new ValidationResult("Valid formats are 'png', 'jpg','jpeg'");
+                    return new ValidationResult("Geçerli Resim Formatları : 'png', 'jpg','jpeg'");
             }
             return ValidationResult.Success;
         }
