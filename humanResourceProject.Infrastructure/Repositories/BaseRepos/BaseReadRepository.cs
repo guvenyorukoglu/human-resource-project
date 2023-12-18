@@ -28,9 +28,9 @@ namespace humanResourceProject.Infrastructure.Repositories.BaseRepos
             return await table.ToListAsync();
         }
 
-        public T GetById(Guid id)
+        public async Task<T> GetById(Guid id)
         {
-            return table.Find(id);
+            return await table.FindAsync(id);
         }
 
         public async Task<T> GetDefault(Expression<Func<T, bool>> expression)

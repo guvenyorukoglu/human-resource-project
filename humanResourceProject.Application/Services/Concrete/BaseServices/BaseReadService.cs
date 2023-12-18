@@ -31,7 +31,7 @@ namespace humanResourceProject.Application.Services.Concrete.BaseServices
             return _readRepository.GetAll();
         }
 
-        public T GetById(Guid id)
+        public Task<T> GetById(Guid id)
         {
             return _readRepository.GetById(id);
         }
