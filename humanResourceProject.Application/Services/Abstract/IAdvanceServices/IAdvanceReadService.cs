@@ -6,7 +6,7 @@ namespace humanResourceProject.Application.Services.Abstract.IAdvanceServices
 {
     public interface IAdvanceReadService : IBaseReadService<Advance>
     {
-        AdvanceDTO GetAdvanceById(Guid id);
+        Task<AdvanceDTO> GetAdvanceById(Guid id);
 
         Task<List<AdvanceVM>> GetAllAdvances();
     }

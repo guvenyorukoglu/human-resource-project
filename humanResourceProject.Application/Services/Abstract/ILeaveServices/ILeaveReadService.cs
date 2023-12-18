@@ -6,7 +6,7 @@ namespace humanResourceProject.Application.Services.Abstract.ILeaveServices
 {
     public interface ILeaveReadService : IBaseReadService<Leave>
     {
-        LeaveDTO GetLeaveById(Guid id);
+        Task<LeaveDTO> GetLeaveById(Guid id);
 
         Task<List<LeaveVM>> GetAllLeaves();
     }

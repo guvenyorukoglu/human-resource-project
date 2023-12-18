@@ -26,12 +26,12 @@ namespace humanResourceProject.Application.Services.Concrete.BaseServices
             
         }
 
-        public Task<bool> Delete(Guid id)
+        public async Task<bool> Delete(Guid id)
         {
-            T entity = _readRepository.GetById(id);
+            T entity = await _readRepository.GetById(id);
             entity.DeleteDate = DateTime.Now;
-            entity.Status = Domain.Enum.Status.Inactive;
-            return _writeRepository.Delete(id);
+            entity.Status = Domain.Enum.Status.Deleted;
+            return await _writeRepository.Delete(id);
         }
 
         public async Task<bool> Insert(T entity)

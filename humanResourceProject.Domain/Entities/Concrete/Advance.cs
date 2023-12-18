@@ -19,6 +19,6 @@ namespace humanResourceProject.Domain.Entities.Concrete
         public DateTime CreateDate { get; set; } = DateTime.Now;
         public DateTime? UpdateDate { get; set; }
         public DateTime? DeleteDate { get; set; }
-        public Status Status { get; set; } = Status.Active;
+        public Status Status { get; set; } = Status.Active; 
     }
 }

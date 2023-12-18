@@ -12,7 +12,7 @@ namespace humanResourceProject.Domain.IRepository.BaseRepos
         Task<List<T>> GetDefaults(Expression<Func<T, bool>> expression);
         Task<List<T>> GetAll();
 
-        T GetById(Guid id);
+        Task<T> GetById(Guid id);
 
         Task<TResult> GetFilteredFirstOrDefault<TResult>(
             Expression<Func<T, TResult>> select,
