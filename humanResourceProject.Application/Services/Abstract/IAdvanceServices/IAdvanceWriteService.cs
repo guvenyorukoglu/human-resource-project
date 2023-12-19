@@ -1,4 +1,4 @@
-﻿using humanResourceProject.Application.Services.BaseServices;
+﻿using humanResourceProject.Application.Services.Abstract.IBaseServices;
 using humanResourceProject.Domain.Entities.Concrete;
 using humanResourceProject.Models.DTOs;
 using Microsoft.AspNetCore.Identity;

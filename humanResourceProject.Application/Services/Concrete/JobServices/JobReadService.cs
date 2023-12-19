@@ -11,12 +11,10 @@ namespace humanResourceProject.Application.Services.Concrete.JobServices
 {
     public class JobReadService : BaseReadService<Job>, IJobReadService
     {
-        private readonly IBaseReadRepository<Job> _baseReadRepository;
-        private readonly IJobReadRepository _jobReadRepository;
+        private readonly IBaseReadRepository<Job> _jobReadRepository;
         private readonly IMapper _mapper;
-        public JobReadService(IBaseReadRepository<Job> baseReadRepository, IJobReadRepository jobReadRepository, IMapper mapper) : base(baseReadRepository)
+        public JobReadService(IBaseReadRepository<Job> jobReadRepository, IMapper mapper) : base(jobReadRepository)
         {
-            _baseReadRepository = baseReadRepository;
             _jobReadRepository = jobReadRepository;
             _mapper = mapper;
         }
@@ -37,7 +35,7 @@ namespace humanResourceProject.Application.Services.Concrete.JobServices
 
         public async Task<JobDTO> GetJobById(Guid id)
         {
-            Job job = await _baseReadRepository.GetById(id);
+            Job job = await _jobReadRepository.GetById(id);
             JobDTO jobDTO = _mapper.Map<JobDTO>(job);
             return jobDTO;
         }

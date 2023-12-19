@@ -93,16 +93,16 @@ namespace humanResourceProject.API.Controllers
 
 
 
-        [HttpPost]
-        [Route("ResetPassword")]
-        public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordDTO model)
-        {
+        //[HttpPost]
+        //[Route("ResetPassword")]
+        //public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordDTO model)
+        //{
 
-            AppUser user = await _userManager.FindByIdAsync(model.Id.ToString());
-            var token = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(model.Token));
-            var result = await _userManager.ResetPasswordAsync(user, token, model.Password);
+        //    AppUser user = await _userManager.FindByIdAsync(model.Id.ToString());
+        //    var token = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(model.Token));
+        //    var result = await _userManager.ResetPasswordAsync(user, token, model.Password);
 
-            return Ok();
-        }
+        //    return Ok();
+        //}
     }
 }

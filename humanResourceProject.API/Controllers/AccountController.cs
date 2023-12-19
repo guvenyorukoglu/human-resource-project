@@ -1,12 +1,14 @@
 ﻿using humanResourceProject.Application.Services.Abstract.IAppUserServices;
+using humanResourceProject.Application.Services.Abstract.IBaseServices;
 using humanResourceProject.Application.Services.Abstract.ICompanyServices;
 using humanResourceProject.Application.Services.Abstract.IMailServices;
-using humanResourceProject.Application.Services.BaseServices;
 using humanResourceProject.Domain.Entities.Concrete;
 using humanResourceProject.Models.DTOs;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using System.ComponentModel.DataAnnotations;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -177,5 +179,59 @@ namespace humanResourceProject.API.Controllers
         //    return Ok(await _appUserWriteService.UpdateProfileImage(id));
         //}
 
+        [HttpPost]
+        [AllowAnonymous]
+        public async Task<IActionResult> ForgotPassword([Required] string email)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+            if (user == null)
+                return BadRequest("Kullanıcı bulunamadı.");
+
+            var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+            var resetLink = Url.Action(nameof(ResetPassword), "Account", new { id = user.Id, token }, Request.Scheme);
+            await _mailService.SendForgotPasswordEmail(user, resetLink);
+            return Ok($"Şifre sıfırlama linki {user.Email} adresine gönderildi! Linke tıklayıp şifrenizi sıfırlayabilirsiniz.");
+        }
+
+        [HttpGet]
+        [Route("ResetPassword")]
+        public async Task<IActionResult> ResetPassword(string id, string token)
+        {
+            var user = await _userManager.FindByIdAsync(id);
+            if (user == null)
+                return BadRequest("Kullanıcı bulunamadı.");
+
+            var model = new ResetPasswordDTO
+            {
+                Id = user.Id.ToString(),
+                Token = token
+            };
+
+            return Ok(model);
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        [Route("ResetPassword")]
+        public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordDTO model)
+        {
+            var user = await _userManager.FindByIdAsync(model.Id);
+            if (user == null)
+                return BadRequest("Kullanıcı bulunamadı.");
+
+            var result = await _userManager.ResetPasswordAsync(user, model.Token, model.Password);
+            if(!result.Succeeded)
+            {
+                foreach(var error in result.Errors)
+                {
+                    ModelState.AddModelError(error.Code, error.Description);
+                }
+                return BadRequest(ModelState);
+            }
+
+            return Ok("Şifreniz başarıyla değiştirildi.");
+
+
+        }
     }
 }
