@@ -48,12 +48,10 @@ namespace humanResourceProject.Presentation.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateAdvance(AdvancePersonnelVM model)
         {
             var json = JsonConvert.SerializeObject(model);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-            var response = await _httpClient.PostAsync($"api/Advance", content);
             if (response.IsSuccessStatusCode)
             {
                 return RedirectToAction("Advances");
@@ -65,40 +63,8 @@ namespace humanResourceProject.Presentation.Controllers
             }
         }
 
-        [HttpPost]
         public async Task<IActionResult> DeleteAdvance(Guid id)
         {
-            var response = await _httpClient.DeleteAsync($"api/Advance/{id}");
-
-            if (response.IsSuccessStatusCode)
-            {
-                return RedirectToAction("Advances");
-            }
-
-            return View("Error");
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> UpdateAdvance(Guid id)
-        {
-            var response = await _httpClient.GetAsync($"api/Advance/{id}");
-            if (response.IsSuccessStatusCode)
-            {
-                var content = await response.Content.ReadAsStringAsync();
-                var advance = JsonConvert.DeserializeObject<AdvancePersonnelVM>(content);
-                return View(advance);
-
-            }
-            return View("Error");
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> UpdateAdvance(AdvancePersonnelVM model)
-        {
-            var json = JsonConvert.SerializeObject(model);
-            var content = new StringContent(json, Encoding.UTF8, "application/json");
-
-            var response = await _httpClient.PutAsync($"api/Advance", content);
 
             if (response.IsSuccessStatusCode)
             {
@@ -209,7 +175,7 @@ namespace humanResourceProject.Presentation.Controllers
                 var leaves = JsonConvert.DeserializeObject<List<LeavePersonnelVM>>(cont);
                 return View(leaves);
 
-            }
+    }
             return View();
         }
 
