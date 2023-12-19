@@ -159,6 +159,8 @@ namespace humanResourceProject.API.Controllers
         [Route("ConfirmEmail")]
         public async Task<IActionResult> ConfirmEmail(Guid id, string token)
         {
+            //var id = data["id"].ToObject<Guid>();
+            //var token = data["token"].ToString();
             var user = await _userManager.FindByIdAsync(id.ToString());
             var result = await _userManager.ConfirmEmailAsync(user, token);
             if (result.Succeeded)
