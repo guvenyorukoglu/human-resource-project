@@ -22,6 +22,25 @@ namespace humanResourceProject.Application.Services.Concrete.AppUserServices
             _userManager = userManager;
         }
 
+        public async Task<List<PersonelVM>> GetEmployeesByCompanyId(Guid companyId)
+        {
+            return await _readRepository.GetFilteredList(
+                select: x => new PersonelVM()
+                {
+                    Id = x.Id,
+                    FirstName = x.FirstName,
+                    LastName = x.LastName,
+                    MiddleName = x.MiddleName,
+                    Email = x.Email,
+                    PhoneNumber = x.PhoneNumber,
+                    Gender = x.Gender,
+                    JobTitle = x.Job.Title
+                },
+                where: x => x.Department.CompanyId == companyId && (x.Status != Domain.Enum.Status.Inactive || x.Status != Domain.Enum.Status.Deleted),
+                orderBy: x => x.OrderBy(x => x.FirstName),
+                include: x => x.Include(x => x.Job).Include(x => x.Department));
+        }
+
         public async Task<List<PersonelVM>> GetEmployeesByDepartmentId(Guid departmentId)
         {
             return await _readRepository.GetFilteredList(
@@ -36,7 +55,7 @@ namespace humanResourceProject.Application.Services.Concrete.AppUserServices
                     Gender = x.Gender,
                     JobTitle = x.Job.Title
                 },
-                where: x => x.DepartmentId == departmentId && x.Status != Domain.Enum.Status.Inactive,
+                where: x => x.DepartmentId == departmentId && (x.Status != Domain.Enum.Status.Inactive || x.Status != Domain.Enum.Status.Deleted),
                 orderBy: x => x.OrderBy(x => x.FirstName),
                 include: x => x.Include(x => x.Job));
         }

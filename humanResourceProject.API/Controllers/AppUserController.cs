@@ -4,8 +4,6 @@ using humanResourceProject.Domain.Entities.Concrete;
 using humanResourceProject.Models.DTOs;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.WebUtilities;
-using System.Text;
 
 namespace humanResourceProject.API.Controllers
 {
@@ -50,7 +48,14 @@ namespace humanResourceProject.API.Controllers
         [Route("GetEmployeesByCompanyId")]
         public async Task<IActionResult> GetEmployeesByCompanyId([FromBody] Guid companyId) // Şirket Id'sine göre Personeller
         {
-            return Ok(await _appUserReadService.GetEmployeesByDepartmentId(companyId));
+            return Ok(await _appUserReadService.GetEmployeesByCompanyId(companyId));
+        }
+
+        [HttpPost]
+        [Route("GetEmployeesByDepartmentId")]
+        public async Task<IActionResult> GetEmployeesByDepartmentId([FromBody] Guid departmentId) // Şirket Id'sine göre Personeller
+        {
+            return Ok(await _appUserReadService.GetEmployeesByDepartmentId(departmentId));
         }
 
         [HttpPost]
