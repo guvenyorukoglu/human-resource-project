@@ -54,7 +54,7 @@ namespace humanResourceProject.Application.Services.Concrete.JobServices
 
             JobDTO jobDTO = _mapper.Map<JobDTO>(job);
 
-            jobDTO.Name = model.Name;
+            jobDTO.Title = model.Title;
             jobDTO.UpdateDate = DateTime.Now;
             jobDTO.Status = Domain.Enum.Status.Modified;
 

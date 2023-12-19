@@ -35,6 +35,7 @@ namespace humanResourceProject.Application.Services.Concrete.LeaveServices
                                                              },
                                                              where: x => x.Status != Status.Deleted || x.Status != Status.Inactive,
                                                              orderBy: x => x.OrderByDescending(x => x.CreateDate),
+                                                             //commented out because of the error
                                                              include: x => x.Include(x => x.Employee));
             return leaves;
         }
