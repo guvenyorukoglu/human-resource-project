@@ -5,9 +5,11 @@ using humanResourceProject.Domain.Entities.Concrete;
 using humanResourceProject.Domain.IRepository.BaseRepos;
 using humanResourceProject.Models.DTOs;
 using humanResourceProject.Models.VMs;
+using Microsoft.AspNetCore.Mvc;
 
 namespace humanResourceProject.Application.Services.Concrete.DeparmentServices
 {
+    
     public class DepartmentReadService : BaseReadService<Department>, IDepartmentReadService
     {
         private readonly IBaseReadRepository<Department> _departmentReadRepository;
