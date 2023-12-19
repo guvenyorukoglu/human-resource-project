@@ -1,19 +1,12 @@
 ﻿using humanResourceProject.Models.Validations;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace humanResourceProject.Models.DTOs
 {
     public class ResetPasswordDTO
     {
-
-
-    
-        public Guid Id { get; set; }
+        [Required]
+        public string Id { get; set; }
 
         [Required]
         [DataType(DataType.Password)]
@@ -26,7 +19,7 @@ namespace humanResourceProject.Models.DTOs
         [Compare("Password", ErrorMessage = "Bir önceki girilen şifreyle aynı olmalıdır!")]
 
         public string ConfirmPassword { get; set; }
-
+        [Required]
         public string Token { get; set; }
     }
 }

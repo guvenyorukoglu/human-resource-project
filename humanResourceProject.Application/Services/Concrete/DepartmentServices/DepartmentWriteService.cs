@@ -3,7 +3,6 @@ using humanResourceProject.Application.Services.Abstract.IDepartmantServices;
 using humanResourceProject.Application.Services.Concrete.BaseServices;
 using humanResourceProject.Domain.Entities.Concrete;
 using humanResourceProject.Domain.IRepository.BaseRepos;
-using humanResourceProject.Domain.IRepository.DepartmentRepo;
 using humanResourceProject.Models.DTOs;
 using Microsoft.AspNetCore.Identity;
 
@@ -11,24 +10,22 @@ namespace humanResourceProject.Application.Services.Concrete.DepartmentServices
 {
     public class DepartmentWriteService : BaseWriteService<Department>, IDepartmentWriteService
     {
-        private readonly IBaseWriteRepository<Department> _baseWriteRepository;
-        private readonly IBaseReadRepository<Department> _baseReadRepository;
-        private readonly IDepartmentWriteRepository _departmentWriteRepository;
+        private readonly IBaseWriteRepository<Department> _departmentWriteRepository;
+        private readonly IBaseReadRepository<Department> _departmentReadRepository;
         private readonly IMapper _mapper;
-        public DepartmentWriteService(IBaseWriteRepository<Department> writeRepository, IBaseReadRepository<Department> readRepository, IDepartmentWriteRepository departmentWriteRepository, IMapper mapper) : base(writeRepository, readRepository)
+        public DepartmentWriteService(IBaseWriteRepository<Department> departmentWriteRepository, IBaseReadRepository<Department> departmentReadRepository, IMapper mapper) : base(departmentWriteRepository, departmentReadRepository)
         {
-            _baseWriteRepository = writeRepository;
-            _baseReadRepository = readRepository;
             _departmentWriteRepository = departmentWriteRepository;
+            _departmentReadRepository = departmentReadRepository;
             _mapper = mapper;
         }
 
         public async Task<IdentityResult> DeleteDepartment(Guid id)
         {
-            Department department = await _baseReadRepository.GetById(id);
+            Department department = await _departmentReadRepository.GetById(id);
             department.Status = Domain.Enum.Status.Deleted;
             department.DeleteDate = DateTime.Now;
-            if(await _baseWriteRepository.Delete(id))
+            if (await _departmentWriteRepository.Delete(id))
                 return IdentityResult.Success;
             else
                 return IdentityResult.Failed();
@@ -42,7 +39,7 @@ namespace humanResourceProject.Application.Services.Concrete.DepartmentServices
             Department newDepartment = _mapper.Map<Department>(model);
             newDepartment.Status = Domain.Enum.Status.Active;
             newDepartment.CreateDate = DateTime.Now;
-            if (await _baseWriteRepository.Insert(newDepartment))
+            if (await _departmentWriteRepository.Insert(newDepartment))
                 return IdentityResult.Success;
             else
                 return IdentityResult.Failed();
@@ -50,7 +47,7 @@ namespace humanResourceProject.Application.Services.Concrete.DepartmentServices
 
         public async Task<IdentityResult> UpdateDepartment(DepartmentDTO model)
         {
-            Department department = await _baseReadRepository.GetSingleDefault(x => x.Id == model.Id);
+            Department department = await _departmentReadRepository.GetSingleDefault(x => x.Id == model.Id);
             if (department == null)
                 return IdentityResult.Failed();
 
@@ -61,7 +58,7 @@ namespace humanResourceProject.Application.Services.Concrete.DepartmentServices
             departmentDTO.Status = Domain.Enum.Status.Modified;
             departmentDTO.UpdateDate = DateTime.Now;
 
-            if (await _baseWriteRepository.Update(_mapper.Map<Department>(departmentDTO)))
+            if (await _departmentWriteRepository.Update(_mapper.Map<Department>(departmentDTO)))
                 return IdentityResult.Success;
             else
                 return IdentityResult.Failed();

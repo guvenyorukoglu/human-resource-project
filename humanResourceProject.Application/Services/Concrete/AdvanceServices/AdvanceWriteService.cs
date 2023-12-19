@@ -2,7 +2,6 @@
 using humanResourceProject.Application.Services.Abstract.IAdvanceServices;
 using humanResourceProject.Application.Services.Concrete.BaseServices;
 using humanResourceProject.Domain.Entities.Concrete;
-using humanResourceProject.Domain.IRepository.AdvanceRepo;
 using humanResourceProject.Domain.IRepository.BaseRepos;
 using humanResourceProject.Models.DTOs;
 using Microsoft.AspNetCore.Identity;
@@ -13,13 +12,11 @@ namespace humanResourceProject.Application.Services.Concrete.AdvanceServices
     {
         private readonly IBaseWriteRepository<Advance> _baseWriteRepository;
         private readonly IBaseReadRepository<Advance> _baseReadRepository;
-        private readonly IAdvanceWriteRepository _advanceWriteRepository;
         private readonly IMapper _mapper;
-        public AdvanceWriteService(IBaseWriteRepository<Advance> writeRepository, IBaseReadRepository<Advance> readRepository, IAdvanceWriteRepository advanceWriteRepository, IMapper mapper) : base(writeRepository, readRepository)
+        public AdvanceWriteService(IBaseWriteRepository<Advance> writeRepository, IBaseReadRepository<Advance> readRepository, IMapper mapper) : base(writeRepository, readRepository)
         {
             _baseWriteRepository = writeRepository;
             _baseReadRepository = readRepository;
-            _advanceWriteRepository = advanceWriteRepository;
             _mapper = mapper;
         }
 

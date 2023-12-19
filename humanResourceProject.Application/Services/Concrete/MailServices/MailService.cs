@@ -79,6 +79,30 @@ namespace humanResourceProject.Application.Services.Concrete.MailServices
             smtpClient.Send(mimeMessage);
         }
 
+        public async Task SendForgotPasswordEmail(AppUser user, string link)
+        {
+            var resetLink = link;
+
+            MimeMessage mimeMessage = new MimeMessage();
+            MailboxAddress mailboxFrom = new MailboxAddress("Monitorease", "monitorease@gmail.com");
+            MailboxAddress mailboxTo = new MailboxAddress($"{user.FirstName} {user.LastName}", user.Email);
+
+            mimeMessage.From.Add(mailboxFrom);
+            mimeMessage.To.Add(mailboxTo);
+
+            var bodybuilder = new BodyBuilder();
+            bodybuilder.HtmlBody = $"<p>Merhaba {user.FirstName} {user.LastName}</p><p>Aşağıdaki linke tıklayarak şifrenizi sıfırlayabilirsiniz. Linkin geçerlilik süresi 24 saattir.</p><p>{resetLink}</p><p>Bize her zaman monitorease@gmail.com adresinden ulaşabilirsiniz.</p><br><hr><br><h3>Team Monitorease</h3>";
+            mimeMessage.Body = bodybuilder.ToMessageBody();
+
+            mimeMessage.Subject = "Monitorease Şifre Sıfırlama!";
+
+            MailKit.Net.Smtp.SmtpClient smtpClient = new MailKit.Net.Smtp.SmtpClient();
+
+            smtpClient.Connect("smtp.gmail.com", 587, false);
+            smtpClient.Authenticate("monitorease@gmail.com", "tvhq axkn vyrb zzmc");
+            smtpClient.Send(mimeMessage);
+        }
+
     }
 
 }

@@ -3,7 +3,6 @@ using humanResourceProject.Application.Services.Abstract.IAdvanceServices;
 using humanResourceProject.Application.Services.Concrete.BaseServices;
 using humanResourceProject.Domain.Entities.Concrete;
 using humanResourceProject.Domain.Enum;
-using humanResourceProject.Domain.IRepository.AdvanceRepo;
 using humanResourceProject.Domain.IRepository.BaseRepos;
 using humanResourceProject.Models.DTOs;
 using humanResourceProject.Models.VMs;
@@ -12,20 +11,18 @@ namespace humanResourceProject.Application.Services.Concrete.AdvanceServices
 {
     public class AdvanceReadService : BaseReadService<Advance>, IAdvanceReadService
     {
-        private readonly IAdvanceReadRepository _advanceReadRepository;
-        private readonly IBaseReadRepository<Advance> _baseReadRepository;
+        private readonly IBaseReadRepository<Advance> _advanceReadRepository;
         private readonly IMapper _mapper;
 
-        public AdvanceReadService(IBaseReadRepository<Advance> baseReadRepository, IAdvanceReadRepository advanceReadRepository, IMapper mapper) : base(baseReadRepository)
+        public AdvanceReadService(IBaseReadRepository<Advance> advanceReadRepository, IMapper mapper) : base(advanceReadRepository)
         {
             _advanceReadRepository = advanceReadRepository;
-            _baseReadRepository = baseReadRepository;
             _mapper = mapper;
         }
 
         public async Task<AdvanceDTO> GetAdvanceById(Guid id)
         {
-            Advance advance = await _baseReadRepository.GetById(id);
+            Advance advance = await _advanceReadRepository.GetById(id);
             AdvanceDTO advanceDTO = _mapper.Map<AdvanceDTO>(advance);
             return advanceDTO;
         }
@@ -81,6 +78,6 @@ namespace humanResourceProject.Application.Services.Concrete.AdvanceServices
             return advances;
         }
 
-        
+
     }
 }

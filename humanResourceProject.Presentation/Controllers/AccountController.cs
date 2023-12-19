@@ -247,10 +247,11 @@ namespace humanResourceProject.Presentation.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public IActionResult ResetPassword(Guid id, string token)
+        public IActionResult ResetPassword(string id, string token)
         {
-
-            return token == null ? View("Error") : View(new ResetPasswordDTO() { Id = id, Token = token });
+            string tokenFromQueryString = Request.Query["token"];
+            string idFromQueryString = Request.Query["id"];
+            return token == null ? View("Error") : View(new ResetPasswordDTO() { Id = idFromQueryString, Token = tokenFromQueryString });
         }
 
         [HttpPost]
@@ -265,7 +266,7 @@ namespace humanResourceProject.Presentation.Controllers
             var json = System.Text.Json.JsonSerializer.Serialize(model);
 
             var content = new StringContent(json, Encoding.UTF8, "application/json");
-            HttpResponseMessage response = await _httpClient.PostAsync("/api/AppUser/ResetPassword", content);
+            HttpResponseMessage response = await _httpClient.PostAsync("/api/Account/ResetPassword", content);
             if (response.IsSuccessStatusCode)
             {
                 return View("ResetPasswordConfirmation");

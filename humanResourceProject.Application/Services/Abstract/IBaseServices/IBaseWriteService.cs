@@ -1,13 +1,6 @@
 ﻿using humanResourceProject.Domain.Entities.Abstract;
-using Microsoft.EntityFrameworkCore.Query;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace humanResourceProject.Application.Services.BaseServices
+namespace humanResourceProject.Application.Services.Abstract.IBaseServices
 {
     public interface IBaseWriteService<T> where T : class, IBaseEntity, new()
     {

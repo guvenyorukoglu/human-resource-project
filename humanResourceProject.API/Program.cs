@@ -39,6 +39,11 @@ builder.Services.AddIdentity<AppUser, IdentityRole<Guid>>(options =>
     options.Password.RequireLowercase = true;
 }).AddEntityFrameworkStores<AppDbContext>().AddDefaultTokenProviders();
 
+//Password Token LifeSpan
+builder.Services.Configure<DataProtectionTokenProviderOptions>(opt =>
+{
+    opt.TokenLifespan = TimeSpan.FromDays(1);
+});
 
 //JWT
 var jwtSettings = builder.Configuration.GetSection("JwtSettings");
@@ -122,7 +127,7 @@ app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
 
-SeedDataGenerator.Seed(app,25,5,20,100,5,10,10);
+SeedDataGenerator.Seed(app,5,2,20,50,5,10,10);
 
 app.MapControllers();
 

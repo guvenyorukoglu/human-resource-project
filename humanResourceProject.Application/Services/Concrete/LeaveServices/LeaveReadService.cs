@@ -4,7 +4,6 @@ using humanResourceProject.Application.Services.Concrete.BaseServices;
 using humanResourceProject.Domain.Entities.Concrete;
 using humanResourceProject.Domain.Enum;
 using humanResourceProject.Domain.IRepository.BaseRepos;
-using humanResourceProject.Domain.IRepository.LeaveRepo;
 using humanResourceProject.Models.DTOs;
 using humanResourceProject.Models.VMs;
 using Microsoft.EntityFrameworkCore;
@@ -13,12 +12,10 @@ namespace humanResourceProject.Application.Services.Concrete.LeaveServices
 {
     public class LeaveReadService : BaseReadService<Leave>, ILeaveReadService
     {
-        private readonly IBaseReadRepository<Leave> _baseReadRepository;
-        private readonly ILeaveReadRepository _leaveReadRepository;
+        private readonly IBaseReadRepository<Leave> _leaveReadRepository;
         private readonly IMapper _mapper;
-        public LeaveReadService(IBaseReadRepository<Leave> readRepository, ILeaveReadRepository leaveReadRepository, IMapper mapper) : base(readRepository)
+        public LeaveReadService(IBaseReadRepository<Leave> leaveReadRepository, IMapper mapper) : base(leaveReadRepository)
         {
-            _baseReadRepository = readRepository;
             _leaveReadRepository = leaveReadRepository;
             _mapper = mapper;
         }
@@ -44,7 +41,7 @@ namespace humanResourceProject.Application.Services.Concrete.LeaveServices
 
         public async Task<LeaveDTO> GetLeaveById(Guid id)
         {
-            Leave leave = await _baseReadRepository.GetById(id);
+            Leave leave = await _leaveReadRepository.GetById(id);
             LeaveDTO leaveDTO = _mapper.Map<LeaveDTO>(leave);
             return leaveDTO;
         }
