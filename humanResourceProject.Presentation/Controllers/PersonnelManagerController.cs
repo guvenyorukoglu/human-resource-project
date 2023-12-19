@@ -68,7 +68,7 @@ namespace humanResourceProject.Presentation.Controllers
             var response = await _httpClient.PutAsync($"api/Leave/DeleteLeave/{model}", content);
 
             if (response.IsSuccessStatusCode)
-            {
+        {
                 return RedirectToAction("LeaveRequests");
             }
 
