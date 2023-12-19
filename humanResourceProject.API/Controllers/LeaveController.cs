@@ -18,6 +18,14 @@ namespace humanResourceProject.API.Controllers
         }
 
         [HttpGet]
+        [Route("GetAllLeaves")]
+        public async Task<IActionResult> GetAllLeave()
+        {
+            return Ok(await _leaveReadService.GetAllLeaves());
+        }
+
+
+        [HttpGet]
         [Route("GetLeavesByEmployeeId/{id}")]
         public async Task<IActionResult> GetLeavesByEmployeeId(Guid id)
         {
