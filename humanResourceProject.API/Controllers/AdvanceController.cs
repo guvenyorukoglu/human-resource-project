@@ -18,6 +18,15 @@ namespace humanResourceProject.API.Controllers
         }
 
         [HttpGet]
+        [Route("GetAllAdvances")]
+        public async Task<IActionResult> GetAllAdvances()
+        {
+            return Ok(await _advanceReadService.GetAllAdvances());
+        }
+        
+
+
+        [HttpGet]
         [Route("GetAdvancesByEmployeeId/{id}")]
         public async Task<IActionResult> GetAdvancesByEmployeeId(Guid id)
         {
