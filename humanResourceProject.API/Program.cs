@@ -39,6 +39,11 @@ builder.Services.AddIdentity<AppUser, IdentityRole<Guid>>(options =>
     options.Password.RequireLowercase = true;
 }).AddEntityFrameworkStores<AppDbContext>().AddDefaultTokenProviders();
 
+//Password Token LifeSpan
+builder.Services.Configure<DataProtectionTokenProviderOptions>(opt =>
+{
+    opt.TokenLifespan = TimeSpan.FromDays(1);
+});
 
 //JWT
 var jwtSettings = builder.Configuration.GetSection("JwtSettings");

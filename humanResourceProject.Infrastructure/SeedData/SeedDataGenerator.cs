@@ -79,10 +79,9 @@ namespace humanResourceProject.Infrastructure.SeedData
                 }
 
                 await UpdateCompanyEmployeeCount();
-
+                await CreateRequestsAsync(maxAdvanceCountPerEmployee, maxExpenseCountPerEmployee, maxLeaveCountPerEmployee);
                 await context.SaveChangesAsync();
 
-                await CreateRequestsAsync(maxAdvanceCountPerEmployee, maxExpenseCountPerEmployee, maxLeaveCountPerEmployee);
                 await CreateSiteManagerAsync(serviceScope);
 
                 void CreateFakeCompanies(int maxCompanyCount)
@@ -259,11 +258,13 @@ namespace humanResourceProject.Infrastructure.SeedData
                     {
                         for (int i = 0; i < maxAdvanceCountPerEmployee; i++)
                         {
+                            int expireIn = new Random().Next(1, 60);
                             var advanceFake = new Faker<Advance>()
                             .RuleFor(a => a.Id, f => f.Random.Guid())
                             .RuleFor(a => a.AmountOfAdvance, f => f.Random.Decimal(100, 99999))
                             .RuleFor(a => a.Explanation, f => f.Lorem.Sentence())
                             .RuleFor(a => a.AdvanceType, f => f.PickRandom<AdvanceType>())
+                            .RuleFor(a => a.ExpiryDate, (f,a) => f.Date.Soon(expireIn, a.CreateDate))
                             .RuleFor(a => a.Currency, f => f.PickRandom<Currency>())
                             .RuleFor(a => a.AdvanceStatus, f => f.Random.Bool(0.5f) ? RequestStatus.Approved : (f.Random.Bool(0.25f) ? RequestStatus.Pending : RequestStatus.Rejected))
                             .RuleFor(a => a.CreateDate, f => f.Date.Past(1))
@@ -272,13 +273,15 @@ namespace humanResourceProject.Infrastructure.SeedData
 
                             advances.Add(advanceFake.Generate());
                         }
+                        context.AddRangeAsync(advances);
 
                         for (int i = 0; i < maxExpenseCountPerEmployee; i++)
                         {
+                            int daysAgo = new Random().Next(1, 30);
                             var expenseFake = new Faker<Expense>()
                             .RuleFor(e => e.Id, f => f.Random.Guid())
                             .RuleFor(e => e.AmountOfExpense, f => f.Random.Decimal(100, 99999))
-                            .RuleFor(e => e.DateOfExpense, f => f.Date.Past(1))
+                            .RuleFor(e => e.DateOfExpense, (f,e) => f.Date.Recent(daysAgo, e.CreateDate))
                             .RuleFor(e => e.ExpenseType, f => f.PickRandom<ExpenseType>())
                             .RuleFor(e => e.Explanation, f => f.Lorem.Sentence())
                             .RuleFor(e => e.Currency, f => f.PickRandom<Currency>())
@@ -290,6 +293,7 @@ namespace humanResourceProject.Infrastructure.SeedData
 
                             expenses.Add(expenseFake.Generate());
                         }
+                        context.AddRangeAsync(expenses);
 
                         for (int i = 0; i < maxLeaveCountPerEmployee; i++)
                         {
@@ -308,6 +312,7 @@ namespace humanResourceProject.Infrastructure.SeedData
 
                             leaves.Add(leaveFake.Generate());
                         }
+                        context.AddRangeAsync(leaves);
                     }
                 }
             }
