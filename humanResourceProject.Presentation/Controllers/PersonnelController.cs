@@ -48,10 +48,12 @@ namespace humanResourceProject.Presentation.Controllers
         }
 
         [HttpPost]
+        public async Task<IActionResult> CreateAdvance(AdvanceDTO model)
         {
             var json = JsonConvert.SerializeObject(model);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
 
+            var response = await _httpClient.PostAsync($"api/Personnel", content);
             if (response.IsSuccessStatusCode)
             {
                 return RedirectToAction("Advances");
@@ -63,8 +65,10 @@ namespace humanResourceProject.Presentation.Controllers
             }
         }
 
+        [HttpGet]
         public async Task<IActionResult> DeleteAdvance(Guid id)
         {
+            var response = await _httpClient.DeleteAsync($"api/Personnel/{id}");
 
             if (response.IsSuccessStatusCode)
             {

@@ -1,4 +1,5 @@
-﻿
+﻿@model humanResourceProject.Models.DTOs.AdvanceDTO
+
 @{
     ViewData["Title"] = "CreateAdvance";
 }
@@ -68,6 +69,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="Description" class="control-label"></label>
+                <input asp-for="Description" class="form-control" />
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
             @Html.HiddenFor(model => model.EmployeeId)
@@ -76,13 +78,16 @@
             @Html.HiddenFor(model => model.AdvanceStatus)
 
             <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
+    <a asp-action="Index">Back to List</a>
 </div>
 
 @section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
