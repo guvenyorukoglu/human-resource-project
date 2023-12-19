@@ -7,7 +7,7 @@ using System.Text;
 
 namespace humanResourceProject.Presentation.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "CompanyManager, DepartmentManager")]
     public class ManagerController : Controller
     {
         private readonly HttpClient _httpClient;
@@ -23,23 +23,46 @@ namespace humanResourceProject.Presentation.Controllers
 
         public async Task<IActionResult> Employees()
         {
-            Guid companyId = Guid.Parse(User.Claims.FirstOrDefault(x => x.Type == "CompanyId").Value);
-            var json = JsonConvert.SerializeObject(companyId);
-            var content = new StringContent(json, Encoding.UTF8, "application/json");
-
-            var response = await _httpClient.PostAsync($"api/AppUser/GetEmployeesByCompanyId/", content);
-            if (response.IsSuccessStatusCode)
+            if(User.IsInRole("CompanyManager")) // Şirket Yöneticisi ise tüm personelleri getirir
             {
-                var cont = await response.Content.ReadAsStringAsync();
-                var employees = JsonConvert.DeserializeObject<List<PersonelVM>>(cont);
-                return View(employees);
+                Guid companyId = Guid.Parse(User.Claims.FirstOrDefault(x => x.Type == "CompanyId").Value);
+                var json = JsonConvert.SerializeObject(companyId);
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
 
+                var response = await _httpClient.PostAsync($"api/AppUser/GetEmployeesByCompanyId/", content);
+                if (response.IsSuccessStatusCode)
+                {
+                    var cont = await response.Content.ReadAsStringAsync();
+                    var employees = JsonConvert.DeserializeObject<List<PersonelVM>>(cont);
+                    return View(employees);
+
+                }
+                return View();
             }
-            return View();
+            else if(User.IsInRole("DepartmentManager")) // Departman Yöneticisi ise departmanındaki personelleri getirir
+            {
+                Guid departmentId = Guid.Parse(User.Claims.FirstOrDefault(x => x.Type == "DepartmentId").Value);
+                var json = JsonConvert.SerializeObject(departmentId);
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+                var response = await _httpClient.PostAsync($"api/AppUser/GetEmployeesByDepartmentId/", content);
+                if (response.IsSuccessStatusCode)
+                {
+                    var cont = await response.Content.ReadAsStringAsync();
+                    var employees = JsonConvert.DeserializeObject<List<PersonelVM>>(cont);
+                    return View(employees);
+
+                }
+                return View();
+            }
+            else
+            {
+                return View();
+            }
         }
 
         [HttpGet]
-        public IActionResult CreatePersonel()
+        public IActionResult CreatePersonel() 
         {
             return View(new UserRegisterDTO());
         }

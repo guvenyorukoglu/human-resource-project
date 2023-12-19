@@ -1,6 +1,7 @@
 ﻿using humanResourceProject.Application.Services.Abstract.IAppUserServices;
 using humanResourceProject.Application.Services.Abstract.IBaseServices;
 using humanResourceProject.Application.Services.Abstract.ICompanyServices;
+using humanResourceProject.Application.Services.Abstract.IDepartmantServices;
 using humanResourceProject.Application.Services.Abstract.IMailServices;
 using humanResourceProject.Domain.Entities.Concrete;
 using humanResourceProject.Models.DTOs;
@@ -23,12 +24,13 @@ namespace humanResourceProject.API.Controllers
         private readonly IAppUserWriteService _appUserWriteService;
         private readonly ICompanyWriteService _companyWriteService;
         private readonly ICompanyReadService _companyReadService;
+        private readonly IDepartmentReadService _departmentReadService;
         private readonly IConfiguration _configuration;
         private readonly IMailService _mailService;
         private readonly UserManager<AppUser> _userManager;
         private readonly IBaseWriteService<AppUser> _baseAppUserWriteService;
 
-        public AccountController(IAppUserReadService appUserReadService, IConfiguration configuration, IAppUserWriteService appUserWriteService, ICompanyWriteService companyWriteService, ICompanyReadService companyReadService, IMailService mailService, UserManager<AppUser> userManager, IBaseWriteService<AppUser> baseAppUserWriteService)
+        public AccountController(IAppUserReadService appUserReadService, IConfiguration configuration, IAppUserWriteService appUserWriteService, ICompanyWriteService companyWriteService, ICompanyReadService companyReadService, IMailService mailService, UserManager<AppUser> userManager, IBaseWriteService<AppUser> baseAppUserWriteService, IDepartmentReadService departmentReadService)
         {
             _appUserReadService = appUserReadService;
             _appUserWriteService = appUserWriteService;
@@ -38,6 +40,7 @@ namespace humanResourceProject.API.Controllers
             _mailService = mailService;
             _userManager = userManager;
             _baseAppUserWriteService = baseAppUserWriteService;
+            _departmentReadService = departmentReadService;
         }
 
 
@@ -56,10 +59,9 @@ namespace humanResourceProject.API.Controllers
                 var authClaims = new List<Claim> {
                     new Claim(ClaimTypes.Email, model.Email),
                     new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
-
                 };
-
                 var token = GetToken(authClaims);
+                var department = await _departmentReadService.GetSingleDefault(x => x.Id == appUser.DepartmentId);
 
                 return Ok(new
                 {
@@ -69,8 +71,10 @@ namespace humanResourceProject.API.Controllers
                     name = appUser.FirstName,
                     surname = appUser.LastName,
                     departmentId = appUser.DepartmentId,
-                    imagePath = appUser.ImagePath
-                });
+                    companyId = department.CompanyId,
+                    imagePath = appUser.ImagePath,
+                    roles = await _userManager.GetRolesAsync(appUser)
+            });
             }
             else
             {
@@ -143,8 +147,7 @@ namespace humanResourceProject.API.Controllers
                 string action = Url.Action("ConfirmEmail", "Account", new { id = user.Id, token }, Request.Scheme);
                 await _mailService.SendAccountConfirmEmail(user, action);
 
-                var loginURL = "https://localhost:7180/account/login"; //Local
-                //var loginURL = "https://monitorease.azurewebsites.net/account/login"; //Azure
+                var loginURL = _configuration["HomePage"] + "/account/login";
 
                 return Redirect(loginURL);
             }
@@ -156,14 +159,13 @@ namespace humanResourceProject.API.Controllers
         [Route("ConfirmEmail")]
         public async Task<IActionResult> ConfirmEmail(Guid id, string token)
         {
-            //var id = data["id"].ToObject<Guid>();
-            //var token = data["token"].ToString();
+
             var user = await _userManager.FindByIdAsync(id.ToString());
             var result = await _userManager.ConfirmEmailAsync(user, token);
             if (result.Succeeded)
             {
-                var loginUrl = "https://localhost:7180/account/login"; //Local
-                //var loginUrl = "https://monitorease.azurewebsites.net/account/login"; //Azure
+                var loginUrl = _configuration["HomePage"] + "/ account/login";
+
                 return Redirect(loginUrl);
             }
             else
@@ -188,7 +190,9 @@ namespace humanResourceProject.API.Controllers
                 return BadRequest("Kullanıcı bulunamadı.");
 
             var token = await _userManager.GeneratePasswordResetTokenAsync(user);
-            var resetLink = Url.Action(nameof(ResetPassword), "Account", new { id = user.Id, token }, Request.Scheme);
+
+            var resetLink = _configuration["HomePage"] + "/Account/ResetPassword?id=" + user.Id + "&token=" + token + "";
+
             await _mailService.SendForgotPasswordEmail(user, resetLink);
             return Ok($"Şifre sıfırlama linki {user.Email} adresine gönderildi! Linke tıklayıp şifrenizi sıfırlayabilirsiniz.");
         }
@@ -220,9 +224,9 @@ namespace humanResourceProject.API.Controllers
                 return BadRequest("Kullanıcı bulunamadı.");
 
             var result = await _userManager.ResetPasswordAsync(user, model.Token, model.Password);
-            if(!result.Succeeded)
+            if (!result.Succeeded)
             {
-                foreach(var error in result.Errors)
+                foreach (var error in result.Errors)
                 {
                     ModelState.AddModelError(error.Code, error.Description);
                 }

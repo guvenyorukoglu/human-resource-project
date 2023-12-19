@@ -193,7 +193,9 @@ namespace humanResourceProject.Presentation.Controllers
                 string name = parsedResponse.name;
                 string surname = parsedResponse.surname;
                 string companyId = parsedResponse.companyId;
+                string departmentId = parsedResponse.departmentId;
                 string imagePath = parsedResponse.imagePath;
+                var roles = parsedResponse.roles;
 
                 List<Claim> claims = new List<Claim>();
                 claims.Add(new Claim(ClaimTypes.Email, model.Email));
@@ -201,8 +203,13 @@ namespace humanResourceProject.Presentation.Controllers
                 claims.Add(new Claim(ClaimTypes.Name, name));
                 claims.Add(new Claim(ClaimTypes.Surname, surname));
                 claims.Add(new Claim("CompanyId", companyId));
+                claims.Add(new Claim("DepartmentId", departmentId));
                 claims.Add(new Claim("ImagePath", imagePath));
 
+                foreach (var role in roles)
+                {
+                    claims.Add(new Claim(ClaimTypes.Role, role.ToString()));
+                }
 
                 ClaimsIdentity identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
                 ClaimsPrincipal principal = new ClaimsPrincipal(identity);
