@@ -42,10 +42,45 @@ namespace humanResourceProject.Application.Services.Concrete.AdvanceServices
                                                     AdvanceDate = x.ExpiryDate,
                                                     Status = x.AdvanceStatus
                                                 },
-                                                where: x => x.AdvanceStatus != RequestStatus.Rejected,
-                                                orderBy: x => x.OrderByDescending(x => x.ExpiryDate)
-                );
+                                                where: x => x.Status != Status.Deleted || x.Status != Status.Inactive,
+                                                orderBy: x => x.OrderByDescending(x => x.ExpiryDate));
             return advances;
         }
+
+        public async Task<List<AdvanceVM>> GetAdvancesByDepartmentId(Guid id)
+        {
+            List<AdvanceVM>? advances = await _advanceReadRepository.GetFilteredList(
+                                                select: x => new AdvanceVM
+                                                {
+                                                    AdvanceAmount = x.AmountOfAdvance,
+                                                    Description = x.Explanation,
+                                                    EmployeeName = x.Employee.FirstName,
+                                                    EmployeeSurname = x.Employee.LastName,
+                                                    AdvanceDate = x.ExpiryDate,
+                                                    Status = x.AdvanceStatus
+                                                },
+                                                where: x => (x.Status != Status.Deleted || x.Status != Status.Inactive) && x.Employee.DepartmentId == id,
+                                                orderBy: x => x.OrderByDescending(x => x.ExpiryDate));
+            return advances;
+        }
+
+        public async Task<List<AdvanceVM>> GetAdvancesByEmployeeId(Guid id)
+        {
+            List<AdvanceVM>? advances = await _advanceReadRepository.GetFilteredList(
+                                                select: x => new AdvanceVM
+                                                {
+                                                    AdvanceAmount = x.AmountOfAdvance,
+                                                    Description = x.Explanation,
+                                                    EmployeeName = x.Employee.FirstName,
+                                                    EmployeeSurname = x.Employee.LastName,
+                                                    AdvanceDate = x.ExpiryDate,
+                                                    Status = x.AdvanceStatus
+                                                },
+                                                where: x => (x.Status != Status.Deleted || x.Status != Status.Inactive) && x.Employee.Id == id,
+                                                orderBy: x => x.OrderByDescending(x => x.ExpiryDate));
+            return advances;
+        }
+
+        
     }
 }

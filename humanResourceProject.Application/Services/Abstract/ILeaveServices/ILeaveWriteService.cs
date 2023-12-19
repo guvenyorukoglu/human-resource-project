@@ -1,14 +1,15 @@
 ﻿using humanResourceProject.Application.Services.BaseServices;
 using humanResourceProject.Domain.Entities.Concrete;
 using humanResourceProject.Models.DTOs;
+using Microsoft.AspNetCore.Identity;
 namespace humanResourceProject.Application.Services.Abstract.ILeaveServices
 {
     public interface ILeaveWriteService : IBaseWriteService<Leave>
     {
-        Task<bool> InsertLeave(LeaveDTO model);
+        Task<IdentityResult> InsertLeave(LeaveDTO model);
 
-        Task<bool> UpdateLeave(LeaveDTO model);
+        Task<IdentityResult> UpdateLeave(LeaveDTO model);
 
-        Task DeleteLeave(Guid id);
+        Task<IdentityResult> DeleteLeave(Guid id);
     }
 }

@@ -3,6 +3,7 @@ using humanResourceProject.Domain.Enum;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace humanResourceProject.Domain.Entities.Concrete
 {
@@ -36,6 +37,7 @@ namespace humanResourceProject.Domain.Entities.Concrete
         public AppUser Manager { get; set; }
         public Guid? ManagerId { get; set; }
 
+        [JsonIgnore]
         public ICollection<AppUser>? DepartmentEmployees { get; set; }
 
         public Job Job { get; set; }

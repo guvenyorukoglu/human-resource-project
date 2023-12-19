@@ -5,6 +5,7 @@ using humanResourceProject.Domain.Entities.Concrete;
 using humanResourceProject.Domain.IRepository.AdvanceRepo;
 using humanResourceProject.Domain.IRepository.BaseRepos;
 using humanResourceProject.Models.DTOs;
+using Microsoft.AspNetCore.Identity;
 
 namespace humanResourceProject.Application.Services.Concrete.AdvanceServices
 {
@@ -22,33 +23,36 @@ namespace humanResourceProject.Application.Services.Concrete.AdvanceServices
             _mapper = mapper;
         }
 
-        public async Task DeleteAdvance(Guid id)
+        public async Task<IdentityResult> DeleteAdvance(Guid id)
         {
             Advance advance = await _baseReadRepository.GetById(id);
             advance.Status = Domain.Enum.Status.Deleted;
             advance.DeleteDate = DateTime.Now;
-            await _baseWriteRepository.Delete(id);
+            if (await _baseWriteRepository.Delete(id))
+                return IdentityResult.Success;
+            else
+                return IdentityResult.Failed();
         }
 
-        public async Task<bool> InsertAdvance(AdvanceDTO model)
+        public async Task<IdentityResult> InsertAdvance(AdvanceDTO model)
         {
             if (model == null)
-                return false;
+                return IdentityResult.Failed();
 
             Advance newAdvance = _mapper.Map<Advance>(model);
             newAdvance.Status = Domain.Enum.Status.Active;
             newAdvance.CreateDate = DateTime.Now;
             if (await _baseWriteRepository.Insert(newAdvance))
-                return true;
+                return IdentityResult.Success;
             else
-                return false;
+                return IdentityResult.Failed();
         }
 
-        public async Task<bool> UpdateAdvance(AdvanceDTO model)
+        public async Task<IdentityResult> UpdateAdvance(AdvanceDTO model)
         {
             Advance advance = await _baseReadRepository.GetSingleDefault(x => x.Id == model.Id);
             if (advance == null)
-                return false;
+                return IdentityResult.Failed();
             AdvanceDTO advanceDTO = _mapper.Map<AdvanceDTO>(advance);
 
             advanceDTO.AdvanceAmount = model.AdvanceAmount;
@@ -61,9 +65,9 @@ namespace humanResourceProject.Application.Services.Concrete.AdvanceServices
 
 
             if (await _baseWriteRepository.Update(advance))
-                return true;
+                return IdentityResult.Success;
             else
-                return false;
+                return IdentityResult.Failed();
 
         }
     }

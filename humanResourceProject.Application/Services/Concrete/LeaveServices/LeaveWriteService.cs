@@ -5,6 +5,7 @@ using humanResourceProject.Domain.Entities.Concrete;
 using humanResourceProject.Domain.IRepository.BaseRepos;
 using humanResourceProject.Domain.IRepository.LeaveRepo;
 using humanResourceProject.Models.DTOs;
+using Microsoft.AspNetCore.Identity;
 
 namespace humanResourceProject.Application.Services.Concrete.LeaveServices
 {
@@ -22,33 +23,36 @@ namespace humanResourceProject.Application.Services.Concrete.LeaveServices
             _mapper = mapper;
         }
 
-        public async Task DeleteLeave(Guid id)
+        public async Task<IdentityResult> DeleteLeave(Guid id)
         {
             Leave leave = await _baseReadRepository.GetById(id);
             leave.Status = Domain.Enum.Status.Deleted;
             leave.DeleteDate = DateTime.Now;
-            await _baseWriteRepository.Delete(id);
+            if (await _baseWriteRepository.Delete(id))
+                return IdentityResult.Success;
+            else
+                return IdentityResult.Failed();
         }
 
-        public async Task<bool> InsertLeave(LeaveDTO model)
+        public async Task<IdentityResult> InsertLeave(LeaveDTO model)
         {
-            if(model == null)
-                return false;
+            if (model == null)
+                return IdentityResult.Failed();
 
             Leave newLeave = _mapper.Map<Leave>(model);
             newLeave.Status = Domain.Enum.Status.Active;
             newLeave.CreateDate = DateTime.Now;
             if (await _baseWriteRepository.Insert(newLeave))
-                return true;
+                return IdentityResult.Success;
             else
-                return false;
+                return IdentityResult.Failed();
         }
 
-        public async Task<bool> UpdateLeave(LeaveDTO model)
+        public async Task<IdentityResult> UpdateLeave(LeaveDTO model)
         {
             Leave leave = await _baseReadRepository.GetSingleDefault(x => x.Id == model.Id);
             if (leave == null)
-                return false;
+                return IdentityResult.Failed();
 
             LeaveDTO leaveDTO = _mapper.Map<LeaveDTO>(leave);
 
@@ -58,10 +62,10 @@ namespace humanResourceProject.Application.Services.Concrete.LeaveServices
             leaveDTO.Status = Domain.Enum.Status.Modified;
             leaveDTO.UpdateDate = DateTime.Now;
 
-            if(await _baseWriteRepository.Update(_mapper.Map<Leave>(leaveDTO)))
-                return true;
+            if (await _baseWriteRepository.Update(_mapper.Map<Leave>(leaveDTO)))
+                return IdentityResult.Success;
             else
-                return false;
+                return IdentityResult.Failed();
 
         }
     }
