@@ -31,26 +31,6 @@
                                     Hoşgeldin @(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Name).Value + " " + User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Surname).Value)!
                                 </span>
                             </li>
-
-                            if (User.IsInRole("SiteManager")) //TODO: çalışmıyor
-                            {
-                                <li class="nav-item">
-                                    <a class="nav-link text-white" asp-area="" asp-controller="Admin" asp-action="Index">Admin Panel</a>
-                                </li>
-                            }
-                            else if (User.IsInRole("CompanyManager"))
-                            {
-                                <li class="nav-item">
-                                    <a class="nav-link text-white" asp-area="" asp-controller="Manager" asp-action="Employees">Manager Panel</a>
-                                </li>
-                            }
-                            else if (User.IsInRole("Personel"))
-                            {
-                                <li class="nav-item">
-                                    <a class="nav-link text-white" asp-area="" asp-controller="Personel" asp-action="Index">Personel Panel</a>
-                                </li>
-                            }
-
                             <li class="nav-item">
                                 <a class="nav-link text-white" asp-area="" asp-controller="Account" asp-action="Logout">Logout</a>
                             </li>

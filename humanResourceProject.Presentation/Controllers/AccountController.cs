@@ -1,8 +1,10 @@
 ﻿using humanResourceProject.Models.DTOs;
+using humanResourceProject.Models.VMs;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis.CSharp;
 using Newtonsoft.Json;
 using System.Net.Mime;
 using System.Security.Claims;
@@ -15,6 +17,7 @@ namespace humanResourceProject.Presentation.Controllers
     {
         private readonly HttpClient _httpClient;
         private readonly IConfiguration _configuration;
+        List<JobVM> jobs = new List<JobVM>();
 
         public AccountController(IConfiguration configuration)
         {
@@ -31,10 +34,33 @@ namespace humanResourceProject.Presentation.Controllers
         }
         [HttpGet]
         [AllowAnonymous]
-        public IActionResult Register(Guid companyId) // İleri butonuna basıldığında açılacak şirket yöneticisi register view'i
+        public async Task<IActionResult> Register(Guid companyId) // İleri butonuna basıldığında açılacak şirket yöneticisi register view'i
         {
             UserRegisterDTO userRegisterDTO = new UserRegisterDTO();
             userRegisterDTO.CompanyId = companyId;
+
+            HttpResponseMessage response = await _httpClient.GetAsync($"api/Job/GetAllJobs/");
+            if (response.IsSuccessStatusCode)
+            {
+                var apiResponse = await response.Content.ReadAsStringAsync();
+                dynamic jobList = JsonConvert.DeserializeObject(apiResponse);
+                
+                foreach (var job in jobList)
+                {
+                    jobs.Add(new JobVM()
+                    {
+                        Id = job.id,
+                        Title = job.title,
+                        Description = job.description
+                    });
+                }
+                userRegisterDTO.Jobs = jobs;
+            }
+            else
+            {
+                ModelState.AddModelError(string.Empty, "Bir hata oluştu. Tekrar deneyiniz!");
+                return View(userRegisterDTO);
+            }
             return View(userRegisterDTO);
         }
 
@@ -77,90 +103,111 @@ namespace humanResourceProject.Presentation.Controllers
             if (!ModelState.IsValid)
             {
                 TempData["Result"] = "modelinvalid";
+                model.Jobs = jobs;
                 return View(model); // Model valid değil ise validation errorları ile birlikte register sayfasına geri döner
             }
 
-            if (model.UploadPath != null && model.UploadPath.Length > 0)
+            Guid departmentId = await CreateDepartment(model);
+            CompanyManagerRegisterDTO companyManagerRegisterDTO = new CompanyManagerRegisterDTO()
             {
-                string fileExtension = Path.GetExtension(model.UploadPath.FileName).ToLower();
+                FirstName = model.FirstName,
+                MiddleName = model.MiddleName ?? "",
+                LastName = model.LastName,
+                Email = model.Email,
+                Password = model.Password,
+                ConfirmPassword = model.ConfirmPassword,
+                PhoneNumber = model.PhoneNumber,
+                Birthdate = model.Birthdate,
+                Address = model.Address,
+                IdentificationNumber = model.IdentificationNumber,
+                BloodGroup = model.BloodGroup,
+                Gender = model.Gender,
+                JobId = model.JobId,
+                ImagePath = model.ImagePath ?? "",
+                UploadPath = model.UploadPath,
+                DepartmentId = departmentId
+            };
+
+            var multipartContent = new MultipartFormDataContent();
+
+            var properties = typeof(CompanyManagerRegisterDTO).GetProperties();
+
+            foreach (var property in properties)
+            {
+                var value = property.GetValue(companyManagerRegisterDTO)?.ToString() ?? string.Empty;
+                var stringContent = new StringContent(value, Encoding.UTF8, MediaTypeNames.Text.Plain);
+                multipartContent.Add(stringContent, property.Name);
+            }
+
+
+            //using var multipartContent = new MultipartFormDataContent
+            //    {
+            //        { new StringContent(companyManagerRegisterDTO.FirstName, Encoding.UTF8, MediaTypeNames.Text.Plain), "FirstName" },
+            //        { new StringContent(companyManagerRegisterDTO.MiddleName, Encoding.UTF8, MediaTypeNames.Text.Plain), "MiddleName" },
+            //        { new StringContent(companyManagerRegisterDTO.LastName, Encoding.UTF8, MediaTypeNames.Text.Plain), "LastName" },
+            //        { new StringContent(companyManagerRegisterDTO.Email, Encoding.UTF8, MediaTypeNames.Text.Plain), "Email" },
+            //        { new StringContent(companyManagerRegisterDTO.Password, Encoding.UTF8, MediaTypeNames.Text.Plain), "Password" },
+            //        { new StringContent(companyManagerRegisterDTO.ConfirmPassword, Encoding.UTF8, MediaTypeNames.Text.Plain), "ConfirmPassword" },
+            //        { new StringContent(companyManagerRegisterDTO.PhoneNumber, Encoding.UTF8, MediaTypeNames.Text.Plain), "PhoneNumber" },
+            //        { new StringContent(companyManagerRegisterDTO.Birthdate.ToString(), Encoding.UTF8, MediaTypeNames.Text.Plain), "Birthdate" },
+            //        { new StringContent(companyManagerRegisterDTO.Address, Encoding.UTF8, MediaTypeNames.Text.Plain), "Address" },
+            //        { new StringContent(companyManagerRegisterDTO.IdentificationNumber, Encoding.UTF8, MediaTypeNames.Text.Plain), "IdentificationNumber" },
+            //        { new StringContent(companyManagerRegisterDTO.BloodGroup.ToString(), Encoding.UTF8, MediaTypeNames.Text.Plain), "BloodGroup" },
+            //        { new StringContent(companyManagerRegisterDTO.Gender.ToString(), Encoding.UTF8, MediaTypeNames.Text.Plain), "Gender" },
+            //        { new StringContent(companyManagerRegisterDTO.JobId.ToString(), Encoding.UTF8, MediaTypeNames.Text.Plain), "JobId" },
+            //        { new StringContent(companyManagerRegisterDTO.ImagePath, Encoding.UTF8, MediaTypeNames.Text.Plain), "ImagePath" },
+            //        { new StringContent(companyManagerRegisterDTO.DepartmentId.ToString(), Encoding.UTF8, MediaTypeNames.Text.Plain), "DepartmentId" }
+            //    };
+
+
+            if (companyManagerRegisterDTO.UploadPath != null && companyManagerRegisterDTO.UploadPath.Length > 0) // Eğer profil fotoğrafı yüklenmiş ise multipartContent'e ekle
+            {
+                string fileExtension = Path.GetExtension(companyManagerRegisterDTO.UploadPath.FileName).ToLower();
 
                 if (fileExtension != ".png" && fileExtension != ".jpg" && fileExtension != ".jpeg")
                 {
                     ModelState.AddModelError(string.Empty, "Yüklediğiniz profil fotoğrafının uzantısı '.png', '.jpg' veya '.jpeg' olmalıdır.");
+                    model.Jobs = jobs;
                     return View(model);
                 }
 
-                using var multipartContent = new MultipartFormDataContent
-                {
-                    { new StringContent(model.FirstName, Encoding.UTF8, MediaTypeNames.Text.Plain), "FirstName" },
-                    { new StringContent(model.MiddleName ?? "", Encoding.UTF8, MediaTypeNames.Text.Plain), "MiddleName" },
-                    { new StringContent(model.LastName, Encoding.UTF8, MediaTypeNames.Text.Plain), "LastName" },
-                    { new StringContent(model.Email, Encoding.UTF8, MediaTypeNames.Text.Plain), "Email" },
-                    { new StringContent(model.Password, Encoding.UTF8, MediaTypeNames.Text.Plain), "Password" },
-                    { new StringContent(model.ConfirmPassword, Encoding.UTF8, MediaTypeNames.Text.Plain), "ConfirmPassword" },
-                    { new StringContent(model.PhoneNumber, Encoding.UTF8, MediaTypeNames.Text.Plain), "PhoneNumber" },
-                    { new StringContent(model.Birthdate.ToString(), Encoding.UTF8, MediaTypeNames.Text.Plain), "Birthdate" },
-                    { new StringContent(model.Address, Encoding.UTF8, MediaTypeNames.Text.Plain), "Address" },
-                    { new StringContent(model.IdentificationNumber, Encoding.UTF8, MediaTypeNames.Text.Plain), "IdentificationNumber" },
-                    { new StringContent(model.BloodGroup.ToString(), Encoding.UTF8, MediaTypeNames.Text.Plain), "BloodGroup" },
-                    { new StringContent(model.Gender.ToString(), Encoding.UTF8, MediaTypeNames.Text.Plain), "Gender" },
-                    { new StringContent(model.Job, Encoding.UTF8, MediaTypeNames.Text.Plain), "Job" },
-                    { new StringContent(model.ImagePath ?? "", Encoding.UTF8, MediaTypeNames.Text.Plain), "ImagePath" },
-                    { new StringContent(model.CompanyId.ToString(), Encoding.UTF8, MediaTypeNames.Text.Plain), "CompanyId" }
-                };
+                var imageContent = new StreamContent(companyManagerRegisterDTO.UploadPath.OpenReadStream());
+                multipartContent.Add(imageContent, "UploadPath", companyManagerRegisterDTO.UploadPath.FileName);
+            }
 
-                var imageContent = new StreamContent(model.UploadPath.OpenReadStream());
-                //imageContent.Headers.ContentType = new MediaTypeHeaderValue("image/bitmap");
-                multipartContent.Add(imageContent, "UploadPath", model.UploadPath.FileName);
+            HttpResponseMessage response = await _httpClient.PostAsync("/api/Account/RegisterCompanyManager", multipartContent);
 
-                // Send a POST request to the API endpoint to create the resource
-                HttpResponseMessage response = await _httpClient.PostAsync("/api/Account/RegisterUser", multipartContent);
-
-                if (response.IsSuccessStatusCode)
-                {
-                    TempData["Result"] = "success";
-                    return RedirectToAction("RegistrationSuccessful");
-                }
-                else
-                {
-                    ModelState.AddModelError(string.Empty, "Bir hata oluştu. Tekrar deneyiniz!");
-                    TempData["Result"] = "error";
-                    return View(model);
-                }
+            if (response.IsSuccessStatusCode)
+            {
+                return RedirectToAction("RegistrationSuccessful");
             }
             else
             {
-                using var multipartContent = new MultipartFormDataContent
-                {
-                    { new StringContent(model.FirstName, Encoding.UTF8, MediaTypeNames.Text.Plain), "FirstName" },
-                    { new StringContent(model.MiddleName ?? "", Encoding.UTF8, MediaTypeNames.Text.Plain), "MiddleName" },
-                    { new StringContent(model.LastName, Encoding.UTF8, MediaTypeNames.Text.Plain), "LastName" },
-                    { new StringContent(model.Email, Encoding.UTF8, MediaTypeNames.Text.Plain), "Email" },
-                    { new StringContent(model.Password, Encoding.UTF8, MediaTypeNames.Text.Plain), "Password" },
-                    { new StringContent(model.ConfirmPassword, Encoding.UTF8, MediaTypeNames.Text.Plain), "ConfirmPassword" },
-                    { new StringContent(model.PhoneNumber, Encoding.UTF8, MediaTypeNames.Text.Plain), "PhoneNumber" },
-                    { new StringContent(model.Birthdate.ToString(), Encoding.UTF8, MediaTypeNames.Text.Plain), "Birthdate" },
-                    { new StringContent(model.Address, Encoding.UTF8, MediaTypeNames.Text.Plain), "Address" },
-                    { new StringContent(model.IdentificationNumber, Encoding.UTF8, MediaTypeNames.Text.Plain), "IdentificationNumber" },
-                    { new StringContent(model.BloodGroup.ToString(), Encoding.UTF8, MediaTypeNames.Text.Plain), "BloodGroup" },
-                    { new StringContent(model.Gender.ToString(), Encoding.UTF8, MediaTypeNames.Text.Plain), "Gender" },
-                    { new StringContent(model.Job, Encoding.UTF8, MediaTypeNames.Text.Plain), "Job" },
-                    { new StringContent(model.ImagePath ?? "", Encoding.UTF8, MediaTypeNames.Text.Plain), "ImagePath" },
-                    { new StringContent(model.CompanyId.ToString(), Encoding.UTF8, MediaTypeNames.Text.Plain), "CompanyId" }
-                };
-
-                HttpResponseMessage response = await _httpClient.PostAsync("/api/Account/RegisterUser", multipartContent);
-
-                if (response.IsSuccessStatusCode)
-                {
-                    return RedirectToAction("RegistrationSuccessful");
-                }
-                else
-                {
-                    ModelState.AddModelError(string.Empty, "Bir hata oluştu. Tekrar deneyiniz!");
-                    return View(model);
-                }
+                ModelState.AddModelError(string.Empty, "Bir hata oluştu. Tekrar deneyiniz!");
+                model.Jobs = jobs;
+                return View(model);
             }
+
+        }
+
+        private async Task<Guid> CreateDepartment(UserRegisterDTO model) // Register işlemi sırasında departman oluşturur ve departman id'sini döner
+        {
+            DepartmentDTO departmentDTO = new DepartmentDTO()
+            {
+                DepartmentName = model.DepartmentName,
+                Description = model.DepartmentDescription ?? "",
+                CompanyId = model.CompanyId
+            };
+
+            var json = JsonConvert.SerializeObject(departmentDTO);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+            HttpResponseMessage response = await _httpClient.PostAsync("/api/Department/CreateDepartment", content);
+            if (!response.IsSuccessStatusCode)
+                return Guid.Empty;
+
+            var departmentId = await response.Content.ReadAsStringAsync();
+            departmentId = departmentId.Replace("\"", "");
+            return Guid.Parse(departmentId);
         }
 
         [AllowAnonymous]
@@ -187,8 +234,8 @@ namespace humanResourceProject.Presentation.Controllers
 
             if (response.IsSuccessStatusCode)
             {
-                var api_response = await response.Content.ReadAsStringAsync();
-                dynamic parsedResponse = JsonConvert.DeserializeObject(api_response);
+                var apiResponse = await response.Content.ReadAsStringAsync();
+                dynamic parsedResponse = JsonConvert.DeserializeObject(apiResponse);
                 string userId = parsedResponse.userId;
                 string name = parsedResponse.name;
                 string surname = parsedResponse.surname;
@@ -254,6 +301,7 @@ namespace humanResourceProject.Presentation.Controllers
 
         [HttpGet]
         [AllowAnonymous]
+        //[ValidateAntiForgeryToken]
         public IActionResult ResetPassword(string id, string token)
         {
             string tokenFromQueryString = Request.Query["token"];
@@ -263,7 +311,6 @@ namespace humanResourceProject.Presentation.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        //[ValidateAntiForgeryToken]
         public async Task<IActionResult> ResetPassword(ResetPasswordDTO model)
         {
             if (!ModelState.IsValid)

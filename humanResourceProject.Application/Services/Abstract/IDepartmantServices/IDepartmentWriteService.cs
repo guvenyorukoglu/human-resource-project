@@ -8,7 +8,7 @@ namespace humanResourceProject.Application.Services.Abstract.IDepartmantServices
     {
         Task<IdentityResult> InsertDepartment(DepartmentDTO model);
 
-        Task<IdentityResult> UpdateDepartment(DepartmentDTO model);
+        Task<IdentityResult> UpdateDepartment(UpdateDepartmentDTO model);
 
         Task<IdentityResult> DeleteDepartment(Guid id);
     }

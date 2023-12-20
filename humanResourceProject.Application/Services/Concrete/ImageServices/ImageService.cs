@@ -3,12 +3,7 @@ using Azure.Storage.Blobs.Models;
 using humanResourceProject.Application.Services.Abstract.IImageServices;
 using humanResourceProject.Domain.Enum;
 using humanResourceProject.Models.DTOs;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Azure;
 using Microsoft.Extensions.Configuration;
-using SixLabors.ImageSharp;
-using SixLabors.ImageSharp.Processing;
 
 namespace humanResourceProject.Application.Services.Concrete.ImageServices
 {
@@ -21,7 +16,7 @@ namespace humanResourceProject.Application.Services.Concrete.ImageServices
             _configuration = configuration;
         }
 
-        public async Task<UserRegisterDTO> UploadImageToAzure(UserRegisterDTO model)
+        public async Task<CompanyManagerRegisterDTO> UploadImageToAzure(CompanyManagerRegisterDTO model)
         {
             if (model.UploadPath == null || model.UploadPath.FileName == null)
             {
@@ -49,13 +44,13 @@ namespace humanResourceProject.Application.Services.Concrete.ImageServices
 
             BlobContainerClient blobContainerClient = new BlobContainerClient(connectionString, containerName);
 
-            
+
             BlobClient blobClient = blobContainerClient.GetBlobClient(fileName);
             await blobClient.UploadAsync(fileUploadStream, new BlobUploadOptions()
             {
                 HttpHeaders = new BlobHttpHeaders()
                 {
-                    ContentType = "image/bitmap"  
+                    ContentType = "image/bitmap"
                 }
             }, cancellationToken: default);
 

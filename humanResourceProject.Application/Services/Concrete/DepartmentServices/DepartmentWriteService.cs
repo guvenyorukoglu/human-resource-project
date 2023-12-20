@@ -45,20 +45,18 @@ namespace humanResourceProject.Application.Services.Concrete.DepartmentServices
                 return IdentityResult.Failed();
         }
 
-        public async Task<IdentityResult> UpdateDepartment(DepartmentDTO model)
+        public async Task<IdentityResult> UpdateDepartment(UpdateDepartmentDTO model)
         {
             Department department = await _departmentReadRepository.GetSingleDefault(x => x.Id == model.Id);
             if (department == null)
                 return IdentityResult.Failed();
 
-            DepartmentDTO departmentDTO = _mapper.Map<DepartmentDTO>(department);
+            department = _mapper.Map<Department>(model);
 
-            departmentDTO.DepartmentName = model.DepartmentName;
-            departmentDTO.Description = model.Description;
-            departmentDTO.Status = Domain.Enum.Status.Modified;
-            departmentDTO.UpdateDate = DateTime.Now;
+            department.Status = Domain.Enum.Status.Modified;
+            department.UpdateDate = DateTime.Now;
 
-            if (await _departmentWriteRepository.Update(_mapper.Map<Department>(departmentDTO)))
+            if (await _departmentWriteRepository.Update(department))
                 return IdentityResult.Success;
             else
                 return IdentityResult.Failed();
