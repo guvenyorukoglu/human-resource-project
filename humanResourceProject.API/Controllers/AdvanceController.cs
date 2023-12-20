@@ -1,4 +1,8 @@
-﻿using humanResourceProject.Application.Services.Abstract.IAdvanceServices;
+﻿using AutoMapper;
+using humanResourceProject.Application.Services.Abstract.IAdvanceServices;
+using humanResourceProject.Application.Services.Abstract.IAppUserServices;
+using humanResourceProject.Application.Services.Abstract.IMailServices;
+using humanResourceProject.Domain.Entities.Concrete;
 using humanResourceProject.Models.DTOs;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,11 +14,18 @@ namespace humanResourceProject.API.Controllers
     {
         private readonly IAdvanceReadService _advanceReadService;
         private readonly IAdvanceWriteService _advanceWriteService;
+        private readonly IMailService _mailService;
+        private readonly IAppUserReadService _appUserReadService;
+        private readonly Mapper _mapper;
 
-        public AdvanceController(IAdvanceReadService advanceReadService, IAdvanceWriteService advanceWriteService)
+
+        public AdvanceController(IAdvanceReadService advanceReadService, IAdvanceWriteService advanceWriteService, Mapper mapper, IMailService mailService, IAppUserReadService appUserReadService = null)
         {
             _advanceReadService = advanceReadService;
             _advanceWriteService = advanceWriteService;
+            _mapper = mapper;
+            _mailService = mailService;
+            _appUserReadService = appUserReadService;
         }
 
         [HttpGet]
@@ -23,8 +34,28 @@ namespace humanResourceProject.API.Controllers
         {
             return Ok(await _advanceReadService.GetAllAdvances());
         }
-        
 
+        [HttpPut]
+        [Route("UpdateStatus")]
+        public async Task<IActionResult> UpdateStatus([FromBody] AdvanceDTO model)
+        {
+            AppUser user= await _appUserReadService.GetSingleDefault(x=>x.Id == model.EmployeeId);
+            string action = "DAD";
+            if (model.AdvanceStatus == Domain.Enum.RequestStatus.Approved)
+            {
+                model.AdvanceStatus = Domain.Enum.RequestStatus.Approved;
+                _mailService.SendApproveMail(user, action, $"Sayın {user.FirstName} {user.LastName} Avansın onaylandı. Güzel günlerde kullan");
+
+            }
+            else if (model.AdvanceStatus == Domain.Enum.RequestStatus.Rejected)
+            {
+                model.AdvanceStatus = Domain.Enum.RequestStatus.Rejected;
+                _mailService.SendApproveMail(user, action, $"Sayın {user.FirstName} {user.LastName} Avansın reddedildi");
+            }
+          
+
+            return Ok(await _advanceWriteService.UpdateAdvance(model));
+        }
 
         [HttpGet]
         [Route("GetAdvancesByEmployeeId/{id}")]
