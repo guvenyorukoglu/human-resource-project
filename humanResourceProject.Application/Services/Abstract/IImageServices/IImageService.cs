@@ -6,6 +6,6 @@ namespace humanResourceProject.Application.Services.Abstract.IImageServices
 {
     public interface IImageService
     {
-        Task<UserRegisterDTO> UploadImageToAzure(UserRegisterDTO model);
+        Task<CompanyManagerRegisterDTO> UploadImageToAzure(CompanyManagerRegisterDTO model);
     }
 }

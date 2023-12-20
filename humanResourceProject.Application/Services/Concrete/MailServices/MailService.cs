@@ -43,7 +43,7 @@ namespace humanResourceProject.Application.Services.Concrete.MailServices
             mimeMessage.To.Add(mailboxTo);
 
             var bodybuilder = new BodyBuilder();
-            bodybuilder.HtmlBody = $"<p>Merhaba Admin</p><p>Yeni kullanıcı uygulamaya kayıt olmuştur.</p><p>Kullanıcıyı aktif duruma çekmek için linke tıklayınız.</p><p>{confirmationLink}</p><br><hr><br><h3>Team Monitorease</h3>";
+            bodybuilder.HtmlBody = $"<p>Merhaba Admin</p><p>Yeni kullanıcı uygulamaya kayıt olmuştur.</p><p>Kullanıcının statüsünü aktif yapmak için <a href='{confirmationLink}'>linkine</a> tıklayınız.</p><br><hr><br><h3>Team Monitorease</h3>";
             mimeMessage.Body = bodybuilder.ToMessageBody();
 
             mimeMessage.Subject = "Yeni Kullanıcı Kayıt Oldu!";
@@ -90,7 +90,7 @@ namespace humanResourceProject.Application.Services.Concrete.MailServices
             mimeMessage.To.Add(mailboxTo);
 
             var bodybuilder = new BodyBuilder();
-            bodybuilder.HtmlBody = $"<p>Merhaba {user.FirstName} {user.LastName}</p><p>Monitorease hesabınız başarılı bir şekilde oluşturulmuştur.</p><p>Hesabınızı doğrulamak için lütfen aşağıdaki doğrulama linkini tıklayınız.</p><p>{confirmationLink}</p><p>Bize her zaman monitorease@gmail.com adresinden ulaşabilirsiniz.</p><br><hr><br><h3>Team Monitorease</h3>";
+            bodybuilder.HtmlBody = $"<p>Merhaba {user.FirstName} {user.LastName}</p><p>Monitorease hesabınız başarılı bir şekilde oluşturulmuştur.</p><p>Hesabınızı doğrulamak için lütfen <a href='{confirmationLink}'>buraya</a> tıklayınız.</p><p>Bize her zaman monitorease@gmail.com adresinden ulaşabilirsiniz.</p><br><hr><br><h3>Team Monitorease</h3>";
             mimeMessage.Body = bodybuilder.ToMessageBody();
 
             mimeMessage.Subject = "Monitorease Hesabınızı Doğrulayınız!";

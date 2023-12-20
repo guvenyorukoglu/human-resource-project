@@ -33,13 +33,18 @@ namespace humanResourceProject.API.Controllers
         }
 
         [HttpPost]
+        [Route("CreateDepartment")]
         public async Task<IActionResult> CreateDepartment([FromBody] DepartmentDTO model)
         {
-            return Ok(await _departmentWriteService.InsertDepartment(model));
+            var result = await _departmentWriteService.InsertDepartment(model);
+            if (!result.Succeeded)
+                return BadRequest(result.Errors);
+
+            return Ok(await _departmentReadService.GetIdByDepartmentName(model.DepartmentName));
         }
 
         [HttpPut]
-        public async Task<IActionResult> UpdateJob([FromBody] DepartmentDTO model)
+        public async Task<IActionResult> UpdateJob([FromBody] UpdateDepartmentDTO model)
         {
             var result = await _departmentWriteService.UpdateDepartment(model);
             if (!result.Succeeded)

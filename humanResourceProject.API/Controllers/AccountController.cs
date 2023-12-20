@@ -96,8 +96,8 @@ namespace humanResourceProject.API.Controllers
         }
 
         [HttpPost]
-        [Route("RegisterUser")]
-        public async Task<IActionResult> RegisterUser([FromForm] UserRegisterDTO model)
+        [Route("RegisterCompanyManager")]
+        public async Task<IActionResult> RegisterCompanyManager([FromForm] CompanyManagerRegisterDTO model)
         {
             var result = await _appUserWriteService.RegisterCompanyManager(model);
             if (!result.Succeeded)
@@ -159,12 +159,11 @@ namespace humanResourceProject.API.Controllers
         [Route("ConfirmEmail")]
         public async Task<IActionResult> ConfirmEmail(Guid id, string token)
         {
-
             var user = await _userManager.FindByIdAsync(id.ToString());
             var result = await _userManager.ConfirmEmailAsync(user, token);
             if (result.Succeeded)
             {
-                var loginUrl = _configuration["HomePage"] + "/ account/login";
+                var loginUrl = _configuration["HomePage"] + "/account/login";
 
                 return Redirect(loginUrl);
             }
@@ -183,6 +182,7 @@ namespace humanResourceProject.API.Controllers
 
         [HttpPost]
         [AllowAnonymous]
+        [Route("ForgotPassword")]
         public async Task<IActionResult> ForgotPassword([Required] string email)
         {
             var user = await _userManager.FindByEmailAsync(email);

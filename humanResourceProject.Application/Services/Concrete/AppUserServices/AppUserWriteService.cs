@@ -62,7 +62,7 @@ namespace humanResourceProject.Application.Services.Concrete.AppUserServices
             return result;
         }
 
-        public async Task<IdentityResult> RegisterCompanyManager(UserRegisterDTO model)
+        public async Task<IdentityResult> RegisterCompanyManager(CompanyManagerRegisterDTO model)
         {
             if (model == null)
                 return IdentityResult.Failed();

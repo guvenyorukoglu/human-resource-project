@@ -10,5 +10,6 @@ namespace humanResourceProject.Application.Services.Abstract.IDepartmantServices
         Task<DepartmentDTO> GetDepartmentById(Guid id);
 
         Task<List<DepartmentVM>> GetAllDepartments();
+        Task<Guid> GetIdByDepartmentName(string departmentName);
     }
 }
