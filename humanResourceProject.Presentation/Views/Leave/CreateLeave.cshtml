@@ -1,17 +1,17 @@
 ﻿@model humanResourceProject.Models.VMs.LeavePersonnelVM
 
 @{
-    ViewData["Title"] = "UpdateLeave";
+    ViewData["Title"] = "CreateLeave";
 }
 
-<h1>İzin Talebi Güncelle</h1>
-
+<h1>İzin Oluştur</h1>
 
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="UpdateLeave">
+        <form asp-action="CreateLeave">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
             <div class="form-group">
                 <label asp-for="StartDateOfLeave" class="control-label"></label>
                 <input asp-for="StartDateOfLeave" class="form-control" />
@@ -40,7 +40,7 @@
             @Html.HiddenFor(model => model.Id)
             @Html.HiddenFor(model => model.LeaveStatus)
             <div class="form-group">
-                <input type="submit" value="Güncelle" class="btn btn-primary" />
+                <input type="submit" value="İzin Oluştur" class="btn btn-primary" />
             </div>
         </form>
     </div>
@@ -51,5 +51,7 @@
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }
