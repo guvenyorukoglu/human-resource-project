@@ -124,10 +124,10 @@ namespace humanResourceProject.Presentation.Controllers
             return View(model);
         }
 
-        [HttpGet]
-        public async Task<IActionResult> ApproveAdvance(Guid id)
-        {
+        //[HttpGet]
+        //public async Task<IActionResult> ApproveAdvance(Guid id)
+        //{
 
-        }
+        //}
     }
 }
