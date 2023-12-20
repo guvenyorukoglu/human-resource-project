@@ -10,7 +10,8 @@ namespace humanResourceProject.Application.Services.Abstract.IAppUserServices
     {
         Task<SignInResult> Login(LoginDTO model);
         Task Logout();
-        Task<List<PersonelVM>> GetEmployeesByDepartmentId(Guid companyId);
+        Task<List<PersonelVM>> GetEmployeesByCompanyId(Guid companyId);
+        Task<List<PersonelVM>> GetEmployeesByDepartmentId(Guid departmentId);
 
     }
 }

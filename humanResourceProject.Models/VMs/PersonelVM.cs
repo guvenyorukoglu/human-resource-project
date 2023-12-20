@@ -1,4 +1,5 @@
-﻿using humanResourceProject.Domain.Enum;
+﻿using humanResourceProject.Domain.Entities.Concrete;
+using humanResourceProject.Domain.Enum;
 
 namespace humanResourceProject.Models.VMs
 {
@@ -12,5 +13,7 @@ namespace humanResourceProject.Models.VMs
         public string PhoneNumber { get; set; }
         public Gender Gender { get; set; }
         public string JobTitle { get; set; }
+        public Leave? Leave { get; set; }
+        public List<Leave>? Leaves { get; set; }
     }
 }

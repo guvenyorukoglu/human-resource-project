@@ -46,6 +46,7 @@ namespace humanResourceProject.Models.DTOs
         public List<JobVM>? Jobs { get; set; }
         public DateTime UpdateDate => DateTime.Now;
         public Status Status => Status.Modified;
+        public RequestStatus RequestStatus => RequestStatus.Pending;
 
     }
 }
