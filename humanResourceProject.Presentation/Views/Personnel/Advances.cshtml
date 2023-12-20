@@ -1,0 +1,108 @@
+﻿@using humanResourceProject.Models.VMs;
+
+@{
+    ViewData["Title"] = "Advances";
+    Layout = "~/Views/Shared/_PanelPartial_Personnel.cshtml";
+}
+
+@model List<AdvancePersonnelVM>
+
+<head>
+
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.css" />
+
+    <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.js"></script>
+    <style>
+        .panel {
+            height: 120vh;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="row">
+        @Html.Partial("_PanelPartial_Personnel")
+
+
+        <div class="aside container mt-5 col-md-9 col-sm-9">
+            @* <div class="search-bar" style="display: flex">
+            <input type="text" id="searchInput" placeholder="Arama Yap" /><i class="fas fa-search mt-2"></i>
+            </div>
+            <hr /> *@
+            @if (Model != null)
+            {
+                <a asp-action="CreateAdvance" asp-controller="Personnel">
+                    <button class="custom-button custom-button--create-advance">Avans Ekle</button>
+                </a>
+            }
+
+            <div class="pagination-container">
+
+                <script>
+                    $(document).ready(function () {
+                        $('#advance').DataTable();
+                    });
+
+                </script>
+
+
+                <table id="advances"
+                       class="display">
+                    <thead>
+                        <tr>
+                            <th style="width: 20%">Avans Miktarı</th>
+                            <th style="width: 20%">Son İstenen Tarihi</th>
+                            <th style="width: 20%">Avans Tipi</th>
+                            <th style="width: 20%">Açıklama</th>
+                            <th style="width: 10%">Durumu</th>
+                            <th style="width: 10%"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model != null)
+                        {
+                            foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>@item.AdvanceAmount</td>
+                                    <td>@item.ExpiryDate</td>
+                                    <td>@item.AdvanceType</td>
+                                    <td>@item.Description</td>
+                                    <td>@item.AdvanceStatus</td>
+                                    <td>
+                                        <a asp-action="EditAdvance"
+                                           asp-controller="Personnel"
+                                           asp-route-id="@item.Id">
+                                            <button class="btn btn-secondary btn-sm d-inline-flex bg-primary">
+                                                <i class="fa fa-pen"></i>
+                                            </button>
+                                        </a>
+
+                                        <a asp-action="DeleteAdvance"
+                                           asp-controller="Personnel"
+                                           asp-route-id="@item.Id">
+                                            <button class="btn btn-danger btn-sm d-inline-flex">
+                                                <i class="fa fa-trash"></i>
+                                            </button>
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+
+
+
+
+
+
+
+            </div>
+
+
+
+
+        </div>
+    </div>
+</body>

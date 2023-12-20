@@ -58,5 +58,6 @@ namespace humanResourceProject.API.Controllers
         {
             return Ok(await _advanceWriteService.DeleteAdvance(id));
         }
+
     }
 }
