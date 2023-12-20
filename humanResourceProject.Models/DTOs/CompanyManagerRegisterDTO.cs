@@ -1,5 +1,4 @@
-using humanResourceProject.Domain.Enum;
-using humanResourceProject.Models.VMs;
+﻿using humanResourceProject.Domain.Enum;
 using humanResourceProject.Models.Validations;
 using Microsoft.AspNetCore.Http;
 using System.ComponentModel;
@@ -7,7 +6,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace humanResourceProject.Models.DTOs
 {
-    public class UserRegisterDTO
+    public class CompanyManagerRegisterDTO
     {
         [Required(ErrorMessage = "İsim alanı boş geçilemez!")]
         [DisplayName("İsim*")]
@@ -45,7 +44,7 @@ namespace humanResourceProject.Models.DTOs
 
         [Required(ErrorMessage = "Doğum tarihi boş geçilemez!")]
         [DisplayName("Doğum Tarihi*")]
-        [BirthdateValidations(ErrorMessage ="18-85 yaş aralığında bir doğum tarihi giriniz!")]
+        [BirthdateValidations(ErrorMessage = "18-85 yaş aralığında bir doğum tarihi giriniz!")]
         public DateTime Birthdate { get; set; }
 
         // public DateTime DateOfEmployment { get; set; }
@@ -71,27 +70,10 @@ namespace humanResourceProject.Models.DTOs
         [Required(ErrorMessage = "Meslek alanı boş geçilemez!")]
         [DisplayName("Meslek*")]
         public Guid JobId { get; set; }
-
-        public List<JobVM>? Jobs { get; set; }
-
         public string? ImagePath { get; set; }
-
         [DisplayName("Profil Fotoğrafı")]
         public IFormFile? UploadPath { get; set; }
-
-        [Required(ErrorMessage = "Departman alanı boş geçilemez!")]
-        [DisplayName("Departman Adı*")]
-        [RegularExpression(@"^[a-zA-ZğĞıİşŞüÜöÖçÇ\s]*$", ErrorMessage = "Yalnızca alfabetik karakterlere izin verilir.")]
-        public string DepartmentName { get; set; }
-
-        [DisplayName("Departman Tanımı")]
-        [RegularExpression(@"^[a-zA-ZğĞıİşŞüÜöÖçÇ\s]*$", ErrorMessage = "Yalnızca alfabetik karakterlere izin verilir.")]
-        [StringLength(500, ErrorMessage = "Adres en fazla 500 karakter olmalıdır.")]
-        public string? DepartmentDescription { get; set; }
-
-        public Guid CompanyId { get; set; }
-
-
-
+        public Guid DepartmentId { get; set; }
     }
 }
+

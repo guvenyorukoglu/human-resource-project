@@ -65,14 +65,8 @@ namespace humanResourceProject.API.Controllers
             if (!result.Succeeded)
                 return BadRequest(result.Errors);
 
-            AppUser user = await _userManager.FindByEmailAsync(model.Email);
-            string token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
 
-            string url = "https://localhost:7255/Account/ResetPassword";
-            string action = url + "?" + "id=" + user.Id + "&" + "token=" + token;
-            await _mailService.SendMessageAsync(user, action);
-
-            return Ok("Yeni personel oluşturuldu.");
+            return RedirectToAction("ForgotPassword", "Account", model.Email);
         }
 
         [HttpPut]

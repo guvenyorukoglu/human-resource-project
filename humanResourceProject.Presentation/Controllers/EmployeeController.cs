@@ -8,12 +8,12 @@ using System.Text;
 namespace humanResourceProject.Presentation.Controllers
 {
     [Authorize(Roles = "CompanyManager, DepartmentManager")]
-    public class ManagerController : Controller
+    public class EmployeeController : Controller
     {
         private readonly HttpClient _httpClient;
         private readonly IConfiguration _configuration;
 
-        public ManagerController(IConfiguration configuration)
+        public EmployeeController(IConfiguration configuration)
         {
             _configuration = configuration;
             _httpClient = new HttpClient();
