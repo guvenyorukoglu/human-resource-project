@@ -42,5 +42,11 @@ namespace humanResourceProject.Application.Services.Concrete.DeparmentServices
             DepartmentDTO departmentDTO = _mapper.Map<DepartmentDTO>(department);
             return departmentDTO;
         }
+
+        public async Task<Guid> GetIdByDepartmentName(string departmentName)
+        {
+            Department department = await _departmentReadRepository.GetDefault(x => x.DepartmentName == departmentName);
+            return department.Id;
+        }
     }
 }

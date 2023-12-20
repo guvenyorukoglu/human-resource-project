@@ -18,6 +18,7 @@ namespace humanResourceProject.Application.AutoMapper
             CreateMap<AppUser, UserRegisterDTO>().ReverseMap();
             CreateMap<AppUser, PersonelVM>().ReverseMap();
             CreateMap<AppUser, LoginDTO>().ReverseMap();
+            CreateMap<AppUser, CompanyManagerRegisterDTO>().ReverseMap();
 
             CreateMap<Department, DepartmentVM>().ReverseMap();
             CreateMap<Department, DepartmentDTO>().ReverseMap();
