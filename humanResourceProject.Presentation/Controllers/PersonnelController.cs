@@ -131,30 +131,10 @@ namespace humanResourceProject.Presentation.Controllers
                 return RedirectToAction("Expense");
             }
 
-            return View("Error");
-        }
 
-        [HttpGet]
-        public async Task<IActionResult> UpdateExpense(Guid id)
-        {
-            var response = await _httpClient.GetAsync($"api/Expense/{id}");
-            if (response.IsSuccessStatusCode)
-            {
-                var content = await response.Content.ReadAsStringAsync();
-                var expense = JsonConvert.DeserializeObject<ExpensePersonnelVM>(content);
-                return View(expense);
 
-            }
-            return View("Error");
-        }
 
-        [HttpPost]
-        public async Task<IActionResult> UpdateExpense(ExpensePersonnelVM model)
-        {
-            var json = JsonConvert.SerializeObject(model);
-            var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-            var response = await _httpClient.PutAsync($"api/Expense", content);
 
             if (response.IsSuccessStatusCode)
             {
