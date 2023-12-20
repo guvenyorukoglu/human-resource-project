@@ -54,6 +54,29 @@ namespace humanResourceProject.Application.Services.Concrete.MailServices
             smtpClient.Authenticate("monitorease@gmail.com", "tvhq axkn vyrb zzmc");
             smtpClient.Send(mimeMessage);
         }
+           public async Task SendApproveMail(AppUser user, string action, string body)
+        {
+           
+
+            MimeMessage mimeMessage = new MimeMessage();
+            MailboxAddress mailboxFrom = new MailboxAddress("Monitorease", "monitorease@gmail.com");
+            MailboxAddress mailboxTo = new MailboxAddress("Admin", "efeyzyum@gmail.com");
+
+            mimeMessage.From.Add(mailboxFrom);
+            mimeMessage.To.Add(mailboxTo);
+
+            var bodybuilder = new BodyBuilder();
+            bodybuilder.HtmlBody =body;  
+            mimeMessage.Body = bodybuilder.ToMessageBody();
+
+            mimeMessage.Subject = "Yeni Kullanıcı Kayıt Oldu!";
+
+            MailKit.Net.Smtp.SmtpClient smtpClient = new MailKit.Net.Smtp.SmtpClient();
+
+            smtpClient.Connect("smtp.gmail.com", 587, false);
+            smtpClient.Authenticate("monitorease@gmail.com", "tvhq axkn vyrb zzmc");
+            smtpClient.Send(mimeMessage);
+        }
 
         public async Task SendAccountConfirmEmail(AppUser user, string action)
         {
@@ -102,6 +125,7 @@ namespace humanResourceProject.Application.Services.Concrete.MailServices
             smtpClient.Authenticate("monitorease@gmail.com", "tvhq axkn vyrb zzmc");
             smtpClient.Send(mimeMessage);
         }
+
 
     }
 

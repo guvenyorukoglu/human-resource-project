@@ -18,5 +18,7 @@ namespace humanResourceProject.Models.DTOs
         public Guid ManagerId { get; set; }
         public Status Status { get; set; }
         public DateTime? UpdateDate { get; set; }
+        public RequestStatus LeaveStatus { get; set; }
+
     }
 }
