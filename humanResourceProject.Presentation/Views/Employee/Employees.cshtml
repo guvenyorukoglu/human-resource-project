@@ -1,8 +1,12 @@
-﻿@using humanResourceProject.Models.VMs;
+﻿@using System.ComponentModel.DataAnnotations
+@using System.Reflection
+@using humanResourceProject.Domain.Enum
+@using humanResourceProject.Models.VMs;
 
 @{
     ViewData["Title"] = "Employees";
     Layout = "~/Views/Shared/_HRLayout.cshtml";
+    
 }
 
 @model List<PersonelVM>
@@ -15,6 +19,10 @@
     <style>
         .panel {
             height: 120vh;
+        }
+
+        a{
+            text-decoration: none;
         }
     </style>
 </head>
@@ -31,9 +39,23 @@
             <hr /> *@
             @if (Model != null)
             {
-                <a asp-action="CreatePersonel" asp-controller="Manager">
-                    <button class="custom-button custom-button--create-personel">Personel Ekle</button>
-                </a>
+                if (User.IsInRole("DepartmentManager"))
+                {
+                    
+                    <a asp-action="CreatePersonel" asp-controller="Manager">
+                        <button class="custom-button custom-button--create-personel">Personel Ekle</button>
+                    </a>
+                }
+                if (User.IsInRole("CompanyManager"))
+                {
+                    <a asp-action="CreatePersonel" asp-controller="Manager">
+                        <button class="custom-button custom-button--create-personel">Müdür Ekle</button>
+                    </a>
+                    <a asp-action="CreatePersonel" asp-controller="Manager">
+                        <button class="custom-button custom-button--create-personel">Personel Ekle</button>
+                    </a>
+                }
+                
             }
 
             <div class="pagination-container">
@@ -54,7 +76,7 @@
                             <th style="width: 15%">Soyad</th>
                             <th style="width: 20%">Telefon</th>
                             <th style="width: 20%">E-posta</th>
-                            <th style="width: 10%">Ünvan</th>
+                            <th style="width: 10%">Cinsiyet</th>
                             <th style="width: 10%">Meslek</th>
                             <th style="width: 10%"></th>
                         </tr>
@@ -64,12 +86,14 @@
                         {
                             foreach (var item in Model)
                             {
+                                var displayAttribute = typeof(Gender).GetMember(item.Gender.ToString())[0].GetCustomAttribute<DisplayAttribute>();
+                                var displayName = displayAttribute?.GetName() ?? item.Gender.ToString();
                                 <tr>
                                     <td>@item.FirstName</td>
                                     <td>@item.LastName</td>
                                     <td>@item.PhoneNumber</td>
                                     <td>@item.Email</td>
-                                    <td>@item.Gender</td>
+                                    <td>@displayName</td>
                                     <td>@item.JobTitle</td>
                                     <td>
                                         <a asp-action="EditEmployee"

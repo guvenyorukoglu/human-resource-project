@@ -23,7 +23,7 @@ namespace humanResourceProject.Presentation.Controllers
 
         public async Task<IActionResult> Employees()
         {
-            if(User.IsInRole("CompanyManager")) // Şirket Yöneticisi ise tüm personelleri getirir
+            if (User.IsInRole("CompanyManager")) // Şirket Yöneticisi ise tüm personelleri getirir
             {
                 Guid companyId = Guid.Parse(User.Claims.FirstOrDefault(x => x.Type == "CompanyId").Value);
                 var json = JsonConvert.SerializeObject(companyId);
@@ -39,7 +39,7 @@ namespace humanResourceProject.Presentation.Controllers
                 }
                 return View();
             }
-            else if(User.IsInRole("DepartmentManager")) // Departman Yöneticisi ise departmanındaki personelleri getirir
+            else if (User.IsInRole("DepartmentManager")) // Departman Yöneticisi ise departmanındaki personelleri getirir
             {
                 Guid departmentId = Guid.Parse(User.Claims.FirstOrDefault(x => x.Type == "DepartmentId").Value);
                 var json = JsonConvert.SerializeObject(departmentId);
@@ -62,13 +62,49 @@ namespace humanResourceProject.Presentation.Controllers
         }
 
         [HttpGet]
-        public IActionResult CreatePersonel() 
+        public IActionResult CreatePersonel()
         {
-            return View(new UserRegisterDTO());
+            if (User.IsInRole("CompanyManager"))
+                return View(new CreateEmployeeDTO());
+            else if(User.IsInRole("DepartmentManager"))
+                return View(new CreateEmployeeDTO()
+                {
+                    DepartmentId = Guid.Parse(User.Claims.FirstOrDefault(x => x.Type == "DepartmentId").Value),
+                    ManagerId = Guid.Parse(User.Claims.FirstOrDefault(x => x.Type == "Id").Value)
+                });
+            else
+                return View();
+        }
+
+        [HttpGet]
+        public IActionResult CreatePersonelManager()
+        {
+            return View(new CreateEmployeeDTO()
+            {
+                ManagerId = Guid.Parse(User.Claims.FirstOrDefault(x => x.Type == "Id").Value)
+            });
         }
 
         [HttpPost]
         public async Task<IActionResult> CreatePersonel(UserRegisterDTO model)
+        {
+            var json = JsonConvert.SerializeObject(model);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            var response = await _httpClient.PostAsync($"api/AppUser", content);
+            if (response.IsSuccessStatusCode)
+            {
+                return RedirectToAction("Employees");
+            }
+            else
+            {
+                ModelState.AddModelError(response.StatusCode.ToString(), "Bir hata oluştu.");
+                return View(model);
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CreatePersonelManager(UserRegisterDTO model)
         {
             var json = JsonConvert.SerializeObject(model);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
