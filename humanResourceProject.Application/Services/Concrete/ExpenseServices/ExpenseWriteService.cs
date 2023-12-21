@@ -3,6 +3,7 @@ using humanResourceProject.Application.Services.Abstract.IExpenseServices;
 using humanResourceProject.Application.Services.Concrete.BaseServices;
 using humanResourceProject.Domain.Entities.Concrete;
 using humanResourceProject.Domain.IRepository.BaseRepos;
+using humanResourceProject.Infrastructure.Repositories.BaseRepos;
 using humanResourceProject.Models.DTOs;
 using Microsoft.AspNetCore.Identity;
 
@@ -45,20 +46,19 @@ namespace humanResourceProject.Application.Services.Concrete.ExpenseServices
                 return IdentityResult.Failed();
         }
 
-        public async Task<IdentityResult> UpdateExpense(ExpenseDTO model)
+        public async Task<IdentityResult> UpdateExpense(UpdateExpenseDTO model)
         {
             Expense expense = await _expenseReadRepository.GetSingleDefault(x => x.Id == model.Id);
             if (expense == null)
                 return IdentityResult.Failed();
 
-            ExpenseDTO expenseDTO = _mapper.Map<ExpenseDTO>(expense);
+            _expenseWriteRepository.DetachEntity(expense);
 
-            expenseDTO.Description = model.Description;
-            expenseDTO.AmountOfExpense = model.AmountOfExpense;
-            expenseDTO.Status = Domain.Enum.Status.Modified;
-            expenseDTO.UpdateDate = DateTime.Now;
+            expense = _mapper.Map<Expense>(model);
+            expense.Status = Domain.Enum.Status.Modified;
+            expense.UpdateDate = DateTime.Now;
 
-            if (await _expenseWriteRepository.Update(_mapper.Map<Expense>(expenseDTO)))
+            if (await _expenseWriteRepository.Update(expense))
                 return IdentityResult.Success;
             else
                 return IdentityResult.Failed();
