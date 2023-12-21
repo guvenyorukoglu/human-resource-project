@@ -75,7 +75,7 @@ namespace humanResourceProject.API.Controllers
             return RedirectToAction("ForgotPassword", "Account", new {email = model.Email});
         }
 
-         [HttpPost]
+        [HttpPost]
         [Route("CreatePersonelManager")]
         public async Task<IActionResult> CreatePersonelManager([FromBody] CreateEmployeeDTO model) 
         {

@@ -35,7 +35,7 @@
             <hr /> *@
             @if (Model != null)
             {
-                <a asp-action="CreateAdvance" asp-controller="Personnel">
+                <a asp-action="CreateAdvance" asp-controller="Advance">
                     <button class="custom-button custom-button--create-entity">Avans Ekle</button>
                 </a>
             }
@@ -85,15 +85,15 @@
                                     <td>
                                         @if(item.AdvanceStatus == RequestStatus.Pending)
                                         {
-                                        <a asp-action="EditAdvance"
-                                           asp-controller="Personnel"
+                                            <a asp-action="UpdateAdvance"
+                                           asp-controller="Advance"
                                            asp-route-id="@item.Id">
                                             <button class="btn btn-secondary btn-sm d-inline-flex bg-primary gap-1 align-items-center">
                                                 <i class="fa fa-pen"></i><span>Güncelle</span>
                                             </button>
                                         </a>
                                         <a asp-action="DeleteAdvance"
-                                           asp-controller="Personnel"
+                                               asp-controller="Advance"
                                            asp-route-id="@item.Id">
                                             <button class="btn btn-danger btn-sm d-inline-flex gap-1 align-items-center">
                                                 <i class="fa fa-trash"></i><span>Kaldır</span>

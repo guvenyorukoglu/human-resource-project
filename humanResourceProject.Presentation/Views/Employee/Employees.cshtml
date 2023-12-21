@@ -1,8 +1,8 @@
-﻿
+﻿﻿
 @{
     ViewData["Title"] = "Employees";
     Layout = "~/Views/Shared/_HRLayout.cshtml";
-    
+
 }
 
 @model List<PersonelVM>
@@ -17,7 +17,7 @@
             height: 120vh;
         }
 
-        a{
+        a {
             text-decoration: none;
         }
     </style>
@@ -35,9 +35,22 @@
             <hr /> *@
             @if (Model != null)
             {
-                <a asp-action="CreatePersonel" asp-controller="Manager">
-                    <button class="custom-button">Personel Ekle</button>
-                </a>
+                if (User.IsInRole("CompanyManager"))
+                {
+                    <a asp-action="CreatePersonelManager" asp-controller="Employee">
+                        <button class="custom-button custom-button--create-entity">Müdür Ekle</button>
+                    </a>
+                    <a asp-action="CreatePersonel" asp-controller="Employee">
+                        <button class="custom-button custom-button--create-entity">Personel Ekle</button>
+                    </a>
+                }
+                if (User.IsInRole("DepartmentManager"))
+                {
+                    <a asp-action="CreatePersonel" asp-controller="Employee">
+                        <button class="custom-button custom-button--create-entity">Personel Ekle</button>
+                    </a>
+                }
+
             }
 
             <div class="pagination-container">
@@ -79,7 +92,7 @@
                                     <td>@item.JobTitle</td>
                                     <td>
                                         <a asp-action="EditEmployee"
-                                           asp-controller="Employee"
+                                           asp-controller="Manager"
                                            asp-route-id="@item.Id">
                                             <button class="btn btn-secondary btn-sm d-inline-flex bg-primary">
                                                 <i class="fa fa-pen"></i>
@@ -87,7 +100,7 @@
                                         </a>
 
                                         <a asp-action="DeleteEmployee"
-                                           asp-controller="Employee"
+                                           asp-controller="Manager"
                                            asp-route-id="@item.Id">
                                             <button class="btn btn-danger btn-sm d-inline-flex">
                                                 <i class="fa fa-trash"></i>
