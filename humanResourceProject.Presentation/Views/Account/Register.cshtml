@@ -1,4 +1,4 @@
-﻿@using System.ComponentModel.DataAnnotations
+﻿﻿@using System.ComponentModel.DataAnnotations
 @using System.Reflection
 @using humanResourceProject.Domain.Enum
 @using humanResourceProject.Models.DTOs;
@@ -94,36 +94,79 @@
                 <span asp-validation-for="BloodGroup" class="text-danger"></span>
             </div>
 
-    <div class="form-group">
-        <label asp-for="Title" class="control-label"></label>
-        <select asp-for="Title" class="form-control">
-            @foreach (var title in Enum.GetValues(typeof(Title)))
-            {
-                <option value="@title">@title</option>
-            }
-        </select>
-        <span asp-validation-for="Title" class="text-danger"></span>
-    </div>
+            <div class="form-group mb-3">
+                <label asp-for="Gender" class="control-label"></label>
+                <select asp-for="Gender" class="form-control">
+                    @{
+                        var enumTyp = typeof(Gender);
+                        var enumValus = enumTyp.GetEnumValues();
+                        foreach (var enumValue in enumValus)
+                        {
+                            var displayAttribute = enumTyp.GetMember(enumValue.ToString())[0].GetCustomAttribute<DisplayAttribute>();
+                            var displayName = displayAttribute?.GetName() ?? enumValue.ToString();
+                            <option value="@enumValue">@displayName</option>
+                        }
+                    }
+                </select>
+                <span asp-validation-for="Gender" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-3">
+                <label asp-for="DepartmentName" class="control-label"></label>
+                <input asp-for="DepartmentName" class="form-control" />
+                <span asp-validation-for="DepartmentName" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-3">
+                <label asp-for="DepartmentDescription" class="control-label"></label>
+                <input asp-for="DepartmentDescription" class="form-control" />
+                <span asp-validation-for="DepartmentDescription" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-3">
+                <label asp-for="JobId" class="control-label"></label>
+                <select asp-for="JobId" asp-items="@Model.Jobs.Select(job => new SelectListItem { Text = job.Title, Value = job.Id.ToString() })" class="form-control">
+                    <option value="" disabled>Meslek seçiniz!</option>
+                </select>
+                <span asp-validation-for="JobId" class="text-danger"></span>
+            </div>
 
-    <div class="form-group">
-        <label asp-for="Job" class="control-label"></label>
-        <input asp-for="Job" class="form-control" />
-        <span asp-validation-for="Job" class="text-danger"></span>
+            <div class="form-group mb-3">
+                <label asp-for="UploadPath" class="control-label"></label>
+                <input asp-for="UploadPath" type="file" accept=".png, .jpg, .jpeg" class="form-control" />
+                <span asp-validation-for="UploadPath" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input asp-for="CompanyId" type="hidden" class="form-control" />
+                <span asp-validation-for="CompanyId" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label>*Zorunlu alan</label>
+            </div>
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+            <div class="form-group d-grid mb-3">
+                <input type="submit" value="Kayıt Ol" class="btn btn-primary" />
+            </div>
+        </form>
     </div>
+</div>
 
-    <div class="form-group">
-        <label asp-for="UploadPath" class="control-label"></label>
-        <input asp-for="UploadPath" type="file" class="form-control" />
-        <span asp-validation-for="UploadPath" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <input  asp-for="CompanyId" type="hidden" class="form-control" />
-        <span asp-validation-for="CompanyId" class="text-danger"></span>
-    </div>
-    <div>
-        <label>*Zorunlu alan</label>
-    </div>
-    <div class="form-group">
-        <input type="submit" value="Register" class="btn btn-primary" />
-    </div>
-</form>
+@section Scripts {
+    <script src="~/lib/toastr.js/toastr.min.js"></script>
+
+    @if (TempData["Result"] == "success")
+    {
+        <script>
+            toastr["success"]("Şirket kaydı gerçekleşmiştir.", "Başarılı")
+        </script>
+    }
+    else if (TempData["Result"] == "modelinvalid")
+    {
+        <script>
+            toastr["warning"]("Girdiğiniz bilgileri lütfen kontrol ediniz.", "Hatalı bilgi girişi!")
+        </script>
+    }
+    else if (TempData["Result"] == "error")
+    {
+        <script>
+            toastr["error"]("Şirket kaydı gerçekleşmemiştir.", "Bir hata oluştu!")
+        </script>
+    }
+}

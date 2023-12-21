@@ -3,6 +3,7 @@ using AutoMapper;
 using humanResourceProject.Application.AutoMapper;
 using humanResourceProject.Application.Services.Abstract.IAdvanceServices;
 using humanResourceProject.Application.Services.Abstract.IAppUserServices;
+using humanResourceProject.Application.Services.Abstract.IBaseServices;
 using humanResourceProject.Application.Services.Abstract.ICompanyServices;
 using humanResourceProject.Application.Services.Abstract.IDepartmantServices;
 using humanResourceProject.Application.Services.Abstract.IExpenseServices;
@@ -10,14 +11,18 @@ using humanResourceProject.Application.Services.Abstract.IImageServices;
 using humanResourceProject.Application.Services.Abstract.IJobServices;
 using humanResourceProject.Application.Services.Abstract.ILeaveServices;
 using humanResourceProject.Application.Services.Abstract.IMailServices;
-using humanResourceProject.Application.Services.Abstract.IBaseServices;
-using humanResourceProject.Application.Services.Concrete.BaseServices;
 using humanResourceProject.Application.Services.Concrete.AdvanceServices;
 using humanResourceProject.Application.Services.Concrete.AppUserServices;
+using humanResourceProject.Application.Services.Concrete.BaseServices;
 using humanResourceProject.Application.Services.Concrete.CompanyServices;
+using humanResourceProject.Application.Services.Concrete.DeparmentServices;
+using humanResourceProject.Application.Services.Concrete.DepartmentServices;
+using humanResourceProject.Application.Services.Concrete.ExpenseServices;
+using humanResourceProject.Application.Services.Concrete.ImageServices;
+using humanResourceProject.Application.Services.Concrete.JobServices;
+using humanResourceProject.Application.Services.Concrete.LeaveServices;
+using humanResourceProject.Application.Services.Concrete.MailServices;
 using humanResourceProject.Domain.Entities.Concrete;
-
-
 using humanResourceProject.Domain.IRepository.BaseRepos;
 using humanResourceProject.Infrastructure.Repositories.AdvanceRepos;
 using humanResourceProject.Infrastructure.Repositories.AppUserRepos;
@@ -26,7 +31,6 @@ using humanResourceProject.Infrastructure.Repositories.DepartmentRepos;
 using humanResourceProject.Infrastructure.Repositories.ExpenseRepo;
 using humanResourceProject.Infrastructure.Repositories.JobRepos;
 using humanResourceProject.Infrastructure.Repositories.LeaveRepos;
-using humanResourceProject.Domain.IRepository.AdvanceRepo;
 
 namespace humanResourceProject.Application.IoC
 {
