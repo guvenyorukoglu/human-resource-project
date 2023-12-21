@@ -264,7 +264,7 @@ namespace humanResourceProject.Infrastructure.SeedData
                             .RuleFor(a => a.AmountOfAdvance, f => f.Random.Decimal(100, 99999))
                             .RuleFor(a => a.Explanation, f => f.Lorem.Sentence())
                             .RuleFor(a => a.AdvanceType, f => f.PickRandom<AdvanceType>())
-                            .RuleFor(a => a.ExpiryDate, (f,a) => f.Date.Soon(expireIn, a.CreateDate))
+                            .RuleFor(a => a.ExpiryDate, (f, a) => f.Date.Soon(expireIn, a.CreateDate))
                             .RuleFor(a => a.Currency, f => f.PickRandom<Currency>())
                             .RuleFor(a => a.AdvanceStatus, f => f.Random.Bool(0.5f) ? RequestStatus.Approved : (f.Random.Bool(0.25f) ? RequestStatus.Pending : RequestStatus.Rejected))
                             .RuleFor(a => a.CreateDate, f => f.Date.Past(1))
@@ -281,7 +281,7 @@ namespace humanResourceProject.Infrastructure.SeedData
                             var expenseFake = new Faker<Expense>()
                             .RuleFor(e => e.Id, f => f.Random.Guid())
                             .RuleFor(e => e.AmountOfExpense, f => f.Random.Decimal(100, 99999))
-                            .RuleFor(e => e.DateOfExpense, (f,e) => f.Date.Recent(daysAgo, e.CreateDate))
+                            .RuleFor(e => e.DateOfExpense, (f, e) => f.Date.Recent(daysAgo, e.CreateDate))
                             .RuleFor(e => e.ExpenseType, f => f.PickRandom<ExpenseType>())
                             .RuleFor(e => e.Explanation, f => f.Lorem.Sentence())
                             .RuleFor(e => e.Currency, f => f.PickRandom<Currency>())
@@ -352,7 +352,9 @@ namespace humanResourceProject.Infrastructure.SeedData
                         .RuleFor(e => e.Gender, Gender.Male)
                         .RuleFor(c => c.CreateDate, f => f.Date.Past(1))
                         .RuleFor(e => e.Status, _ => Status.Active)
-                        .RuleFor(e => e.CompanyId, company.Id);
+                        .RuleFor(e => e.ImagePath, "https://ik.imagekit.io/7ypp4olwr/companymanager.png?tr=h-200,w-200")
+                        .RuleFor(e => e.JobId, randomJobId)
+                        .RuleFor(e => e.DepartmentId, companyManagerDepartmentId);
 
                 AppUser companyManagerUser = companyManagerFake.Generate();
                 companyManagers.Add(companyManagerUser);
@@ -472,6 +474,7 @@ namespace humanResourceProject.Infrastructure.SeedData
                     CreateDate = DateTime.Now,
                     Status = Status.Active,
                     UserName = "SiteManager",
+                    ImagePath = "https://ik.imagekit.io/7ypp4olwr/admin.jpeg?tr=h-200,w-200",
                     Email = email,
                     DepartmentId = department.Id,
                     EmailConfirmed = true
