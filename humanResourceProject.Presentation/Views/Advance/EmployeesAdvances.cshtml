@@ -77,21 +77,62 @@
                                         <td>
                                             @if (item.AdvanceStatus == RequestStatus.Pending)
                                             {
-                                                <a asp-action="ApproveAdvance"
-                                                   asp-controller="Advance"
-                                                   asp-route-id="@item.Id" onclick="return confirm('Onaylamak istediğinize emin misiniz?')">
-                                                    <button class="btn btn-secondary btn-sm d-inline-flex bg-primary gap-1 align-items-center">
-                                                        <i class="fa fa-check"></i><span>Onayla</span>
-                                                    </button>
-                                                </a>
+                                                //Onaylama modalı
+                                                <div class="modal fade" id="approveAdvanceModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                    <div class="modal-dialog">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title" id="exampleModalLabel">Avans Talebi Onaylama</h5>
+                                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                Avans talebini onaylamak istediğinize emin misiniz?
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>
+                                                                <a asp-action="ApproveAdvance"
+                                                                   asp-controller="Advance"
+                                                                   asp-route-id="@item.Id">
+                                                                    <button type="button" class="btn btn-primary">Onaylıyorum</button>
+                                                                </a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
 
-                                                <a asp-action="RejectAdvance"
-                                                   asp-controller="Advance"
-                                                   asp-route-id="@item.Id" onclick="return confirm('Reddetmek istediğinize emin misiniz?')">
-                                                    <button class="btn btn-danger btn-sm d-inline-flex gap-1 align-items-center">
-                                                        <i class="fa fa-x"></i><span>Reddet</span>
-                                                    </button>
-                                                </a>
+                                                //Reddetme modalı
+                                                <div class="modal fade" id="rejectAdvanceModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                    <div class="modal-dialog">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title" id="exampleModalLabel">Avans Talebi Reddetme</h5>
+                                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                Avans talebini reddetmek istediğinize emin misiniz?
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>
+                                                                <a asp-action="RejectAdvance"
+                                                                   asp-controller="Advance"
+                                                                   asp-route-id="@item.Id">
+                                                                    <button type="button" class="btn btn-danger">Onaylıyorum</button>
+                                                                </a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                //Onaylama modalı açan buton
+                                                <button type="button" class="btn btn-secondary btn-sm d-inline-flex bg-primary gap-1 align-items-center" data-bs-toggle="modal" data-bs-target="#approveAdvanceModal">
+                                                    <i class="fa fa-check"></i><span>Onayla</span>
+                                                </button>
+
+                                                //Reddetme modalı açan buton
+                                                <button class="btn btn-danger btn-sm d-inline-flex gap-1 align-items-center" data-bs-toggle="modal" data-bs-target="#rejectAdvanceModal">
+                                                    <i class="fa fa-x"></i><span>Reddet</span>
+                                                </button>
+
                                             }
                                         </td>
                                     </tr>
@@ -103,5 +144,6 @@
             </div>
         </div>
     </div>
+
 
 </body>
