@@ -25,15 +25,19 @@ namespace humanResourceProject.Application.Services.Concrete.LeaveServices
             List<LeaveVM>? leaves = await _leaveReadRepository.GetFilteredList(
                                                              select: x => new LeaveVM
                                                              {
+                                                                 Id = x.Id,
                                                                  LeaveType = x.LeaveType,
                                                                  StartDate = x.StartDateOfLeave,
                                                                  EndDate = x.EndDateOfLeave,
                                                                  EmployeeName = x.Employee.FirstName,
                                                                  EmployeeSurname = x.Employee.LastName,
+                                                                 EmployeeId = x.Employee.Id,
+                                                                 DepartmentId = x.Employee.Department.Id,
+                                                                 ManagerId = (Guid)x.Employee.Manager.ManagerId,
                                                                  LeaveStatus = x.LeaveStatus,
                                                                  DaysOfLeave = x.DaysOfLeave
                                                              },
-                                                             where: x => x.Status != Status.Deleted || x.Status != Status.Inactive,
+                                                             where: x => x.Status != Status.Deleted && x.Status != Status.Inactive,
                                                              orderBy: x => x.OrderByDescending(x => x.CreateDate),
                                                              //commented out because of the error
                                                              include: x => x.Include(x => x.Employee));
@@ -52,15 +56,19 @@ namespace humanResourceProject.Application.Services.Concrete.LeaveServices
             List<LeaveVM>? leaves = await _leaveReadRepository.GetFilteredList(
                                                              select: x => new LeaveVM
                                                              {
+                                                                 Id = x.Id,
                                                                  LeaveType = x.LeaveType,
                                                                  StartDate = x.StartDateOfLeave,
                                                                  EndDate = x.EndDateOfLeave,
                                                                  EmployeeName = x.Employee.FirstName,
                                                                  EmployeeSurname = x.Employee.LastName,
+                                                                 EmployeeId = x.Employee.Id,
+                                                                 DepartmentId = x.Employee.Department.Id,
+                                                                 ManagerId = (Guid)x.Employee.Manager.ManagerId,
                                                                  LeaveStatus = x.LeaveStatus,
                                                                  DaysOfLeave = x.DaysOfLeave
                                                              },
-                                                             where: x => (x.Status != Status.Deleted || x.Status != Status.Inactive) && x.Employee.DepartmentId == id,
+                                                             where: x => (x.Status != Status.Deleted && x.Status != Status.Inactive) && x.Employee.DepartmentId == id,
                                                              orderBy: x => x.OrderByDescending(x => x.CreateDate),
                                                              include: x => x.Include(x => x.Employee));
             return leaves;
@@ -71,15 +79,19 @@ namespace humanResourceProject.Application.Services.Concrete.LeaveServices
             List<LeaveVM>? leaves = await _leaveReadRepository.GetFilteredList(
                                                              select: x => new LeaveVM
                                                              {
+                                                                 Id = x.Id,
                                                                  LeaveType = x.LeaveType,
                                                                  StartDate = x.StartDateOfLeave,
                                                                  EndDate = x.EndDateOfLeave,
                                                                  EmployeeName = x.Employee.FirstName,
                                                                  EmployeeSurname = x.Employee.LastName,
+                                                                 EmployeeId = x.Employee.Id,
+                                                                 DepartmentId = x.Employee.Department.Id,
+                                                                 ManagerId = (Guid)x.Employee.Manager.ManagerId,
                                                                  LeaveStatus = x.LeaveStatus,
                                                                  DaysOfLeave = x.DaysOfLeave
                                                              },
-                                                             where: x => (x.Status != Status.Deleted || x.Status != Status.Inactive) && x.Employee.Id == id,
+                                                             where: x => (x.Status != Status.Deleted && x.Status != Status.Inactive) && x.Employee.Id == id,
                                                              orderBy: x => x.OrderByDescending(x => x.CreateDate),
                                                              include: x => x.Include(x => x.Employee));
             return leaves;

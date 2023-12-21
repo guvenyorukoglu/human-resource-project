@@ -38,5 +38,10 @@ namespace humanResourceProject.Infrastructure.Repositories.BaseRepos
         {
             return _context.SaveChangesAsync();
         }
+
+        public void DetachEntity(T entity)
+        {
+            _context.Entry(entity).State = EntityState.Detached;
+        }
     }
 }
