@@ -39,19 +39,18 @@
             <hr /> *@
             @if (Model != null)
             {
-                if (User.IsInRole("DepartmentManager"))
+                if (User.IsInRole("CompanyManager"))
                 {
-                    
-                    <a asp-action="CreatePersonel" asp-controller="Manager">
+                    <a asp-action="CreatePersonelManager" asp-controller="Employee">
+                        <button class="custom-button custom-button--create-personel">Müdür Ekle</button>
+                    </a>
+                    <a asp-action="CreatePersonel" asp-controller="Employee">
                         <button class="custom-button custom-button--create-personel">Personel Ekle</button>
                     </a>
                 }
-                if (User.IsInRole("CompanyManager"))
+                if (User.IsInRole("DepartmentManager"))
                 {
-                    <a asp-action="CreatePersonel" asp-controller="Manager">
-                        <button class="custom-button custom-button--create-personel">Müdür Ekle</button>
-                    </a>
-                    <a asp-action="CreatePersonel" asp-controller="Manager">
+                    <a asp-action="CreatePersonel" asp-controller="Employee">
                         <button class="custom-button custom-button--create-personel">Personel Ekle</button>
                     </a>
                 }

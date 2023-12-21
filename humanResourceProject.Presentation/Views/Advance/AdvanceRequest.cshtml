@@ -1,0 +1,88 @@
+﻿@using humanResourceProject.Models.VMs;
+@model List<PersonelVM>
+
+@{
+    ViewData["Title"] = "AdvanceRequests";
+}
+
+<h1>Avans Talepleri</h1>
+
+
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.css" />
+
+<script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $('#advancerequests').DataTable();
+    });
+
+</script>
+
+
+
+<div class="row">
+    @Html.Partial("_PanelPartial_PersonnelManager")
+
+    <div class="aside container mt-5 col-md-9 col-sm-9">
+
+        <table id="advancerequests"
+               class="display">
+            <thead>
+                <tr>
+                    <th style="width: 15%">Ad</th>
+                    <th style="width: 15%">İkinci Ad</th>
+                    <th style="width: 15%">Soyad</th>
+                    <th style="width: 20%">Telefon</th>
+                    <th style="width: 20%">E-posta</th>
+                    <th style="width: 10%">Meslek</th>
+                    <th style="width: 10%">Son Tarih</th>
+                    <th style="width: 10%">Avans Miktarı</th>
+                    <th style="width: 10%">Avans Tipi</th>
+                    <th style="width: 10%">Talep Tarihi</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null)
+                {
+
+                    foreach (var item in Model)
+                    {
+                        if (item.Advance != null)
+                        {
+                            <tr>
+                                <td>@item.FirstName</td>
+                                <td>@item.MiddleName</td>
+                                <td>@item.LastName</td>
+                                <td>@item.PhoneNumber</td>
+                                <td>@item.Email</td>
+                                <td>@item.JobTitle</td>
+                                <td>@item.Advance.ExpiryDate</td>
+                                <td>@item.Advance.AmountOfAdvance</td>
+                                <td>@item.Advance.AdvanceType</td>
+                                <td>@item.Advance.CreateDate</td>
+                                <td>
+                                    <a asp-action="ApproveAdvance"
+                                       asp-controller="Advance"
+                                       asp-route-id="@item.Id" onclick="return confirm('Onaylamak istediğinize emin misiniz?')">
+                                        <button class="btn btn-secondary btn-sm d-inline-flex bg-primary">
+                                            <i class="fa fa-check">Onayla</i>
+                                        </button>
+                                    </a>
+
+                                    <a asp-action="RejectAdvance"
+                                       asp-controller="Advance"
+                                       asp-route-id="@item.Id" onclick="return confirm('Reddetmek istediğinize emin misiniz?')">
+                                        <button class="btn btn-danger btn-sm d-inline-flex">
+                                            <i class="fa fa-x">Reddet</i>
+                                        </button>
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

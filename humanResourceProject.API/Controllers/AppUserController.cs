@@ -36,6 +36,12 @@ namespace humanResourceProject.API.Controllers
         {
             return Ok(await _appUserReadService.GetSingleDefault(x => x.Id == id));
         }
+        [HttpGet]
+        [Route("GetManagerByDepartmentId/{id}")]
+        public async Task<IActionResult> GetManagerByDepartmentId(Guid id) // Departman Id'sine göre Yönetici
+        {
+            return Ok(await _appUserReadService.GetManagerByDepartmentId(id));
+        }
 
         [HttpGet]
         [Route("GetUpdateUserDTO/{id}")]
@@ -59,14 +65,14 @@ namespace humanResourceProject.API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreatePersonel([FromBody] UserRegisterDTO model) // Yeni Personel Oluşturma
+        public async Task<IActionResult> CreatePersonel([FromBody] CreateEmployeeDTO model) // Yeni Personel Oluşturma
         {
             IdentityResult result = await _appUserWriteService.RegisterPersonel(model);
             if (!result.Succeeded)
                 return BadRequest(result.Errors);
 
 
-            return RedirectToAction("ForgotPassword", "Account", model.Email);
+            return RedirectToAction("ForgotPassword", "Account", new {email = model.Email});
         }
 
          [HttpPost]

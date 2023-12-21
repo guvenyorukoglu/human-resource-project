@@ -66,6 +66,8 @@ namespace humanResourceProject.Models.DTOs
 
         public List<JobVM>? Jobs { get; set; }
 
+        public string? ImagePath { get; set; }
+
         [Required(ErrorMessage = "Departman alanı boş geçilemez!")]
         [DisplayName("Departman*")]
         public Guid DepartmentId { get; set; }

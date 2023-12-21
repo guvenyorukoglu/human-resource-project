@@ -1,4 +1,5 @@
-﻿using humanResourceProject.Models.VMs;
+﻿using humanResourceProject.Models.DTOs;
+using humanResourceProject.Models.VMs;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Net.Http;
@@ -116,6 +117,57 @@ namespace humanResourceProject.Presentation.Controllers
             if (response.IsSuccessStatusCode)
             {
                 return RedirectToAction("Expense");
+            }
+
+            ModelState.AddModelError(response.StatusCode.ToString(), "Bir hata oluştu.");
+            return View(model);
+        }
+
+        //Expense REQUESTS & CONTROLS
+        public async Task<IActionResult> ExpenseRequests()
+        {
+
+            var response = await _httpClient.GetAsync($"api/Expense/GetAllExpences/");
+            if (response.IsSuccessStatusCode)
+            {
+                var cont = await response.Content.ReadAsStringAsync();
+                var expenseRequests = JsonConvert.DeserializeObject<List<PersonelVM>>(cont);
+                return View(expenseRequests);
+
+            }
+            return View();
+        }
+
+
+        [HttpPut]
+        public async Task<IActionResult> ExpenseLeave(ExpenseDTO model)
+        {
+            var json = JsonConvert.SerializeObject(model);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            var response = await _httpClient.PutAsync($"api/Expense/UpdateExpense/{model}", content);
+
+            if (response.IsSuccessStatusCode)
+            {
+                return RedirectToAction("ExpenseRequests");
+            }
+
+            ModelState.AddModelError(response.StatusCode.ToString(), "Bir hata oluştu.");
+            return View(model);
+        }
+
+
+        [HttpPost]
+        public async Task<IActionResult> RejectExpense(ExpenseDTO model)
+        {
+            var json = JsonConvert.SerializeObject(model);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            var response = await _httpClient.PutAsync($"api/Expense/DeleteExpense/{model}", content);
+
+            if (response.IsSuccessStatusCode)
+            {
+                return RedirectToAction("ExpenseRequests");
             }
 
             ModelState.AddModelError(response.StatusCode.ToString(), "Bir hata oluştu.");

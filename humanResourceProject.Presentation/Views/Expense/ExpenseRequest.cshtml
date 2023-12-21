@@ -1,0 +1,88 @@
+﻿@using humanResourceProject.Models.VMs;
+@model List<PersonelVM>
+
+@{
+    ViewData["Title"] = "ExpemseRequests";
+}
+
+<h1>Masraf Talepleri</h1>
+
+
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.css" />
+
+<script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $('#expenserequests').DataTable();
+    });
+
+</script>
+
+
+
+<div class="row">
+    @Html.Partial("_PanelPartial_PersonnelManager")
+
+    <div class="aside container mt-5 col-md-9 col-sm-9">
+
+        <table id="expenserequests"
+               class="display">
+            <thead>
+                <tr>
+                    <th style="width: 15%">Ad</th>
+                    <th style="width: 15%">Soyad</th>
+                    <th style="width: 20%">Telefon</th>
+                    <th style="width: 20%">E-posta</th>
+                    <th style="width: 10%">Meslek</th>
+                    <th style="width: 10%">Masraf Tarihi</th>
+                    <th style="width: 10%">Masraf Miktarı</th>
+                    <th style="width: 10%">Masraf Türü</th>
+                    <th style="width: 10%">Masraf Açıklaması</th>
+                    <th style="width: 15%">Resim</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null)
+                {
+
+                    foreach (var item in Model)
+                    {
+                        if (item.Expense != null)
+                        {
+                            <tr>
+                                <td>@item.FirstName</td>
+                                <td>@item.LastName</td>
+                                <td>@item.PhoneNumber</td>
+                                <td>@item.Email</td>
+                                <td>@item.JobTitle</td>
+                                <td>@item.Expense.CreateDate</td>
+                                <td>@item.Expense.AmountOfExpense</td>
+                                <td>@item.Expense.ExpenseType</td>
+                                <td>@item.Expense.Explanation</td>
+                                <td><img style="width:10%" src="@item.Expense.FilePath"></td>
+                                <td>
+                                    <a asp-action="ApproveExpense"
+                                       asp-controller="Expense"
+                                       asp-route-id="@item.Id" onclick="return confirm('Onaylamak istediğinize emin misiniz?')">
+                                        <button class="btn btn-secondary btn-sm d-inline-flex bg-primary">
+                                            <i class="fa fa-check">Onayla</i>
+                                        </button>
+                                    </a>
+                                    <a asp-action="RejectExpense"
+                                       asp-controller="Expense"
+                                       asp-route-id="@item.Id" onclick="return confirm('Reddetmek istediğinize emin misiniz?')">
+                                        <button class="btn btn-danger btn-sm d-inline-flex">
+                                            <i class="fa fa-x">Reddet</i>
+                                        </button>
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
