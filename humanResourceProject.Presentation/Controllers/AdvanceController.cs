@@ -1,4 +1,5 @@
-﻿using humanResourceProject.Models.DTOs;
+﻿using humanResourceProject.Domain.Enum;
+using humanResourceProject.Models.DTOs;
 using humanResourceProject.Models.VMs;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -146,40 +147,61 @@ namespace humanResourceProject.Presentation.Controllers
         //ADVANCE REQUESTS & CONTROLS
         
         [Authorize(Roles = "DepartmentManager,CompanyManager")]
-        [HttpPost]
-        public async Task<IActionResult> ApproveAdvance(AdvanceDTO model)
+        [HttpGet]
+        public async Task<IActionResult> ApproveAdvance(Guid id)
         {
-            var json = JsonConvert.SerializeObject(model);
-            var content = new StringContent(json, Encoding.UTF8, "application/json");
+            var response = await _httpClient.GetAsync($"api/Advance/GetUpdateAdvanceDTO/{id}");
 
-            var response = await _httpClient.PutAsync($"api/Advance/UpdateAdvance/{model}", content);
-
-            if (response.IsSuccessStatusCode)
+            if (!response.IsSuccessStatusCode)
             {
-                return RedirectToAction("AdvanceRequests");
+                return View("Error");
             }
 
-            ModelState.AddModelError(response.StatusCode.ToString(), "Bir hata oluştu.");
-            return View(model);
+            var content = await response.Content.ReadAsStringAsync();
+            var updateAdvanceDTO = JsonConvert.DeserializeObject<UpdateAdvanceDTO>(content);
+            updateAdvanceDTO.AdvanceStatus = RequestStatus.Approved;
+
+            var json = JsonConvert.SerializeObject(updateAdvanceDTO);
+            var contentDTO = new StringContent(json, Encoding.UTF8, "application/json");
+
+            var httpResponse = await _httpClient.PutAsync($"api/Advance/UpdateStatus", contentDTO);
+
+            if (httpResponse.IsSuccessStatusCode)
+            {
+                return RedirectToAction(nameof(EmployeesAdvances));
+            }
+
+            ModelState.AddModelError(httpResponse.StatusCode.ToString(), "Bir hata oluştu.");
+            return View("Error");
         }
 
         [Authorize(Roles = "DepartmentManager,CompanyManager")]
-        [HttpPost]
-        public async Task<IActionResult> RejectAdvance(AdvanceDTO model)
+        [HttpGet]
+        public async Task<IActionResult> RejectAdvance(Guid id)
         {
+            var response = await _httpClient.GetAsync($"api/Advance/GetUpdateAdvanceDTO/{id}");
 
-            var json = JsonConvert.SerializeObject(model);
-            var content = new StringContent(json, Encoding.UTF8, "application/json");
-
-            var response = await _httpClient.PutAsync($"api/Advance/DeleteAdvance/{model}", content);
-
-            if (response.IsSuccessStatusCode)
+            if (!response.IsSuccessStatusCode)
             {
-                return RedirectToAction("AdvanceRequests");
+                return View("Error");
             }
 
-            ModelState.AddModelError(response.StatusCode.ToString(), "Bir hata oluştu.");
-            return View(model);
+            var content = await response.Content.ReadAsStringAsync();
+            var updateAdvanceDTO = JsonConvert.DeserializeObject<UpdateAdvanceDTO>(content);
+            updateAdvanceDTO.AdvanceStatus = RequestStatus.Rejected;
+
+            var json = JsonConvert.SerializeObject(updateAdvanceDTO);
+            var contentDTO = new StringContent(json, Encoding.UTF8, "application/json");
+
+            var httpResponse = await _httpClient.PutAsync($"api/Advance/UpdateStatus/", contentDTO);
+
+            if (httpResponse.IsSuccessStatusCode)
+            {
+                return RedirectToAction(nameof(EmployeesAdvances));
+            }
+
+            ModelState.AddModelError(httpResponse.StatusCode.ToString(), "Bir hata oluştu.");
+            return View("Error");
         }
 
     }
