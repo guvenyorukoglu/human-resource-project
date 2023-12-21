@@ -132,24 +132,24 @@ font-size: 20px;
         outline: none;
     }
 
-.custom-button--create-personel {
+.custom-button--create-entity {
     background-color: #31374a;
     color: snow;
 }
 
-    .custom-button--create-personel:hover {
+    .custom-button--create-entity:hover {
         background-color: snow;
         color: #31374a;
         border: 1px solid #31374a;
     }
 
-    .custom-button--create-personel:active {
+    .custom-button--create-entity:active {
         background-color: #31374a;
         color: snow;
         border: 1px solid #31374a;
     }
 
-    .custom-button--create-personel:focus {
+    .custom-button--create-entity:focus {
         outline: none;
     }
 /* PAGINATION */

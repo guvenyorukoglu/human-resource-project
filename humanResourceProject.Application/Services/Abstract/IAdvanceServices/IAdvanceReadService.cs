@@ -8,8 +8,9 @@ namespace humanResourceProject.Application.Services.Abstract.IAdvanceServices
     {
         Task<AdvanceDTO> GetAdvanceById(Guid id);
         Task<List<AdvanceVM>> GetAllAdvances();
-        Task<List<AdvanceVM>> GetAdvancesByEmployeeId(Guid id);
+        Task<List<AdvancePersonnelVM>> GetAdvancesByEmployeeId(Guid id);
         Task<List<AdvanceVM>> GetAdvancesByDepartmentId(Guid id);
+        Task<List<AdvanceVM>> GetAdvancesByCompanyId(Guid id);
         Task<UpdateAdvanceDTO> GetUpdateAdvanceDTO(Guid id);
 
     }

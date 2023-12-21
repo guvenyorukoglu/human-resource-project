@@ -2,7 +2,6 @@
 using humanResourceProject.Models.VMs;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using System.Net.Http;
 using System.Security.Claims;
 using System.Text;
 
@@ -12,9 +11,11 @@ namespace humanResourceProject.Presentation.Controllers
     {
         private readonly HttpClient _httpClient;
 
-        public AdvanceController(HttpClient httpClient)
+        public AdvanceController()
         {
-            _httpClient = httpClient;
+            _httpClient = new HttpClient();
+            //_httpClient.BaseAddress = new Uri("https://monitoreaseapi.azurewebsites.net"); // Azure
+            _httpClient.BaseAddress = new Uri("https://localhost:7255/"); // Local
         }
 
         public IActionResult Index()
@@ -22,13 +23,11 @@ namespace humanResourceProject.Presentation.Controllers
             return View();
         }
 
-        public async Task<IActionResult> Advances()
+        public async Task<IActionResult> MyAdvances()
         {
             Guid employeeId = Guid.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value);
-            var json = JsonConvert.SerializeObject(employeeId);
-            var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-            var response = await _httpClient.PostAsync($"api/Advance/GetAdvancesByEmployeeId/", content);
+            var response = await _httpClient.GetAsync($"api/Advance/GetAdvancesByEmployeeId/{employeeId}");
             if (response.IsSuccessStatusCode)
             {
                 var cont = await response.Content.ReadAsStringAsync();
@@ -40,19 +39,33 @@ namespace humanResourceProject.Presentation.Controllers
         }
 
 
-        public async Task<IActionResult> AdvancesDepartment() 
+        public async Task<IActionResult> EmployeesAdvances()
         {
-            Guid depatmentId = Guid.Parse(User.Claims.FirstOrDefault(x => x.Type == "DepartmentId").Value);
-            var json = JsonConvert.SerializeObject(depatmentId);
-            var content = new StringContent(json, Encoding.UTF8, "application/json");
-
-            var response = await _httpClient.PostAsync($"api/Advance/GetAdvancesByDepartmentId/", content);
-            if (response.IsSuccessStatusCode)
+            if (User.IsInRole("DepartmentManager"))
             {
-                var cont = await response.Content.ReadAsStringAsync();
-                var advances = JsonConvert.DeserializeObject<List<AdvanceVM>>(cont);
-                return View(advances);
+                Guid depatmentId = Guid.Parse(User.Claims.FirstOrDefault(x => x.Type == "DepartmentId").Value);
 
+                var response = await _httpClient.GetAsync($"api/Advance/GetAdvancesByDepartmentId/{depatmentId}");
+                if (response.IsSuccessStatusCode)
+                {
+                    var cont = await response.Content.ReadAsStringAsync();
+                    var advances = JsonConvert.DeserializeObject<List<AdvanceVM>>(cont);
+                    return View(advances);
+                }
+                return View();
+            }
+            else if (User.IsInRole("CompanyManager"))
+            {
+                Guid companyId = Guid.Parse(User.Claims.FirstOrDefault(x => x.Type == "CompanyId").Value);
+
+                var response = await _httpClient.GetAsync($"api/Advance/GetAdvancesByCompanyId/{companyId}");
+                if (response.IsSuccessStatusCode)
+                {
+                    var cont = await response.Content.ReadAsStringAsync();
+                    var advances = JsonConvert.DeserializeObject<List<AdvanceVM>>(cont);
+                    return View(advances);
+                }
+                return View();
             }
             return View();
         }
@@ -60,11 +73,11 @@ namespace humanResourceProject.Presentation.Controllers
         [HttpGet]
         public IActionResult CreateAdvance()
         {
-            return View(new AdvancePersonnelVM());
+            return View(new AdvanceDTO());
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateAdvance(AdvancePersonnelVM model)
+        public async Task<IActionResult> CreateAdvance(AdvanceDTO model)
         {
             var json = JsonConvert.SerializeObject(model);
             var content = new StringContent(json, Encoding.UTF8, "application/json");

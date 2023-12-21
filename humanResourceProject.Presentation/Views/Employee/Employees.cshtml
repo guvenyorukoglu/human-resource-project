@@ -1,8 +1,4 @@
-﻿@using System.ComponentModel.DataAnnotations
-@using System.Reflection
-@using humanResourceProject.Domain.Enum
-@using humanResourceProject.Models.VMs;
-
+﻿
 @{
     ViewData["Title"] = "Employees";
     Layout = "~/Views/Shared/_HRLayout.cshtml";
@@ -42,16 +38,16 @@
                 if (User.IsInRole("CompanyManager"))
                 {
                     <a asp-action="CreatePersonelManager" asp-controller="Employee">
-                        <button class="custom-button custom-button--create-personel">Müdür Ekle</button>
+                        <button class="custom-button custom-button--create-entity">Müdür Ekle</button>
                     </a>
                     <a asp-action="CreatePersonel" asp-controller="Employee">
-                        <button class="custom-button custom-button--create-personel">Personel Ekle</button>
+                        <button class="custom-button custom-button--create-entity">Personel Ekle</button>
                     </a>
                 }
                 if (User.IsInRole("DepartmentManager"))
                 {
                     <a asp-action="CreatePersonel" asp-controller="Employee">
-                        <button class="custom-button custom-button--create-personel">Personel Ekle</button>
+                        <button class="custom-button custom-button--create-entity">Personel Ekle</button>
                     </a>
                 }
                 

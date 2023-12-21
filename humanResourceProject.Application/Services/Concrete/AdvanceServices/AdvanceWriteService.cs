@@ -5,6 +5,8 @@ using humanResourceProject.Domain.Entities.Concrete;
 using humanResourceProject.Domain.IRepository.BaseRepos;
 using humanResourceProject.Models.DTOs;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace humanResourceProject.Application.Services.Concrete.AdvanceServices
 {
@@ -45,23 +47,20 @@ namespace humanResourceProject.Application.Services.Concrete.AdvanceServices
                 return IdentityResult.Failed();
         }
 
-        public async Task<IdentityResult> UpdateAdvance(AdvanceDTO model)
+        public async Task<IdentityResult> UpdateAdvance(UpdateAdvanceDTO model)
         {
-            Advance advance = await _baseReadRepository.GetSingleDefault(x => x.Id == model.Id);
-            if (advance == null)
+            Advance updateAdvance = await _baseReadRepository.GetSingleDefault(x => x.Id == model.Id);
+            if (updateAdvance == null)
                 return IdentityResult.Failed();
-            AdvanceDTO advanceDTO = _mapper.Map<AdvanceDTO>(advance);
 
-            advanceDTO.AdvanceAmount = model.AdvanceAmount;
-            advanceDTO.ExpiryDate = model.ExpiryDate;
-            advanceDTO.Description = model.Description;
-            advanceDTO.AdvanceType = model.AdvanceType;
-            advanceDTO.AdvanceStatus = model.AdvanceStatus;
-            advanceDTO.Status = Domain.Enum.Status.Modified;
-            advanceDTO.UpdateDate = DateTime.Now;
+            _baseWriteRepository.DetachEntity(updateAdvance);
 
+            updateAdvance = _mapper.Map<Advance>(model); 
 
-            if (await _baseWriteRepository.Update(advance))
+            updateAdvance.Status = Domain.Enum.Status.Modified;
+            updateAdvance.UpdateDate = DateTime.Now;
+
+            if (await _baseWriteRepository.Update(updateAdvance))
                 return IdentityResult.Success;
             else
                 return IdentityResult.Failed();
