@@ -16,9 +16,22 @@
                 <li>
                     <a asp-action="Home" asp-controller="Employee"><i class="fa-solid fa-calendar-days"></i>Dashboard</a>
                 </li>
-                <li>
-                    <a asp-action="Employees" asp-controller="Employee"><i class="fa fa-users"></i>Personeller</a>
-                </li>
+                @if(User.IsInRole("CompanyManager") || User.IsInRole("DepartmentManager"))
+                {
+                    <li>
+                        <a asp-action="Employees" asp-controller="Employee"><i class="fa fa-users"></i>Personeller</a>
+                    </li>
+                    <li>
+                        <a asp-action="LeaveRequest" asp-controller="Employee"><i class="fa fa-users"></i>Personeller</a>
+                    </li>
+                    <li>
+                        <a asp-action="AdvanceRequest" asp-controller="Employee"><i class="fa fa-users"></i>Personeller</a>
+                    </li>
+                    <li>
+                        <a asp-action="ExpenseRequest" asp-controller="Employee"><i class="fa fa-users"></i>Personeller</a>
+                    </li>
+                }
+
                 <li>
                     <a href="#"><i class="fa fa-newspaper"></i>Raporlar</a>
                 </li>

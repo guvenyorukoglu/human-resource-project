@@ -45,7 +45,7 @@ namespace humanResourceProject.Application.Services.Concrete.AppUserServices
             return updateUserDTO;
         }
 
-        public async Task<IdentityResult> RegisterPersonel(UserRegisterDTO model)
+        public async Task<IdentityResult> RegisterPersonel(CreateEmployeeDTO model)
         {
             if (model == null)
                 return IdentityResult.Failed();

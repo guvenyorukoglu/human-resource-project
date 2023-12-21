@@ -125,6 +125,7 @@ namespace humanResourceProject.Presentation.Controllers
             return View(model);
         }
 
+
         //ADVANCE REQUESTS & CONTROLS
         public async Task<IActionResult> AdvanceRequests()
         {
@@ -175,5 +176,6 @@ namespace humanResourceProject.Presentation.Controllers
             ModelState.AddModelError(response.StatusCode.ToString(), "Bir hata oluştu.");
             return View(model);
         }
+
     }
 }

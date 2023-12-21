@@ -32,6 +32,13 @@ namespace humanResourceProject.API.Controllers
             return Ok(await _departmentReadService.GetAllDepartments());
         }
 
+        [HttpGet]
+        [Route("GetDepartmentsByCompanyId/{companyId}")]
+        public async Task<IActionResult> GetDepartmentsByCompanyId(Guid companyId)
+        {
+            return Ok(await _departmentReadService.GetDepartmentsByCompanyId(companyId));
+        }
+
         [HttpPost]
         [Route("CreateDepartment")]
         public async Task<IActionResult> CreateDepartment([FromBody] DepartmentDTO model)

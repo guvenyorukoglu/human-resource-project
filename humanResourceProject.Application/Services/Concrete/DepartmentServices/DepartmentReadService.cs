@@ -30,8 +30,8 @@ namespace humanResourceProject.Application.Services.Concrete.DeparmentServices
                                    DepartmentName = x.DepartmentName,
                                    Description = x.Description
                                },
-                               where: x => x.Status != Domain.Enum.Status.Deleted,
-                               orderBy: x => x.OrderByDescending(x => x.CreateDate)
+                               where: x => x.Status != Domain.Enum.Status.Deleted && x.Status != Domain.Enum.Status.Inactive,
+                               orderBy: x => x.OrderByDescending(x => x.DepartmentName)
                );
             return departments;
         }
@@ -41,6 +41,21 @@ namespace humanResourceProject.Application.Services.Concrete.DeparmentServices
             Department department = await _departmentReadRepository.GetById(id);
             DepartmentDTO departmentDTO = _mapper.Map<DepartmentDTO>(department);
             return departmentDTO;
+        }
+
+        public async Task<List<DepartmentVM>> GetDepartmentsByCompanyId(Guid id)
+        {
+            List<DepartmentVM> departments = await _departmentReadRepository.GetFilteredList(
+                               select: x => new DepartmentVM
+                               {
+                                   Id = x.Id,
+                                   DepartmentName = x.DepartmentName,
+                                   Description = x.Description
+                               },
+                               where: x => (x.Status != Domain.Enum.Status.Deleted && x.Status != Domain.Enum.Status.Inactive) && x.CompanyId == id,
+                               orderBy: x => x.OrderByDescending(x => x.DepartmentName)
+               );
+            return departments;
         }
 
         public async Task<Guid> GetIdByDepartmentName(string departmentName)
