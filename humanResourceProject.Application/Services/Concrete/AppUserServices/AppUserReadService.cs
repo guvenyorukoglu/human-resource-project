@@ -60,9 +60,9 @@ namespace humanResourceProject.Application.Services.Concrete.AppUserServices
                 include: x => x.Include(x => x.Job));
         }
 
-        public async Task<ManagerVM> GetManagerByDepartmentId(Guid deparmentId)
+        public async Task<List<ManagerVM>> GetManagersByDepartmentId(Guid deparmentId)
         {
-            return await _readRepository.GetFilteredFirstOrDefault(
+            return await _readRepository.GetFilteredList(
                 select: x => new ManagerVM()
                 {
                     Id = x.Id,

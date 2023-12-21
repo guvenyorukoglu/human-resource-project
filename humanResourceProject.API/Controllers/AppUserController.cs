@@ -40,7 +40,16 @@ namespace humanResourceProject.API.Controllers
         [Route("GetManagerByDepartmentId/{id}")]
         public async Task<IActionResult> GetManagerByDepartmentId(Guid id) // Departman Id'sine göre Yönetici
         {
-            return Ok(await _appUserReadService.GetManagerByDepartmentId(id));
+            var employees = await _appUserReadService.GetEmployeesByDepartmentId(id);
+            foreach (var employee in employees)
+            {
+                AppUser appUser = await _userManager.FindByIdAsync(employee.Id.ToString());
+                if (await _userManager.IsInRoleAsync(appUser, "DepartmentManager"))
+                {
+                    return Ok(employee);
+                }
+            }            
+            return Ok();
         }
 
         [HttpGet]
