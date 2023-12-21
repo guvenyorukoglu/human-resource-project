@@ -14,13 +14,15 @@ namespace humanResourceProject.Presentation.Controllers
         public LeaveController(HttpClient httpClient)
         {
             _httpClient = httpClient;
+            //_httpClient.BaseAddress = new Uri("https://monitoreaseapi.azurewebsites.net"); // Azure
+            _httpClient.BaseAddress = new Uri("https://localhost:7255/"); // Local
         }
         public IActionResult Index()
         {
             return View();
         }
 
-        public async Task<IActionResult> Leaves()
+        public async Task<IActionResult> MyLeaves()
         {
             Guid employeeId = Guid.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value);
             var json = JsonConvert.SerializeObject(employeeId);
@@ -37,19 +39,33 @@ namespace humanResourceProject.Presentation.Controllers
             return View();
         }
 
-        public async Task<IActionResult> LeavesDepartment()
+        public async Task<IActionResult> EmployeesLeaves()
         {
-            Guid departmentId = Guid.Parse(User.Claims.FirstOrDefault(x => x.Type == "DepartmentId").Value);
-            var json = JsonConvert.SerializeObject(departmentId);
-            var content = new StringContent(json, Encoding.UTF8, "application/json");
-
-            var response = await _httpClient.PostAsync($"api/Expense/GetLeavesByDepartmentId/", content);
-            if (response.IsSuccessStatusCode)
+            if(User.IsInRole("DepartmentManager"))
             {
-                var cont = await response.Content.ReadAsStringAsync();
-                var leaves = JsonConvert.DeserializeObject<List<LeaveVM>>(cont);
-                return View(leaves);
+                Guid depatmentId = Guid.Parse(User.Claims.FirstOrDefault(x => x.Type == "DepartmentId").Value);
 
+                var response = await _httpClient.GetAsync($"api/Leave/GetLeavesByDepartmentId/{depatmentId}");
+                if (response.IsSuccessStatusCode)
+                {
+                    var cont = await response.Content.ReadAsStringAsync();
+                    var leaves = JsonConvert.DeserializeObject<List<LeaveVM>>(cont);
+                    return View(leaves);
+                }
+                return View();
+            }
+            else if(User.IsInRole("CompanyManager"))
+            {
+                Guid companyId = Guid.Parse(User.Claims.FirstOrDefault(x => x.Type == "CompanyId").Value);
+
+                var response = await _httpClient.GetAsync($"api/Leave/GetLeavesByCompanyId/{companyId}");
+                if (response.IsSuccessStatusCode)
+                {
+                    var cont = await response.Content.ReadAsStringAsync();
+                    var leaves = JsonConvert.DeserializeObject<List<LeaveVM>>(cont);
+                    return View(leaves);
+                }
+                return View();
             }
             return View();
         }

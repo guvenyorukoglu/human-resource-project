@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis.CSharp;
 using Newtonsoft.Json;
-using System.Net.Mime;
 using System.Security.Claims;
 using System.Text;
 
@@ -241,9 +240,6 @@ namespace humanResourceProject.Presentation.Controllers
                 string name = parsedResponse.name;
                 string surname = parsedResponse.surname;
                 string companyId = parsedResponse.companyId;
-                string departmentId = parsedResponse.departmentId;
-                string imagePath = parsedResponse.imagePath;
-                var roles = parsedResponse.roles;
 
                 List<Claim> claims = new List<Claim>();
                 claims.Add(new Claim(ClaimTypes.Email, model.Email));

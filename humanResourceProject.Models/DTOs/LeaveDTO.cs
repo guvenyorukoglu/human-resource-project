@@ -19,6 +19,6 @@ namespace humanResourceProject.Models.DTOs
         public DateTime CreateDate { get; set; } = DateTime.Now;
         public DateTime? UpdateDate { get; set; }
         public RequestStatus LeaveStatus { get; set; }
-
+        public decimal DaysOfLeave { get; set; }
     }
 }

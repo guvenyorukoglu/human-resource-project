@@ -51,6 +51,30 @@ namespace humanResourceProject.Application.Services.Concrete.LeaveServices
             return leaveDTO;
         }
 
+        //gets leaves by company id
+        public async Task<List<LeaveVM>> GetLeavesByCompanyId(Guid id)
+        {
+            List<LeaveVM>? leaves = await _leaveReadRepository.GetFilteredList(
+                                                                            select: x => new LeaveVM
+                                                                            {
+                                                                 Id = x.Id,
+                                                                 LeaveType = x.LeaveType,
+                                                                 StartDate = x.StartDateOfLeave,
+                                                                 EndDate = x.EndDateOfLeave,
+                                                                 EmployeeName = x.Employee.FirstName,
+                                                                 EmployeeSurname = x.Employee.LastName,
+                                                                 EmployeeId = x.Employee.Id,
+                                                                 DepartmentId = x.Employee.Department.Id,
+                                                                 ManagerId = (Guid)x.Employee.Manager.ManagerId,
+                                                                 LeaveStatus = x.LeaveStatus,
+                                                                 DaysOfLeave = x.DaysOfLeave
+                                                             },
+                                                                                                                                        where: x => (x.Status != Status.Deleted && x.Status != Status.Inactive) && x.Employee.Department.CompanyId == id,
+                                                                                                                                                                                                    orderBy: x => x.OrderByDescending(x => x.CreateDate),
+                                                                                                                                                                                                                                                                include: x => x.Include(x => x.Employee));
+            return leaves;
+        }
+
         public async Task<List<LeaveVM>> GetLeavesByDepartmentId(Guid id)
         {
             List<LeaveVM>? leaves = await _leaveReadRepository.GetFilteredList(

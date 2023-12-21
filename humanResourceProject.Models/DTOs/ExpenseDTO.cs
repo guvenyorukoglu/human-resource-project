@@ -16,10 +16,10 @@ namespace humanResourceProject.Models.DTOs
         [DisplayName("Harcama Miktarı*")]
         public decimal AmountOfExpense { get; set; }
         public DateTime? UpdateDate { get; set; }
-        public Status Status { get; set; } = Status.Active;
+        public Status Status { get; set; }
+        public AppUser Employee { get; set; }
         public Guid EmployeeId { get; set; }
         public Guid ManagerId { get; set; }
-        //public AppUser Employee { get; set; }
         public DateTime CreateDate { get; set; }
         public Currency Currency { get; set; }
 

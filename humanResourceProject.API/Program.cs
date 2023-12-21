@@ -20,10 +20,20 @@ builder.Services.AddControllers();
 
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
+<<<<<<< HEAD
     //options.UseSqlServer(builder.Configuration.GetConnectionString("MonitorEase:SqlDb"));   //Azure
     options.UseSqlServer(builder.Configuration.GetConnectionString("FeyzaSQLConnection")); //Local
+=======
+    options.UseSqlServer(builder.Configuration.GetConnectionString("GuvenSQLConnection")); //Local
+>>>>>>> profile image upload, resize it using imagekit.io
+=======
+    options.UseSqlServer(builder.Configuration.GetConnectionString("MonitorEase:SqlDb"));   //Azure
+    //options.UseSqlServer(builder.Configuration.GetConnectionString("GuvenSQLConnection")); //Local
+
+>>>>>>> RegularExpression'a Türkçe karakterlerde eklendi
 
 });
+
 
 builder.Services.AddIdentity<AppUser, IdentityRole<Guid>>(options =>
 {
