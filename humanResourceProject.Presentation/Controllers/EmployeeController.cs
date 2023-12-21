@@ -131,13 +131,56 @@ namespace humanResourceProject.Presentation.Controllers
         }
 
         [HttpGet]
-        public IActionResult CreatePersonelManager()
+        public async Task<IActionResult> CreatePersonelManager()
         {
-            return View(new CreateEmployeeDTO()
+
+            HttpResponseMessage response = await _httpClient.GetAsync($"api/Job/GetAllJobs/");
+            if (response.IsSuccessStatusCode)
             {
-                ManagerId = Guid.Parse(User.Claims.FirstOrDefault(x => x.Type == "Id").Value)
-            });
+                var apiResponse = await response.Content.ReadAsStringAsync();
+                dynamic jobList = JsonConvert.DeserializeObject(apiResponse);
+
+                foreach (var job in jobList)
+                {
+                    jobs.Add(new JobVM()
+                    {
+                        Id = job.id,
+                        Title = job.title,
+                        Description = job.description
+                    });
+                }
+
+                HttpResponseMessage message = await _httpClient.GetAsync($"api/Department/GetDepartmentsByCompanyId/{Guid.Parse(User.Claims.FirstOrDefault(x => x.Type == "CompanyId").Value)}");
+
+                var apiResponse2 = await message.Content.ReadAsStringAsync();
+                dynamic departmentList = JsonConvert.DeserializeObject(apiResponse2);
+
+                List<DepartmentVM> departments = new List<DepartmentVM>();
+
+                foreach (var department in departmentList)
+                {
+                    departments.Add(new DepartmentVM()
+                    {
+                        Id = department.id,
+                        DepartmentName = department.departmentName,
+                        Description = department.description
+                    });
+                }
+
+                return View(new CreateEmployeeDTO()
+                {
+                    Departments = departments,
+                    Jobs = jobs,
+                    ManagerId = Guid.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value),
+                });
+            }
+            else
+            {
+                return View("Error");
+            }
+            
         }
+                    
 
         [HttpPost]
         public async Task<IActionResult> CreatePersonel(CreateEmployeeDTO model)
@@ -176,10 +219,9 @@ namespace humanResourceProject.Presentation.Controllers
         [HttpPost]
         public async Task<IActionResult> CreatePersonelManager(CreateEmployeeDTO model)
         {
-            //if (User.IsInRole("CompanyManager"))
-            //{
-            //    HttpResponseMessage message = await _httpClient.GetAsync($"api/AppUser/GetEmployeesByCompanyId"{model. })
-            //}
+
+            model.ImagePath = model.Gender == Domain.Enum.Gender.Female ? "https://ik.imagekit.io/7ypp4olwr/femaledefault.png?tr=h-200,w-200" : "https://ik.imagekit.io/7ypp4olwr/maledefault.png?tr=h-200,w-200";
+
             var json = JsonConvert.SerializeObject(model);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
 
@@ -193,6 +235,9 @@ namespace humanResourceProject.Presentation.Controllers
                 ModelState.AddModelError(response.StatusCode.ToString(), "Bir hata oluştu.");
                 return View(model);
             }
+
+
+
         }
 
         [HttpGet]

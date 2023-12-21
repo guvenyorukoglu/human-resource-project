@@ -45,24 +45,27 @@ namespace humanResourceProject.Application.Services.Concrete.LeaveServices
                 return IdentityResult.Failed();
         }
 
-        public async Task<IdentityResult> UpdateLeave(LeaveDTO model)
+        public async Task<IdentityResult> UpdateLeave(UpdateLeaveDTO model)
         {
             Leave leave = await _leaveReadRepository.GetSingleDefault(x => x.Id == model.Id);
             if (leave == null)
                 return IdentityResult.Failed();
 
-            LeaveDTO leaveDTO = _mapper.Map<LeaveDTO>(leave);
+            _leaveWriteRepository.DetachEntity(leave);
 
-            leaveDTO.LeaveType = model.LeaveType;
-            leaveDTO.StartDate = model.StartDate;
-            leaveDTO.EndDate = model.EndDate;
-            leaveDTO.Status = Domain.Enum.Status.Modified;
-            leaveDTO.UpdateDate = DateTime.Now;
+            leave = _mapper.Map<Leave>(model);
 
-            if (await _leaveWriteRepository.Update(_mapper.Map<Leave>(leaveDTO)))
+            leave.Status = Domain.Enum.Status.Modified;
+            leave.UpdateDate = DateTime.Now;
+
+            if (await _leaveWriteRepository.Update(leave))
+            {
                 return IdentityResult.Success;
+            }
             else
+            {
                 return IdentityResult.Failed();
+            }
 
         }
     }

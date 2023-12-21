@@ -46,25 +46,30 @@ namespace humanResourceProject.API.Controllers
             return Ok(await _leaveReadService.GetLeavesByDepartmentId(id));
         }
 
-
-
         [HttpPost]
+        [Route("CreateLeave")]
         public async Task<IActionResult> CreateLeave([FromBody] LeaveDTO model)
         {
             return Ok(await _leaveWriteService.InsertLeave(model));
         }
 
         [HttpPut]
-        public async Task<IActionResult> UpdateLeave([FromBody] LeaveDTO model)
+        [Route("UpdateLeave")]
+        public async Task<IActionResult> UpdateLeave([FromBody] UpdateLeaveDTO model)
         {
             return Ok(await _leaveWriteService.UpdateLeave(model));
         }
 
-
         [HttpPut]
         [Route("UpdateStatus")]
-        public async Task<IActionResult> UpdateStatus([FromBody] LeaveDTO model)
+        public async Task<IActionResult> UpdateStatus([FromBody] UpdateLeaveDTO model)
         {
+            var result = await _leaveWriteService.UpdateLeave(model);
+            if(!result.Succeeded)
+            {
+                return BadRequest(result.Errors);
+            }
+
             AppUser user = await _appUserReadService.GetSingleDefault(x => x.Id == model.EmployeeId);
             string action = "";
             string recipientEmail = "efeyzyum@gmail.com";
@@ -86,7 +91,6 @@ namespace humanResourceProject.API.Controllers
                 await _mailService.SendEmailAsync(user, recipientEmail, mailToName, action, subject, body);
                 //_mailService.SendApproveMail(user, action, $"Sayın {user.FirstName} {user.LastName} İznin maalesef reddedildi");
             }
-
 
             return Ok(await _leaveWriteService.UpdateLeave(model));
         }

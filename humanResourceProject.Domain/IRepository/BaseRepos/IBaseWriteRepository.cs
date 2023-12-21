@@ -1,4 +1,4 @@
-﻿using humanResourceProject.Domain.Entities.Abstract;
+using humanResourceProject.Domain.Entities.Abstract;
 
 namespace humanResourceProject.Domain.IRepository.BaseRepos
 {
@@ -10,6 +10,7 @@ namespace humanResourceProject.Domain.IRepository.BaseRepos
         Task<int> SaveChangesAsync();
 
         void DetachEntity(T entity);
+
 
     }
 }

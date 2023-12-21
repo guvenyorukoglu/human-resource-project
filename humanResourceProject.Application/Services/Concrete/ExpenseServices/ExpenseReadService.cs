@@ -31,7 +31,7 @@ namespace humanResourceProject.Application.Services.Concrete.ExpenseServices
                                                   EmployeeSurname = x.Employee.LastName,
                                                   Status = x.ExpenseStatus
                                               },
-                                              where: x => x.Status != Status.Deleted || x.Status != Status.Inactive,
+                                              where: x => x.Status != Status.Deleted && x.Status != Status.Inactive,
                                               orderBy: x => x.OrderByDescending(x => x.CreateDate),
                                               include: x => x.Include(x => x.Employee));
             return expenses;
@@ -55,7 +55,7 @@ namespace humanResourceProject.Application.Services.Concrete.ExpenseServices
                                                   EmployeeSurname = x.Employee.LastName,
                                                   Status = x.ExpenseStatus
                                               },
-                                              where: x => (x.Status != Status.Deleted || x.Status != Status.Inactive) && x.Employee.DepartmentId == id,
+                                              where: x => (x.Status != Status.Deleted && x.Status != Status.Inactive) && x.Employee.DepartmentId == id,
                                               orderBy: x => x.OrderByDescending(x => x.CreateDate),
                                               include: x => x.Include(x => x.Employee));
             return expenses;
@@ -72,7 +72,7 @@ namespace humanResourceProject.Application.Services.Concrete.ExpenseServices
                                                   EmployeeSurname = x.Employee.LastName,
                                                   Status = x.ExpenseStatus
                                               },
-                                              where: x => (x.Status != Status.Deleted || x.Status != Status.Inactive) && x.EmployeeId == id,
+                                              where: x => (x.Status != Status.Deleted && x.Status != Status.Inactive) && x.EmployeeId == id,
                                               orderBy: x => x.OrderByDescending(x => x.CreateDate),
                                               include: x => x.Include(x => x.Employee));
             return expenses;

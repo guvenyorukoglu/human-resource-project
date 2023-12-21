@@ -9,7 +9,7 @@ namespace humanResourceProject.Application.Services.Concrete.MailServices
         public async Task SendEmailAsync(AppUser user, string recipientEmail, string mailToName, string action, string subject, string body)
         {
 
-            var confirmationLink = $"<a href ='{action}'></a>";
+            var confirmationLink = action;
 
             MimeMessage mimeMessage = new MimeMessage();
             MailboxAddress mailboxFrom = new MailboxAddress("Monitorease", "monitorease@gmail.com");
@@ -19,7 +19,7 @@ namespace humanResourceProject.Application.Services.Concrete.MailServices
             mimeMessage.To.Add(mailboxTo);
 
             var bodybuilder = new BodyBuilder();
-            bodybuilder.HtmlBody = $"{body} + {confirmationLink}";
+            bodybuilder.HtmlBody = $"{body} {confirmationLink}";
             mimeMessage.Body = bodybuilder.ToMessageBody();
 
             mimeMessage.Subject = subject;
