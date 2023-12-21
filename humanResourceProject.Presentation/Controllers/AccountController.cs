@@ -17,7 +17,7 @@ namespace humanResourceProject.Presentation.Controllers
     {
         private readonly HttpClient _httpClient;
         private readonly IConfiguration _configuration;
-        List<JobVM> jobs = new List<JobVM>();
+        List<JobVM> jobs;
 
         public AccountController(IConfiguration configuration)
         {
@@ -25,6 +25,7 @@ namespace humanResourceProject.Presentation.Controllers
             _httpClient = new HttpClient();
             //_httpClient.BaseAddress = new Uri("https://monitoreaseapi.azurewebsites.net"); // Azure
             _httpClient.BaseAddress = new Uri("https://localhost:7255/"); // Local
+            jobs = new List<JobVM>();
         }
         [HttpGet]
         [AllowAnonymous]
