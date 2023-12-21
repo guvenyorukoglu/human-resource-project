@@ -1,6 +1,10 @@
-﻿using humanResourceProject.Application.Services.Abstract.IExpenseServices;
+﻿using humanResourceProject.Application.Services.Abstract.IAppUserServices;
+using humanResourceProject.Application.Services.Abstract.IExpenseServices;
+using humanResourceProject.Application.Services.Abstract.IMailServices;
+using humanResourceProject.Domain.Entities.Concrete;
 using humanResourceProject.Models.DTOs;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.OpenApi.Extensions;
 
 namespace humanResourceProject.API.Controllers
 {
@@ -10,11 +14,15 @@ namespace humanResourceProject.API.Controllers
     {
         private readonly IExpenseReadService _expenseReadService;
         private readonly IExpenseWriteService _expenseWriteService;
+        private readonly IAppUserReadService _appUserReadService;
+        private readonly IMailService _mailService;
 
-        public ExpenseController(IExpenseReadService expenseReadService, IExpenseWriteService expenseWriteService)
+        public ExpenseController(IExpenseReadService expenseReadService, IExpenseWriteService expenseWriteService, IAppUserReadService appUserReadService, IMailService mailService)
         {
             _expenseReadService = expenseReadService;
             _expenseWriteService = expenseWriteService;
+            _appUserReadService = appUserReadService;
+            _mailService = mailService;
         }
 
         [HttpGet]
@@ -34,6 +42,13 @@ namespace humanResourceProject.API.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateExpense([FromBody] ExpenseDTO model)
         {
+            AppUser manager = await _appUserReadService.GetSingleDefault(x => x.Id == model.Employee.ManagerId);
+            string recipientEmail = manager.Email;
+            string mailToName = $"{manager.FirstName} {manager.LastName}";
+            string action = "";
+            string subject = "Harcama Talebi!";
+            string body = $"Sayın {manager.FirstName} {manager.LastName}, {model.CreateDate.ToShortDateString()} tarihli {model.AmountOfExpense} {model.Currency.GetDisplayName()} harcama talebi yapılmıştır. Uygulamaya giriş yapıp onaylamanızı rica ederiz.";
+            await _mailService.SendEmailAsync(manager, recipientEmail, mailToName, action, subject, body);
             return Ok(await _expenseWriteService.InsertExpense(model));
         }
 

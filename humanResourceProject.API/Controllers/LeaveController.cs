@@ -50,6 +50,13 @@ namespace humanResourceProject.API.Controllers
         [Route("CreateLeave")]
         public async Task<IActionResult> CreateLeave([FromBody] LeaveDTO model)
         {
+            AppUser manager = await _appUserReadService.GetSingleDefault(x => x.Id == model.ManagerId);
+            string recipientEmail = manager.Email;
+            string mailToName = $"{manager.FirstName} {manager.LastName}";
+            string action = "";
+            string subject = "İzin Talebi!";
+            string body = $"Sayın {manager.FirstName} {manager.LastName}, {model.CreateDate.ToShortDateString()} tarihli {model.DaysOfLeave} gün izin talebi yapılmıştır. Uygulamaya giriş yapıp onaylamanızı rica ederiz.";
+            await _mailService.SendEmailAsync(manager, recipientEmail, mailToName, action, subject, body);
             return Ok(await _leaveWriteService.InsertLeave(model));
         }
 

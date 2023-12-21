@@ -17,6 +17,9 @@ namespace humanResourceProject.Models.DTOs
         public decimal AmountOfExpense { get; set; }
         public DateTime? UpdateDate { get; set; }
         public Status Status { get; set; }
+        public AppUser Employee { get; set; }
+        public DateTime CreateDate { get; set; }
+        public Currency Currency { get; set; }
 
     }
 }

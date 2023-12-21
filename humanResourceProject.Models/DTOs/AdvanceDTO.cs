@@ -1,6 +1,7 @@
 ﻿using humanResourceProject.Domain.Enum;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel;
+using humanResourceProject.Domain.Entities.Concrete;
 
 namespace humanResourceProject.Models.DTOs
 {
@@ -31,5 +32,8 @@ namespace humanResourceProject.Models.DTOs
         [DisplayName("Açıklama*")]
         [StringLength(500, ErrorMessage = "Açıklama en fazla 500 en az 5 karakter olmalıdır.", MinimumLength = 5)]
         public string Explanation { get; set; }
+        public AppUser Employee { get; set; }
+        public DateTime CreateDate { get; set; }
+        public Currency Currency { get; set; }
     }
 }

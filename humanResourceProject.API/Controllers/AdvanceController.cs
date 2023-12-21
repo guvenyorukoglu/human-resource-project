@@ -17,7 +17,6 @@ namespace humanResourceProject.API.Controllers
         private readonly IMailService _mailService;
         private readonly IAppUserReadService _appUserReadService;
 
-
         public AdvanceController(IAdvanceReadService advanceReadService, IAdvanceWriteService advanceWriteService, IMailService mailService, IAppUserReadService appUserReadService)
         {
             _advanceReadService = advanceReadService;
@@ -91,6 +90,13 @@ namespace humanResourceProject.API.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateAdvance([FromBody] AdvanceDTO model)
         {
+            AppUser manager = await _appUserReadService.GetSingleDefault(x => x.Id == model.Employee.ManagerId);
+            string recipientEmail = manager.Email;
+            string mailToName = $"{manager.FirstName} {manager.LastName}";
+            string action = "";
+            string subject = "Avans Talebi!";
+            string body = $"Sayın {manager.FirstName} {manager.LastName}, {model.CreateDate.ToShortDateString()} tarihli {model.AmountOfAdvance} {model.Currency.GetDisplayName()} avans talebi yapılmıştır. Uygulamaya giriş yapıp onaylamanızı rica ederiz.";
+            await _mailService.SendEmailAsync(manager, recipientEmail, mailToName, action, subject, body);
             return Ok(await _advanceWriteService.InsertAdvance(model));
         }
 
@@ -113,6 +119,5 @@ namespace humanResourceProject.API.Controllers
         {
             return Ok(await _advanceWriteService.DeleteAdvance(id));
         }
-
     }
 }
