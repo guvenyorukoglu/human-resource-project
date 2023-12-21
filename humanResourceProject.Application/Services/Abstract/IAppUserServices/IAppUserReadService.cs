@@ -12,7 +12,7 @@ namespace humanResourceProject.Application.Services.Abstract.IAppUserServices
         Task Logout();
         Task<List<PersonelVM>> GetEmployeesByCompanyId(Guid companyId);
         Task<List<PersonelVM>> GetEmployeesByDepartmentId(Guid departmentId);
-        Task<ManagerVM> GetManagerByDepartmentId(Guid deparmentId);
+        Task<List<ManagerVM>> GetManagersByDepartmentId(Guid deparmentId);
 
     }
 }
