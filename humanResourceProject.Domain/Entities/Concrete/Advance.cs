@@ -10,7 +10,7 @@ namespace humanResourceProject.Domain.Entities.Concrete
         public string? Explanation { get; set; }
         public AdvanceType AdvanceType { get; set; }
         public DateTime ExpiryDate { get; set; }
-        public Currency Currency { get; set; } = Currency.TRY;
+        public Currency Currency { get; set; }
         public RequestStatus AdvanceStatus { get; set; } = RequestStatus.Pending;
 
         public AppUser Employee { get; set; }

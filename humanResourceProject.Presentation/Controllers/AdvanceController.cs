@@ -1,5 +1,6 @@
 ﻿using humanResourceProject.Models.DTOs;
 using humanResourceProject.Models.VMs;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Security.Claims;
@@ -7,6 +8,7 @@ using System.Text;
 
 namespace humanResourceProject.Presentation.Controllers
 {
+    [Authorize]
     public class AdvanceController : Controller
     {
         private readonly HttpClient _httpClient;
@@ -18,11 +20,7 @@ namespace humanResourceProject.Presentation.Controllers
             _httpClient.BaseAddress = new Uri("https://localhost:7255/"); // Local
         }
 
-        public IActionResult Index()
-        {
-            return View();
-        }
-
+        [Authorize(Roles = "DepartmentManager,Personel")]
         public async Task<IActionResult> MyAdvances()
         {
             Guid employeeId = Guid.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value);
@@ -38,7 +36,7 @@ namespace humanResourceProject.Presentation.Controllers
             return View();
         }
 
-
+        [Authorize(Roles = "DepartmentManager,CompanyManager")]
         public async Task<IActionResult> EmployeesAdvances()
         {
             if (User.IsInRole("DepartmentManager"))
@@ -73,7 +71,10 @@ namespace humanResourceProject.Presentation.Controllers
         [HttpGet]
         public IActionResult CreateAdvance()
         {
-            return View(new AdvanceDTO());
+            return View(new AdvanceDTO()
+            {
+                EmployeeId = Guid.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value)
+            });
         }
 
         [HttpPost]
@@ -85,7 +86,7 @@ namespace humanResourceProject.Presentation.Controllers
             var response = await _httpClient.PostAsync($"api/Advance", content);
             if (response.IsSuccessStatusCode)
             {
-                return RedirectToAction("Advances");
+                return RedirectToAction(nameof(MyAdvances));
             }
             else
             {
@@ -101,7 +102,7 @@ namespace humanResourceProject.Presentation.Controllers
 
             if (response.IsSuccessStatusCode)
             {
-                return RedirectToAction("Advances");
+                return RedirectToAction(nameof(MyAdvances));
             }
 
             return View("Error");
@@ -110,20 +111,23 @@ namespace humanResourceProject.Presentation.Controllers
         [HttpGet]
         public async Task<IActionResult> UpdateAdvance(Guid id)
         {
-            var response = await _httpClient.GetAsync($"api/Advance/{id}");
+            var response = await _httpClient.GetAsync($"api/Advance/GetUpdateAdvanceDTO/{id}");
             if (response.IsSuccessStatusCode)
             {
                 var content = await response.Content.ReadAsStringAsync();
-                var advance = JsonConvert.DeserializeObject<AdvancePersonnelVM>(content);
-                return View(advance);
+                var updateAdvanceDTO = JsonConvert.DeserializeObject<UpdateAdvanceDTO>(content);
+                return View(updateAdvanceDTO);
 
             }
             return View("Error");
         }
 
         [HttpPost]
-        public async Task<IActionResult> UpdateAdvance(AdvancePersonnelVM model)
+        public async Task<IActionResult> UpdateAdvance(UpdateAdvanceDTO model)
         {
+            if (!ModelState.IsValid)
+                return View(model);
+            
             var json = JsonConvert.SerializeObject(model);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
 
@@ -131,7 +135,7 @@ namespace humanResourceProject.Presentation.Controllers
 
             if (response.IsSuccessStatusCode)
             {
-                return RedirectToAction("Advances");
+                return RedirectToAction(nameof(MyAdvances));
             }
 
             ModelState.AddModelError(response.StatusCode.ToString(), "Bir hata oluştu.");
@@ -140,21 +144,8 @@ namespace humanResourceProject.Presentation.Controllers
 
 
         //ADVANCE REQUESTS & CONTROLS
-        public async Task<IActionResult> AdvanceRequests()
-        {
-            var response = await _httpClient.GetAsync($"api/Leave/GetAllAdvances");
-            if (response.IsSuccessStatusCode)
-            {
-                var cont = await response.Content.ReadAsStringAsync();
-                var leaveRequests = JsonConvert.DeserializeObject<List<PersonelVM>>(cont);
-                return View(leaveRequests);
-
-            }
-            return View();
-        }
-
-
-
+        
+        [Authorize(Roles = "DepartmentManager,CompanyManager")]
         [HttpPost]
         public async Task<IActionResult> ApproveAdvance(AdvanceDTO model)
         {
@@ -172,6 +163,7 @@ namespace humanResourceProject.Presentation.Controllers
             return View(model);
         }
 
+        [Authorize(Roles = "DepartmentManager,CompanyManager")]
         [HttpPost]
         public async Task<IActionResult> RejectAdvance(AdvanceDTO model)
         {

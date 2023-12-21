@@ -32,5 +32,8 @@ namespace humanResourceProject.Models.DTOs
         [DisplayName("Açıklama*")]
         [StringLength(500, ErrorMessage = "Açıklama en fazla 500 en az 5 karakter olmalıdır.", MinimumLength = 5)]
         public string Explanation { get; set; }
+        [Required(ErrorMessage = "Para birimi alanı boş geçilemez!")]
+        [DisplayName("Para Birimi*")]
+        public Currency Currency { get; set; }
     }
 }
