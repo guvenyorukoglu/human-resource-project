@@ -1,0 +1,106 @@
+﻿@using humanResourceProject.Models.VMs;
+@model List<LeaveVM>
+
+@{
+    ViewData["Title"] = "EmployeesLeaves";
+}
+
+<head>
+
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.css" />
+
+    <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.js"></script>
+    <style>
+        .panel {
+            height: 120vh;
+        }
+
+        a {
+            text-decoration: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="row">
+        @Html.Partial("_PanelPartial")
+
+        <div class="aside container mt-5 col-md-9 col-sm-9">
+
+            <div class="pagination-container">
+
+                <script>
+                    $(document).ready(function () {
+                        $('#leaverequests').DataTable();
+                    });
+
+                </script>
+
+                <table id="leaverequests"
+                       class="display">
+                    <thead>
+                        <tr>
+                            <th style="width: 7%">Ad</th>
+                            <th style="width: 7%">Soyad</th>
+                            <th style="width: 10%">İzin Günü</th>
+                            <th style="width: 7%">İzin Başlangıç Tarihi</th>
+                            <th style="width: 7%">İzin Bitiş Tarih</th>
+                            <th style="width: 13%">İzin Türü</th>
+                            <th style="width: 21%">Açıklama</th>
+                            <th style="width: 8%">Statü</th>
+                            <th style="width: 15%">İşlemler</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model != null)
+                        {
+
+                            foreach (var item in Model)
+                            {
+                                if (item != null)
+                                {
+                                    var displayLeaveType = typeof(LeaveType).GetMember(item.LeaveType.ToString())[0].GetCustomAttribute<DisplayAttribute>();
+                                    var displayNameLeaveType = displayLeaveType?.GetName() ?? item.LeaveType.ToString();
+
+                                    var displayLeaveStatus = typeof(RequestStatus).GetMember(item.LeaveStatus.ToString())[0].GetCustomAttribute<DisplayAttribute>();
+                                    var displayNameLeaveStatus = displayLeaveStatus?.GetName() ?? item.LeaveStatus.ToString();
+                                    <tr>
+                                        <td>@item.EmployeeName</td>
+                                        <td>@item.EmployeeSurname</td>
+                                        <td>@item.DaysOfLeave</td>
+                                        <td>@item.StartDate.ToShortDateString()</td>
+                                        <td>@item.EndDate.ToShortDateString()</td>
+                                        <td>@displayNameLeaveType</td>
+                                        <td>@item.Explanation</td>
+                                        <td>@displayNameLeaveStatus</td>
+                                        <td>
+                                            @if (item.LeaveStatus == RequestStatus.Pending)
+                                            {
+                                                <a asp-action="ApproveLeave"
+                                                   asp-controller="MyLeave"
+                                                   asp-route-id="@item.Id" onclick="return confirm('Onaylamak istediğinize emin misiniz?')">
+                                                    <button class="btn btn-secondary btn-sm d-inline-flex bg-primary gap-1 align-items-center">
+                                                        <i class="fa fa-check"></i><span>Onayla</span>
+                                                    </button>
+                                                </a>
+
+                                                <a asp-action="RejectLeave"
+                                                   asp-controller="MyAdvance"
+                                                   asp-route-id="@item.Id" onclick="return confirm('Reddetmek istediğinize emin misiniz?')">
+                                                    <button class="btn btn-danger btn-sm d-inline-flex gap-1 align-items-center">
+                                                        <i class="fa fa-x"></i><span>Reddet</span>
+                                                    </button>
+                                                </a>
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</body>
