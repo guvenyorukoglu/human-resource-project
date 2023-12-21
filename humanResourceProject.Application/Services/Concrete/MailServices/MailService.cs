@@ -6,10 +6,10 @@ namespace humanResourceProject.Application.Services.Concrete.MailServices
 {
     public class MailService : IMailService
     {
-        public async Task SendEmailAsync(AppUser user, string mailToName, string action, string recipientEmail, string subject, string body)
+        public async Task SendEmailAsync(AppUser user, string recipientEmail, string mailToName, string action, string subject, string body)
         {
 
-            var confirmationLink = $"<a href ='{action}'>";
+            var confirmationLink = $"<a href ='{action}'></a>";
 
             MimeMessage mimeMessage = new MimeMessage();
             MailboxAddress mailboxFrom = new MailboxAddress("Monitorease", "monitorease@gmail.com");
