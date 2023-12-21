@@ -1,4 +1,5 @@
-﻿@model List<LeaveVM>
+﻿@using humanResourceProject.Models.VMs;
+@model List<LeaveVM>
 
 @{
     ViewData["Title"] = "EmployeesLeaves";
@@ -88,7 +89,7 @@
                                                             </div>
                                                             <div class="modal-footer">
                                                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>
-                                                                <a asp-action="ApproveLeave"
+                                                <a asp-action="ApproveLeave"
                                                                    asp-controller="Leave"
                                                                    asp-route-id="@item.Id">
                                                                     <button type="button" class="btn btn-primary">Onaylıyorum</button>
@@ -121,12 +122,14 @@
                                                 </div>
 
                                                 <button type="button" class="btn btn-secondary btn-sm d-inline-flex bg-primary gap-1 align-items-center" data-bs-toggle="modal" data-bs-target="#approveLeaveModal">
-                                                    <i class="fa fa-check"></i><span>Onayla</span>
-                                                </button>
+                                                        <i class="fa fa-check"></i><span>Onayla</span>
+                                                    </button>
+                                                </a>
 
                                                 <button class="btn btn-danger btn-sm d-inline-flex gap-1 align-items-center" data-bs-toggle="modal" data-bs-target="#rejectLeaveModal">
-                                                    <i class="fa fa-x"></i><span>Reddet</span>
-                                                </button>
+                                                        <i class="fa fa-x"></i><span>Reddet</span>
+                                                    </button>
+                                                </a>
                                             }
                                         </td>
                                     </tr>
@@ -138,4 +141,5 @@
             </div>
         </div>
     </div>
+
 </body>
