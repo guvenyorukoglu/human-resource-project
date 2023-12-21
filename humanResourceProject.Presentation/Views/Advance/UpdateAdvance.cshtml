@@ -13,9 +13,9 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
             <div class="form-group">
-                <label asp-for="AdvanceAmount" class="control-label"></label>
-                <input asp-for="AdvanceAmount" class="form-control" />
-                <span asp-validation-for="AdvanceAmount" class="text-danger"></span>
+                <label asp-for="AmountOfAdvance" class="control-label"></label>
+                <input asp-for="AmountOfAdvance" class="form-control" />
+                <span asp-validation-for="AmountOfAdvance" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="AdvanceType" class="control-label"></label>
@@ -28,9 +28,9 @@
                 <span asp-validation-for="ExpiryDate" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Description" class="control-label"></label>
-                <textarea asp-for="Description" class="form-control"></textarea>
-                <span asp-validation-for="Description" class="text-danger"></span>
+                <label asp-for="Explanation" class="control-label"></label>
+                <textarea asp-for="Explanation" class="form-control"></textarea>
+                <span asp-validation-for="Explanation" class="text-danger"></span>
             </div>
             @Html.HiddenFor(model => model.EmployeeId)
             @Html.HiddenFor(model => model.Status)

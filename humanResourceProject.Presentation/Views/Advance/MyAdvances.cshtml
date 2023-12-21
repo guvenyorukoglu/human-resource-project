@@ -1,0 +1,112 @@
+﻿@using humanResourceProject.Models.VMs;
+
+@{
+    ViewData["Title"] = "MyAdvances";
+    Layout = "~/Views/Shared/_HRLayout.cshtml";
+}
+
+@model List<AdvancePersonnelVM>
+
+<head>
+
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.css" />
+
+    <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.js"></script>
+    <style>
+        .panel {
+            height: 120vh;
+        }
+
+        a {
+            text-decoration: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="row">
+        @Html.Partial("_PanelPartial")
+
+
+        <div class="aside container mt-5 col-md-9 col-sm-9">
+            @* <div class="search-bar" style="display: flex">
+            <input type="text" id="searchInput" placeholder="Arama Yap" /><i class="fas fa-search mt-2"></i>
+            </div>
+            <hr /> *@
+            @if (Model != null)
+            {
+                <a asp-action="CreateAdvance" asp-controller="Personnel">
+                    <button class="custom-button custom-button--create-entity">Avans Ekle</button>
+                </a>
+            }
+
+            <div class="pagination-container">
+
+                <script>
+                    $(document).ready(function () {
+                        $('#advances').DataTable();
+                    });
+
+                </script>
+
+
+                <table id="advances"
+                       class="display">
+                    <thead>
+                        <tr>
+                            <th style="width: 7%">Talep Tarihi</th>
+                            <th style="width: 7%">Son İstenen Tarih</th>
+                            <th style="width: 10%">Avans Miktarı</th>
+                            <th style="width: 5%">Para Birimi</th>
+                            <th style="width: 8%">Avans Tipi</th>
+                            <th style="width: 30%">Açıklama</th>
+                            <th style="width: 10%">Statü</th>
+                            <th style="width: 15%">İşlemler</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model != null)
+                        {
+                            foreach (var item in Model)
+                            {
+                                var displayAdvanceType = typeof(AdvanceType).GetMember(item.AdvanceType.ToString())[0].GetCustomAttribute<DisplayAttribute>();
+                                var displayNameAdvanceType = displayAdvanceType?.GetName() ?? item.AdvanceType.ToString();
+
+                                var displayAdvanceStatus = typeof(RequestStatus).GetMember(item.AdvanceStatus.ToString())[0].GetCustomAttribute<DisplayAttribute>();
+                                var displayNameAdvanceStatus = displayAdvanceStatus?.GetName() ?? item.AdvanceStatus.ToString();
+                                <tr>
+                                    <td>@item.CreateDate.ToShortDateString()</td>
+                                    <td>@item.ExpiryDate.ToShortDateString()</td>
+                                    <td>@item.AmountOfAdvance</td>
+                                    <td>@item.Currency</td>
+                                    <td>@displayNameAdvanceType</td>
+                                    <td>@item.Explanation</td>
+                                    <td>@displayNameAdvanceStatus</td>
+                                    <td>
+                                        @if(item.AdvanceStatus == RequestStatus.Pending)
+                                        {
+                                        <a asp-action="EditAdvance"
+                                           asp-controller="Personnel"
+                                           asp-route-id="@item.Id">
+                                            <button class="btn btn-secondary btn-sm d-inline-flex bg-primary gap-1 align-items-center">
+                                                <i class="fa fa-pen"></i><span>Güncelle</span>
+                                            </button>
+                                        </a>
+                                        <a asp-action="DeleteAdvance"
+                                           asp-controller="Personnel"
+                                           asp-route-id="@item.Id">
+                                            <button class="btn btn-danger btn-sm d-inline-flex gap-1 align-items-center">
+                                                <i class="fa fa-trash"></i><span>Kaldır</span>
+                                            </button>
+                                        </a>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>

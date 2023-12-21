@@ -214,7 +214,7 @@ namespace humanResourceProject.Presentation.Controllers
         [AllowAnonymous]
         public IActionResult Login(string returnUrl)
         {
-            returnUrl = returnUrl is null ? "/Home/Index" : returnUrl;
+            returnUrl = returnUrl is null ? "/Employee/Home" : returnUrl;
             return View(new LoginDTO() { ReturnUrl = returnUrl });
         }
 

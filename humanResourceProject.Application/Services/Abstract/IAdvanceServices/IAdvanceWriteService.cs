@@ -8,7 +8,7 @@ namespace humanResourceProject.Application.Services.Abstract.IAdvanceServices
     {
         Task<IdentityResult> InsertAdvance(AdvanceDTO model);
 
-        Task<IdentityResult> UpdateAdvance(AdvanceDTO model);
+        Task<IdentityResult> UpdateAdvance(UpdateAdvanceDTO model);
 
         Task<IdentityResult> DeleteAdvance(Guid id);
     }

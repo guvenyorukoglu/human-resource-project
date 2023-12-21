@@ -16,19 +16,29 @@
                 <li>
                     <a asp-action="Home" asp-controller="Employee"><i class="fa-solid fa-calendar-days"></i>Dashboard</a>
                 </li>
-                @if(User.IsInRole("CompanyManager") || User.IsInRole("DepartmentManager"))
+                <li>
+                    <a asp-action="MyLeaves" asp-controller="Leave"><i class="fa fa-users"></i>İzin Taleplerim</a>
+                </li>
+                <li>
+                    <a asp-action="MyAdvances" asp-controller="Advance"><i class="fa fa-users"></i>Avans Taleplerim</a>
+                </li>
+                <li>
+                    <a asp-action="MyExpenses" asp-controller="Expense"><i class="fa fa-users"></i>Masraf Taleplerim</a>
+                </li>
+
+                @if (User.IsInRole("CompanyManager") || User.IsInRole("DepartmentManager"))
                 {
                     <li>
                         <a asp-action="Employees" asp-controller="Employee"><i class="fa fa-users"></i>Personeller</a>
                     </li>
                     <li>
-                        <a asp-action="LeaveRequest" asp-controller="Employee"><i class="fa fa-users"></i>Personeller</a>
+                        <a asp-action="Leaves" asp-controller="Leave"><i class="fa fa-users"></i>Personel İzin Talepleri</a>
                     </li>
                     <li>
-                        <a asp-action="AdvanceRequest" asp-controller="Employee"><i class="fa fa-users"></i>Personeller</a>
+                        <a asp-action="EmployeesAdvances" asp-controller="Advance"><i class="fa fa-users"></i>Personel Avans Talepleri</a>
                     </li>
                     <li>
-                        <a asp-action="ExpenseRequest" asp-controller="Employee"><i class="fa fa-users"></i>Personeller</a>
+                        <a asp-action="Expenses" asp-controller="Expense"><i class="fa fa-users"></i>Personel Masraf Talepleri</a>
                     </li>
                 }
 

@@ -18,7 +18,7 @@ namespace humanResourceProject.Models.VMs
         public Guid EmployeeId { get; set; }
         [Required(ErrorMessage = "Miktar alanı boş geçilemez!")]
         [DisplayName("Avans Miktarı*")]
-        public decimal AdvanceAmount { get; set; }
+        public decimal AmountOfAdvance { get; set; }
         [Required(ErrorMessage = "Avans tarihi boş geçilemez!")]
         [DisplayName("Son İstenen Tarihi*")]
         public DateTime ExpiryDate { get; set; }
@@ -29,7 +29,9 @@ namespace humanResourceProject.Models.VMs
         [Required(ErrorMessage = "Açıklama alanı boş geçilemez!")]
         [DisplayName("Açıklama*")]
         [StringLength(500, ErrorMessage = "Açıklama en fazla 500 en az 5 karakter olmalıdır.", MinimumLength = 5)]
-        public string Description { get; set; }
+        public string Explanation { get; set; }
         public RequestStatus AdvanceStatus { get; set; }
+        public DateTime CreateDate { get; set; }
+        public Currency Currency { get; set; }
     }
 }

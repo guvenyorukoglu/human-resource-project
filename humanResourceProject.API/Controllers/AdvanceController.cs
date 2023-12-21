@@ -1,10 +1,10 @@
-﻿using AutoMapper;
-using humanResourceProject.Application.Services.Abstract.IAdvanceServices;
+﻿using humanResourceProject.Application.Services.Abstract.IAdvanceServices;
 using humanResourceProject.Application.Services.Abstract.IAppUserServices;
 using humanResourceProject.Application.Services.Abstract.IMailServices;
 using humanResourceProject.Domain.Entities.Concrete;
 using humanResourceProject.Models.DTOs;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.OpenApi.Extensions;
 
 namespace humanResourceProject.API.Controllers
 {
@@ -16,14 +16,12 @@ namespace humanResourceProject.API.Controllers
         private readonly IAdvanceWriteService _advanceWriteService;
         private readonly IMailService _mailService;
         private readonly IAppUserReadService _appUserReadService;
-        private readonly Mapper _mapper;
 
 
-        public AdvanceController(IAdvanceReadService advanceReadService, IAdvanceWriteService advanceWriteService, Mapper mapper, IMailService mailService, IAppUserReadService appUserReadService = null)
+        public AdvanceController(IAdvanceReadService advanceReadService, IAdvanceWriteService advanceWriteService, IMailService mailService, IAppUserReadService appUserReadService)
         {
             _advanceReadService = advanceReadService;
             _advanceWriteService = advanceWriteService;
-            _mapper = mapper;
             _mailService = mailService;
             _appUserReadService = appUserReadService;
         }
@@ -37,20 +35,25 @@ namespace humanResourceProject.API.Controllers
 
         [HttpPut]
         [Route("UpdateStatus")]
-        public async Task<IActionResult> UpdateStatus([FromBody] AdvanceDTO model)
+        public async Task<IActionResult> UpdateStatus([FromBody] UpdateAdvanceDTO model)
         {
-            AppUser user = await _appUserReadService.GetSingleDefault(x => x.Id == model.EmployeeId);
-            string action = "";
-            string recipientEmail = "efeyzyum@gmail.com";
-            string mailToName = "Admin";
-            if (model.AdvanceStatus == Domain.Enum.RequestStatus.Approved)
+            var result = await _advanceWriteService.UpdateAdvance(model);
+            if (!result.Succeeded)
             {
-                model.AdvanceStatus = Domain.Enum.RequestStatus.Approved;
+                return BadRequest(result.Errors);
+            }
+
+            Advance advance = await _advanceReadService.GetSingleDefault(x => x.Id == model.Id);
+            AppUser user = await _appUserReadService.GetSingleDefault(x => x.Id == advance.EmployeeId);
+            string action = "";
+            string recipientEmail = user.Email;
+            string mailToName = $"{user.FirstName} {user.LastName}";
+            if (advance.AdvanceStatus == Domain.Enum.RequestStatus.Approved)
+            {
                 string subject = "Avans Onayı!";
-                string body = $"Sayın {user.FirstName} {user.LastName} Avans talebiniz onaylandı. Güzel günlerde kullan";
+                string body = $"Sayın {user.FirstName} {user.LastName}, {advance.CreateDate.ToShortDateString()} tarihli {advance.AmountOfAdvance} {advance.Currency.GetDisplayName()} avans talebiniz onaylannıştır. Güzel günlerde kullanınız.";
                 await _mailService.SendEmailAsync(user, recipientEmail, mailToName, action, subject, body);
                 //_mailService.SendApproveMail(user, action, $"Sayın {user.FirstName} {user.LastName} Avansın onaylandı. Güzel günlerde kullan");
-
             }
             else if (model.AdvanceStatus == Domain.Enum.RequestStatus.Rejected)
             {
@@ -61,8 +64,7 @@ namespace humanResourceProject.API.Controllers
                 //_mailService.SendApproveMail(user, action, $"Sayın {user.FirstName} {user.LastName} Avansın reddedildi");
             }
 
-
-            return Ok(await _advanceWriteService.UpdateAdvance(model));
+            return Ok();
         }
 
         [HttpGet]
@@ -79,21 +81,28 @@ namespace humanResourceProject.API.Controllers
             return Ok(await _advanceReadService.GetAdvancesByDepartmentId(id));
         }
 
+        [HttpGet]
+        [Route("GetAdvancesByCompanyId/{id}")]
+        public async Task<IActionResult> GetAdvancesByCompanyId(Guid id)
+        {
+            return Ok(await _advanceReadService.GetAdvancesByCompanyId(id));
+        }
+
         [HttpPost]
         public async Task<IActionResult> CreateAdvance([FromBody] AdvanceDTO model)
         {
             return Ok(await _advanceWriteService.InsertAdvance(model));
         }
 
-       [HttpGet]
-       [Route("GetUpdateAdvanceDTO/{id}")]
-       public async Task<IActionResult> GetUpdateAdvanceDTO(Guid id)
-       {
-           return Ok(await _advanceReadService.GetUpdateAdvanceDTO(id));
-       }
+        [HttpGet]
+        [Route("GetUpdateAdvanceDTO/{id}")]
+        public async Task<IActionResult> GetUpdateAdvanceDTO(Guid id)
+        {
+            return Ok(await _advanceReadService.GetUpdateAdvanceDTO(id));
+        }
 
         [HttpPut]
-        public async Task<IActionResult> UpdateAdvance([FromBody] AdvanceDTO model)
+        public async Task<IActionResult> UpdateAdvance([FromBody] UpdateAdvanceDTO model)
         {
             return Ok(await _advanceWriteService.UpdateAdvance(model));
         }
