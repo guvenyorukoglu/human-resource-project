@@ -101,18 +101,18 @@ namespace humanResourceProject.API.Controllers
         [Route("RegisterCompanyManager")]
         public async Task<IActionResult> RegisterCompanyManager([FromForm] CompanyManagerRegisterDTO model)
         {
-            var result = await _appUserWriteService.RegisterCompanyManager(model);
-            if (!result.Succeeded)
-                return BadRequest(result.Errors);
+                var result = await _appUserWriteService.RegisterCompanyManager(model);
+                if (!result.Succeeded)
+                    return BadRequest(result.Errors);
 
-            AppUser user = await _userManager.FindByEmailAsync(model.Email);
+                AppUser user = await _userManager.FindByEmailAsync(model.Email);
 
-            string action = Url.Action("SetStatusActive", "Account", new { id = user.Id }, Request.Scheme);
-            await _mailService.SendUserRegisteredEmail(user, action);
+                string action = Url.Action("SetStatusActive", "Account", new { id = user.Id }, Request.Scheme);
+                await _mailService.SendUserRegisteredEmail(user, action);
 
-            return Ok("Yeni şirket yöneticisi oluşturuldu.");
+                return Ok("Yeni şirket yöneticisi oluşturuldu.");
         }
-
+       
         [HttpGet]
         [Route("Logout")]
         public async Task Logout()

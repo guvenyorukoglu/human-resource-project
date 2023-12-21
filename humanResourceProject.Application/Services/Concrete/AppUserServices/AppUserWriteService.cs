@@ -61,6 +61,22 @@ namespace humanResourceProject.Application.Services.Concrete.AppUserServices
             }
             return result;
         }
+         public async Task<IdentityResult> RegisterPersonelManager(CreateEmployeeDTO model)
+        {
+            if (model == null)
+                return IdentityResult.Failed();
+
+            AppUser newUser = _mapper.Map<AppUser>(model);
+            newUser.UserName = newUser.Email;
+            IdentityResult result = await _userManager.CreateAsync(newUser, model.Password);
+            if (result.Succeeded)
+            {
+               
+                await _userManager.AddToRoleAsync(newUser, "PersonelManager");
+               
+            }
+            return result;
+        }
 
         public async Task<IdentityResult> RegisterCompanyManager(CompanyManagerRegisterDTO model)
         {

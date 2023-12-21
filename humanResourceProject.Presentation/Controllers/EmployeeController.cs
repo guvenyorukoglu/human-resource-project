@@ -174,12 +174,16 @@ namespace humanResourceProject.Presentation.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreatePersonelManager(UserRegisterDTO model)
+        public async Task<IActionResult> CreatePersonelManager(CreateEmployeeDTO model)
         {
+            //if (User.IsInRole("CompanyManager"))
+            //{
+            //    HttpResponseMessage message = await _httpClient.GetAsync($"api/AppUser/GetEmployeesByCompanyId"{model. })
+            //}
             var json = JsonConvert.SerializeObject(model);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-            var response = await _httpClient.PostAsync($"api/AppUser", content);
+            var response = await _httpClient.PostAsync($"api/AppUser/CreatePersonelManager", content);
             if (response.IsSuccessStatusCode)
             {
                 return RedirectToAction("Employees");
