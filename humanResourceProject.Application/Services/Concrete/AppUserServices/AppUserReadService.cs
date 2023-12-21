@@ -36,7 +36,7 @@ namespace humanResourceProject.Application.Services.Concrete.AppUserServices
                     Gender = x.Gender,
                     JobTitle = x.Job.Title
                 },
-                where: x => x.Department.CompanyId == companyId && (x.Status != Domain.Enum.Status.Inactive || x.Status != Domain.Enum.Status.Deleted),
+                where: x => x.Department.CompanyId == companyId && (x.Status != Domain.Enum.Status.Inactive && x.Status != Domain.Enum.Status.Deleted),
                 orderBy: x => x.OrderBy(x => x.FirstName),
                 include: x => x.Include(x => x.Job).Include(x => x.Department));
         }
@@ -55,9 +55,20 @@ namespace humanResourceProject.Application.Services.Concrete.AppUserServices
                     Gender = x.Gender,
                     JobTitle = x.Job.Title
                 },
-                where: x => x.DepartmentId == departmentId && (x.Status != Domain.Enum.Status.Inactive || x.Status != Domain.Enum.Status.Deleted),
+                where: x => x.DepartmentId == departmentId && (x.Status != Domain.Enum.Status.Inactive && x.Status != Domain.Enum.Status.Deleted),
                 orderBy: x => x.OrderBy(x => x.FirstName),
                 include: x => x.Include(x => x.Job));
+        }
+
+        public async Task<ManagerVM> GetManagerByDepartmentId(Guid deparmentId)
+        {
+            return await _readRepository.GetFilteredFirstOrDefault(
+                select: x => new ManagerVM()
+                {
+                    Id = x.Id,
+                    FullName = x.FirstName + " " + x.LastName
+                },
+                where: x => x.DepartmentId == deparmentId && (x.Status != Domain.Enum.Status.Inactive && x.Status != Domain.Enum.Status.Deleted));
         }
 
         public async Task<SignInResult> Login(LoginDTO model)

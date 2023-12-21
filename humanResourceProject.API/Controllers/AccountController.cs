@@ -8,7 +8,9 @@ using humanResourceProject.Models.DTOs;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json.Linq;
 using System.ComponentModel.DataAnnotations;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -74,7 +76,7 @@ namespace humanResourceProject.API.Controllers
                     companyId = department.CompanyId,
                     imagePath = appUser.ImagePath,
                     roles = await _userManager.GetRolesAsync(appUser)
-            });
+                });
             }
             else
             {
@@ -180,7 +182,7 @@ namespace humanResourceProject.API.Controllers
         //    return Ok(await _appUserWriteService.UpdateProfileImage(id));
         //}
 
-        [HttpPost]
+        [HttpGet]
         [AllowAnonymous]
         [Route("ForgotPassword")]
         public async Task<IActionResult> ForgotPassword([Required] string email)
@@ -190,8 +192,10 @@ namespace humanResourceProject.API.Controllers
                 return BadRequest("Kullanıcı bulunamadı.");
 
             var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+            var encodedToken = Encoding.UTF8.GetBytes(token);
+            var validToken = WebEncoders.Base64UrlEncode(encodedToken);
 
-            var resetLink = _configuration["HomePage"] + "/Account/ResetPassword?id=" + user.Id + "&token=" + token + "";
+            var resetLink = $"{_configuration["HomePage"]}/Account/ResetPassword?id={user.Id}&token={validToken}";
 
             await _mailService.SendForgotPasswordEmail(user, resetLink);
             return Ok($"Şifre sıfırlama linki {user.Email} adresine gönderildi! Linke tıklayıp şifrenizi sıfırlayabilirsiniz.");
@@ -223,7 +227,10 @@ namespace humanResourceProject.API.Controllers
             if (user == null)
                 return BadRequest("Kullanıcı bulunamadı.");
 
-            var result = await _userManager.ResetPasswordAsync(user, model.Token, model.Password);
+            var decodedToken = WebEncoders.Base64UrlDecode(model.Token);
+            var normalToken = Encoding.UTF8.GetString(decodedToken);
+
+            var result = await _userManager.ResetPasswordAsync(user, normalToken, model.Password);
             if (!result.Succeeded)
             {
                 foreach (var error in result.Errors)
@@ -232,7 +239,9 @@ namespace humanResourceProject.API.Controllers
                 }
                 return BadRequest(ModelState);
             }
-
+            user.Status = Domain.Enum.Status.Active;
+            user.EmailConfirmed = true;
+            await _appUserWriteService.Update(user);
             return Ok("Şifreniz başarıyla değiştirildi.");
 
 
