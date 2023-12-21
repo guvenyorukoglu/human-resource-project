@@ -62,10 +62,17 @@
             <div class="form-group mb-3">
                 <label asp-for="BloodGroup" class="control-label"></label>
                 <select asp-for="BloodGroup" class="form-control">
-                    @foreach (var bloodGroup in Enum.GetValues(typeof(BloodGroup)))
-                    {
-                        <option value="@bloodGroup">@bloodGroup</option>
+                    @{
+                        var enumType = typeof(BloodGroup);
+                        var enumValues = enumType.GetEnumValues();
+                        foreach (var enumValue in enumValues)
+                        {
+                            var displayAttribute = enumType.GetMember(enumValue.ToString())[0].GetCustomAttribute<DisplayAttribute>();
+                            var displayName = displayAttribute?.GetName() ?? enumValue.ToString();
+                            <option value="@enumValue">@displayName</option>
+                        }
                     }
+
                 </select>
                 <span asp-validation-for="BloodGroup" class="text-danger"></span>
             </div>
@@ -73,11 +80,11 @@
                 <label asp-for="Gender" class="control-label"></label>
                 <select asp-for="Gender" class="form-control">
                     @{
-                        var enumType = typeof(Gender);
-                        var enumValues = enumType.GetEnumValues();
-                        foreach (var enumValue in enumValues)
+                        var enumTypeGender = typeof(Gender);
+                        var enumValuesGender = enumTypeGender.GetEnumValues();
+                        foreach (var enumValue in enumValuesGender)
                         {
-                            var displayAttribute = enumType.GetMember(enumValue.ToString())[0].GetCustomAttribute<DisplayAttribute>();
+                            var displayAttribute = enumTypeGender.GetMember(enumValue.ToString())[0].GetCustomAttribute<DisplayAttribute>();
                             var displayName = displayAttribute?.GetName() ?? enumValue.ToString();
                             <option value="@enumValue">@displayName</option>
                         }

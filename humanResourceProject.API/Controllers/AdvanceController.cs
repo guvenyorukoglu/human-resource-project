@@ -90,6 +90,12 @@ namespace humanResourceProject.API.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateAdvance([FromBody] AdvanceDTO model)
         {
+            var result = await _advanceWriteService.InsertAdvance(model);
+            if (!result.Succeeded)
+            {
+                return BadRequest(result.Errors);
+            }
+
             AppUser employee = await _appUserReadService.GetSingleDefault(x => x.Id == model.EmployeeId);
             AppUser manager = await _appUserReadService.GetSingleDefault(x => x.Id == employee.ManagerId);
 
@@ -99,7 +105,7 @@ namespace humanResourceProject.API.Controllers
             string subject = "Avans Talebi!";
             string body = $"<p>Sayın {manager.FirstName} {manager.LastName},</p><p>{employee.FirstName} {employee.LastName} tarafından {model.CreateDate.ToShortDateString()} tarihinde {model.AmountOfAdvance} {model.Currency.GetDisplayName()} avans talebi yapılmıştır.</p><p>Uygulamaya giriş yapıp onaylamanızı rica ederiz.</p><br><hr><br><h3>Team Monitorease</h3>";
             await _mailService.SendEmailAsync(manager, recipientEmail, mailToName, action, subject, body);
-            return Ok(await _advanceWriteService.InsertAdvance(model));
+            return Ok(result);
         }
 
         [HttpGet]

@@ -16,16 +16,18 @@
                 <li>
                     <a asp-action="Home" asp-controller="Employee"><i class="fa-solid fa-calendar-days"></i>Dashboard</a>
                 </li>
-                <li>
-                    <a asp-action="MyLeaves" asp-controller="Leave"><i class="fa fa-users"></i>İzin Taleplerim</a>
-                </li>
-                <li>
-                    <a asp-action="MyAdvances" asp-controller="Advance"><i class="fa fa-users"></i>Avans Taleplerim</a>
-                </li>
-                <li>
-                    <a asp-action="MyExpenses" asp-controller="Expense"><i class="fa fa-users"></i>Masraf Taleplerim</a>
-                </li>
-
+                @if (User.IsInRole("Personel") || User.IsInRole("DepartmentManager"))
+                {
+                    <li>
+                        <a asp-action="MyLeaves" asp-controller="Leave"><i class="fa fa-users"></i>İzin Taleplerim</a>
+                    </li>
+                    <li>
+                        <a asp-action="MyAdvances" asp-controller="Advance"><i class="fa fa-users"></i>Avans Taleplerim</a>
+                    </li>
+                    <li>
+                        <a asp-action="MyExpenses" asp-controller="Expense"><i class="fa fa-users"></i>Masraf Taleplerim</a>
+                    </li>
+                }
                 @if (User.IsInRole("CompanyManager") || User.IsInRole("DepartmentManager"))
                 {
                     <li>

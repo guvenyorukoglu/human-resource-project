@@ -110,8 +110,8 @@ namespace humanResourceProject.API.Controllers
             string action = Url.Action("SetStatusActive", "Account", new { id = user.Id }, Request.Scheme);
             string mailToName = "Admin";
             string subject = "Yeni Kullanıcı Kayıt Oldu!";
-            string body = "<p>Merhaba Admin</p><p>Yeni kullanıcı uygulamaya kayıt olmuştur.</p><p>Kullanıcının statüsünü aktif yapmak için linke tıklayınız:</p><br><hr><br><h3>Team Monitorease</h3>";
-            string recipientEmail = "efeyzyum@gmail.com";
+            string body = $"<p>Merhaba Admin</p><p>Yeni kullanıcı uygulamaya kayıt olmuştur.</p><p>Kullanıcının statüsünü aktif yapmak için <a href ='{action}'>buraya</a> tıklayınız:</p><br><hr><br><h3>Team Monitorease</h3>";
+            string recipientEmail = "yorukoglu.guven@gmail.com";
             await _mailService.SendEmailAsync(user, recipientEmail, mailToName, action, subject, body);
             //await _mailService.SendUserRegisteredEmail(user, action);
 
@@ -155,7 +155,7 @@ namespace humanResourceProject.API.Controllers
                 string recipientEmail = user.Email;
                 string mailToName = $"{user.FirstName} {user.LastName}";
                 string subject = "Monitorease Hesabınızı Doğrulayınız!";
-                string body = "<p>Merhaba</p><p>Monitorease hesabınız başarılı bir şekilde oluşturulmuştur.</p><p>Hesabınızı doğrulamak için linke tıklayınız:</p><p>Bize her zaman monitorease@gmail.com adresinden ulaşabilirsiniz.</p><br><hr><br><h3>Team Monitorease</h3>";
+                string body = $"<p>Merhaba</p><p>Monitorease hesabınız başarılı bir şekilde oluşturulmuştur.</p><p>Hesabınızı doğrulamak için <a href ='{action}'>buraya</a> tıklayınız.</p><p>Bize her zaman monitorease@gmail.com adresinden ulaşabilirsiniz.</p><br><hr><br><h3>Team Monitorease</h3>";
                 await _mailService.SendEmailAsync(user, recipientEmail, mailToName, action, subject, body);
                 //await _mailService.SendAccountConfirmEmail(user, action);
 
