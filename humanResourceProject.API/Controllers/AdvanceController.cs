@@ -50,7 +50,7 @@ namespace humanResourceProject.API.Controllers
             if (advance.AdvanceStatus == Domain.Enum.RequestStatus.Approved)
             {
                 string subject = "Avans Onayı!";
-                string body = $"Sayın {user.FirstName} {user.LastName}, {advance.CreateDate.ToShortDateString()} tarihli {advance.AmountOfAdvance} {advance.Currency.GetDisplayName()} avans talebiniz onaylannıştır. Güzel günlerde kullanınız.";
+                string body = $"<p>Sayın {user.FirstName} {user.LastName},</p><p>{advance.CreateDate.ToShortDateString()} tarihli {advance.AmountOfAdvance} {advance.Currency.GetDisplayName()} avans talebiniz onaylannıştır.</p><p>Güzel günlerde kullanmanız dileğiyle.</p><br><hr><br><h3>Team Monitorease</h3>";
                 await _mailService.SendEmailAsync(user, recipientEmail, mailToName, action, subject, body);
                 //_mailService.SendApproveMail(user, action, $"Sayın {user.FirstName} {user.LastName} Avansın onaylandı. Güzel günlerde kullan");
             }
@@ -58,7 +58,7 @@ namespace humanResourceProject.API.Controllers
             {
                 model.AdvanceStatus = Domain.Enum.RequestStatus.Rejected;
                 string subject = "Avans Reddi!";
-                string body = $"Sayın {user.FirstName} {user.LastName} Avans talebiniz reddedildi.";
+                string body = $"<p>Sayın {user.FirstName} {user.LastName},</p><p>{advance.CreateDate.ToShortDateString()} tarihli {advance.AmountOfAdvance} {advance.Currency.GetDisplayName()} avans talebiniz reddedilmiştir.</p><br><hr><br><h3>Team Monitorease</h3>";
                 await _mailService.SendEmailAsync(user, recipientEmail, mailToName, action, subject, body);
                 //_mailService.SendApproveMail(user, action, $"Sayın {user.FirstName} {user.LastName} Avansın reddedildi");
             }
@@ -90,12 +90,14 @@ namespace humanResourceProject.API.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateAdvance([FromBody] AdvanceDTO model)
         {
-            AppUser manager = await _appUserReadService.GetSingleDefault(x => x.Id == model.Employee.ManagerId);
+            AppUser employee = await _appUserReadService.GetSingleDefault(x => x.Id == model.EmployeeId);
+            AppUser manager = await _appUserReadService.GetSingleDefault(x => x.Id == employee.ManagerId);
+
             string recipientEmail = manager.Email;
             string mailToName = $"{manager.FirstName} {manager.LastName}";
             string action = "";
             string subject = "Avans Talebi!";
-            string body = $"Sayın {manager.FirstName} {manager.LastName}, {model.CreateDate.ToShortDateString()} tarihli {model.AmountOfAdvance} {model.Currency.GetDisplayName()} avans talebi yapılmıştır. Uygulamaya giriş yapıp onaylamanızı rica ederiz.";
+            string body = $"<p>Sayın {manager.FirstName} {manager.LastName},</p><p>{employee.FirstName} {employee.LastName} tarafından {model.CreateDate.ToShortDateString()} tarihinde {model.AmountOfAdvance} {model.Currency.GetDisplayName()} avans talebi yapılmıştır.</p><p>Uygulamaya giriş yapıp onaylamanızı rica ederiz.</p><br><hr><br><h3>Team Monitorease</h3>";
             await _mailService.SendEmailAsync(manager, recipientEmail, mailToName, action, subject, body);
             return Ok(await _advanceWriteService.InsertAdvance(model));
         }

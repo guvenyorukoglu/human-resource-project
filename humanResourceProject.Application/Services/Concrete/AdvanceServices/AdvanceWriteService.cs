@@ -5,8 +5,6 @@ using humanResourceProject.Domain.Entities.Concrete;
 using humanResourceProject.Domain.IRepository.BaseRepos;
 using humanResourceProject.Models.DTOs;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace humanResourceProject.Application.Services.Concrete.AdvanceServices
 {
@@ -55,7 +53,7 @@ namespace humanResourceProject.Application.Services.Concrete.AdvanceServices
 
             _baseWriteRepository.DetachEntity(updateAdvance);
 
-            updateAdvance = _mapper.Map<Advance>(model); 
+            updateAdvance = _mapper.Map<Advance>(model);
 
             updateAdvance.Status = Domain.Enum.Status.Modified;
             updateAdvance.UpdateDate = DateTime.Now;
