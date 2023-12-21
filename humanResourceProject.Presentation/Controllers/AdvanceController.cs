@@ -95,10 +95,10 @@ namespace humanResourceProject.Presentation.Controllers
             }
         }
 
-        [HttpPost]
+        [HttpGet]
         public async Task<IActionResult> DeleteAdvance(Guid id)
         {
-            var response = await _httpClient.DeleteAsync($"api/Advance/{id}");
+            var response = await _httpClient.DeleteAsync($"api/Advance/DeleteAdvance/{id}");
 
             if (response.IsSuccessStatusCode)
             {
