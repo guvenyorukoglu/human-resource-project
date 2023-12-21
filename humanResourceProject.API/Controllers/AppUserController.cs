@@ -69,6 +69,18 @@ namespace humanResourceProject.API.Controllers
             return RedirectToAction("ForgotPassword", "Account", model.Email);
         }
 
+         [HttpPost]
+        [Route("CreatePersonelManager")]
+        public async Task<IActionResult> CreatePersonelManager([FromBody] CreateEmployeeDTO model) // Yeni Personel Oluşturma
+        {
+            IdentityResult result = await _appUserWriteService.RegisterPersonelManager(model);
+            if (!result.Succeeded)
+                return BadRequest(result.Errors);
+
+
+            return RedirectToAction("ForgotPassword", "Account", model.Email);
+        }
+
         [HttpPut]
         public async Task<IActionResult> UpdateEmployee([FromBody] UpdateUserDTO updatedPersonel) // Personel Güncelleme
         {
