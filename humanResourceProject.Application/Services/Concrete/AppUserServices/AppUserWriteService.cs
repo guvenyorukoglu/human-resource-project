@@ -122,9 +122,10 @@ namespace humanResourceProject.Application.Services.Concrete.AppUserServices
 
         }
 
-        //public async Task<IdentityResult> UpdateProfileImage(Guid id)
-        //{
-        //    AppUser user = await _readRepository.GetSingleDefault(x => x.Id == id);
-        //}
+        public async Task<IdentityResult> UpdateProfileImage(Guid id)
+        {
+            AppUser user = await _readRepository.GetSingleDefault(x => x.Id == id);
+            return await _userManager.UpdateAsync(user);
+        }
     }
 }

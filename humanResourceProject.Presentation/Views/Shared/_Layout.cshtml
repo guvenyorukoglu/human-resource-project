@@ -59,7 +59,7 @@
         </main>
     </div>
 
-    <footer class="border-top footer text-white" style="background-color: #133a63">
+    <footer class="border-top footer text-white" style="background-color: #133a63; position: absolute; bottom: 0px; width: 100%;">
         <div class="container">
             &copy; 2023 - Monitorease - <a class="text-white" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
@@ -71,3 +71,9 @@
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
+
+
+<style>
+    .nav-link {
+        font-size: 20px;
+    }</style> 

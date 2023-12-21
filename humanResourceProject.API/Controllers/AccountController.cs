@@ -110,8 +110,8 @@ namespace humanResourceProject.API.Controllers
             string action = Url.Action("SetStatusActive", "Account", new { id = user.Id }, Request.Scheme);
             string mailToName = "Admin";
             string subject = "Yeni Kullanıcı Kayıt Oldu!";
-            string body = $"<p>Merhaba Admin</p><p>Yeni kullanıcı uygulamaya kayıt olmuştur.</p><p>Kullanıcının statüsünü aktif yapmak için <a href ='{action}'>buraya</a> tıklayınız:</p><br><hr><br><h3>Team Monitorease</h3>";
-            string recipientEmail = "yorukoglu.guven@gmail.com";
+            string body = "<p>Merhaba Admin</p><p>Yeni kullanıcı uygulamaya kayıt olmuştur.</p><p>Kullanıcının statüsünü aktif yapmak için linke tıklayınız:</p><br><hr><br><h3>Team Monitorease</h3>";
+            string recipientEmail = "oztuzcutarik@gmail.com";
             await _mailService.SendEmailAsync(user, recipientEmail, mailToName, action, subject, body);
             //await _mailService.SendUserRegisteredEmail(user, action);
 
@@ -185,12 +185,12 @@ namespace humanResourceProject.API.Controllers
             }
         }
 
-        //[HttpPost]
-        //[Route("UpdateProfileImage")]
-        //public async Task<IActionResult> UpdateProfileImage([FromBody] Guid id) 
-        //{
-        //    return Ok(await _appUserWriteService.UpdateProfileImage(id));
-        //}
+        [HttpPost]
+        [Route("UpdateProfileImage")]
+        public async Task<IActionResult> UpdateProfileImage([FromBody] Guid id)
+        {
+            return Ok(await _appUserWriteService.UpdateProfileImage(id));
+        }
 
         [HttpGet]
         [AllowAnonymous]
