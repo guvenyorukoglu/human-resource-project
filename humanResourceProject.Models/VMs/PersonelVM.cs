@@ -15,5 +15,9 @@ namespace humanResourceProject.Models.VMs
         public string JobTitle { get; set; }
         public Leave? Leave { get; set; }
         public List<Leave>? Leaves { get; set; }
+        public Advance? Advance { get; set; }
+        public List<Advance>? Advances { get; set; }
+        public Expense? Expense { get; set; }   
+        public List<Expense>? Expenses { get; set; }
     }
 }

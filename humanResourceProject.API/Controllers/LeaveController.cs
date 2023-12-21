@@ -46,6 +46,8 @@ namespace humanResourceProject.API.Controllers
             return Ok(await _leaveReadService.GetLeavesByDepartmentId(id));
         }
 
+
+
         [HttpPost]
         public async Task<IActionResult> CreateLeave([FromBody] LeaveDTO model)
         {
