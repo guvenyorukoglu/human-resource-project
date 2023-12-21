@@ -64,17 +64,25 @@ namespace humanResourceProject.API.Controllers
         public async Task<IActionResult> UpdateStatus([FromBody] LeaveDTO model)
         {
             AppUser user = await _appUserReadService.GetSingleDefault(x => x.Id == model.EmployeeId);
-            string action = "DENEMELİK";
+            string action = "";
+            string recipientEmail = "efeyzyum@gmail.com";
+            string mailToName = "Admin";
             if (model.LeaveStatus == Domain.Enum.RequestStatus.Approved)
             {
                 model.LeaveStatus = Domain.Enum.RequestStatus.Approved;
-                _mailService.SendApproveMail(user, action, $"Sayın {user.FirstName} {user.LastName} İznin onaylandı. Güzel günler dileriz.");
+                string subject = "İzin Onayı!";
+                string body = $"Sayın {user.FirstName} {user.LastName} İzin talebiniz onaylandı. Güzel günler dileriz.";
+                await _mailService.SendEmailAsync(user, recipientEmail, mailToName, action, subject, body);
+                //_mailService.SendApproveMail(user, action, $"Sayın {user.FirstName} {user.LastName} İznin onaylandı. Güzel günler dileriz.");
 
             }
             else if (model.LeaveStatus == Domain.Enum.RequestStatus.Rejected)
             {
                 model.LeaveStatus = Domain.Enum.RequestStatus.Rejected;
-                _mailService.SendApproveMail(user, action, $"Sayın {user.FirstName} {user.LastName} İznin maalesef reddedildi");
+                string subject = "İzin Reddi!";
+                string body = $"Sayın {user.FirstName} {user.LastName} İzin talebiniz reddedildi.";
+                await _mailService.SendEmailAsync(user, recipientEmail, mailToName, action, subject, body);
+                //_mailService.SendApproveMail(user, action, $"Sayın {user.FirstName} {user.LastName} İznin maalesef reddedildi");
             }
 
 

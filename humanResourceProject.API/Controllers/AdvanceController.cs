@@ -40,17 +40,25 @@ namespace humanResourceProject.API.Controllers
         public async Task<IActionResult> UpdateStatus([FromBody] AdvanceDTO model)
         {
             AppUser user= await _appUserReadService.GetSingleDefault(x=>x.Id == model.EmployeeId);
-            string action = "DAD";
+            string action = "";
+            string recipientEmail = "efeyzyum@gmail.com";
+            string mailToName = "Admin";
             if (model.AdvanceStatus == Domain.Enum.RequestStatus.Approved)
             {
                 model.AdvanceStatus = Domain.Enum.RequestStatus.Approved;
-                _mailService.SendApproveMail(user, action, $"Sayın {user.FirstName} {user.LastName} Avansın onaylandı. Güzel günlerde kullan");
+                string subject = "Avans Onayı!";
+                string body = $"Sayın {user.FirstName} {user.LastName} Avans talebiniz onaylandı. Güzel günlerde kullan";
+                await _mailService.SendEmailAsync(user, recipientEmail, mailToName,action,subject,body);
+                //_mailService.SendApproveMail(user, action, $"Sayın {user.FirstName} {user.LastName} Avansın onaylandı. Güzel günlerde kullan");
 
             }
             else if (model.AdvanceStatus == Domain.Enum.RequestStatus.Rejected)
             {
                 model.AdvanceStatus = Domain.Enum.RequestStatus.Rejected;
-                _mailService.SendApproveMail(user, action, $"Sayın {user.FirstName} {user.LastName} Avansın reddedildi");
+                string subject = "Avans Reddi!";
+                string body = $"Sayın {user.FirstName} {user.LastName} Avans talebiniz reddedildi.";
+                await _mailService.SendEmailAsync(user, recipientEmail, mailToName, action, subject, body);
+                //_mailService.SendApproveMail(user, action, $"Sayın {user.FirstName} {user.LastName} Avansın reddedildi");
             }
           
 
