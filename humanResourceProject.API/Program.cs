@@ -21,7 +21,7 @@ builder.Services.AddControllers();
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
     //options.UseSqlServer(builder.Configuration.GetConnectionString("MonitorEase:SqlDb"));   //Azure
-    options.UseSqlServer(builder.Configuration.GetConnectionString("GuvenSQLConnection")); //Local
+    options.UseSqlServer(builder.Configuration.GetConnectionString("CanSQLConnection")); //Local
 });
 
 builder.Services.AddIdentity<AppUser, IdentityRole<Guid>>(options =>
@@ -124,7 +124,7 @@ app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
 
-SeedDataGenerator.Seed(app,10,5,15,50,5,10,10);
+SeedDataGenerator.Seed(app,5,5,5,5,5,5,5);
 
 app.MapControllers();
 

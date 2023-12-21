@@ -6,7 +6,6 @@ namespace humanResourceProject.Models.DTOs
 {
     public class LeaveDTO
     {
-        public Guid Id { get; set; }
         public LeaveType LeaveType { get; set; }
         [Required(ErrorMessage = "İzin başlangıç tarihi boş geçilemez!")]
         [DisplayName("İzin başlangıç Tarihi*")]
@@ -16,7 +15,8 @@ namespace humanResourceProject.Models.DTOs
         public DateTime EndDate { get; set; }
         public Guid EmployeeId { get; set; }
         public Guid ManagerId { get; set; }
-        public Status Status { get; set; }
+        public Status Status { get; set; } = Status.Active;
+        public DateTime CreateDate { get; set; } = DateTime.Now;
         public DateTime? UpdateDate { get; set; }
         public RequestStatus LeaveStatus { get; set; }
 

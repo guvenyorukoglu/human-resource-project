@@ -8,7 +8,7 @@ namespace humanResourceProject.Application.Services.Abstract.ILeaveServices
     {
         Task<IdentityResult> InsertLeave(LeaveDTO model);
 
-        Task<IdentityResult> UpdateLeave(LeaveDTO model);
+        Task<IdentityResult> UpdateLeave(UpdateLeaveDTO model);
 
         Task<IdentityResult> DeleteLeave(Guid id);
     }
