@@ -104,15 +104,104 @@
                     <div id="calendar" style="width: 90%"></div>
                 </div>
 
-                <div class="col-md-3 holiday-info card"><h6>RESMİ TATİLLER</h6></div>
-            </div>
+
+                <div class="col-md-3 holiday-info card"><h6>ŞİRKET BİLGİLERİ</h6>
+                    <table class=" table-bordered table-striped">
+                        <tbody>
+                             @if (Model != null)
+                            {
+                                <tr>
+                                    @foreach (var item in Model)
+                                    {
+                                        <td>@item.Company.CompanyName</td>
+                                        <td>@item.Company.TaxOffice</td>
+                                        <td>@item.Company.TaxNumber</td>
+                                        <td>@item.Company.PhoneNumber</td>
+                                        <td>@item.Company.Address</td>
+                                    }
+
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                </div>
 
             <div class="row text-center">
-                <div class="col-md-4 upcoming-leave-info card"><h6>YAKLAŞAN İZİNLER</h6></div>
-                <div class="col-md-8 upcoming-birthday-info card">
+                <div class="col-md-4 upcoming-leave-info card">
+                    <h6>
+                        <a asp-action="MyLeaves"
+                           asp-controller="Leave">İZİNLER</a>
+                    </h6>
+                    <table class=" table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th style="width: 50%">İzin Gün Sayısı</th>
+                                <th style="width: 50%">İstek Tarihi</th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model != null)
+                            {
+                                int count = 0;
+                                foreach (var item in Model)
+                                {
+                                    if (count >= 3)
+                                    {
+                                        break;
+                                    }
+
+                                    <tr>
+
+                                        <td>@item.Leave.DaysOfLeave</td>
+                                        <td>@item.Leave.CreateDate</td>
+                                    </tr>
+                                    count++;
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                     <div class="col-md-4 upcoming-leave-info card">
+                    <h6>
+                        <a asp-action="Expenses"
+                           asp-controller="Expense">MASRAFLAR</a>
+                    </h6>
+                    <table class=" table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th style="width: 50%">Miktarı</th>
+                                <th style="width: 50%">İstek Tarihi</th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model != null)
+                            {
+                                int count = 0;
+                                foreach (var item in Model)
+                                {
+                                    if (count >= 3)
+                                    {
+                                        break;
+                                    }
+
+                                    <tr>
+
+                                        <td>@item.Expense.AmountOfExpense</td>
+                                        <td>@item.Expense.CreateDate</td>
+                                    </tr>
+                                    count++;
+                                }
+                            }
+                        </tbody>
+                    </table>
+                    </div>
+                <div class="col-md-3 upcoming-leave-info card">
                     <h6>
                         <a asp-action="MyAdvances"
-                           asp-controller="Advance">Avanslar</a>
+                           asp-controller="Advance">AVANSLAR</a>
                     </h6>
                     <table class=" table-bordered table-striped">
                         <thead>
@@ -145,83 +234,8 @@
                     </table>
                 </div>
 
-                <div class="col-md-8 upcoming-birthday-info card">
-                    <h6>
-                        <a asp-action="MyLeaves"
-                           asp-controller="Leave">İzinler</a>
-                    </h6>
-                    <table class=" table-bordered table-striped">
-                        <thead>
-                            <tr>
-                                <th style="width: 50%">İzin Gün Sayısı</th>
-                                <th style="width: 50%">İstek Tarihi</th>
 
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @if (Model != null)
-                            {
-                                int count = 0;
-                                foreach (var item in Model)
-                                {
-                                    if (count >= 3)
-                                    {
-                                        break;
-                                    }
-
-                                    <tr>
-
-                                        <td>@item.Leave.DaysOfLeave</td>
-                                        <td>@item.Leave.CreateDate</td>
-                                    </tr>
-                                    count++;
-                                }
-                            }
-                        </tbody>
-                    </table>
-                </div>
-
-
-
-
-            </div>
-        </div>
-
-        <div class="col-md-8 upcoming-birthday-info card">
-            <h6>
-                <a asp-action="ExpenseRequests"
-                   asp-controller="Expense">Masraflar</a>
-            </h6>
-            <table class=" table-bordered table-striped">
-                <thead>
-                    <tr>
-                        <th style="width: 50%">Miktarı</th>
-                        <th style="width: 50%">İstek Tarihi</th>
-
-                    </tr>
-                </thead>
-                <tbody>
-                    @if (Model != null)
-                    {
-                        int count = 0;
-                        foreach (var item in Model)
-                        {
-                            if (count >= 3)
-                            {
-                                break;
-                            }
-
-                            <tr>
-
-                                <td>@item.Expense.AmountOfExpense</td>
-                                <td>@item.Expense.CreateDate</td>
-                            </tr>
-                            count++;
-                        }
-                    }
-                </tbody>
-            </table>
-        </div>
+      
 
         <div id="calendarEventModal" class="modal fade" role="dialog">
             <div class="modal-dialog modal-md text-center">
@@ -324,6 +338,12 @@
     #myChart {
         max-width: 300px;
         max-height: 300px;
+    }
+
+    a{
+        text-decoration: none;
+        font-size: 1vw;
+        color: #ffffff;
     }
 
 </style>
