@@ -29,12 +29,15 @@ namespace humanResourceProject.Application.AutoMapper
 
             CreateMap<Advance, AdvanceVM>().ReverseMap();
             CreateMap<Advance, AdvanceDTO>().ReverseMap();
+            CreateMap<Advance, UpdateAdvanceDTO>().ReverseMap();
 
             CreateMap<Expense, ExpenseVM>().ReverseMap();
             CreateMap<Expense, ExpenseDTO>().ReverseMap();
+            CreateMap<Expense, UpdateExpenseDTO>().ReverseMap();
 
             CreateMap<Leave, LeaveVM>().ReverseMap();
             CreateMap<Leave, LeaveDTO>().ReverseMap();
+            CreateMap<Leave, UpdateLeaveDTO>().ReverseMap();
 
             //CreateMap<>().ReverseMap();
         }

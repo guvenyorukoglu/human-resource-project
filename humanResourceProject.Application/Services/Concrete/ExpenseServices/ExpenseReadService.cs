@@ -77,5 +77,12 @@ namespace humanResourceProject.Application.Services.Concrete.ExpenseServices
                                               include: x => x.Include(x => x.Employee));
             return expenses;
         }
+
+        public async Task<UpdateExpenseDTO> GetUpdateExpenseDTO(Guid id)
+        {
+            Expense expense = await _expenseReadRepository.GetById(id);
+            UpdateExpenseDTO updateExpenseDTO = _mapper.Map<UpdateExpenseDTO>(expense);
+            return updateExpenseDTO;
+        }
     }
 }

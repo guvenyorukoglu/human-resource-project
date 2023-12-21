@@ -84,5 +84,12 @@ namespace humanResourceProject.Application.Services.Concrete.LeaveServices
                                                              include: x => x.Include(x => x.Employee));
             return leaves;
         }
+
+        public async Task<UpdateLeaveDTO> GetUpdateLeaveDTO(Guid id)
+        {
+            Leave leave = await _leaveReadRepository.GetById(id);
+            UpdateLeaveDTO updateLeaveDTO = _mapper.Map<UpdateLeaveDTO>(leave);
+            return updateLeaveDTO;
+        }
     }
 }

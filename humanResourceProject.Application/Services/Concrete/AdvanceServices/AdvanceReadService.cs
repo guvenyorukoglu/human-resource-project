@@ -78,6 +78,11 @@ namespace humanResourceProject.Application.Services.Concrete.AdvanceServices
             return advances;
         }
 
-
+        public async Task<UpdateAdvanceDTO> GetUpdateAdvanceDTO(Guid id)
+        {
+            Advance advance = await _advanceReadRepository.GetById(id);
+            UpdateAdvanceDTO updateAdvanceDTO = _mapper.Map<UpdateAdvanceDTO>(advance);
+            return updateAdvanceDTO;
+        }
     }
 }
