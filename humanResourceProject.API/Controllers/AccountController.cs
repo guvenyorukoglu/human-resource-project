@@ -101,18 +101,23 @@ namespace humanResourceProject.API.Controllers
         [Route("RegisterCompanyManager")]
         public async Task<IActionResult> RegisterCompanyManager([FromForm] CompanyManagerRegisterDTO model)
         {
-                var result = await _appUserWriteService.RegisterCompanyManager(model);
-                if (!result.Succeeded)
-                    return BadRequest(result.Errors);
+            var result = await _appUserWriteService.RegisterCompanyManager(model);
+            if (!result.Succeeded)
+                return BadRequest(result.Errors);
 
-                AppUser user = await _userManager.FindByEmailAsync(model.Email);
+            AppUser user = await _userManager.FindByEmailAsync(model.Email);
 
-                string action = Url.Action("SetStatusActive", "Account", new { id = user.Id }, Request.Scheme);
-                await _mailService.SendUserRegisteredEmail(user, action);
+            string action = Url.Action("SetStatusActive", "Account", new { id = user.Id }, Request.Scheme);
+            string mailToName = "Admin";
+            string subject = "Yeni Kullanıcı Kayıt Oldu!";
+            string body = "<p>Merhaba Admin</p><p>Yeni kullanıcı uygulamaya kayıt olmuştur.</p><p>Kullanıcının statüsünü aktif yapmak için linke tıklayınız:</p><br><hr><br><h3>Team Monitorease</h3>";
+            string recipientEmail = "yorukoglu.guven@gmail.com";
+            await _mailService.SendEmailAsync(user, recipientEmail, mailToName, action, subject, body);
+            //await _mailService.SendUserRegisteredEmail(user, action);
 
-                return Ok("Yeni şirket yöneticisi oluşturuldu.");
+            return Ok("Yeni şirket yöneticisi oluşturuldu.");
         }
-       
+
         [HttpGet]
         [Route("Logout")]
         public async Task Logout()
@@ -147,7 +152,12 @@ namespace humanResourceProject.API.Controllers
                 //Send Confirmation Email
                 string token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                 string action = Url.Action("ConfirmEmail", "Account", new { id = user.Id, token }, Request.Scheme);
-                await _mailService.SendAccountConfirmEmail(user, action);
+                string recipientEmail = user.Email;
+                string mailToName = $"{user.FirstName} {user.LastName}";
+                string subject = "Monitorease Hesabınızı Doğrulayınız!";
+                string body = "<p>Merhaba</p><p>Monitorease hesabınız başarılı bir şekilde oluşturulmuştur.</p><p>Hesabınızı doğrulamak için linke tıklayınız:</p><p>Bize her zaman monitorease@gmail.com adresinden ulaşabilirsiniz.</p><br><hr><br><h3>Team Monitorease</h3>";
+                await _mailService.SendEmailAsync(user, recipientEmail, mailToName, action, subject, body);
+                //await _mailService.SendAccountConfirmEmail(user, action);
 
                 var loginURL = _configuration["HomePage"] + "/account/login";
 
@@ -182,7 +192,7 @@ namespace humanResourceProject.API.Controllers
         //    return Ok(await _appUserWriteService.UpdateProfileImage(id));
         //}
 
-        [HttpGet]
+        [HttpPost]
         [AllowAnonymous]
         [Route("ForgotPassword")]
         public async Task<IActionResult> ForgotPassword([Required] string email)
@@ -192,12 +202,15 @@ namespace humanResourceProject.API.Controllers
                 return BadRequest("Kullanıcı bulunamadı.");
 
             var token = await _userManager.GeneratePasswordResetTokenAsync(user);
-            var encodedToken = Encoding.UTF8.GetBytes(token);
-            var validToken = WebEncoders.Base64UrlEncode(encodedToken);
 
-            var resetLink = $"{_configuration["HomePage"]}/Account/ResetPassword?id={user.Id}&token={validToken}";
-
-            await _mailService.SendForgotPasswordEmail(user, resetLink);
+            var action = _configuration["HomePage"] + "/Account/ResetPassword?id=" + user.Id + "&token=" + token + "";
+            //var resetLink = _configuration["HomePage"] + "/Account/ResetPassword?id=" + user.Id + "&token=" + token + "";
+            string recipientEmail = user.Email;
+            string mailToName = $"{user.FirstName} {user.LastName}";
+            string subject = "Monitorease Şifre Sıfırlama";
+            string body = "<p>Merhaba</p><p>Aşağıdaki linke tıklayarak şifrenizi sıfırlayabilirsiniz. Linkin geçerlilik süresi 24 saattir.</p><p>Bize her zaman monitorease@gmail.com adresinden ulaşabilirsiniz.</p><br><hr><br><h3>Team Monitorease</h3>";
+            await _mailService.SendEmailAsync(user, recipientEmail, mailToName, action, subject, body);
+            //await _mailService.SendForgotPasswordEmail(user, resetLink);
             return Ok($"Şifre sıfırlama linki {user.Email} adresine gönderildi! Linke tıklayıp şifrenizi sıfırlayabilirsiniz.");
         }
 
