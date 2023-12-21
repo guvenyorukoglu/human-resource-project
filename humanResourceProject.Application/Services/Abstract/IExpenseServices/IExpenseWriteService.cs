@@ -8,7 +8,7 @@ namespace humanResourceProject.Application.Services.Abstract.IExpenseServices
     {
         Task<IdentityResult> InsertExpense(ExpenseDTO model);
 
-        Task<IdentityResult> UpdateExpense(ExpenseDTO model);
+        Task<IdentityResult> UpdateExpense(UpdateExpenseDTO model);
 
         Task<IdentityResult> DeleteExpense(Guid id);
     }
