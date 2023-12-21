@@ -48,7 +48,8 @@
                    
                     foreach (var item in Model)
                     {
-                        
+                        if(item.Leave != null)
+                        {
                         <tr>
                             <td>@item.FirstName</td>
                             <td>@item.MiddleName</td>
@@ -78,6 +79,7 @@
                                 </a>
                             </td>
                         </tr>
+                        }
                     }
                 }
             </tbody>

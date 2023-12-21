@@ -77,12 +77,12 @@ namespace humanResourceProject.API.Controllers
             return Ok(await _advanceWriteService.InsertAdvance(model));
         }
 
-       // [HttpGet]
-       // [Route("GetUpdateAdvanceDTO/{id}")]
-       // public async Task<IActionResult> GetUpdateAdvanceDTO(Guid id)
-       // {
-       //     return Ok(await _advanceReadService.GetUpdateAdvanceDTO(id));
-       // }
+       [HttpGet]
+       [Route("GetUpdateAdvanceDTO/{id}")]
+       public async Task<IActionResult> GetUpdateAdvanceDTO(Guid id)
+       {
+           return Ok(await _advanceReadService.GetUpdateAdvanceDTO(id));
+       }
 
         [HttpPut]
         public async Task<IActionResult> UpdateAdvance([FromBody] AdvanceDTO model)

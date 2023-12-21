@@ -50,6 +50,13 @@ namespace humanResourceProject.API.Controllers
             return Ok(await _expenseWriteService.DeleteExpense(id));
         }
 
+        [HttpGet]
+        [Route("GetUpdateAdvanceDTO/{id}")]
+        public async Task<IActionResult> GetUpdateExpenseDTO(Guid id)
+        {
+            return Ok(await _expenseReadService.GetUpdateExpenseDTO(id));
+        }
+
 
     }
 }

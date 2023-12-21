@@ -1,4 +1,5 @@
-﻿using humanResourceProject.Models.VMs;
+﻿using humanResourceProject.Models.DTOs;
+using humanResourceProject.Models.VMs;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Net.Http;
@@ -124,10 +125,57 @@ namespace humanResourceProject.Presentation.Controllers
             return View(model);
         }
 
-        //[HttpGet]
-        //public async Task<IActionResult> ApproveAdvance(Guid id)
-        //{
 
-        //}
+        //ADVANCE REQUESTS & CONTROLS
+        public async Task<IActionResult> AdvanceRequests()
+        {
+            var response = await _httpClient.GetAsync($"api/Leave/GetAllAdvances");
+            if (response.IsSuccessStatusCode)
+            {
+                var cont = await response.Content.ReadAsStringAsync();
+                var leaveRequests = JsonConvert.DeserializeObject<List<PersonelVM>>(cont);
+                return View(leaveRequests);
+
+            }
+            return View();
+        }
+
+
+
+        [HttpPost]
+        public async Task<IActionResult> ApproveAdvance(AdvanceDTO model)
+        {
+            var json = JsonConvert.SerializeObject(model);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            var response = await _httpClient.PutAsync($"api/Advance/UpdateAdvance/{model}", content);
+
+            if (response.IsSuccessStatusCode)
+            {
+                return RedirectToAction("AdvanceRequests");
+            }
+
+            ModelState.AddModelError(response.StatusCode.ToString(), "Bir hata oluştu.");
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> RejectAdvance(AdvanceDTO model)
+        {
+
+            var json = JsonConvert.SerializeObject(model);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            var response = await _httpClient.PutAsync($"api/Advance/DeleteAdvance/{model}", content);
+
+            if (response.IsSuccessStatusCode)
+            {
+                return RedirectToAction("AdvanceRequests");
+            }
+
+            ModelState.AddModelError(response.StatusCode.ToString(), "Bir hata oluştu.");
+            return View(model);
+        }
+
     }
 }
