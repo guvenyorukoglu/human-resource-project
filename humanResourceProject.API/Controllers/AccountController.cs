@@ -192,7 +192,7 @@ namespace humanResourceProject.API.Controllers
         //    return Ok(await _appUserWriteService.UpdateProfileImage(id));
         //}
 
-        [HttpPost]
+        [HttpGet]
         [AllowAnonymous]
         [Route("ForgotPassword")]
         public async Task<IActionResult> ForgotPassword([Required] string email)
@@ -202,13 +202,15 @@ namespace humanResourceProject.API.Controllers
                 return BadRequest("Kullanıcı bulunamadı.");
 
             var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+            var encodedToken = Encoding.UTF8.GetBytes(token);
+            var validToken = WebEncoders.Base64UrlEncode(encodedToken);
 
-            var action = _configuration["HomePage"] + "/Account/ResetPassword?id=" + user.Id + "&token=" + token + "";
-            //var resetLink = _configuration["HomePage"] + "/Account/ResetPassword?id=" + user.Id + "&token=" + token + "";
+            var action = _configuration["HomePage"] + "/Account/ResetPassword?id=" + user.Id + "&token=" + validToken + "";
+
             string recipientEmail = user.Email;
             string mailToName = $"{user.FirstName} {user.LastName}";
             string subject = "Monitorease Şifre Sıfırlama";
-            string body = "<p>Merhaba</p><p>Aşağıdaki linke tıklayarak şifrenizi sıfırlayabilirsiniz. Linkin geçerlilik süresi 24 saattir.</p><p>Bize her zaman monitorease@gmail.com adresinden ulaşabilirsiniz.</p><br><hr><br><h3>Team Monitorease</h3>";
+            string body = $"<p>Merhaba</p><p><a href ='{action}'>Buraya</a> tıklayarak şifrenizi sıfırlayabilirsiniz. Linkin geçerlilik süresi 24 saattir.</p><p>Bize her zaman monitorease@gmail.com adresinden ulaşabilirsiniz.</p><br><hr><br><h3>Team Monitorease</h3>";
             await _mailService.SendEmailAsync(user, recipientEmail, mailToName, action, subject, body);
             //await _mailService.SendForgotPasswordEmail(user, resetLink);
             return Ok($"Şifre sıfırlama linki {user.Email} adresine gönderildi! Linke tıklayıp şifrenizi sıfırlayabilirsiniz.");
