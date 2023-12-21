@@ -25,8 +25,10 @@ namespace humanResourceProject.Application.Services.Concrete.ExpenseServices
             List<ExpenseVM>? expenses = await _expenseReadRepository.GetFilteredList(
                                               select: x => new ExpenseVM
                                               {
+                                                  Id = x.Id,
                                                   Description = x.Explanation,
                                                   Amount = x.AmountOfExpense,
+                                                  EmployeeId = x.EmployeeId,
                                                   EmployeeName = x.Employee.FirstName,
                                                   EmployeeSurname = x.Employee.LastName,
                                                   Status = x.ExpenseStatus
@@ -44,7 +46,9 @@ namespace humanResourceProject.Application.Services.Concrete.ExpenseServices
             return expenseDTO;
         }
 
-        public async Task<List<ExpenseVM>> GetExpensesByDepartmentId(Guid id)
+    
+
+            public async Task<List<ExpenseVM>> GetExpensesByDepartmentId(Guid id)
         {
             List<ExpenseVM>? expenses = await _expenseReadRepository.GetFilteredList(
                                               select: x => new ExpenseVM
@@ -66,6 +70,8 @@ namespace humanResourceProject.Application.Services.Concrete.ExpenseServices
             List<ExpenseVM>? expenses = await _expenseReadRepository.GetFilteredList(
                                               select: x => new ExpenseVM
                                               {
+                                                  Id = x.Id,
+                                                  EmployeeId = x.EmployeeId,
                                                   Description = x.Explanation,
                                                   Amount = x.AmountOfExpense,
                                                   EmployeeName = x.Employee.FirstName,
