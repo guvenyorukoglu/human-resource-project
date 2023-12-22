@@ -334,15 +334,21 @@ namespace humanResourceProject.Presentation.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> UpdateProfileImage(Guid id)
+        public async Task<IActionResult> UpdateProfileImage(UpdateProfileImageDTO model)
         {
-            var response = await _httpClient.GetAsync($"api/Account/UpdateProfileImage/{id}");
+            model.Id =  Guid.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value);
+            using var multipartContent = new MultipartFormDataContent
+                {
+                    { new StringContent(model.Id.ToString(), Encoding.UTF8, MediaTypeNames.Text.Plain), "Id" }
+                };
+
+            var imageContent = new StreamContent(model.UploadPath.OpenReadStream());
+            multipartContent.Add(imageContent, "UploadPath", model.UploadPath.FileName);
+
+            var response = await _httpClient.PostAsync($"api/Account/UpdateProfileImage/", multipartContent);
             if (response.IsSuccessStatusCode)
             {
-                var apiResponse = await response.Content.ReadAsStringAsync();
-                dynamic parsedResponse = JsonConvert.DeserializeObject(apiResponse);
-                string imagePath = parsedResponse.imagePath;
-                return View(new UpdateProfileImageDTO() { ImagePath = imagePath });
+                return RedirectToAction("Home", "Employee");
             }
             return View("Error");
         }

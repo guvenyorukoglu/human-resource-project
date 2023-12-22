@@ -14,15 +14,13 @@ namespace humanResourceProject.API.Controllers
     {
         private readonly IAppUserReadService _appUserReadService;
         private readonly IAppUserWriteService _appUserWriteService;
-        private readonly IMailService _mailService;
         private readonly UserManager<AppUser> _userManager;
 
-        public AppUserController(IAppUserReadService appUserReadService, IAppUserWriteService appUserWriteService, UserManager<AppUser> userManager, IMailService mailService)
+        public AppUserController(IAppUserReadService appUserReadService, IAppUserWriteService appUserWriteService, UserManager<AppUser> userManager)
         {
             _appUserReadService = appUserReadService;
             _appUserWriteService = appUserWriteService;
             _userManager = userManager;
-            _mailService = mailService;
         }
 
         [HttpGet]

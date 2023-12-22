@@ -10,10 +10,10 @@ namespace humanResourceProject.Models.DTOs
         public LeaveType LeaveType { get; set; }
         [Required(ErrorMessage = "İzin başlangıç tarihi boş geçilemez!")]
         [DisplayName("İzin başlangıç Tarihi*")]
-        public DateTime StartDate { get; set; }
+        public DateTime StartDateOfLeave { get; set; }
         [Required(ErrorMessage = "İzin bitiş tarihi boş geçilemez!")]
         [DisplayName("İzin bitiş Tarihi*")]
-        public DateTime EndDate { get; set; }
+        public DateTime EndDateOfLeave { get; set; }
         public Guid EmployeeId { get; set; }
         public Guid ManagerId { get; set; }
         //public Status Status { get; set; } = Status.Active;

@@ -165,7 +165,7 @@ namespace humanResourceProject.Presentation.Controllers
 
             if (httpResponse.IsSuccessStatusCode)
             {
-                return RedirectToAction("EmployeesLeaves");
+                return RedirectToAction(nameof(EmployeesLeaves));
             }
 
             ModelState.AddModelError(httpResponse.StatusCode.ToString(), "Bir hata oluştu.");
@@ -193,7 +193,7 @@ namespace humanResourceProject.Presentation.Controllers
 
             if (httpResponse.IsSuccessStatusCode)
             {
-                return RedirectToAction("EmployeesLeaves");
+                return RedirectToAction(nameof(EmployeesLeaves));
             }
 
             ModelState.AddModelError(httpResponse.StatusCode.ToString(), "Bir hata oluştu.");

@@ -2,9 +2,11 @@
 using humanResourceProject.Application.Services.Abstract.IBaseServices;
 using humanResourceProject.Application.Services.Abstract.ICompanyServices;
 using humanResourceProject.Application.Services.Abstract.IDepartmantServices;
+using humanResourceProject.Application.Services.Abstract.IImageServices;
 using humanResourceProject.Application.Services.Abstract.IMailServices;
 using humanResourceProject.Domain.Entities.Concrete;
 using humanResourceProject.Models.DTOs;
+using humanResourceProject.Presentation.Controllers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -31,8 +33,9 @@ namespace humanResourceProject.API.Controllers
         private readonly IMailService _mailService;
         private readonly UserManager<AppUser> _userManager;
         private readonly IBaseWriteService<AppUser> _baseAppUserWriteService;
+        private readonly IImageService _imageService;
 
-        public AccountController(IAppUserReadService appUserReadService, IConfiguration configuration, IAppUserWriteService appUserWriteService, ICompanyWriteService companyWriteService, ICompanyReadService companyReadService, IMailService mailService, UserManager<AppUser> userManager, IBaseWriteService<AppUser> baseAppUserWriteService, IDepartmentReadService departmentReadService)
+        public AccountController(IAppUserReadService appUserReadService, IConfiguration configuration, IAppUserWriteService appUserWriteService, ICompanyWriteService companyWriteService, ICompanyReadService companyReadService, IMailService mailService, UserManager<AppUser> userManager, IBaseWriteService<AppUser> baseAppUserWriteService, IDepartmentReadService departmentReadService, IImageService imageService)
         {
             _appUserReadService = appUserReadService;
             _appUserWriteService = appUserWriteService;
@@ -43,6 +46,7 @@ namespace humanResourceProject.API.Controllers
             _userManager = userManager;
             _baseAppUserWriteService = baseAppUserWriteService;
             _departmentReadService = departmentReadService;
+            _imageService = imageService;
         }
 
 
@@ -187,9 +191,13 @@ namespace humanResourceProject.API.Controllers
 
         [HttpPost]
         [Route("UpdateProfileImage")]
-        public async Task<IActionResult> UpdateProfileImage([FromBody] Guid id)
+        public async Task<IActionResult> UpdateProfileImage([FromForm] UpdateProfileImageDTO model)
         {
-            return Ok(await _appUserWriteService.UpdateProfileImage(id));
+            var result = await _imageService.UpdateProfileImage(model);
+            if (!result.Succeeded)
+                return BadRequest(result.Errors);
+
+            return Ok(result.Succeeded);
         }
 
         [HttpGet]
