@@ -54,7 +54,7 @@ font-size: 20px;
     padding: 2vw;
 }
 
-.panel-list {
+.panel-list, .sub-menu {
     list-style: none;
     padding: 0;
     margin: 0;
