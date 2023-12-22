@@ -1,33 +1,32 @@
-﻿using humanResourceProject.Models.DTOs;
+﻿using humanResourceProject.Domain.Enum;
+using humanResourceProject.Models.DTOs;
 using humanResourceProject.Models.VMs;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using System.Net.Http;
 using System.Security.Claims;
 using System.Text;
 
 namespace humanResourceProject.Presentation.Controllers
 {
+    [Authorize]
     public class ExpenseController : Controller
     {
         private readonly HttpClient _httpClient;
 
-        public ExpenseController(HttpClient httpClient)
+        public ExpenseController()
         {
-            _httpClient = httpClient;
-        }
-        public IActionResult Index()
-        {
-            return View();
+            _httpClient = new HttpClient();
+            //_httpClient.BaseAddress = new Uri("https://monitoreaseapi.azurewebsites.net"); // Azure
+            _httpClient.BaseAddress = new Uri("https://localhost:7255/"); // Local
         }
 
-        public async Task<IActionResult> Expenses()
+        [Authorize(Roles = "DepartmentManager,Personel")]
+        public async Task<IActionResult> MyExpenses()
         {
             Guid employeeId = Guid.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value);
-            var json = JsonConvert.SerializeObject(employeeId);
-            var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-            var response = await _httpClient.PostAsync($"api/Expense/GetExpensesByEmployeeId/", content);
+            var response = await _httpClient.GetAsync($"api/Expense/GetExpensesByEmployeeId/{employeeId}");
             if (response.IsSuccessStatusCode)
             {
                 var cont = await response.Content.ReadAsStringAsync();
@@ -38,19 +37,33 @@ namespace humanResourceProject.Presentation.Controllers
             return View();
         }
 
-        public async Task<IActionResult> ExpensesDepartment()
+        [Authorize(Roles = "DepartmentManager,CompanyManager")]
+        public async Task<IActionResult> EmployeesExpenses()
         {
-            Guid departmentId = Guid.Parse(User.Claims.FirstOrDefault(x => x.Type == "DepartmentId").Value);
-            var json = JsonConvert.SerializeObject(departmentId);
-            var content = new StringContent(json, Encoding.UTF8, "application/json");
-
-            var response = await _httpClient.PostAsync($"api/Expense/GetExpensesByDepartmentId/", content);
-            if (response.IsSuccessStatusCode)
+            if (User.IsInRole("DepartmentManager"))
             {
-                var cont = await response.Content.ReadAsStringAsync();
-                var expenses = JsonConvert.DeserializeObject<List<ExpenseVM>>(cont);
-                return View(expenses);
+                Guid depatmentId = Guid.Parse(User.Claims.FirstOrDefault(x => x.Type == "DepartmentId").Value);
+                var response = await _httpClient.GetAsync($"api/Expense/GetExpensesByDepartmentId/{depatmentId}");
+                if (response.IsSuccessStatusCode)
+                {
+                    var cont = await response.Content.ReadAsStringAsync();
+                    var expenses = JsonConvert.DeserializeObject<List<ExpenseVM>>(cont);
+                    return View(expenses);
+                }
+                return View();
+            }
+            else if (User.IsInRole("CompanyManager"))
+            {
+                Guid companyId = Guid.Parse(User.Claims.FirstOrDefault(x => x.Type == "CompanyId").Value);
 
+                var response = await _httpClient.GetAsync($"api/Expense/GetExpensesByCompanyId/{companyId}");
+                if (response.IsSuccessStatusCode)
+                {
+                    var cont = await response.Content.ReadAsStringAsync();
+                    var expenses = JsonConvert.DeserializeObject<List<ExpenseVM>>(cont);
+                    return View(expenses);
+                }
+                return View();
             }
             return View();
         }
@@ -58,7 +71,10 @@ namespace humanResourceProject.Presentation.Controllers
         [HttpGet]
         public IActionResult CreateExpense()
         {
-            return View(new ExpensePersonnelVM());
+            return View(new ExpenseDTO()
+            {
+                EmployeeId = Guid.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value)
+            });
         }
 
         [HttpPost]
@@ -69,9 +85,8 @@ namespace humanResourceProject.Presentation.Controllers
 
             var response = await _httpClient.PostAsync($"api/Expense", content);
             if (response.IsSuccessStatusCode)
-            {
-                return RedirectToAction("Expense");
-            }
+                return RedirectToAction(nameof(MyExpenses));
+
             else
             {
                 ModelState.AddModelError(response.StatusCode.ToString(), "Bir hata oluştu.");
@@ -79,15 +94,13 @@ namespace humanResourceProject.Presentation.Controllers
             }
         }
 
-        [HttpPost]
+        [HttpGet]
         public async Task<IActionResult> DeleteExpense(Guid id)
         {
-            var response = await _httpClient.DeleteAsync($"api/Expense/{id}");
+            var response = await _httpClient.DeleteAsync($"api/Expense/DeleteExpense/{id}");
 
             if (response.IsSuccessStatusCode)
-            {
-                return RedirectToAction("Expense");
-            }
+                return RedirectToAction(nameof(MyExpenses));
 
             return View("Error");
         }
@@ -95,7 +108,8 @@ namespace humanResourceProject.Presentation.Controllers
         [HttpGet]
         public async Task<IActionResult> UpdateExpense(Guid id)
         {
-            var response = await _httpClient.GetAsync($"api/Expense/{id}");
+            var response = await _httpClient.GetAsync($"api/Expense/GetUpdateExpenseDTO/{id}");
+
             if (response.IsSuccessStatusCode)
             {
                 var content = await response.Content.ReadAsStringAsync();
@@ -107,72 +121,71 @@ namespace humanResourceProject.Presentation.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> UpdateExpense(ExpensePersonnelVM model)
+        public async Task<IActionResult> UpdateExpense(ExpenseDTO model)
         {
+            if (!ModelState.IsValid)
+                return View(model);
             var json = JsonConvert.SerializeObject(model);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
 
             var response = await _httpClient.PutAsync($"api/Expense", content);
 
             if (response.IsSuccessStatusCode)
-            {
                 return RedirectToAction("Expense");
-            }
 
             ModelState.AddModelError(response.StatusCode.ToString(), "Bir hata oluştu.");
             return View(model);
         }
 
         //Expense REQUESTS & CONTROLS
-        public async Task<IActionResult> ExpenseRequests()
+        [Authorize(Roles = "DepartmentManager,CompanyManager")]
+        [HttpGet]
+        public async Task<IActionResult> ApproveExpense(Guid id)
         {
+            var response = await _httpClient.GetAsync($"api/Expense/GetUpdateExpenceDTO/{id}");
 
-            var response = await _httpClient.GetAsync($"api/Expense/GetAllExpences/");
-            if (response.IsSuccessStatusCode)
-            {
-                var cont = await response.Content.ReadAsStringAsync();
-                var expenseRequests = JsonConvert.DeserializeObject<List<PersonelVM>>(cont);
-                return View(expenseRequests);
+            if (!response.IsSuccessStatusCode)
+                return View("Error");
 
-            }
-            return View();
-        }
+            var content = await response.Content.ReadAsStringAsync();
+            var model = JsonConvert.DeserializeObject<UpdateExpenseDTO>(content);
+            model.ExpenseStatus = RequestStatus.Approved;
 
-
-        [HttpPut]
-        public async Task<IActionResult> ExpenseLeave(ExpenseDTO model)
-        {
             var json = JsonConvert.SerializeObject(model);
-            var content = new StringContent(json, Encoding.UTF8, "application/json");
+            var contentDTO = new StringContent(json, Encoding.UTF8, "application/json");
 
-            var response = await _httpClient.PutAsync($"api/Expense/UpdateExpense/{model}", content);
+            var httpResponse = await _httpClient.PutAsync($"api/Expense/UpdateStatus", contentDTO);
 
-            if (response.IsSuccessStatusCode)
-            {
-                return RedirectToAction("ExpenseRequests");
-            }
+            if (httpResponse.IsSuccessStatusCode)
+                return RedirectToAction(nameof(EmployeesExpenses));
 
-            ModelState.AddModelError(response.StatusCode.ToString(), "Bir hata oluştu.");
-            return View(model);
+            ModelState.AddModelError(httpResponse.StatusCode.ToString(), "Bir hata oluştu.");
+            return View("Error");
         }
 
-
-        [HttpPost]
-        public async Task<IActionResult> RejectExpense(ExpenseDTO model)
+        [Authorize(Roles = "DepartmentManager,CompanyManager")]
+        [HttpGet]
+        public async Task<IActionResult> RejectExpense(Guid id)
         {
+            var response = await _httpClient.GetAsync($"api/Expense/GetUpdateExpenceDTO/{id}");
+
+            if (!response.IsSuccessStatusCode)
+                return View("Error");
+
+            var content = await response.Content.ReadAsStringAsync();
+            var model = JsonConvert.DeserializeObject<UpdateExpenseDTO>(content);
+            model.ExpenseStatus = RequestStatus.Rejected;
+
             var json = JsonConvert.SerializeObject(model);
-            var content = new StringContent(json, Encoding.UTF8, "application/json");
+            var contentDTO = new StringContent(json, Encoding.UTF8, "application/json");
 
-            var response = await _httpClient.PutAsync($"api/Expense/DeleteExpense/{model}", content);
+            var httpResponse = await _httpClient.PutAsync($"api/Expense/UpdateStatus", contentDTO);
 
-            if (response.IsSuccessStatusCode)
-            {
-                return RedirectToAction("ExpenseRequests");
-            }
+            if (httpResponse.IsSuccessStatusCode)
+                return RedirectToAction(nameof(EmployeesExpenses));
 
-            ModelState.AddModelError(response.StatusCode.ToString(), "Bir hata oluştu.");
-            return View(model);
+            ModelState.AddModelError(httpResponse.StatusCode.ToString(), "Bir hata oluştu.");
+            return View("Error");
         }
-
     }
 }

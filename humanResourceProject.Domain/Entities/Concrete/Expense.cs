@@ -1,5 +1,6 @@
 ﻿using humanResourceProject.Domain.Entities.Abstract;
 using humanResourceProject.Domain.Enum;
+using Microsoft.AspNetCore.Http;
 
 namespace humanResourceProject.Domain.Entities.Concrete
 {
@@ -11,6 +12,7 @@ namespace humanResourceProject.Domain.Entities.Concrete
         public ExpenseType ExpenseType { get; set; }
         public string? Explanation { get; set; }
         public Currency Currency { get; set; }
+        public IFormFile? UploadPath { get; set; }
         public string? FilePath { get; set; }
         public RequestStatus ExpenseStatus { get; set; } = RequestStatus.Pending;
 
