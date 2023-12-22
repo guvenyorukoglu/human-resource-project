@@ -185,9 +185,7 @@ namespace humanResourceProject.Presentation.Controllers
             var httpResponse = await _httpClient.PutAsync($"api/Leave/UpdateStatus", contentDTO);
 
             if (httpResponse.IsSuccessStatusCode)
-            {
-                return RedirectToAction("EmployeesLeaves");
-            }
+                return RedirectToAction(nameof(EmployeesLeaves));
 
             ModelState.AddModelError(httpResponse.StatusCode.ToString(), "Bir hata oluştu.");
             return View("Error");
