@@ -62,6 +62,7 @@
             <div class="form-group mb-3">
                 <label asp-for="BloodGroup" class="control-label"></label>
                 <select asp-for="BloodGroup" class="form-control">
+                    <option value="" disabled selected>Kan grubu seçiniz!</option>
                     @{
                         var enumType = typeof(BloodGroup);
                         var enumValues = enumType.GetEnumValues();
@@ -69,6 +70,7 @@
                         {
                             var displayAttribute = enumType.GetMember(enumValue.ToString())[0].GetCustomAttribute<DisplayAttribute>();
                             var displayName = displayAttribute?.GetName() ?? enumValue.ToString();
+                            
                             <option value="@enumValue">@displayName</option>
                         }
                     }
@@ -79,6 +81,7 @@
             <div class="form-group mb-3">
                 <label asp-for="Gender" class="control-label"></label>
                 <select asp-for="Gender" class="form-control">
+                    <option value="" disabled selected>Cinsiyet seçiniz!</option>
                     @{
                         var enumTypeGender = typeof(Gender);
                         var enumValuesGender = enumTypeGender.GetEnumValues();
@@ -86,6 +89,7 @@
                         {
                             var displayAttribute = enumTypeGender.GetMember(enumValue.ToString())[0].GetCustomAttribute<DisplayAttribute>();
                             var displayName = displayAttribute?.GetName() ?? enumValue.ToString();
+                            
                             <option value="@enumValue">@displayName</option>
                         }
                     }
@@ -96,7 +100,7 @@
             <div class="form-group mb-3">
                 <label asp-for="JobId" class="control-label"></label>
                 <select asp-for="JobId" asp-items="@Model.Jobs.Select(job => new SelectListItem { Text = job.Title, Value = job.Id.ToString() })" class="form-control">
-                    <option value="" disabled>Meslek seçiniz!</option>B
+                    <option value="" disabled selected>Meslek seçiniz!</option>
                 </select>
                 <span asp-validation-for="JobId" class="text-danger"></span>
             </div>

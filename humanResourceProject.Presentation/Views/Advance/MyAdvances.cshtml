@@ -23,6 +23,7 @@
 </head>
 
 <body>
+    <h3>Avans Taleplerim</h3>
     <div class="row">
         @Html.Partial("_PanelPartial")
 
@@ -43,9 +44,12 @@
 
                 <script>
                     $(document).ready(function () {
-                        $('#advances').DataTable();
+                        $('#advances').DataTable({
+                            "order": [
+                                [0, 'desc']
+                            ]
+                        });
                     });
-
                 </script>
 
 
@@ -74,8 +78,8 @@
                                 var displayAdvanceStatus = typeof(RequestStatus).GetMember(item.AdvanceStatus.ToString())[0].GetCustomAttribute<DisplayAttribute>();
                                 var displayNameAdvanceStatus = displayAdvanceStatus?.GetName() ?? item.AdvanceStatus.ToString();
                                 <tr>
-                                    <td>@item.CreateDate.ToShortDateString()</td>
-                                    <td>@item.ExpiryDate.ToShortDateString()</td>
+                                    <td>@item.CreateDate.ToString("dd.MM.yyyy"))</td>
+                                    <td>@item.ExpiryDate.ToString("dd.MM.yyyy")</td>
                                     <td>@item.AmountOfAdvance</td>
                                     <td>@item.Currency</td>
                                     <td>@displayNameAdvanceType</td>

@@ -125,7 +125,7 @@ app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
 
-SeedDataGenerator.Seed(app,5,5,5,5,5,5,5);
+SeedDataGenerator.Seed(app,5,10,15,20,15,15,15);
 
 app.MapControllers();
 

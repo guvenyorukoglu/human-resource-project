@@ -8,12 +8,6 @@
 <div class="row">
     <div class="col-md-4">
         <form asp-action="CreateAdvance">
-            
-            <div class="form-group mb-3">
-                <label asp-for="AmountOfAdvance" class="control-label"></label>
-                <input type="number" min="1" asp-for="AmountOfAdvance" class="form-control" />
-                <span asp-validation-for="AmountOfAdvance" class="text-danger"></span>
-            </div>
             <div class="form-group mb-3">
                 <label asp-for="AdvanceType" class="control-label"></label>
                 <select asp-for="AdvanceType" class="form-control">
@@ -32,6 +26,17 @@
                 <span asp-validation-for="AdvanceType" class="text-danger"></span>
             </div>
             <div class="form-group mb-3">
+                <label asp-for="ExpiryDate" class="control-label"></label>
+                <input value="@DateTime.Now.ToString("yyyy-MM-dd")" min="@DateTime.Now.ToString("yyyy-MM-dd")" type="date" asp-for="ExpiryDate" class="form-control" />
+                <span asp-validation-for="ExpiryDate" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-3">
+                <label asp-for="AmountOfAdvance" class="control-label"></label>
+                <input type="number" min="1" asp-for="AmountOfAdvance" class="form-control" />
+                <span asp-validation-for="AmountOfAdvance" class="text-danger"></span>
+            </div>
+            
+            <div class="form-group mb-3">
                 <label asp-for="Currency" class="control-label"></label>
                 <select asp-for="Currency" class="form-control">
                     @{
@@ -41,6 +46,7 @@
                         {
                             var displayAttribute = enumTypeCurrency.GetMember(enumValue.ToString())[0].GetCustomAttribute<DisplayAttribute>();
                             var displayName = displayAttribute?.GetName() ?? enumValue.ToString();
+                            <option value="" disabled selected>Para birimi seçiniz!</option>
                             <option value="@enumValue">@displayName</option>
                         }
                     }
@@ -48,11 +54,7 @@
                 </select>
                 <span asp-validation-for="Currency" class="text-danger"></span>
             </div>
-            <div class="form-group mb-3">
-                <label asp-for="ExpiryDate" class="control-label"></label>
-                <input value="@DateTime.Now.ToString("yyyy-MM-dd")" min="@DateTime.Now.ToString("yyyy-MM-dd")" type="date" asp-for="ExpiryDate" class="form-control" />
-                <span asp-validation-for="ExpiryDate" class="text-danger"></span>
-            </div>
+            
             <div class="form-group mb-3">
                 <label asp-for="Explanation" class="control-label"></label>
                 <textarea asp-for="Explanation" class="form-control"></textarea>
