@@ -8,6 +8,7 @@ namespace humanResourceProject.Application.Services.Abstract.IImageServices
     public interface IImageService
     {
         Task<CompanyManagerRegisterDTO> UploadImageToAzure(CompanyManagerRegisterDTO model);
+        Task<ExpenseDTO> UploadExpenseImageToAzure(ExpenseDTO model);
         Task<IdentityResult> UpdateProfileImage(UpdateProfileImageDTO model); // Profil resmini günceller.
     }
 }

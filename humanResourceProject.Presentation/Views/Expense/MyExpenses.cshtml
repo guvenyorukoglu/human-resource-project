@@ -54,6 +54,7 @@
                             <th style="width: 8%">Harcama Tipi</th>
                             <th style="width: 30%">Açıklama</th>
                             <th style="width: 10%">Statü</th>
+                            <th style="width: 8%">Fiş</th>
                             <th style="width: 15%">İşlemler</th>
                         </tr>
                     </thead>
@@ -75,6 +76,11 @@
                                     <td>@displayNameExpenseType</td>
                                     <td>@item.Explanation</td>
                                     <td>@displayNameExpenseStatus</td>
+                                    <td>@if(item.FilePath != null)
+                                        {
+                                            <a href="@item.FilePath">Aç</a>
+                                        }
+                                        </td>
                                     <td>
                                         @if (item.ExpenseStatus == RequestStatus.Pending)
                                         {

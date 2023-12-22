@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using humanResourceProject.Application.Services.Abstract.IExpenseServices;
+using humanResourceProject.Application.Services.Abstract.IImageServices;
 using humanResourceProject.Application.Services.Concrete.BaseServices;
 using humanResourceProject.Domain.Entities.Concrete;
 using humanResourceProject.Domain.IRepository.BaseRepos;
@@ -14,11 +15,13 @@ namespace humanResourceProject.Application.Services.Concrete.ExpenseServices
         private readonly IBaseWriteRepository<Expense> _expenseWriteRepository;
         private readonly IBaseReadRepository<Expense> _expenseReadRepository;
         private readonly IMapper _mapper;
-        public ExpenseWriteService(IBaseWriteRepository<Expense> expenseWriteRepository, IBaseReadRepository<Expense> expenseReadRepository, IMapper mapper) : base(expenseWriteRepository, expenseReadRepository)
+        private readonly IImageService _imageService;
+        public ExpenseWriteService(IBaseWriteRepository<Expense> expenseWriteRepository, IBaseReadRepository<Expense> expenseReadRepository, IMapper mapper, IImageService imageService) : base(expenseWriteRepository, expenseReadRepository)
         {
             _expenseWriteRepository = expenseWriteRepository;
             _expenseReadRepository = expenseReadRepository;
             _mapper = mapper;
+            _imageService = imageService;
         }
 
         public async Task<IdentityResult> DeleteExpense(Guid id)
@@ -36,6 +39,8 @@ namespace humanResourceProject.Application.Services.Concrete.ExpenseServices
         {
             if (model == null)
                 return IdentityResult.Failed();
+
+            model = await _imageService.UploadExpenseImageToAzure(model);
 
             Expense newExpense = _mapper.Map<Expense>(model);
             newExpense.Status = Domain.Enum.Status.Active;
