@@ -289,6 +289,7 @@ namespace humanResourceProject.Presentation.Controllers
 
         public async Task<IActionResult> Home()
         {
+            //DashboardVM doldur apiden çek view'e gönder
             return View();
         }
 
