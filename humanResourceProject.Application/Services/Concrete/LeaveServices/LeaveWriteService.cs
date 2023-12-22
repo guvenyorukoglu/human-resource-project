@@ -25,6 +25,7 @@ namespace humanResourceProject.Application.Services.Concrete.LeaveServices
             Leave leave = await _leaveReadRepository.GetById(id);
             leave.Status = Domain.Enum.Status.Deleted;
             leave.DeleteDate = DateTime.Now;
+
             if (await _leaveWriteRepository.Delete(id))
                 return IdentityResult.Success;
             else
@@ -39,6 +40,7 @@ namespace humanResourceProject.Application.Services.Concrete.LeaveServices
             Leave newLeave = _mapper.Map<Leave>(model);
             newLeave.Status = Domain.Enum.Status.Active;
             newLeave.CreateDate = DateTime.Now;
+
             if (await _leaveWriteRepository.Insert(newLeave))
                 return IdentityResult.Success;
             else
@@ -59,13 +61,9 @@ namespace humanResourceProject.Application.Services.Concrete.LeaveServices
             leave.UpdateDate = DateTime.Now;
 
             if (await _leaveWriteRepository.Update(leave))
-            {
                 return IdentityResult.Success;
-            }
             else
-            {
                 return IdentityResult.Failed();
-            }
 
         }
     }

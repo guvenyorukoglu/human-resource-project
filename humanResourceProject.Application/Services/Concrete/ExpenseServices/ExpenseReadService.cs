@@ -20,25 +20,6 @@ namespace humanResourceProject.Application.Services.Concrete.ExpenseServices
             _mapper = mapper;
         }
 
-        public async Task<List<ExpenseVM>> GetAllExpenses()
-        {
-            List<ExpenseVM>? expenses = await _expenseReadRepository.GetFilteredList(
-                                              select: x => new ExpenseVM
-                                              {
-                                                  Id = x.Id,
-                                                  Description = x.Explanation,
-                                                  Amount = x.AmountOfExpense,
-                                                  EmployeeId = x.EmployeeId,
-                                                  EmployeeName = x.Employee.FirstName,
-                                                  EmployeeSurname = x.Employee.LastName,
-                                                  Status = x.ExpenseStatus
-                                              },
-                                              where: x => x.Status != Status.Deleted && x.Status != Status.Inactive,
-                                              orderBy: x => x.OrderByDescending(x => x.CreateDate),
-                                              include: x => x.Include(x => x.Employee));
-            return expenses;
-        }
-
         public async Task<ExpenseDTO> GetExpenseById(Guid id)
         {
             Expense expense = await _expenseReadRepository.GetById(id);
@@ -46,18 +27,70 @@ namespace humanResourceProject.Application.Services.Concrete.ExpenseServices
             return expenseDTO;
         }
 
-    
-
-            public async Task<List<ExpenseVM>> GetExpensesByDepartmentId(Guid id)
+        public async Task<List<ExpenseVM>> GetAllExpenses()
         {
             List<ExpenseVM>? expenses = await _expenseReadRepository.GetFilteredList(
                                               select: x => new ExpenseVM
                                               {
-                                                  Description = x.Explanation,
-                                                  Amount = x.AmountOfExpense,
+                                                  Id = x.Id,
+                                                  Explanation = x.Explanation,
+                                                  AmountOfExpense = x.AmountOfExpense,
+                                                  Currency = x.Currency,
                                                   EmployeeName = x.Employee.FirstName,
                                                   EmployeeSurname = x.Employee.LastName,
-                                                  Status = x.ExpenseStatus
+                                                  EmployeeId = x.EmployeeId,
+                                                  DepartmentId = x.Employee.Department.Id,
+                                                  ManagerId = (Guid)x.Employee.Manager.ManagerId,
+                                                  ExpenseStatus = x.ExpenseStatus,
+                                                  DateOfExpense = x.DateOfExpense,
+                                                  FilePath = x.FilePath,
+                                                  UploadPath = x.UploadPath
+                                              },
+                                              where: x => x.Status != Status.Deleted && x.Status != Status.Inactive,
+                                              orderBy: x => x.OrderByDescending(x => x.CreateDate),
+                                              include: x => x.Include(x => x.Employee));
+            return expenses;
+        }
+
+        public async Task<List<ExpensePersonnelVM>> GetExpensesByEmployeeId(Guid id)
+        {
+            List<ExpensePersonnelVM>? expenses = await _expenseReadRepository.GetFilteredList(
+                                              select: x => new ExpensePersonnelVM
+                                              {
+                                                  Id = x.Id,
+                                                  Explanation = x.Explanation,
+                                                  AmountOfExpense = x.AmountOfExpense,
+                                                  Currency = x.Currency,
+                                                  EmployeeId = x.EmployeeId,
+                                                  ExpenseStatus = x.ExpenseStatus,
+                                                  FilePath = x.FilePath,
+                                                  DateOfExpense = x.DateOfExpense,
+                                                  UploadPath = x.UploadPath
+                                              },
+                                              where: x => (x.Status != Status.Deleted && x.Status != Status.Inactive) && x.Employee.Id == id,
+                                              orderBy: x => x.OrderByDescending(x => x.CreateDate),
+                                              include: x => x.Include(x => x.Employee));
+            return expenses;
+        }
+
+        public async Task<List<ExpenseVM>> GetExpensesByDepartmentId(Guid id)
+        {
+            List<ExpenseVM>? expenses = await _expenseReadRepository.GetFilteredList(
+                                              select: x => new ExpenseVM
+                                              {
+                                                  Id = x.Id,
+                                                  Explanation = x.Explanation,
+                                                  AmountOfExpense = x.AmountOfExpense,
+                                                  Currency = x.Currency,
+                                                  EmployeeName = x.Employee.FirstName,
+                                                  EmployeeSurname = x.Employee.LastName,
+                                                  EmployeeId = x.EmployeeId,
+                                                  DepartmentId = x.Employee.Department.Id,
+                                                  ManagerId = (Guid)x.Employee.Manager.ManagerId,
+                                                  ExpenseStatus = x.ExpenseStatus,
+                                                  DateOfExpense = x.DateOfExpense,
+                                                  FilePath = x.FilePath,
+                                                  UploadPath = x.UploadPath
                                               },
                                               where: x => (x.Status != Status.Deleted && x.Status != Status.Inactive) && x.Employee.DepartmentId == id,
                                               orderBy: x => x.OrderByDescending(x => x.CreateDate),
@@ -65,22 +98,28 @@ namespace humanResourceProject.Application.Services.Concrete.ExpenseServices
             return expenses;
         }
 
-        public async Task<List<ExpenseVM>> GetExpensesByEmployeeId(Guid id)
+        public async Task<List<ExpenseVM>> GetExpensesByCompanyId(Guid id)
         {
             List<ExpenseVM>? expenses = await _expenseReadRepository.GetFilteredList(
-                                              select: x => new ExpenseVM
-                                              {
-                                                  Id = x.Id,
-                                                  EmployeeId = x.EmployeeId,
-                                                  Description = x.Explanation,
-                                                  Amount = x.AmountOfExpense,
-                                                  EmployeeName = x.Employee.FirstName,
-                                                  EmployeeSurname = x.Employee.LastName,
-                                                  Status = x.ExpenseStatus
-                                              },
-                                              where: x => (x.Status != Status.Deleted && x.Status != Status.Inactive) && x.EmployeeId == id,
-                                              orderBy: x => x.OrderByDescending(x => x.CreateDate),
-                                              include: x => x.Include(x => x.Employee));
+                                                             select: x => new ExpenseVM
+                                                             {
+                                                                 Id = x.Id,
+                                                                 Explanation = x.Explanation,
+                                                                 AmountOfExpense = x.AmountOfExpense,
+                                                                 Currency = x.Currency,
+                                                                 EmployeeName = x.Employee.FirstName,
+                                                                 EmployeeSurname = x.Employee.LastName,
+                                                                 EmployeeId = x.EmployeeId,
+                                                                 DepartmentId = x.Employee.Department.Id,
+                                                                 ManagerId = (Guid)x.Employee.Manager.ManagerId,
+                                                                 ExpenseStatus = x.ExpenseStatus,
+                                                                 DateOfExpense = x.DateOfExpense,
+                                                                 FilePath = x.FilePath,
+                                                                 UploadPath = x.UploadPath
+                                                             },
+                                                where: x => (x.Status != Status.Deleted && x.Status != Status.Inactive) && x.Employee.Department.CompanyId == id,
+                                                orderBy: x => x.OrderByDescending(x => x.CreateDate),
+                                                include: x => x.Include(x => x.Employee));
             return expenses;
         }
 
