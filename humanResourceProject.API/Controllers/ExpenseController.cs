@@ -91,6 +91,7 @@ namespace humanResourceProject.API.Controllers
         }
 
         [HttpPost]
+        [Route("CreateExpense")]
         public async Task<IActionResult> CreateExpense([FromBody] ExpenseDTO model)
         {
             var result = await _expenseWriteService.InsertExpense(model);

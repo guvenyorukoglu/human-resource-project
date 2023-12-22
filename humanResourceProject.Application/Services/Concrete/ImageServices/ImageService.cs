@@ -106,5 +106,40 @@ namespace humanResourceProject.Application.Services.Concrete.ImageServices
                 return IdentityResult.Failed();
 
         }
+
+        public async Task<ExpenseDTO> UploadExpenseImageToAzure(ExpenseDTO model)
+        {
+            if (model.UploadPath == null || model.UploadPath.FileName == null)
+                return model;
+           
+
+            var fileExtension = Path.GetExtension(model.UploadPath.FileName);
+            if (fileExtension != ".jpg" && fileExtension != ".png" && fileExtension != ".jpeg")
+                return model;
+            
+            using MemoryStream fileUploadStream = new MemoryStream();
+            await model.UploadPath.CopyToAsync(fileUploadStream);
+            fileUploadStream.Position = 0;
+
+            var fileName = Guid.NewGuid().ToString() + fileExtension;
+
+            var connectionString = _configuration["AzureStorage:ConnectionString"];
+            var containerName = _configuration["AzureStorage:Container"];
+
+            BlobContainerClient blobContainerClient = new BlobContainerClient(connectionString, containerName);
+
+
+            BlobClient blobClient = blobContainerClient.GetBlobClient(fileName);
+            await blobClient.UploadAsync(fileUploadStream, new BlobUploadOptions()
+            {
+                HttpHeaders = new BlobHttpHeaders()
+                {
+                    ContentType = "image/bitmap"
+                }
+            }, cancellationToken: default);
+
+            model.FilePath = "https://ik.imagekit.io/7ypp4olwr" + "/" + fileName;
+            return model;
+        }
     }
 }

@@ -44,11 +44,13 @@ namespace humanResourceProject.Application.Services.Concrete.ExpenseServices
                                                   ExpenseStatus = x.ExpenseStatus,
                                                   DateOfExpense = x.DateOfExpense,
                                                   FilePath = x.FilePath,
-                                                  UploadPath = x.UploadPath
+                                                  UploadPath = x.UploadPath,
+                                                  CreateDate = x.CreateDate,
+                                                  ExpenseType = x.ExpenseType
                                               },
                                               where: x => x.Status != Status.Deleted && x.Status != Status.Inactive,
                                               orderBy: x => x.OrderByDescending(x => x.CreateDate),
-                                              include: x => x.Include(x => x.Employee));
+                                              include: x => x.Include(x => x.Employee).ThenInclude(x => x.Manager));
             return expenses;
         }
 
@@ -92,11 +94,13 @@ namespace humanResourceProject.Application.Services.Concrete.ExpenseServices
                                                   ExpenseStatus = x.ExpenseStatus,
                                                   DateOfExpense = x.DateOfExpense,
                                                   FilePath = x.FilePath,
-                                                  UploadPath = x.UploadPath
+                                                  UploadPath = x.UploadPath,
+                                                  CreateDate = x.CreateDate,
+                                                  ExpenseType = x.ExpenseType
                                               },
                                               where: x => (x.Status != Status.Deleted && x.Status != Status.Inactive) && x.Employee.DepartmentId == id,
                                               orderBy: x => x.OrderByDescending(x => x.CreateDate),
-                                              include: x => x.Include(x => x.Employee));
+                                              include: x => x.Include(x => x.Employee).ThenInclude(x => x.Manager));
             return expenses;
         }
 
@@ -117,11 +121,13 @@ namespace humanResourceProject.Application.Services.Concrete.ExpenseServices
                                                                  ExpenseStatus = x.ExpenseStatus,
                                                                  DateOfExpense = x.DateOfExpense,
                                                                  FilePath = x.FilePath,
-                                                                 UploadPath = x.UploadPath
+                                                                 UploadPath = x.UploadPath,
+                                                                 CreateDate = x.CreateDate,
+                                                                 ExpenseType = x.ExpenseType
                                                              },
                                                 where: x => (x.Status != Status.Deleted && x.Status != Status.Inactive) && x.Employee.Department.CompanyId == id,
                                                 orderBy: x => x.OrderByDescending(x => x.CreateDate),
-                                                include: x => x.Include(x => x.Employee));
+                                                include: x => x.Include(x => x.Employee).ThenInclude(x => x.Manager));
             return expenses;
         }
 

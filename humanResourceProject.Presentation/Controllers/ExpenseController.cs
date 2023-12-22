@@ -1,9 +1,12 @@
-﻿using humanResourceProject.Domain.Enum;
+﻿using humanResourceProject.Domain.Entities.Concrete;
+using humanResourceProject.Domain.Enum;
 using humanResourceProject.Models.DTOs;
 using humanResourceProject.Models.VMs;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using System.Net.Http;
+using System.Net.Mime;
 using System.Security.Claims;
 using System.Text;
 
@@ -78,15 +81,45 @@ namespace humanResourceProject.Presentation.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateExpense(ExpensePersonnelVM model)
+        public async Task<IActionResult> CreateExpense(ExpenseDTO model)
         {
+            if (!ModelState.IsValid)
+                return View(model);
+
+            //var multipartContent = new MultipartFormDataContent();
+
+            //var properties = typeof(ExpenseDTO).GetProperties();
+
+            //foreach (var property in properties)
+            //{
+            //    var value = property.GetValue(model)?.ToString() ?? string.Empty;
+            //    var stringContent = new StringContent(value, Encoding.UTF8, MediaTypeNames.Text.Plain);
+            //    multipartContent.Add(stringContent, property.Name);
+            //}
+
+            //if (model.UploadPath != null && model.UploadPath.Length > 0) // UploadPath varsa
+            //{
+            //    string fileExtension = Path.GetExtension(model.UploadPath.FileName).ToLower();
+
+            //    if (fileExtension != ".png" && fileExtension != ".jpg" && fileExtension != ".jpeg")
+            //    {
+            //        ModelState.AddModelError(string.Empty, "Yüklediğiniz profil fotoğrafının uzantısı '.png', '.jpg' veya '.jpeg' olmalıdır.");
+            //        return View(model);
+            //    }
+
+            //    var imageContent = new StreamContent(model.UploadPath.OpenReadStream());
+            //    multipartContent.Add(imageContent, "UploadPath", model.UploadPath.FileName);
+            //}
+
+            //var response = await _httpClient.PostAsync($"api/Expense/CreateExpense", multipartContent);
+
             var json = JsonConvert.SerializeObject(model);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-            var response = await _httpClient.PostAsync($"api/Expense", content);
+            var response = await _httpClient.PostAsync($"api/Expense/CreateExpense", content);
+
             if (response.IsSuccessStatusCode)
                 return RedirectToAction(nameof(MyExpenses));
-
             else
             {
                 ModelState.AddModelError(response.StatusCode.ToString(), "Bir hata oluştu.");
