@@ -1,4 +1,4 @@
-﻿@model humanResourceProject.Models.VMs.LeavePersonnelVM
+﻿@model LeaveDTO
 
 @{
     ViewData["Title"] = "CreateLeave";
@@ -10,37 +10,56 @@
 <div class="row">
     <div class="col-md-4">
         <form asp-action="CreateLeave">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-
-            <div class="form-group">
-                <label asp-for="StartDateOfLeave" class="control-label"></label>
-                <input asp-for="StartDateOfLeave" class="form-control" />
-                <span asp-validation-for="StartDateOfLeave" class="text-danger"></span>
+            <div class="form-group mb-4">
+                <label asp-for="DaysOfLeave" class="control-label"></label>
+                <input type="number" min="1" asp-for="DaysOfLeave" class="form-control" />
+                <span asp-validation-for="DaysOfLeave" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="EndDateOfLeave" class="control-label"></label>
-                <input asp-for="EndDateOfLeave" class="form-control" />
-                <span asp-validation-for="EndDateOfLeave" class="text-danger"></span>
-            </div>
-            <div class="form-group">
+            <div class="form-group mb-4">
                 <label asp-for="LeaveType" class="control-label"></label>
-                <input asp-for="LeaveType" class="form-control" />
+                <select asp-for="LeaveType" class="form-control">
+                    @{
+                        var enumType = typeof(LeaveType);
+                        var enumValues = enumType.GetEnumValues();
+                        foreach (var enumValue in enumValues)
+                        {
+                            var displayAttribute = enumType.GetMember(enumValue.ToString())[0].GetCustomAttribute<DisplayAttribute>();
+                            var displayName = displayAttribute?.GetName() ?? enumValue.ToString();
+                            <option value="@enumValue">@displayName</option>
+                        }
+                    }
+
+                </select>
                 <span asp-validation-for="LeaveType" class="text-danger"></span>
             </div>
-            <div class="form-group">
+
+            <div class="form-group mb-4">
+                <label asp-for="StartDate" class="control-label"></label>
+                <input value="@DateTime.Now.ToString("yyyy-MM-dd")" min="@DateTime.Now.ToString("yyyy-MM-dd")" type="date" asp-for="StartDate" class="form-control" />
+                <span asp-validation-for="StartDate" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-4">
+                <label asp-for="EndDate" class="control-label"></label>
+                <input value="@DateTime.Now.ToString("yyyy-MM-dd")" min="@DateTime.Now.ToString("yyyy-MM-dd")" type="date" asp-for="EndDate" class="form-control" />
+                <span asp-validation-for="EndDate" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-4">
                 <label asp-for="Explanation" class="control-label"></label>
-                <input asp-for="Explanation" class="form-control" />
+                <textarea asp-for="Explanation" class="form-control"></textarea>
                 <span asp-validation-for="Explanation" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="form-group mb-4">
                 <label asp-for="DaysOfLeave" class="control-label"></label>
                 <input asp-for="DaysOfLeave" class="form-control" />
                 <span asp-validation-for="DaysOfLeave" class="text-danger"></span>
             </div>
-            @Html.HiddenFor(model => model.Id)
-            @Html.HiddenFor(model => model.LeaveStatus)
-            <div class="form-group">
-                <input type="submit" value="İzin Oluştur" class="btn btn-primary" />
+            <div class="form-group mb-4">
+                <input asp-for="EmployeeId" type="hidden" class="form-control" />
+                <span asp-validation-for="EmployeeId" class="text-danger"></span>
+            </div>
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group mb-3">
+                <input type="submit" value="Oluştur" class="btn btn-primary" />
             </div>
         </form>
     </div>

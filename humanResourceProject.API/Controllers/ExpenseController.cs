@@ -88,12 +88,13 @@ namespace humanResourceProject.API.Controllers
         [Route("CreateExpense")]
         public async Task<IActionResult> CreateExpense([FromBody] ExpenseDTO model)
         {
-            AppUser manager = await _appUserReadService.GetSingleDefault(x => x.Id == model.Employee.ManagerId);
+            AppUser employee = await _appUserReadService.GetSingleDefault(x => x.Id == model.EmployeeId);
+            AppUser manager = await _appUserReadService.GetSingleDefault(x => x.Id == model.ManagerId);
             string recipientEmail = manager.Email;
             string mailToName = $"{manager.FirstName} {manager.LastName}";
             string action = "";
             string subject = "Masraf Talebi!";
-            string body = $"Sayın {manager.FirstName} {manager.LastName}, {model.CreateDate.ToShortDateString()} tarihli {model.AmountOfExpense} {model.Currency.GetDisplayName()} masraf talebi yapılmıştır. Uygulamaya giriş yapıp onaylamanızı rica ederiz.";
+            string body = $"Sayın {manager.FirstName} {manager.LastName}, {employee.FirstName} {employee.LastName} tarafından {model.CreateDate.ToShortDateString()} tarihli {model.AmountOfExpense} {model.Currency.GetDisplayName()} masraf talebi yapılmıştır. Uygulamaya giriş yapıp onaylamanızı rica ederiz.";
             await _mailService.SendEmailAsync(manager, recipientEmail, mailToName, action, subject, body);
             return Ok(await _expenseWriteService.InsertExpense(model));
         }

@@ -31,42 +31,6 @@ namespace humanResourceProject.API.Controllers
             return Ok(await _leaveReadService.GetAllLeaves());
         }
 
-
-        [HttpGet]
-        [Route("GetLeavesByEmployeeId/{id}")]
-        public async Task<IActionResult> GetLeavesByEmployeeId(Guid id)
-        {
-            return Ok(await _leaveReadService.GetLeavesByEmployeeId(id));
-        }
-
-        [HttpGet]
-        [Route("GetLeavesByDepartmentId/{id}")]
-        public async Task<IActionResult> GetLeavesByDepartmentId(Guid id)
-        {
-            return Ok(await _leaveReadService.GetLeavesByDepartmentId(id));
-        }
-
-        [HttpPost]
-        [Route("CreateLeave")]
-        public async Task<IActionResult> CreateLeave([FromBody] LeaveDTO model)
-        {
-            AppUser manager = await _appUserReadService.GetSingleDefault(x => x.Id == model.ManagerId);
-            string recipientEmail = manager.Email;
-            string mailToName = $"{manager.FirstName} {manager.LastName}";
-            string action = "";
-            string subject = "İzin Talebi!";
-            string body = $"Sayın {manager.FirstName} {manager.LastName}, {model.CreateDate.ToShortDateString()} tarihli {model.DaysOfLeave} gün izin talebi yapılmıştır. Uygulamaya giriş yapıp onaylamanızı rica ederiz.";
-            await _mailService.SendEmailAsync(manager, recipientEmail, mailToName, action, subject, body);
-            return Ok(await _leaveWriteService.InsertLeave(model));
-        }
-
-        [HttpPut]
-        [Route("UpdateLeave")]
-        public async Task<IActionResult> UpdateLeave([FromBody] UpdateLeaveDTO model)
-        {
-            return Ok(await _leaveWriteService.UpdateLeave(model));
-        }
-
         [HttpPut]
         [Route("UpdateStatus")]
         public async Task<IActionResult> UpdateStatus([FromBody] UpdateLeaveDTO model)
@@ -99,6 +63,59 @@ namespace humanResourceProject.API.Controllers
                 //_mailService.SendApproveMail(user, action, $"Sayın {user.FirstName} {user.LastName} İznin maalesef reddedildi");
             }
 
+            return Ok();
+        }
+
+        [HttpGet]
+        [Route("GetLeavesByEmployeeId/{id}")]
+        public async Task<IActionResult> GetLeavesByEmployeeId(Guid id)
+        {
+            return Ok(await _leaveReadService.GetLeavesByEmployeeId(id));
+        }
+
+        [HttpGet]
+        [Route("GetLeavesByDepartmentId/{id}")]
+        public async Task<IActionResult> GetLeavesByDepartmentId(Guid id)
+        {
+            return Ok(await _leaveReadService.GetLeavesByDepartmentId(id));
+        }
+
+        [HttpGet]
+        [Route("GetLeavesByCompanyId/{id}")]
+        public async Task<IActionResult> GetLeavesByCompanyId(Guid id)
+        {
+            return Ok(await _leaveReadService.GetLeavesByCompanyId(id));
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateLeave([FromBody] LeaveDTO model)
+        {
+            var result = await _leaveWriteService.InsertLeave(model);
+            if (!result.Succeeded)
+            {
+                return BadRequest(result.Errors);
+            }
+            AppUser employee = await _appUserReadService.GetSingleDefault(x => x.Id == model.EmployeeId);
+            AppUser manager = await _appUserReadService.GetSingleDefault(x => x.Id == model.ManagerId);
+            string recipientEmail = manager.Email;
+            string mailToName = $"{manager.FirstName} {manager.LastName}";
+            string action = "";
+            string subject = "İzin Talebi!";
+            string body = $"Sayın {manager.FirstName} {manager.LastName},{employee.FirstName} {employee.LastName} tarafından {model.CreateDate.ToShortDateString()} tarihli {model.DaysOfLeave} gün izin talebi yapılmıştır. Uygulamaya giriş yapıp onaylamanızı rica ederiz.";
+            await _mailService.SendEmailAsync(manager, recipientEmail, mailToName, action, subject, body);
+            return Ok(result);
+        }
+
+        [HttpGet]
+        [Route("GetUpdateLeaveDTO/{id}")]
+        public async Task<IActionResult> GetUpdateLeaveDTO(Guid id)
+        {
+            return Ok(await _leaveReadService.GetUpdateLeaveDTO(id));
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> UpdateLeave([FromBody] UpdateLeaveDTO model)
+        {
             return Ok(await _leaveWriteService.UpdateLeave(model));
         }
 

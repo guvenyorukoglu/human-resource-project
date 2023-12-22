@@ -21,11 +21,12 @@ namespace humanResourceProject.Models.DTOs
         public DateTime EndDateOfLeave { get; set; }
         public Guid EmployeeId { get; set; }
         //public Guid ManagerId { get; set; }
-        public Status Status { get; set; } = Status.Modified;
-        public DateTime? UpdateDate { get; set; } = DateTime.Now;
+        //public Status Status { get; set; } = Status.Modified;
+        //public DateTime? UpdateDate { get; set; } = DateTime.Now;
         public RequestStatus LeaveStatus { get; set; }
         [Required(ErrorMessage = "İzin süresi boş geçilemez!")]
         [DisplayName("İzin süresi*")]
         public decimal DaysOfLeave { get; set; }
+        public string Explanation { get; set; }
     }
 }
