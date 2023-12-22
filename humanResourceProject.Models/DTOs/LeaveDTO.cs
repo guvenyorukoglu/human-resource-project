@@ -7,6 +7,8 @@ namespace humanResourceProject.Models.DTOs
     public class LeaveDTO
     {
         //public Guid Id { get; set; }
+        [Required(ErrorMessage = "İzin türü boş geçilemez!")]
+        [DisplayName("İzin Türü*")]
         public LeaveType LeaveType { get; set; }
         [Required(ErrorMessage = "İzin başlangıç tarihi boş geçilemez!")]
         [DisplayName("İzin başlangıç Tarihi*")]
@@ -20,7 +22,11 @@ namespace humanResourceProject.Models.DTOs
         public DateTime CreateDate { get; set; } = DateTime.Now;
         //public DateTime? UpdateDate { get; set; }
         //public RequestStatus LeaveStatus { get; set; }
+        [Required(ErrorMessage = "İzin gün miktarı boş geçilemez!")]
+        [DisplayName("İzinli Gün Miktarı*")]
         public decimal DaysOfLeave { get; set; }
+        [Required(ErrorMessage = "İzin açıklaması boş geçilemez!")]
+        [DisplayName("İzin Açıklaması*")]
         public string Explanation { get; set; }
     }
 }

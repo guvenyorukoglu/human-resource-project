@@ -22,11 +22,18 @@ namespace humanResourceProject.Models.DTOs
         public Guid EmployeeId { get; set; }
         public Guid ManagerId { get; set; }
         public DateTime CreateDate { get; set; }
+        [Required(ErrorMessage = "Para birimi alanı boş geçilemez!")]
+        [DisplayName("Para Birimi*")]
         public Currency Currency { get; set; }
         public IFormFile? UploadPath { get; set; }
         public string? FilePath { get; set; }
+
+        [Required(ErrorMessage = "Masraf türü alanı boş geçilemez!")]
+        [DisplayName("Masraf Türü*")]
         public ExpenseType ExpenseType { get; set; }
         public RequestStatus ExpenseStatus { get; set; } = RequestStatus.Pending;
+        [Required(ErrorMessage = "Masraf tarihi alanı boş geçilemez!")]
+        [DisplayName("Masraf Tarihi*")]
         public DateTime DateOfExpense { get; set; }
 
     }

@@ -2,7 +2,7 @@
 
 @{
     ViewData["Title"] = "MyLeaves";
-    Layout = "~/Views/Shared/_PanelPartial.cshtml";
+    Layout = "~/Views/Shared/_HRLayout.cshtml";
 }
 
 @model List<LeavePersonnelVM>
@@ -16,6 +16,10 @@
         .panel {
             height: 120vh;
         }
+
+        a{
+            text-decoration: none;
+        }
     </style>
 </head>
 
@@ -27,7 +31,7 @@
             @if (Model != null)
             {
                 <a asp-action="CreateLeave" asp-controller="Leave">
-                    <button class="custom-button custom-button--create-advance">İzin Ekle</button>
+                    <button class="custom-button custom-button--create-entity">İzin Ekle</button>
                 </a>
             }
 
@@ -47,10 +51,10 @@
                         <tr>
                             <th style="width: 20%">Açıklama</th>
                             <th style="width: 20%">İzin Bitiş Tarihi</th>
-                            <th style="width: 20%">İzin Gün Sayısı</th>
-                            <th style="width: 20%">İzin Türü</th>
-                            <th style="width: 10%">Durumu</th>
-                            <th style="width: 10%"></th>
+                            <th style="width: 10%">İzin Gün Sayısı</th>
+                            <th style="width: 15%">İzin Türü</th>
+                            <th style="width: 15%">Durumu</th>
+                            <th style="width: 20%"></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -58,12 +62,17 @@
                         {
                             foreach (var item in Model)
                             {
+                                var displayLeaveType = typeof(LeaveType).GetMember(item.LeaveType.ToString())[0].GetCustomAttribute<DisplayAttribute>();
+                                var displayNameLeaveType = displayLeaveType?.GetName() ?? item.LeaveType.ToString();
+
+                                var displayLeaveStatus = typeof(RequestStatus).GetMember(item.LeaveStatus.ToString())[0].GetCustomAttribute<DisplayAttribute>();
+                                var displayNameLeaveStatus = displayLeaveStatus?.GetName() ?? item.LeaveStatus.ToString();
                                 <tr>
                                     <td>@item.Explanation</td>
                                     <td>@item.EndDateOfLeave</td>
                                     <td>@item.DaysOfLeave</td>
-                                    <td>@item.LeaveType</td>
-                                    <td>@item.LeaveStatus</td>
+                                    <td>@displayNameLeaveType</td>
+                                    <td>@displayNameLeaveStatus</td>
                                     <td>
                                         @if (item.LeaveStatus == RequestStatus.Pending)
                                         {
