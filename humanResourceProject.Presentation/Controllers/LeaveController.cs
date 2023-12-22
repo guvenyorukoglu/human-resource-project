@@ -85,9 +85,8 @@ namespace humanResourceProject.Presentation.Controllers
 
             var response = await _httpClient.PostAsync($"api/Leave", content);
             if (response.IsSuccessStatusCode)
-            {
                 return RedirectToAction(nameof(MyLeaves));
-            }
+
             else
             {
                 ModelState.AddModelError(response.StatusCode.ToString(), "Bir hata oluştu.");
@@ -101,9 +100,7 @@ namespace humanResourceProject.Presentation.Controllers
             var response = await _httpClient.DeleteAsync($"api/Leave/DeleteLeave/{id}");
 
             if (response.IsSuccessStatusCode)
-            {
                 return RedirectToAction(nameof(MyLeaves));
-            }
 
             return View("Error");
         }
@@ -135,9 +132,7 @@ namespace humanResourceProject.Presentation.Controllers
             var response = await _httpClient.PutAsync($"api/Leave/{model.Id}", content);
 
             if (response.IsSuccessStatusCode)
-            {
                 return RedirectToAction(nameof(MyLeaves));
-            }
 
             ModelState.AddModelError(response.StatusCode.ToString(), "Bir hata oluştu.");
             return View(model);
@@ -151,9 +146,8 @@ namespace humanResourceProject.Presentation.Controllers
             var response = await _httpClient.GetAsync($"api/Leave/GetUpdateLeaveDTO/{id}");
 
             if (!response.IsSuccessStatusCode)
-            {
                 return View("Error");
-            }
+
             var content = await response.Content.ReadAsStringAsync();
             var model = JsonConvert.DeserializeObject<UpdateLeaveDTO>(content);
             model.LeaveStatus = RequestStatus.Approved;
@@ -179,9 +173,8 @@ namespace humanResourceProject.Presentation.Controllers
             var response = await _httpClient.GetAsync($"api/Leave/GetUpdateLeaveDTO/{id}");
 
             if (!response.IsSuccessStatusCode)
-            {
                 return View("Error");
-            }
+            
             var content = await response.Content.ReadAsStringAsync();
             var model = JsonConvert.DeserializeObject<UpdateLeaveDTO>(content);
             model.LeaveStatus = RequestStatus.Rejected;
@@ -193,7 +186,7 @@ namespace humanResourceProject.Presentation.Controllers
 
             if (httpResponse.IsSuccessStatusCode)
             {
-                return RedirectToAction(nameof(EmployeesLeaves));
+                return RedirectToAction("EmployeesLeaves");
             }
 
             ModelState.AddModelError(httpResponse.StatusCode.ToString(), "Bir hata oluştu.");

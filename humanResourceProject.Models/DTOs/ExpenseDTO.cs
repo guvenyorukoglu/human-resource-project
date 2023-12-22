@@ -2,6 +2,7 @@
 using humanResourceProject.Domain.Enum;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel;
+using Microsoft.AspNetCore.Http;
 
 namespace humanResourceProject.Models.DTOs
 {
@@ -22,6 +23,11 @@ namespace humanResourceProject.Models.DTOs
         public Guid ManagerId { get; set; }
         public DateTime CreateDate { get; set; }
         public Currency Currency { get; set; }
+        public IFormFile? UploadPath { get; set; }
+        public string? FilePath { get; set; }
+        public ExpenseType ExpenseType { get; set; }
+        public RequestStatus ExpenseStatus { get; set; } = RequestStatus.Pending;
+        public DateTime DateOfExpense { get; set; }
 
     }
 }

@@ -1,7 +1,7 @@
 ﻿@using humanResourceProject.Models.VMs;
 
 @{
-    ViewData["Title"] = "Leaves";
+    ViewData["Title"] = "MyLeaves";
     Layout = "~/Views/Shared/_PanelPartial.cshtml";
 }
 
@@ -23,15 +23,10 @@
     <div class="row">
         @Html.Partial("_PanelPartial")
 
-
         <div class="aside container mt-5 col-md-9 col-sm-9">
-            @* <div class="search-bar" style="display: flex">
-            <input type="text" id="searchInput" placeholder="Arama Yap" /><i class="fas fa-search mt-2"></i>
-            </div>
-            <hr /> *@
             @if (Model != null)
             {
-                <a asp-action="CreateLeave" asp-controller="Personnel">
+                <a asp-action="CreateLeave" asp-controller="Leave">
                     <button class="custom-button custom-button--create-advance">İzin Ekle</button>
                 </a>
             }
@@ -93,18 +88,7 @@
                         }
                     </tbody>
                 </table>
-
-
-
-
-
-
-
             </div>
-
-
-
-
         </div>
     </div>
 </body>

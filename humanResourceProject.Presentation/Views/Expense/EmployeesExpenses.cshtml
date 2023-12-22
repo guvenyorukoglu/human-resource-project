@@ -1,0 +1,146 @@
+﻿@model List<ExpenseVM>
+
+@{
+    ViewData["Title"] = "ExpenseRequests";
+    Layout = "~/Views/Shared/_HRLayout.cshtml";
+}
+
+<head>
+
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.css" />
+
+    <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.js"></script>
+    <style>
+        .panel {
+            height: 120vh;
+        }
+
+        a {
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="row">
+        @Html.Partial("_PanelPartial")
+
+        <div class="aside container mt-5 col-md-9 col-sm-9">
+
+            <div class="pagination-container">
+
+                <script>
+                    $(document).ready(function () {
+                        $('#expenserequests').DataTable();
+                    });
+
+                </script>
+
+                <table id="expenserequests"
+                       class="display">
+                    <thead>
+                        <tr>
+                            <th style="width: 7%">Ad</th>
+                            <th style="width: 7%">Soyad</th>
+                            <th style="width: 10%">Harcama Miktarı</th>
+                            <th style="width: 5%">Para Birimi</th>
+                            <th style="width: 7%">Talep Tarihi</th>
+                            <th style="width: 7%">Harcama Tarih</th>
+                            <th style="width: 13%">Harcama Tipi</th>
+                            <th style="width: 21%">Açıklama</th>
+                            <th style="width: 8%">Statü</th>
+                            <th style="width: 15%">İşlemler</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model != null)
+                        {
+
+                            foreach (var item in Model)
+                            {
+                                if (item != null)
+                                {
+                                    var displayExpenseType = typeof(ExpenseType).GetMember(item.ExpenseType.ToString())[0].GetCustomAttribute<DisplayAttribute>();
+                                    var displayNameExpenseType = displayExpenseType?.GetName() ?? item.ExpenseType.ToString();
+
+                                    var displayExpenseStatus = typeof(RequestStatus).GetMember(item.ExpenseStatus.ToString())[0].GetCustomAttribute<DisplayAttribute>();
+                                    var displayNameExpenseStatus = displayExpenseStatus?.GetName() ?? item.ExpenseStatus.ToString();
+                                    <tr>
+                                        <td>@item.EmployeeName</td>
+                                        <td>@item.EmployeeSurname</td>
+                                        <td>@item.AmountOfExpense</td>
+                                        <td>@item.Currency</td>
+                                        <td>@item.CreateDate.ToShortDateString()</td>
+                                        <td>@item.DateOfExpense.ToShortDateString()</td>
+                                        <td>@displayNameExpenseType</td>
+                                        <td>@item.Explanation</td>
+                                        <td>@displayNameExpenseStatus</td>
+                                        <td>
+                                            @if (item.ExpenseStatus == RequestStatus.Pending)
+                                            {
+                                                //Onaylama modalı
+                                                <div class="modal fade" id="approveExpenseModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                    <div class="modal-dialog">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title" id="exampleModalLabel">Harcama Talebi Onaylama</h5>
+                                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                Harcama talebini onaylamak istediğinize emin misiniz?
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>
+                                                                <a asp-action="ApproveExpense"
+                                                                   asp-controller="Expense"
+                                                                   asp-route-id="@item.Id">
+                                                                    <button type="button" class="btn btn-primary">Onaylıyorum</button>
+                                                                </a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                //Reddetme modalı
+                                                <div class="modal fade" id="rejectExpenseModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                    <div class="modal-dialog">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title" id="exampleModalLabel">Harcama Talebi Reddetme</h5>
+                                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                Harcama talebini reddetmek istediğinize emin misiniz?
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>
+                                                                <a asp-action="RejectExpense"
+                                                                   asp-controller="Expense"
+                                                                   asp-route-id="@item.Id">
+                                                                    <button type="button" class="btn btn-danger">Onaylıyorum</button>
+                                                                </a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                //Onaylama modalı açan buton
+                                                <button type="button" class="btn btn-secondary btn-sm d-inline-flex bg-primary gap-1 align-items-center" data-bs-toggle="modal" data-bs-target="#approveExpenseModal">
+                                                    <i class="fa fa-check"></i><span>Onayla</span>
+                                                </button>
+
+                                                //Reddetme modalı açan buton
+                                                <button class="btn btn-danger btn-sm d-inline-flex gap-1 align-items-center" data-bs-toggle="modal" data-bs-target="#rejectExpenseModal">
+                                                    <i class="fa fa-x"></i><span>Reddet</span>
+                                                </button>
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
