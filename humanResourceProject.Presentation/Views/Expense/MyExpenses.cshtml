@@ -2,7 +2,7 @@
 
 @{
     ViewData["Title"] = "MyExpenses";
-    Layout = "~/Views/Shared/_PanelPartial.cshtml";
+    Layout = "~/Views/Shared/_HRLayout.cshtml";
 }
 
 @model List<ExpensePersonnelVM>
@@ -16,6 +16,10 @@
         .panel {
             height: 120vh;
         }
+
+        a{
+            text-decoration: none;
+        }
     </style>
 </head>
 
@@ -27,7 +31,7 @@
             @if (Model != null)
             {
                 <a asp-action="CreateExpense" asp-controller="Expense">
-                    <button class="custom-button custom-button--create-advance">Harcama Ekle</button>
+                    <button class="custom-button custom-button--create-entity">Harcama Ekle</button>
                 </a>
             }
 

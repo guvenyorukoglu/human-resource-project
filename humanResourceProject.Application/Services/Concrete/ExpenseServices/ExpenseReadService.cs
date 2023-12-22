@@ -65,7 +65,9 @@ namespace humanResourceProject.Application.Services.Concrete.ExpenseServices
                                                   ExpenseStatus = x.ExpenseStatus,
                                                   FilePath = x.FilePath,
                                                   DateOfExpense = x.DateOfExpense,
-                                                  UploadPath = x.UploadPath
+                                                  UploadPath = x.UploadPath,
+                                                  CreateDate = x.CreateDate,
+                                                  ExpenseType = x.ExpenseType
                                               },
                                               where: x => (x.Status != Status.Deleted && x.Status != Status.Inactive) && x.Employee.Id == id,
                                               orderBy: x => x.OrderByDescending(x => x.CreateDate),

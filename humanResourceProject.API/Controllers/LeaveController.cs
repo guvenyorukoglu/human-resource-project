@@ -96,7 +96,7 @@ namespace humanResourceProject.API.Controllers
                 return BadRequest(result.Errors);
             }
             AppUser employee = await _appUserReadService.GetSingleDefault(x => x.Id == model.EmployeeId);
-            AppUser manager = await _appUserReadService.GetSingleDefault(x => x.Id == model.ManagerId);
+            AppUser manager = await _appUserReadService.GetSingleDefault(x => x.Id == employee.ManagerId);
             string recipientEmail = manager.Email;
             string mailToName = $"{manager.FirstName} {manager.LastName}";
             string action = "";
