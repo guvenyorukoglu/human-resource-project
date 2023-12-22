@@ -1,5 +1,7 @@
-﻿using humanResourceProject.Models.DTOs;
+﻿using humanResourceProject.Domain.Enum;
+using humanResourceProject.Models.DTOs;
 using humanResourceProject.Models.VMs;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Security.Claims;
@@ -7,38 +9,34 @@ using System.Text;
 
 namespace humanResourceProject.Presentation.Controllers
 {
+    [Authorize]
     public class LeaveController : Controller
     {
         private readonly HttpClient _httpClient;
 
-        public LeaveController(HttpClient httpClient)
+        public LeaveController()
         {
-            _httpClient = httpClient;
+            _httpClient = new HttpClient();
             //_httpClient.BaseAddress = new Uri("https://monitoreaseapi.azurewebsites.net"); // Azure
             _httpClient.BaseAddress = new Uri("https://localhost:7255/"); // Local
         }
-        public IActionResult Index()
-        {
-            return View();
-        }
 
+        [Authorize(Roles = "DepartmentManager,Personel")]
         public async Task<IActionResult> MyLeaves()
         {
             Guid employeeId = Guid.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value);
-            var json = JsonConvert.SerializeObject(employeeId);
-            var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-            var response = await _httpClient.PostAsync($"api/Leave/GetLeavesByEmployeeId/", content);
+            var response = await _httpClient.GetAsync($"api/Leave/GetLeavesByEmployeeId/{employeeId}");
             if (response.IsSuccessStatusCode)
             {
                 var cont = await response.Content.ReadAsStringAsync();
                 var leaves = JsonConvert.DeserializeObject<List<LeavePersonnelVM>>(cont);
                 return View(leaves);
-
             }
             return View();
         }
 
+        [Authorize(Roles = "DepartmentManager,CompanyManager")]
         public async Task<IActionResult> EmployeesLeaves()
         {
             if(User.IsInRole("DepartmentManager"))
@@ -73,11 +71,14 @@ namespace humanResourceProject.Presentation.Controllers
         [HttpGet]
         public IActionResult CreateLeave()
         {
-            return View(new LeavePersonnelVM());
+            return View(new LeaveDTO()
+            {
+                EmployeeId = Guid.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value)
+            });
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateLeave(LeavePersonnelVM model)
+        public async Task<IActionResult> CreateLeave(LeaveDTO model)
         {
             var json = JsonConvert.SerializeObject(model);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
@@ -85,7 +86,7 @@ namespace humanResourceProject.Presentation.Controllers
             var response = await _httpClient.PostAsync($"api/Leave", content);
             if (response.IsSuccessStatusCode)
             {
-                return RedirectToAction("Leave");
+                return RedirectToAction(nameof(MyLeaves));
             }
             else
             {
@@ -94,14 +95,14 @@ namespace humanResourceProject.Presentation.Controllers
             }
         }
 
-        [HttpPost]
+        [HttpGet]
         public async Task<IActionResult> DeleteLeave(Guid id)
         {
-            var response = await _httpClient.DeleteAsync($"api/Leave/{id}");
+            var response = await _httpClient.DeleteAsync($"api/Leave/DeleteLeave/{id}");
 
             if (response.IsSuccessStatusCode)
             {
-                return RedirectToAction("Leave");
+                return RedirectToAction(nameof(MyLeaves));
             }
 
             return View("Error");
@@ -110,28 +111,32 @@ namespace humanResourceProject.Presentation.Controllers
         [HttpGet]
         public async Task<IActionResult> UpdateLeave(Guid id)
         {
-            var response = await _httpClient.GetAsync($"api/Leave/{id}");
+            var response = await _httpClient.GetAsync($"api/Leave/GetUpdateLeaveDTO/{id}");
+
             if (response.IsSuccessStatusCode)
             {
-                var content = await response.Content.ReadAsStringAsync();
-                var leave = JsonConvert.DeserializeObject<LeavePersonnelVM>(content);
-                return View(leave);
-
+                var cont = await response.Content.ReadAsStringAsync();
+                var updateLeaveDTO = JsonConvert.DeserializeObject<UpdateLeaveDTO>(cont);
+                return View(updateLeaveDTO);
             }
+
             return View("Error");
         }
 
         [HttpPost]
-        public async Task<IActionResult> UpdateLeave(LeavePersonnelVM model)
+        public async Task<IActionResult> UpdateLeave(UpdateLeaveDTO model)
         {
+            if (!ModelState.IsValid)
+                return View(model);
+
             var json = JsonConvert.SerializeObject(model);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-            var response = await _httpClient.PutAsync($"api/Leave", content);
+            var response = await _httpClient.PutAsync($"api/Leave/{model.Id}", content);
 
             if (response.IsSuccessStatusCode)
             {
-                return RedirectToAction("Leave");
+                return RedirectToAction(nameof(MyLeaves));
             }
 
             ModelState.AddModelError(response.StatusCode.ToString(), "Bir hata oluştu.");
@@ -139,54 +144,60 @@ namespace humanResourceProject.Presentation.Controllers
         }
 
         //LEAVE REQUESTS & CONTROLS
-        public async Task<IActionResult> LeaveRequests()
+        [Authorize(Roles = "DepartmentManager,CompanyManager")]
+        [HttpGet]
+        public async Task<IActionResult> ApproveLeave(Guid id)
         {
+            var response = await _httpClient.GetAsync($"api/Leave/GetUpdateLeaveDTO/{id}");
 
-            var response = await _httpClient.GetAsync($"api/Leave/GetAllLeaves/");
-            if (response.IsSuccessStatusCode)
+            if (!response.IsSuccessStatusCode)
             {
-                var cont = await response.Content.ReadAsStringAsync();
-                var leaveRequests = JsonConvert.DeserializeObject<List<PersonelVM>>(cont);
-                return View(leaveRequests);
-
+                return View("Error");
             }
-            return View();
+            var content = await response.Content.ReadAsStringAsync();
+            var model = JsonConvert.DeserializeObject<UpdateLeaveDTO>(content);
+            model.LeaveStatus = RequestStatus.Approved;
+
+            var json = JsonConvert.SerializeObject(model);
+            var contentDTO = new StringContent(json, Encoding.UTF8, "application/json");
+
+            var httpResponse = await _httpClient.PutAsync($"api/Leave/UpdateStatus", contentDTO);
+
+            if (httpResponse.IsSuccessStatusCode)
+            {
+                return RedirectToAction("EmployeesLeaves");
+            }
+
+            ModelState.AddModelError(httpResponse.StatusCode.ToString(), "Bir hata oluştu.");
+            return View("Error");
         }
 
-
-        [HttpPut]
-        public async Task<IActionResult> ApproveLeave(LeaveDTO model)
+        [Authorize(Roles = "DepartmentManager,CompanyManager")]
+        [HttpGet]
+        public async Task<IActionResult> RejectLeave(Guid id)
         {
-            var json = JsonConvert.SerializeObject(model);
-            var content = new StringContent(json, Encoding.UTF8, "application/json");
+            var response = await _httpClient.GetAsync($"api/Leave/GetUpdateLeaveDTO/{id}");
 
-            var response = await _httpClient.PutAsync($"api/Leave/UpdateLeave/{model}", content);
-
-            if (response.IsSuccessStatusCode)
+            if (!response.IsSuccessStatusCode)
             {
-                return RedirectToAction("LeaveRequests");
+                return View("Error");
+            }
+            var content = await response.Content.ReadAsStringAsync();
+            var model = JsonConvert.DeserializeObject<UpdateLeaveDTO>(content);
+            model.LeaveStatus = RequestStatus.Rejected;
+
+            var json = JsonConvert.SerializeObject(model);
+            var contentDTO = new StringContent(json, Encoding.UTF8, "application/json");
+
+            var httpResponse = await _httpClient.PutAsync($"api/Leave/UpdateStatus", contentDTO);
+
+            if (httpResponse.IsSuccessStatusCode)
+            {
+                return RedirectToAction("EmployeesLeaves");
             }
 
-            ModelState.AddModelError(response.StatusCode.ToString(), "Bir hata oluştu.");
-            return View(model);
-        }
-
-
-        [HttpPost]
-        public async Task<IActionResult> RejectLeave(LeaveDTO model)
-        {
-            var json = JsonConvert.SerializeObject(model);
-            var content = new StringContent(json, Encoding.UTF8, "application/json");
-
-            var response = await _httpClient.PutAsync($"api/Leave/DeleteLeave/{model}", content);
-
-            if (response.IsSuccessStatusCode)
-            {
-                return RedirectToAction("LeaveRequests");
-            }
-
-            ModelState.AddModelError(response.StatusCode.ToString(), "Bir hata oluştu.");
-            return View(model);
+            ModelState.AddModelError(httpResponse.StatusCode.ToString(), "Bir hata oluştu.");
+            return View("Error");
         }
     }
 }

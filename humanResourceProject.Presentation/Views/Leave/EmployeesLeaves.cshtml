@@ -1,8 +1,8 @@
-﻿@using humanResourceProject.Models.VMs;
-@model List<LeaveVM>
+﻿@model List<LeaveVM>
 
 @{
     ViewData["Title"] = "EmployeesLeaves";
+    Layout = "~/Views/Shared/_HRLayout.cshtml";
 }
 
 <head>
@@ -46,7 +46,7 @@
                             <th style="width: 7%">İzin Başlangıç Tarihi</th>
                             <th style="width: 7%">İzin Bitiş Tarih</th>
                             <th style="width: 13%">İzin Türü</th>
-                            <th style="width: 21%">Açıklama</th>
+                            <th style="width: 26%">Açıklama</th>
                             <th style="width: 8%">Statü</th>
                             <th style="width: 15%">İşlemler</th>
                         </tr>
@@ -76,21 +76,57 @@
                                         <td>
                                             @if (item.LeaveStatus == RequestStatus.Pending)
                                             {
-                                                <a asp-action="ApproveLeave"
-                                                   asp-controller="MyLeave"
-                                                   asp-route-id="@item.Id" onclick="return confirm('Onaylamak istediğinize emin misiniz?')">
-                                                    <button class="btn btn-secondary btn-sm d-inline-flex bg-primary gap-1 align-items-center">
-                                                        <i class="fa fa-check"></i><span>Onayla</span>
-                                                    </button>
-                                                </a>
+                                                <div class="modal fade" id="approveLeaveModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                    <div class="modal-dialog">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title" id="exampleModalLabel">İzin Talebi Onaylama</h5>
+                                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                İzin talebini onaylamak istediğinize emin misiniz?
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>
+                                                                <a asp-action="ApproveLeave"
+                                                                   asp-controller="Leave"
+                                                                   asp-route-id="@item.Id">
+                                                                    <button type="button" class="btn btn-primary">Onaylıyorum</button>
+                                                                </a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
 
-                                                <a asp-action="RejectLeave"
-                                                   asp-controller="MyAdvance"
-                                                   asp-route-id="@item.Id" onclick="return confirm('Reddetmek istediğinize emin misiniz?')">
-                                                    <button class="btn btn-danger btn-sm d-inline-flex gap-1 align-items-center">
-                                                        <i class="fa fa-x"></i><span>Reddet</span>
-                                                    </button>
-                                                </a>
+                                                <div class="modal fade" id="rejectLeaveModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                    <div class="modal-dialog">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title" id="exampleModalLabel">İzin Talebi Reddetme</h5>
+                                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                İzin talebini reddetmek istediğinize emin misiniz?
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>
+                                                                <a asp-action="RejectLeave"
+                                                                   asp-controller="Leave"
+                                                                   asp-route-id="@item.Id">
+                                                                    <button type="button" class="btn btn-danger">Onaylıyorum</button>
+                                                                </a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <button type="button" class="btn btn-secondary btn-sm d-inline-flex bg-primary gap-1 align-items-center" data-bs-toggle="modal" data-bs-target="#approveLeaveModal">
+                                                    <i class="fa fa-check"></i><span>Onayla</span>
+                                                </button>
+
+                                                <button class="btn btn-danger btn-sm d-inline-flex gap-1 align-items-center" data-bs-toggle="modal" data-bs-target="#rejectLeaveModal">
+                                                    <i class="fa fa-x"></i><span>Reddet</span>
+                                                </button>
                                             }
                                         </td>
                                     </tr>
@@ -102,5 +138,4 @@
             </div>
         </div>
     </div>
-
 </body>

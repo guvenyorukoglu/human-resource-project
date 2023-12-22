@@ -38,6 +38,7 @@ namespace humanResourceProject.Application.AutoMapper
             CreateMap<Leave, LeaveVM>().ReverseMap();
             CreateMap<Leave, LeaveDTO>().ReverseMap();
             CreateMap<Leave, UpdateLeaveDTO>().ReverseMap();
+            CreateMap<Leave, LeavePersonnelVM>().ReverseMap();
 
             //CreateMap<>().ReverseMap();
         }

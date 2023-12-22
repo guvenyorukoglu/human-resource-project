@@ -16,22 +16,22 @@
         .panel {
             height: 120vh;
         }
+
+        a {
+            text-decoration: none;
+        }
     </style>
 </head>
 
 <body>
     <div class="row">
-        @Html.Partial("_PanelPartial_Personnel")
+        @Html.Partial("_PanelPartial")
 
 
         <div class="aside container mt-5 col-md-9 col-sm-9">
-            @* <div class="search-bar" style="display: flex">
-            <input type="text" id="searchInput" placeholder="Arama Yap" /><i class="fas fa-search mt-2"></i>
-            </div>
-            <hr /> *@
             @if (Model != null)
             {
-                <a asp-action="CreateLeave" asp-controller="Personnel">
+                <a asp-action="CreateLeave" asp-controller="Leavee">
                     <button class="custom-button custom-button--create-entity">İzin Ekle</button>
                 </a>
             }
@@ -40,7 +40,7 @@
 
                 <script>
                     $(document).ready(function () {
-                        $('#leave').DataTable();
+                        $('#leaves').DataTable();
                     });
 
                 </script>
@@ -50,10 +50,12 @@
                        class="display">
                     <thead>
                         <tr>
-                            <th style="width: 20%">Açıklama</th>
-                            <th style="width: 20%">İzin Bitiş Tarihi</th>
+                            <th style="width: 7%">Talep Tarihi</th>
+                            <th style="width: 30%">Açıklama</th>
+                            <th style="width: 7%">İzin Başlangıç Tarihi</th>
+                            <th style="width: 7%">İzin Bitiş Tarihi</th>
                             <th style="width: 20%">İzin Gün Sayısı</th>
-                            <th style="width: 20%">İzin Türü</th>
+                            <th style="width: 9%">İzin Türü</th>
                             <th style="width: 10%">Durumu</th>
                             <th style="width: 10%"></th>
                         </tr>
@@ -63,46 +65,44 @@
                         {
                             foreach (var item in Model)
                             {
-                                <tr>
-                                    <td>@item.Explanation</td>
-                                    <td>@item.EndDateOfLeave</td>
-                                    <td>@item.DaysOfLeave</td>
-                                    <td>@item.LeaveType</td>
-                                    <td>@item.LeaveStatus</td>
-                                    <td>
-                                        <a asp-action="EditLeave"
-                                           asp-controller="Personnel"
-                                           asp-route-id="@item.Id">
-                                            <button class="btn btn-secondary btn-sm d-inline-flex bg-primary">
-                                                <i class="fa fa-pen"></i>
-                                            </button>
-                                        </a>
+                                var displayLeaveType = typeof(LeaveType).GetMember(item.LeaveType.ToString())[0].GetCustomAttribute<DisplayAttribute>();
+                                var displayNameLeaveType = displayLeaveType?.GetName() ?? item.LeaveType.ToString();
 
-                                        <a asp-action="DeleteLeave"
-                                           asp-controller="Personnel"
-                                           asp-route-id="@item.Id">
-                                            <button class="btn btn-danger btn-sm d-inline-flex">
-                                                <i class="fa fa-trash"></i>
-                                            </button>
-                                        </a>
+                                var displayLeaveStatus = typeof(RequestStatus).GetMember(item.LeaveStatus.ToString())[0].GetCustomAttribute<DisplayAttribute>();
+                                var displayNameLeaveStatus = displayLeaveStatus?.GetName() ?? item.LeaveStatus.ToString();
+                                <tr>
+                                    <td>@item.CreateDate.ToShortDateString()</td>
+                                    <td>@item.Explanation</td>
+                                    <td>@item.StartDateOfLeave.ToShortDateString()</td>
+                                    <td>@item.EndDateOfLeave.ToShortDateString()</td>
+                                    <td>@item.DaysOfLeave</td>
+                                    <td>@displayNameLeaveType</td>
+                                    <td>@displayNameLeaveStatus</td>
+                                    <td>
+                                        @if (item.LeaveStatus == RequestStatus.Pending)
+                                        {
+                                            <a asp-action="UpdateLeave"
+                                            asp-controller="Leave"
+                                               asp-route-id="@item.Id" onclick="return confirm('Güncellemek istediğinize emin misiniz?')">
+                                                <button class="btn btn-secondary btn-sm d-inline-flex bg-primary gap-1 align-items-center">
+                                                    <i class="fa fa-pen"></i><span>Güncelle</span>
+                                                </button>
+                                            </a>
+                                            <a asp-action="DeleteLeave"
+                                               asp-controller="Leave"
+                                               asp-route-id="@item.Id" onclick="return confirm('Silmek istediğinize emin misiniz?')">
+                                                <button class="btn btn-danger btn-sm d-inline-flex gap-1 align-items-center">
+                                                    <i class="fa fa-trash"></i><span>Kaldır</span>
+                                                </button>
+                                            </a>
+                                        }
                                     </td>
                                 </tr>
                             }
                         }
                     </tbody>
                 </table>
-
-
-
-
-
-
-
             </div>
-
-
-
-
         </div>
     </div>
 </body>

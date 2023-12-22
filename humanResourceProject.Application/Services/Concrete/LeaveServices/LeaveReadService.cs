@@ -20,6 +20,13 @@ namespace humanResourceProject.Application.Services.Concrete.LeaveServices
             _mapper = mapper;
         }
 
+        public async Task<LeaveDTO> GetLeaveById(Guid id)
+        {
+            Leave leave = await _leaveReadRepository.GetById(id);
+            LeaveDTO leaveDTO = _mapper.Map<LeaveDTO>(leave);
+            return leaveDTO;
+        }
+
         public async Task<List<LeaveVM>> GetAllLeaves()
         {
             List<LeaveVM>? leaves = await _leaveReadRepository.GetFilteredList(
@@ -38,40 +45,32 @@ namespace humanResourceProject.Application.Services.Concrete.LeaveServices
                                                                  DaysOfLeave = x.DaysOfLeave
                                                              },
                                                              where: x => x.Status != Status.Deleted && x.Status != Status.Inactive,
-                                                             orderBy: x => x.OrderByDescending(x => x.CreateDate),
                                                              //commented out because of the error
+                                                             orderBy: x => x.OrderByDescending(x => x.CreateDate),
                                                              include: x => x.Include(x => x.Employee));
             return leaves;
         }
 
-        public async Task<LeaveDTO> GetLeaveById(Guid id)
-        {
-            Leave leave = await _leaveReadRepository.GetById(id);
-            LeaveDTO leaveDTO = _mapper.Map<LeaveDTO>(leave);
-            return leaveDTO;
-        }
-
-        //gets leaves by company id
         public async Task<List<LeaveVM>> GetLeavesByCompanyId(Guid id)
         {
             List<LeaveVM>? leaves = await _leaveReadRepository.GetFilteredList(
-                                                                            select: x => new LeaveVM
-                                                                            {
-                                                                 Id = x.Id,
-                                                                 LeaveType = x.LeaveType,
-                                                                 StartDate = x.StartDateOfLeave,
-                                                                 EndDate = x.EndDateOfLeave,
-                                                                 EmployeeName = x.Employee.FirstName,
-                                                                 EmployeeSurname = x.Employee.LastName,
-                                                                 EmployeeId = x.Employee.Id,
-                                                                 DepartmentId = x.Employee.Department.Id,
-                                                                 ManagerId = (Guid)x.Employee.Manager.ManagerId,
-                                                                 LeaveStatus = x.LeaveStatus,
-                                                                 DaysOfLeave = x.DaysOfLeave
-                                                             },
-                                                                                                                                        where: x => (x.Status != Status.Deleted && x.Status != Status.Inactive) && x.Employee.Department.CompanyId == id,
-                                                                                                                                                                                                    orderBy: x => x.OrderByDescending(x => x.CreateDate),
-                                                                                                                                                                                                                                                                include: x => x.Include(x => x.Employee));
+                                                            select: x => new LeaveVM
+                                                            {
+                                                                    Id = x.Id,
+                                                                    LeaveType = x.LeaveType,
+                                                                    StartDate = x.StartDateOfLeave,
+                                                                    EndDate = x.EndDateOfLeave,
+                                                                    EmployeeName = x.Employee.FirstName,
+                                                                    EmployeeSurname = x.Employee.LastName,
+                                                                    EmployeeId = x.Employee.Id,
+                                                                    DepartmentId = x.Employee.Department.Id,
+                                                                    ManagerId = (Guid)x.Employee.Manager.ManagerId,
+                                                                    LeaveStatus = x.LeaveStatus,
+                                                                    DaysOfLeave = x.DaysOfLeave
+                                                            },
+                                                            where: x => (x.Status != Status.Deleted && x.Status != Status.Inactive) && x.Employee.Department.CompanyId == id,
+                                                            orderBy: x => x.OrderByDescending(x => x.CreateDate),
+                                                            include: x => x.Include(x => x.Employee));
             return leaves;
         }
 
@@ -98,22 +97,20 @@ namespace humanResourceProject.Application.Services.Concrete.LeaveServices
             return leaves;
         }
 
-        public async Task<List<LeaveVM>> GetLeavesByEmployeeId(Guid id)
+        public async Task<List<LeavePersonnelVM>> GetLeavesByEmployeeId(Guid id)
         {
-            List<LeaveVM>? leaves = await _leaveReadRepository.GetFilteredList(
-                                                             select: x => new LeaveVM
+            List<LeavePersonnelVM>? leaves = await _leaveReadRepository.GetFilteredList(
+                                                             select: x => new LeavePersonnelVM
                                                              {
                                                                  Id = x.Id,
                                                                  LeaveType = x.LeaveType,
-                                                                 StartDate = x.StartDateOfLeave,
-                                                                 EndDate = x.EndDateOfLeave,
-                                                                 EmployeeName = x.Employee.FirstName,
-                                                                 EmployeeSurname = x.Employee.LastName,
+                                                                 StartDateOfLeave = x.StartDateOfLeave,
+                                                                 EndDateOfLeave = x.EndDateOfLeave,
                                                                  EmployeeId = x.Employee.Id,
-                                                                 DepartmentId = x.Employee.Department.Id,
-                                                                 ManagerId = (Guid)x.Employee.Manager.ManagerId,
                                                                  LeaveStatus = x.LeaveStatus,
-                                                                 DaysOfLeave = x.DaysOfLeave
+                                                                 DaysOfLeave = x.DaysOfLeave,
+                                                                 CreateDate = x.CreateDate,
+                                                                 Explanation = x.Explanation
                                                              },
                                                              where: x => (x.Status != Status.Deleted && x.Status != Status.Inactive) && x.Employee.Id == id,
                                                              orderBy: x => x.OrderByDescending(x => x.CreateDate),
