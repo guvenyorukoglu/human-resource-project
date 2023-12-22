@@ -83,11 +83,21 @@ namespace humanResourceProject.API.Controllers
             return Ok(await _expenseReadService.GetExpensesByDepartmentId(id));
         }
 
+        [HttpGet]
+        [Route("GetExpensesByCompanyId/{id}")]
+        public async Task<IActionResult> GetExpensesByCompanyId(Guid id)
+        {
+            return Ok(await _expenseReadService.GetExpensesByCompanyId(id));
+        }
 
         [HttpPost]
-        [Route("CreateExpense")]
         public async Task<IActionResult> CreateExpense([FromBody] ExpenseDTO model)
         {
+            var result = await _expenseWriteService.InsertExpense(model);
+            if (!result.Succeeded)
+            {
+                return BadRequest(result.Errors);
+            }
             AppUser employee = await _appUserReadService.GetSingleDefault(x => x.Id == model.EmployeeId);
             AppUser manager = await _appUserReadService.GetSingleDefault(x => x.Id == model.ManagerId);
             string recipientEmail = manager.Email;
@@ -100,10 +110,16 @@ namespace humanResourceProject.API.Controllers
         }
 
         [HttpPut]
-        [Route("UpdateExpense")]
         public async Task<IActionResult> UpdateExpense([FromBody] UpdateExpenseDTO model)
         {
             return Ok(await _expenseWriteService.UpdateExpense(model));
+        }
+
+        [HttpGet]
+        [Route("GetUpdateAdvanceDTO/{id}")]
+        public async Task<IActionResult> GetUpdateExpenseDTO(Guid id)
+        {
+            return Ok(await _expenseReadService.GetUpdateExpenseDTO(id));
         }
 
         [HttpDelete]
@@ -113,11 +129,5 @@ namespace humanResourceProject.API.Controllers
             return Ok(await _expenseWriteService.DeleteExpense(id));
         }
 
-        //[HttpGet]
-        //[Route("GetUpdateAdvanceDTO/{id}")]
-        //public async Task<IActionResult> GetUpdateExpenseDTO(Guid id)
-        //{
-        //    return Ok(await _expenseReadService.GetUpdateExpenseDTO(id));
-        //}
     }
 }
