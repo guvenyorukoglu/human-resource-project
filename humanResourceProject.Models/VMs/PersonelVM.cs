@@ -19,5 +19,8 @@ namespace humanResourceProject.Models.VMs
         public List<Advance>? Advances { get; set; }
         public Expense? Expense { get; set; }   
         public List<Expense>? Expenses { get; set; }
+
+        public Company Company { get; set; }
+
     }
 }

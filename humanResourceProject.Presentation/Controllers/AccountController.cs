@@ -333,15 +333,19 @@ namespace humanResourceProject.Presentation.Controllers
         }
 
 
-        //[HttpGet]
-        //public IActionResult UpdateProfileImage(Guid id)
-        //{
-        //    var response = await _httpClient.GetAsync($"api/Account/UpdateProfileImage/{id}");
-        //    if (response.IsSuccessStatusCode)
-        //    {
-        //    }
-        //    return View("Error");
-        //}
+        [HttpPost]
+        public async Task<IActionResult> UpdateProfileImage(Guid id)
+        {
+            var response = await _httpClient.GetAsync($"api/Account/UpdateProfileImage/{id}");
+            if (response.IsSuccessStatusCode)
+            {
+                var apiResponse = await response.Content.ReadAsStringAsync();
+                dynamic parsedResponse = JsonConvert.DeserializeObject(apiResponse);
+                string imagePath = parsedResponse.imagePath;
+                return View(new UpdateProfileImageDTO() { ImagePath = imagePath });
+            }
+            return View("Error");
+        }
 
     }
 }
