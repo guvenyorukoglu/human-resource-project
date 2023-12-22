@@ -21,6 +21,7 @@
     </style>
 </head>
 <body>
+    <h3>Personel Masraf Talepleri</h3>
     <div class="row">
         @Html.Partial("_PanelPartial")
 
@@ -30,9 +31,12 @@
 
                 <script>
                     $(document).ready(function () {
-                        $('#expenserequests').DataTable();
+                        $('#expenserequests').DataTable({
+                            "order": [
+                                [4, 'desc']
+                            ]
+                        });
                     });
-
                 </script>
 
                 <table id="expenserequests"
@@ -70,8 +74,8 @@
                                         <td>@item.EmployeeSurname</td>
                                         <td>@item.AmountOfExpense</td>
                                         <td>@item.Currency</td>
-                                        <td>@item.CreateDate.ToShortDateString()</td>
-                                        <td>@item.DateOfExpense.ToShortDateString()</td>
+                                        <td>@item.CreateDate.ToString("dd.MM.yyyy")</td>
+                                        <td>@item.DateOfExpense.ToString("dd.MM.yyyy")</td>
                                         <td>@displayNameExpenseType</td>
                                         <td>@item.Explanation</td>
                                         <td>@displayNameExpenseStatus</td>

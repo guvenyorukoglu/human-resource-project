@@ -21,6 +21,7 @@
     </style>
 </head>
 <body>
+    <h3>Personel Avans Talepleri</h3>
     <div class="row">
         @Html.Partial("_PanelPartial")
 
@@ -30,9 +31,12 @@
 
                 <script>
                     $(document).ready(function () {
-                        $('#advancerequests').DataTable();
+                        $('#advancerequests').DataTable({
+                            "order": [
+                                [4, 'desc']
+                            ]
+                        });
                     });
-
                 </script>
 
                 <table id="advancerequests"
@@ -69,8 +73,8 @@
                                         <td>@item.LastName</td>
                                         <td>@item.AmountOfAdvance</td>
                                         <td>@item.Currency</td>
-                                        <td>@item.CreateDate.ToShortDateString()</td>
-                                        <td>@item.ExpiryDate.ToShortDateString()</td>
+                                        <td>@item.CreateDate.ToString("dd.MM.yyyy")</td>
+                                        <td>@item.ExpiryDate.ToString("dd.MM.yyyy")</td>
                                         <td>@displayNameAdvanceType</td>
                                         <td>@item.Explanation</td>
                                         <td>@displayNameAdvanceStatus</td>

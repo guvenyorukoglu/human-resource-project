@@ -22,6 +22,7 @@
 </head>
 
 <body>
+    <h3>Personel İzin Talepleri</h3>
     <div class="row">
         @Html.Partial("_PanelPartial")
 
@@ -31,9 +32,12 @@
 
                 <script>
                     $(document).ready(function () {
-                        $('#leaverequests').DataTable();
+                        $('#leaverequests').DataTable({
+                            "order": [
+                                [3, 'desc']
+                            ]
+                        });
                     });
-
                 </script>
 
                 <table id="leaverequests"
@@ -43,10 +47,11 @@
                             <th style="width: 7%">Ad</th>
                             <th style="width: 7%">Soyad</th>
                             <th style="width: 10%">İzin Günü</th>
-                            <th style="width: 7%">İzin Başlangıç Tarihi</th>
-                            <th style="width: 7%">İzin Bitiş Tarih</th>
-                            <th style="width: 13%">İzin Türü</th>
-                            <th style="width: 26%">Açıklama</th>
+                            <th style="width: 7%">Talep Tarihi</th>
+                            <th style="width: 7%">Başlangıç Tarihi</th>
+                            <th style="width: 7%">Bitiş Tarihi</th>
+                            <th style="width: 12%">İzin Türü</th>
+                            <th style="width: 20%">Açıklama</th>
                             <th style="width: 8%">Statü</th>
                             <th style="width: 15%">İşlemler</th>
                         </tr>
@@ -68,8 +73,9 @@
                                         <td>@item.EmployeeName</td>
                                         <td>@item.EmployeeSurname</td>
                                         <td>@item.DaysOfLeave</td>
-                                        <td>@item.StartDate.ToShortDateString()</td>
-                                        <td>@item.EndDate.ToShortDateString()</td>
+                                        <td>@item.CreateDate.ToString("dd.MM.yyyy")</td>
+                                        <td>@item.StartDate.ToString("dd.MM.yyyy")</td>
+                                        <td>@item.EndDate.ToString("dd.MM.yyyy")</td>
                                         <td>@displayNameLeaveType</td>
                                         <td>@item.Explanation</td>
                                         <td>@displayNameLeaveStatus</td>

@@ -24,6 +24,7 @@
 </head>
 
 <body>
+    <h3>İzin Taleplerim</h3>
     <div class="row">
         @Html.Partial("_PanelPartial")
 
@@ -39,9 +40,12 @@
 
                 <script>
                     $(document).ready(function () {
-                        $('#leaves').DataTable();
+                        $('#leaves').DataTable({
+                            "order": [
+                                [0, 'desc']
+                            ]
+                        });
                     });
-
                 </script>
 
 
@@ -49,11 +53,13 @@
                        class="display">
                     <thead>
                         <tr>
-                            <th style="width: 20%">Açıklama</th>
-                            <th style="width: 20%">İzin Bitiş Tarihi</th>
+                            <th style="width: 10%">Talep Tarihi</th>
+                            <th style="width: 10%">İzin Başlangıç Tarihi</th>
+                            <th style="width: 10%">İzin Bitiş Tarihi</th>
                             <th style="width: 10%">İzin Gün Sayısı</th>
-                            <th style="width: 15%">İzin Türü</th>
-                            <th style="width: 15%">Durumu</th>
+                            <th style="width: 10%">İzin Türü</th>
+                            <th style="width: 20%">Açıklama</th>
+                            <th style="width: 10%">Statü</th>
                             <th style="width: 20%"></th>
                         </tr>
                     </thead>
@@ -68,10 +74,12 @@
                                 var displayLeaveStatus = typeof(RequestStatus).GetMember(item.LeaveStatus.ToString())[0].GetCustomAttribute<DisplayAttribute>();
                                 var displayNameLeaveStatus = displayLeaveStatus?.GetName() ?? item.LeaveStatus.ToString();
                                 <tr>
-                                    <td>@item.Explanation</td>
-                                    <td>@item.EndDateOfLeave</td>
+                                    <td>@item.CreateDate.ToString("dd.MM.yyyy")</td>
+                                    <td>@item.StartDateOfLeave.ToString("dd.MM.yyyy")</td>
+                                    <td>@item.EndDateOfLeave.ToString("dd.MM.yyyy")</td>
                                     <td>@item.DaysOfLeave</td>
                                     <td>@displayNameLeaveType</td>
+                                    <td>@item.Explanation</td>
                                     <td>@displayNameLeaveStatus</td>
                                     <td>
                                         @if (item.LeaveStatus == RequestStatus.Pending)

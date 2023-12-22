@@ -92,20 +92,29 @@
                                     <td>@item.JobTitle</td>
                                     <td>
                                         <a asp-action="EditEmployee"
-                                           asp-controller="Manager"
+                                           asp-controller="Employee"
                                            asp-route-id="@item.Id">
                                             <button class="btn btn-secondary btn-sm d-inline-flex bg-primary">
                                                 <i class="fa fa-pen"></i>
                                             </button>
                                         </a>
 
+                                        <a asp-action="FireEmployee"
+                                           asp-controller="Employee"
+                                           asp-route-id="@item.Id">
+                                            <button class="btn btn-warning btn-sm d-inline-flex">
+                                                <i class="fa fa-sign-out"></i>
+                                            </button>
+                                        </a>
+
                                         <a asp-action="DeleteEmployee"
-                                           asp-controller="Manager"
+                                           asp-controller="Employee"
                                            asp-route-id="@item.Id">
                                             <button class="btn btn-danger btn-sm d-inline-flex">
                                                 <i class="fa fa-trash"></i>
                                             </button>
                                         </a>
+                                                                               
                                     </td>
                                 </tr>
                             }
