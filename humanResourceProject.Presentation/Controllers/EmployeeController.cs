@@ -8,7 +8,7 @@ using System.Text;
 
 namespace humanResourceProject.Presentation.Controllers
 {
-    [Authorize(Roles = "Admin, CompanyManager, DepartmentManager, Personel")]
+    [Authorize(Roles = "SiteManager, CompanyManager, DepartmentManager, Personel")]
     public class EmployeeController : Controller
     {
         private readonly HttpClient _httpClient;

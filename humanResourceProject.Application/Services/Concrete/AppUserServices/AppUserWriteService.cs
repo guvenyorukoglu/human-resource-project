@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
+using humanResourceProject.Presentation.Controllers;
 
 
 namespace humanResourceProject.Application.Services.Concrete.AppUserServices
@@ -122,10 +123,6 @@ namespace humanResourceProject.Application.Services.Concrete.AppUserServices
 
         }
 
-        public async Task<IdentityResult> UpdateProfileImage(Guid id)
-        {
-            AppUser user = await _readRepository.GetSingleDefault(x => x.Id == id);
-            return await _userManager.UpdateAsync(user);
-        }
+        
     }
 }

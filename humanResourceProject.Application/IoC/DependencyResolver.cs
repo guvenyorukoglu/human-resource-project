@@ -47,8 +47,6 @@ namespace humanResourceProject.Application.IoC
             builder.RegisterType<CompanyWriteService>().As<ICompanyWriteService>().InstancePerLifetimeScope();
             builder.RegisterType<ImageService>().As<IImageService>().InstancePerLifetimeScope();
 
-            builder.RegisterType<ImageService>().As<IImageService>().InstancePerLifetimeScope();
-
             builder.RegisterType<MailService>().As<IMailService>().InstancePerLifetimeScope();
 
             builder.RegisterType<AdvanceReadService>().As<IAdvanceReadService>().InstancePerLifetimeScope();
