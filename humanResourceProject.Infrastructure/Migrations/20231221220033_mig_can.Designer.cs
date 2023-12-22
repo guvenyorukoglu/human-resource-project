@@ -12,11 +12,15 @@ using humanResourceProject.Infrastructure.Context;
 namespace humanResourceProject.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
+<<<<<<<< HEAD:humanResourceProject.Infrastructure/Migrations/20231221220033_mig_can.Designer.cs
+    [Migration("20231221220033_mig_can")]
+========
 <<<<<<< HEAD:humanResourceProject.Infrastructure/Migrations/20231221220033_mig_can.Designer.cs
     [Migration("20231221220033_mig_can")]
 =======
     [Migration("20231221192401_mig_can")]
 >>>>>>> Leave Views of Presentation:humanResourceProject.Infrastructure/Migrations/20231221192401_mig_can.Designer.cs
+>>>>>>>> leave presentation controllers:humanResourceProject.Infrastructure/Migrations/20231221192401_mig_can.Designer.cs
     partial class mig_can
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
