@@ -78,6 +78,7 @@ namespace humanResourceProject.API.Controllers
                     surname = appUser.LastName,
                     departmentId = appUser.DepartmentId,
                     companyId = department.CompanyId,
+                    managerId = appUser.ManagerId,
                     imagePath = appUser.ImagePath,
                     roles = await _userManager.GetRolesAsync(appUser)
                 });

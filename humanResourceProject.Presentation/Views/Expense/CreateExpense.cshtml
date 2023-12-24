@@ -85,14 +85,22 @@
                 <input asp-for="Explanation" class="form-control" />
                 <span asp-validation-for="Explanation" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="form-group mb-3">
                 <label asp-for="UploadPath" class="control-label"></label>
-                <input asp-for="UploadPath" type="file" class="form-control" />
+                <input asp-for="UploadPath" type="file" accept=".png, .jpg, .jpeg" class="form-control" />
                 <span asp-validation-for="UploadPath" class="text-danger"></span>
             </div>
             <div class="form-group mb-3">
                 <input asp-for="EmployeeId" type="hidden" class="form-control" />
                 <span asp-validation-for="EmployeeId" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-3">
+                <input asp-for="ManagerId" type="hidden" class="form-control" />
+                <span asp-validation-for="ManagerId" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-3">
+                <input asp-for="CreateDate" type="hidden" class="form-control" />
+                <span asp-validation-for="CreateDate" class="text-danger"></span>
             </div>
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
            <div class="text-center"

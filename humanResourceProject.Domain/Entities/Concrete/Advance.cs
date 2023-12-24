@@ -20,6 +20,17 @@ namespace humanResourceProject.Domain.Entities.Concrete
         public DateTime CreateDate { get; set; }
         public DateTime? UpdateDate { get; set; }
         public DateTime? DeleteDate { get; set; }
-        public Status Status { get; set; } = Status.Active; 
+        public Status Status { get; set; } = Status.Active;
+
+        public static string GenerateAdvanceNumber(int currentAdvanceCount)
+        {
+            const string prefix = "ADV";
+
+            string sequentialNumber = (currentAdvanceCount + 1).ToString("D5");
+
+            string advanceNo = $"{prefix}{DateTime.Now.Year}{sequentialNumber}";
+
+            return advanceNo;
+        }
     }
 }

@@ -241,6 +241,7 @@ namespace humanResourceProject.Presentation.Controllers
                 string surname = parsedResponse.surname;
                 string companyId = parsedResponse.companyId;
                 string departmentId = parsedResponse.departmentId;
+                string managerId = parsedResponse.managerId;
                 string imagePath = parsedResponse.imagePath;
                 var roles = parsedResponse.roles;
 
@@ -251,6 +252,7 @@ namespace humanResourceProject.Presentation.Controllers
                 claims.Add(new Claim(ClaimTypes.Surname, surname));
                 claims.Add(new Claim("CompanyId", companyId));
                 claims.Add(new Claim("DepartmentId", departmentId));
+                claims.Add(new Claim("ManagerId", managerId));
                 claims.Add(new Claim("ImagePath", imagePath));
 
                 foreach (var role in roles)

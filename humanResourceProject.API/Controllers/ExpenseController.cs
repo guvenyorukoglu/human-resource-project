@@ -93,7 +93,7 @@ namespace humanResourceProject.API.Controllers
 
         [HttpPost]
         [Route("CreateExpense")]
-        public async Task<IActionResult> CreateExpense([FromBody] ExpenseDTO model)
+        public async Task<IActionResult> CreateExpense([FromForm] ExpenseDTO model)
         {
             var result = await _expenseWriteService.InsertExpense(model);
             if (!result.Succeeded)

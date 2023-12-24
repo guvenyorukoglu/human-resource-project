@@ -33,6 +33,11 @@ namespace humanResourceProject.Infrastructure.Repositories.BaseRepos
             return await table.FindAsync(id);
         }
 
+        public Task<int> GetCountAsync()
+        {
+            return table.CountAsync();
+        }
+
         public async Task<T> GetDefault(Expression<Func<T, bool>> expression)
         {
             return await table.FirstOrDefaultAsync(expression);

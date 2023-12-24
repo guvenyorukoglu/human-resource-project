@@ -39,6 +39,10 @@ namespace humanResourceProject.Application.Services.Concrete.AdvanceServices
             Advance newAdvance = _mapper.Map<Advance>(model);
             newAdvance.Status = Domain.Enum.Status.Active;
             newAdvance.CreateDate = DateTime.Now;
+
+            int currentAdvanceCount = await _baseReadRepository.GetCountAsync();
+            newAdvance.AdvanceNo = Advance.GenerateAdvanceNumber(currentAdvanceCount);
+
             if (await _baseWriteRepository.Insert(newAdvance))
                 return IdentityResult.Success;
             else
