@@ -76,7 +76,9 @@ namespace humanResourceProject.Presentation.Controllers
         {
             return View(new ExpenseDTO()
             {
-                EmployeeId = Guid.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value)
+                EmployeeId = Guid.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value),
+                ManagerId = Guid.Parse(User.Claims.FirstOrDefault(x => x.Type == "ManagerId").Value),
+                CreateDate = DateTime.Now
             });
         }
 
@@ -86,37 +88,32 @@ namespace humanResourceProject.Presentation.Controllers
             if (!ModelState.IsValid)
                 return View(model);
 
-            //var multipartContent = new MultipartFormDataContent();
+            var multipartContent = new MultipartFormDataContent();
 
-            //var properties = typeof(ExpenseDTO).GetProperties();
+            var properties = typeof(ExpenseDTO).GetProperties();
 
-            //foreach (var property in properties)
-            //{
-            //    var value = property.GetValue(model)?.ToString() ?? string.Empty;
-            //    var stringContent = new StringContent(value, Encoding.UTF8, MediaTypeNames.Text.Plain);
-            //    multipartContent.Add(stringContent, property.Name);
-            //}
+            foreach (var property in properties)
+            {
+                var value = property.GetValue(model)?.ToString() ?? string.Empty;
+                var stringContent = new StringContent(value, Encoding.UTF8, MediaTypeNames.Text.Plain);
+                multipartContent.Add(stringContent, property.Name);
+            }
 
-            //if (model.UploadPath != null && model.UploadPath.Length > 0) // UploadPath varsa
-            //{
-            //    string fileExtension = Path.GetExtension(model.UploadPath.FileName).ToLower();
+            if (model.UploadPath != null && model.UploadPath.Length > 0) // UploadPath varsa
+            {
+                string fileExtension = Path.GetExtension(model.UploadPath.FileName).ToLower();
 
-            //    if (fileExtension != ".png" && fileExtension != ".jpg" && fileExtension != ".jpeg")
-            //    {
-            //        ModelState.AddModelError(string.Empty, "Yüklediğiniz profil fotoğrafının uzantısı '.png', '.jpg' veya '.jpeg' olmalıdır.");
-            //        return View(model);
-            //    }
+                if (fileExtension != ".png" && fileExtension != ".jpg" && fileExtension != ".jpeg")
+                {
+                    ModelState.AddModelError(string.Empty, "Yüklediğiniz profil fotoğrafının uzantısı '.png', '.jpg' veya '.jpeg' olmalıdır.");
+                    return View(model);
+                }
 
-            //    var imageContent = new StreamContent(model.UploadPath.OpenReadStream());
-            //    multipartContent.Add(imageContent, "UploadPath", model.UploadPath.FileName);
-            //}
+                var imageContent = new StreamContent(model.UploadPath.OpenReadStream());
+                multipartContent.Add(imageContent, "UploadPath", model.UploadPath.FileName);
+            }
 
-            //var response = await _httpClient.PostAsync($"api/Expense/CreateExpense", multipartContent);
-
-            var json = JsonConvert.SerializeObject(model);
-            var content = new StringContent(json, Encoding.UTF8, "application/json");
-
-            var response = await _httpClient.PostAsync($"api/Expense/CreateExpense", content);
+            var response = await _httpClient.PostAsync($"api/Expense/CreateExpense", multipartContent);
 
             if (response.IsSuccessStatusCode)
                 return RedirectToAction(nameof(MyExpenses));
@@ -146,7 +143,7 @@ namespace humanResourceProject.Presentation.Controllers
             if (response.IsSuccessStatusCode)
             {
                 var content = await response.Content.ReadAsStringAsync();
-                var expense = JsonConvert.DeserializeObject<ExpensePersonnelVM>(content);
+                var expense = JsonConvert.DeserializeObject<UpdateExpenseDTO>(content);
                 return View(expense);
 
             }

@@ -7,7 +7,8 @@ namespace humanResourceProject.Infrastructure.Repositories.AdvanceRepos
 {
     public class AdvanceReadRepository : BaseReadRepository<Advance>
     {
-        public AdvanceReadRepository(AppDbContext context) : base(context) { }
-
+        public AdvanceReadRepository(AppDbContext context) : base(context) 
+        { 
+        }
     }
 }

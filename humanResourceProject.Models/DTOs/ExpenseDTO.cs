@@ -8,7 +8,7 @@ namespace humanResourceProject.Models.DTOs
 {
     public class ExpenseDTO
     {
-        public Guid Id { get; set; }
+        //public Guid Id { get; set; }
         [Required(ErrorMessage = "Açıklama alanı boş geçilemez!")]
         [DisplayName("Açıklama*")]
         [StringLength(500, ErrorMessage = "Açıklama en fazla 500 en az 5 karakter olmalıdır.", MinimumLength = 5)]
@@ -33,7 +33,7 @@ namespace humanResourceProject.Models.DTOs
         [Required(ErrorMessage = "Masraf türü alanı boş geçilemez!")]
         [DisplayName("Masraf Türü*")]
         public ExpenseType ExpenseType { get; set; }
-        //public RequestStatus ExpenseStatus { get; set; } = RequestStatus.Pending;
+
         [Required(ErrorMessage = "Masraf tarihi alanı boş geçilemez!")]
         [DisplayName("Masraf Tarihi*")]
         public DateTime DateOfExpense { get; set; }

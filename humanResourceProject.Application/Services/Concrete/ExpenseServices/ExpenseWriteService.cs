@@ -4,7 +4,6 @@ using humanResourceProject.Application.Services.Abstract.IImageServices;
 using humanResourceProject.Application.Services.Concrete.BaseServices;
 using humanResourceProject.Domain.Entities.Concrete;
 using humanResourceProject.Domain.IRepository.BaseRepos;
-using humanResourceProject.Infrastructure.Repositories.BaseRepos;
 using humanResourceProject.Models.DTOs;
 using Microsoft.AspNetCore.Identity;
 
@@ -45,6 +44,9 @@ namespace humanResourceProject.Application.Services.Concrete.ExpenseServices
             Expense newExpense = _mapper.Map<Expense>(model);
             newExpense.Status = Domain.Enum.Status.Active;
             newExpense.CreateDate = DateTime.Now;
+
+            int currentExpenseCount = await _expenseReadRepository.GetCountAsync();
+            newExpense.ExpenseNo = Expense.GenerateExpenseNumber(currentExpenseCount);
             if (await _expenseWriteRepository.Insert(newExpense))
                 return IdentityResult.Success;
             else

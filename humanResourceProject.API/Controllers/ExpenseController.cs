@@ -92,7 +92,7 @@ namespace humanResourceProject.API.Controllers
 
         [HttpPost]
         [Route("CreateExpense")]
-        public async Task<IActionResult> CreateExpense([FromBody] ExpenseDTO model)
+        public async Task<IActionResult> CreateExpense([FromForm] ExpenseDTO model)
         {
             var result = await _expenseWriteService.InsertExpense(model);
             if (!result.Succeeded)
@@ -117,7 +117,7 @@ namespace humanResourceProject.API.Controllers
         }
 
         [HttpGet]
-        [Route("GetUpdateAdvanceDTO/{id}")]
+        [Route("GetUpdateExpenseDTO/{id}")]
         public async Task<IActionResult> GetUpdateExpenseDTO(Guid id)
         {
             return Ok(await _expenseReadService.GetUpdateExpenseDTO(id));

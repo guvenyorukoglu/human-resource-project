@@ -25,5 +25,7 @@ namespace humanResourceProject.Domain.IRepository.BaseRepos
             Expression<Func<T, bool>> where,
             Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null,
             Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null);
+
+        Task<int> GetCountAsync();
     }
 }

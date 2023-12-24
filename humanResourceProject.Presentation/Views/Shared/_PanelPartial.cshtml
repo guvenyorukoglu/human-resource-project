@@ -3,7 +3,7 @@
     <div class="profile row">
         <div class="picture">
             <input type="file" id="uploadInput" style="display: none;" />
-            <img id="profileImg" src="@(User.Claims.FirstOrDefault(x => x.Type == "ImagePath").Value)" alt="profileImage" />
+            <img id="profileImg" src="@(User.Claims.FirstOrDefault(x => x.Type == "ImagePath").Value)" alt="profileImage" title="Profil Fotoğrafını Güncelle" />
         </div>
         <div class="name text-center">
             <h3>@(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Name).Value + " " + User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Surname).Value)</h3>
