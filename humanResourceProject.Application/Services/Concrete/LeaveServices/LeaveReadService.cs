@@ -68,7 +68,7 @@ namespace humanResourceProject.Application.Services.Concrete.LeaveServices
                                                                 CreateDate = x.CreateDate,
                                                                 Explanation = x.Explanation
                                                             },
-                                                            where: x => (x.Status != Status.Deleted && x.Status != Status.Inactive) && x.Employee.Department.CompanyId == id,
+                                                            where: x => (x.Status != Status.Deleted && x.Status != Status.Inactive) && x.Employee.CompanyId == id,
                                                             orderBy: x => x.OrderByDescending(x => x.CreateDate),
                                                             include: x => x.Include(x => x.Employee));
             return leaves;

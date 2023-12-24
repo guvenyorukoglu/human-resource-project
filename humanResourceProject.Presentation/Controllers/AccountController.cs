@@ -348,9 +348,21 @@ namespace humanResourceProject.Presentation.Controllers
             var response = await _httpClient.PostAsync($"api/Account/UpdateProfileImage/", multipartContent);
             if (response.IsSuccessStatusCode)
             {
-                return RedirectToAction("Home", "Employee");
+                var identity = (ClaimsIdentity)User.Identity;
+                var existingImageUrlClaim = identity.FindFirst("ImagePath");
+                if (existingImageUrlClaim != null)
+                {
+                    identity.RemoveClaim(existingImageUrlClaim);
+                }
+
+                string imageUrl = await response.Content.ReadAsStringAsync();
+                identity.AddClaim(new Claim("ImagePath", imageUrl));
+
+                await HttpContext.SignInAsync(new ClaimsPrincipal(identity));
+
+                return Json(new { imageUrl });
             }
-            return View("Error");
+                return RedirectToAction("Home", "Employee");
         }
 
     }

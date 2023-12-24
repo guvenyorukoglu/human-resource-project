@@ -9,7 +9,8 @@ namespace humanResourceProject.Infrastructure.EntityTypeConfig
         public void Configure(EntityTypeBuilder<Job> builder)
         {
             builder.Property(j => j.Title).IsRequired().HasMaxLength(50);
-            builder.Property(j => j.Description).IsRequired(false).HasMaxLength(200);
+            builder.Property(j => j.Description).IsRequired(false).HasMaxLength(500);
+            builder.HasOne(j => j.Company).WithMany(c => c.Jobs).HasForeignKey(j => j.CompanyId);
         }
     }
 }

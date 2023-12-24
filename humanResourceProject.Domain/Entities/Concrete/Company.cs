@@ -1,10 +1,5 @@
 ﻿using humanResourceProject.Domain.Entities.Abstract;
 using humanResourceProject.Domain.Enum;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace humanResourceProject.Domain.Entities.Concrete
 {
@@ -12,8 +7,9 @@ namespace humanResourceProject.Domain.Entities.Concrete
     {
         public Company()
         {
-            //Employees = new HashSet<AppUser>();
+            Employees = new HashSet<AppUser>();
             Departments = new HashSet<Department>();
+            Jobs = new HashSet<Job>();
         }
         public Guid Id { get; set; }
         public string CompanyName { get; set; }
@@ -23,8 +19,9 @@ namespace humanResourceProject.Domain.Entities.Concrete
         public string Address { get; set; }
         public string PhoneNumber { get; set; }
 
-        //public ICollection<AppUser> Employees { get; set; }
+        public ICollection<AppUser> Employees { get; set; }
         public ICollection<Department> Departments { get; set; }
+        public ICollection<Job> Jobs { get; set; }
         public DateTime CreateDate { get; set; }
         public DateTime? UpdateDate { get; set; }
         public DateTime? DeleteDate { get; set; }

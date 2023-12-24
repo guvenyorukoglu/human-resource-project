@@ -6,6 +6,7 @@ namespace humanResourceProject.Domain.Entities.Concrete
     public class Advance : IBaseEntity
     {
         public Guid Id { get; set; }
+        public string AdvanceNo { get; set; }
         public decimal AmountOfAdvance { get; set; }
         public string? Explanation { get; set; }
         public AdvanceType AdvanceType { get; set; }

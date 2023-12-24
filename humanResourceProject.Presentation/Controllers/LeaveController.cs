@@ -21,7 +21,7 @@ namespace humanResourceProject.Presentation.Controllers
             _httpClient.BaseAddress = new Uri("https://localhost:7255/"); // Local
         }
 
-        [Authorize(Roles = "DepartmentManager,Personel")]
+        [Authorize(Roles = "Manager,Personel")]
         public async Task<IActionResult> MyLeaves()
         {
             Guid employeeId = Guid.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value);
@@ -36,10 +36,10 @@ namespace humanResourceProject.Presentation.Controllers
             return View();
         }
 
-        [Authorize(Roles = "DepartmentManager,CompanyManager")]
+        [Authorize(Roles = "Manager,CompanyManager")]
         public async Task<IActionResult> EmployeesLeaves()
         {
-            if(User.IsInRole("DepartmentManager"))
+            if(User.IsInRole("Manager"))
             {
                 Guid depatmentId = Guid.Parse(User.Claims.FirstOrDefault(x => x.Type == "DepartmentId").Value);
 
@@ -138,7 +138,7 @@ namespace humanResourceProject.Presentation.Controllers
         }
 
         //LEAVE REQUESTS & CONTROLS
-        [Authorize(Roles = "DepartmentManager,CompanyManager")]
+        [Authorize(Roles = "Manager,CompanyManager")]
         [HttpGet]
         public async Task<IActionResult> ApproveLeave(Guid id)
         {
@@ -165,7 +165,7 @@ namespace humanResourceProject.Presentation.Controllers
             return View("Error");
         }
 
-        [Authorize(Roles = "DepartmentManager,CompanyManager")]
+        [Authorize(Roles = "Manager,CompanyManager")]
         [HttpGet]
         public async Task<IActionResult> RejectLeave(Guid id)
         {

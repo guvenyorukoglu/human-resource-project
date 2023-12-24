@@ -16,16 +16,18 @@ namespace humanResourceProject.Models.DTOs
         [Required(ErrorMessage = "Miktar alanı boş geçilemez!")]
         [DisplayName("Harcama Miktarı*")]
         public decimal AmountOfExpense { get; set; }
-        public DateTime? UpdateDate { get; set; }
-        public Status Status { get; set; }
+        //public DateTime? UpdateDate { get; set; }
+        //public Status Status { get; set; }
         //public AppUser Employee { get; set; }
         public Guid EmployeeId { get; set; }
         public Guid ManagerId { get; set; }
-        public DateTime CreateDate { get; set; }
+        public DateTime CreateDate { get; set; } = DateTime.Now;
         [Required(ErrorMessage = "Para birimi alanı boş geçilemez!")]
         [DisplayName("Para Birimi*")]
         public Currency Currency { get; set; }
-        public IFormFile? UploadPath { get; set; }
+        [Required(ErrorMessage = "Dosya alanı boş geçilemez!")]
+        [DisplayName("Dosya*")]
+        public IFormFile UploadPath { get; set; }
         public string? FilePath { get; set; }
 
         [Required(ErrorMessage = "Masraf türü alanı boş geçilemez!")]

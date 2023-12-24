@@ -8,7 +8,7 @@ using System.Text;
 
 namespace humanResourceProject.Presentation.Controllers
 {
-    [Authorize(Roles = "SiteManager, CompanyManager, DepartmentManager, Personel")]
+    [Authorize(Roles = "SiteManager, CompanyManager, Manager, Personel")]
     public class EmployeeController : Controller
     {
         private readonly HttpClient _httpClient;
@@ -42,7 +42,7 @@ namespace humanResourceProject.Presentation.Controllers
                 }
                 return View();
             }
-            else if (User.IsInRole("DepartmentManager")) // Departman Yöneticisi ise departmanındaki personelleri getirir
+            else if (User.IsInRole("Manager")) // Departman Yöneticisi ise departmanındaki personelleri getirir
             {
                 Guid departmentId = Guid.Parse(User.Claims.FirstOrDefault(x => x.Type == "DepartmentId").Value);
                 var json = JsonConvert.SerializeObject(departmentId);
@@ -114,7 +114,7 @@ namespace humanResourceProject.Presentation.Controllers
                         return View("Error");
                     }
                 }
-                else if (User.IsInRole("DepartmentManager"))
+                else if (User.IsInRole("Manager"))
                     return View(new CreateEmployeeDTO()
                     {
                         DepartmentId = Guid.Parse(User.Claims.FirstOrDefault(x => x.Type == "DepartmentId").Value),
