@@ -6,6 +6,7 @@ namespace humanResourceProject.Domain.Entities.Concrete
     public class Leave : IBaseEntity
     {
         public Guid Id { get; set; }
+        public string LeaveNo { get; set; }
         public DateTime StartDateOfLeave { get; set; }
         public DateTime EndDateOfLeave { get; set; }
         public LeaveType LeaveType { get; set; }

@@ -197,7 +197,8 @@ namespace humanResourceProject.API.Controllers
             if (!result.Succeeded)
                 return BadRequest(result.Errors);
 
-            return Ok(result.Succeeded);
+            AppUser user = await _userManager.FindByIdAsync(model.Id.ToString());
+            return Ok(user.ImagePath);
         }
 
         [HttpGet]

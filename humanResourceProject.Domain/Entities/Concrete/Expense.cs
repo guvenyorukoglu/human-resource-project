@@ -8,6 +8,7 @@ namespace humanResourceProject.Domain.Entities.Concrete
     public class Expense : IBaseEntity
     {
         public Guid Id { get; set; }
+        public string ExpenseNo { get; set; }
         public decimal AmountOfExpense { get; set; }
         public DateTime DateOfExpense { get; set; }
         public ExpenseType ExpenseType { get; set; }

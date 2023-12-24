@@ -39,7 +39,7 @@ namespace humanResourceProject.Application.Services.Concrete.ExpenseServices
                                                   EmployeeName = x.Employee.FirstName,
                                                   EmployeeSurname = x.Employee.LastName,
                                                   EmployeeId = x.EmployeeId,
-                                                  DepartmentId = x.Employee.Department.Id,
+                                                  DepartmentId = (Guid)x.Employee.DepartmentId,
                                                   ManagerId = (Guid)x.Employee.Manager.ManagerId,
                                                   ExpenseStatus = x.ExpenseStatus,
                                                   DateOfExpense = x.DateOfExpense,
@@ -89,7 +89,7 @@ namespace humanResourceProject.Application.Services.Concrete.ExpenseServices
                                                   EmployeeName = x.Employee.FirstName,
                                                   EmployeeSurname = x.Employee.LastName,
                                                   EmployeeId = x.EmployeeId,
-                                                  DepartmentId = x.Employee.Department.Id,
+                                                  DepartmentId = (Guid)x.Employee.DepartmentId,
                                                   ManagerId = (Guid)x.Employee.Manager.ManagerId,
                                                   ExpenseStatus = x.ExpenseStatus,
                                                   DateOfExpense = x.DateOfExpense,
@@ -116,7 +116,7 @@ namespace humanResourceProject.Application.Services.Concrete.ExpenseServices
                                                                  EmployeeName = x.Employee.FirstName,
                                                                  EmployeeSurname = x.Employee.LastName,
                                                                  EmployeeId = x.EmployeeId,
-                                                                 DepartmentId = x.Employee.Department.Id,
+                                                                 DepartmentId = (Guid)x.Employee.DepartmentId,
                                                                  ManagerId = (Guid)x.Employee.Manager.ManagerId,
                                                                  ExpenseStatus = x.ExpenseStatus,
                                                                  DateOfExpense = x.DateOfExpense,
@@ -125,7 +125,7 @@ namespace humanResourceProject.Application.Services.Concrete.ExpenseServices
                                                                  CreateDate = x.CreateDate,
                                                                  ExpenseType = x.ExpenseType
                                                              },
-                                                where: x => (x.Status != Status.Deleted && x.Status != Status.Inactive) && x.Employee.Department.CompanyId == id,
+                                                where: x => (x.Status != Status.Deleted && x.Status != Status.Inactive) && x.Employee.CompanyId == id,
                                                 orderBy: x => x.OrderByDescending(x => x.CreateDate),
                                                 include: x => x.Include(x => x.Employee).ThenInclude(x => x.Manager));
             return expenses;

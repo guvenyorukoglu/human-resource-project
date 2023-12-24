@@ -74,7 +74,7 @@ namespace humanResourceProject.Application.Services.Concrete.AppUserServices
             if (result.Succeeded)
             {
                
-                await _userManager.AddToRoleAsync(newUser, "DepartmentManager");
+                await _userManager.AddToRoleAsync(newUser, "Manager");
                
             }
             return result;

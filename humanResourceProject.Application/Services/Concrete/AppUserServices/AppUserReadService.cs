@@ -34,11 +34,11 @@ namespace humanResourceProject.Application.Services.Concrete.AppUserServices
                     Email = x.Email,
                     PhoneNumber = x.PhoneNumber,
                     Gender = x.Gender,
-                    JobTitle = x.Job.Title
+                    JobTitle = x.Company.Jobs.FirstOrDefault(j => j.Id == x.JobId).Title
                 },
-                where: x => x.Department.CompanyId == companyId && (x.Status != Domain.Enum.Status.Inactive && x.Status != Domain.Enum.Status.Deleted),
+                where: x => x.CompanyId == companyId && (x.Status != Domain.Enum.Status.Inactive && x.Status != Domain.Enum.Status.Deleted),
                 orderBy: x => x.OrderBy(x => x.FirstName),
-                include: x => x.Include(x => x.Job).Include(x => x.Department));
+                include: x => x.Include(x => x.Company).ThenInclude(x => x.Jobs));
         }
 
         public async Task<List<PersonelVM>> GetEmployeesByDepartmentId(Guid departmentId)
@@ -53,11 +53,11 @@ namespace humanResourceProject.Application.Services.Concrete.AppUserServices
                     Email = x.Email,
                     PhoneNumber = x.PhoneNumber,
                     Gender = x.Gender,
-                    JobTitle = x.Job.Title
+                    JobTitle = x.Company.Jobs.FirstOrDefault(j => j.Id == x.JobId).Title
                 },
                 where: x => x.DepartmentId == departmentId && (x.Status != Domain.Enum.Status.Inactive && x.Status != Domain.Enum.Status.Deleted),
                 orderBy: x => x.OrderBy(x => x.FirstName),
-                include: x => x.Include(x => x.Job));
+                include: x => x.Include(x => x.Company).ThenInclude(x => x.Jobs));
         }
 
         public async Task<List<ManagerVM>> GetManagersByDepartmentId(Guid deparmentId)

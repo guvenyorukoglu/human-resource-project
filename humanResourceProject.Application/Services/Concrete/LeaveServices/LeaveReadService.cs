@@ -39,7 +39,6 @@ namespace humanResourceProject.Application.Services.Concrete.LeaveServices
                                                                  EmployeeName = x.Employee.FirstName,
                                                                  EmployeeSurname = x.Employee.LastName,
                                                                  EmployeeId = x.Employee.Id,
-                                                                 DepartmentId = x.Employee.Department.Id,
                                                                  ManagerId = (Guid)x.Employee.Manager.ManagerId,
                                                                  LeaveStatus = x.LeaveStatus,
                                                                  DaysOfLeave = x.DaysOfLeave,
@@ -64,13 +63,12 @@ namespace humanResourceProject.Application.Services.Concrete.LeaveServices
                                                                     EmployeeName = x.Employee.FirstName,
                                                                     EmployeeSurname = x.Employee.LastName,
                                                                     EmployeeId = x.Employee.Id,
-                                                                    DepartmentId = x.Employee.Department.Id,
                                                                     ManagerId = (Guid)x.Employee.Manager.ManagerId,
                                                                     LeaveStatus = x.LeaveStatus,
                                                                     DaysOfLeave = x.DaysOfLeave,
                                                                     CreateDate = x.CreateDate
                                                             },
-                                                            where: x => (x.Status != Status.Deleted && x.Status != Status.Inactive) && x.Employee.Department.CompanyId == id,
+                                                            where: x => (x.Status != Status.Deleted && x.Status != Status.Inactive) && x.Employee.CompanyId == id,
                                                             orderBy: x => x.OrderByDescending(x => x.CreateDate),
                                                             include: x => x.Include(x => x.Employee));
             return leaves;
@@ -88,7 +86,6 @@ namespace humanResourceProject.Application.Services.Concrete.LeaveServices
                                                                  EmployeeName = x.Employee.FirstName,
                                                                  EmployeeSurname = x.Employee.LastName,
                                                                  EmployeeId = x.Employee.Id,
-                                                                 DepartmentId = x.Employee.Department.Id,
                                                                  ManagerId = (Guid)x.Employee.Manager.ManagerId,
                                                                  LeaveStatus = x.LeaveStatus,
                                                                  DaysOfLeave = x.DaysOfLeave,

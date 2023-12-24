@@ -19,7 +19,7 @@ namespace humanResourceProject.Infrastructure.SeedData
         static List<Expense> expenses = new();
         static List<Leave> leaves = new();
         static List<AppUser> companyManagers = new();
-        static List<AppUser> departmentManagers = new();
+        static List<AppUser> managers = new();
         static string[] femaleDefaultImages = new string[]
         {
             "https://ik.imagekit.io/7ypp4olwr/female1.jpg?tr=h-200,w-200",
@@ -43,7 +43,7 @@ namespace humanResourceProject.Infrastructure.SeedData
         };
 
 
-        public static async void Seed(IApplicationBuilder app, int maxCompanyCount, int maxDepartmentCountPerCompany, int maxNumberOfEmployeesCountPerDepartment, int maxJobCount, int maxAdvanceCountPerEmployee, int maxExpenseCountPerEmployee, int maxLeaveCountPerEmployee)
+        public static async void Seed(IApplicationBuilder app, int maxCompanyCount, int maxDepartmentCountPerCompany, int maxManagerCountPerCompany, int maxEmployeeCountPerManager, int maxJobCountPerCompany, int maxAdvanceCountPerManager, int maxExpenseCountPerManager, int maxLeaveCountPerManager, int maxAdvanceCountPerEmployee, int maxExpenseCountPerEmployee, int maxLeaveCountPerEmployee)
         {
             using (var serviceScope = app.ApplicationServices.CreateScope())
             {
@@ -67,19 +67,19 @@ namespace humanResourceProject.Infrastructure.SeedData
 
                 if (!await context.Jobs.AnyAsync())
                 {
-                    await CreateJobsAsync(maxJobCount);
+                    await CreateJobsAsync(maxJobCountPerCompany);
                     await context.Jobs.AddRangeAsync(jobs);
                 }
 
                 if (!await context.AppUsers.AnyAsync())
                 {
                     await CreateCompanyManagerAsync(serviceScope);
-                    await CreateDepartmentManagerAsync(serviceScope);
-                    await CreateFakeEmployeesAsync(maxNumberOfEmployeesCountPerDepartment);
+                    await CreateManagerAsync(serviceScope, maxManagerCountPerCompany);
+                    await CreateFakeEmployeesAsync(maxEmployeeCountPerManager);
                 }
 
                 await UpdateCompanyEmployeeCount();
-                await CreateRequestsAsync(maxAdvanceCountPerEmployee, maxExpenseCountPerEmployee, maxLeaveCountPerEmployee);
+                await CreateRequestsAsync(maxAdvanceCountPerManager, maxExpenseCountPerManager, maxLeaveCountPerManager, maxAdvanceCountPerEmployee, maxExpenseCountPerEmployee, maxLeaveCountPerEmployee);
                 await context.SaveChangesAsync();
 
                 await CreateSiteManagerAsync(serviceScope);
@@ -92,7 +92,7 @@ namespace humanResourceProject.Infrastructure.SeedData
                             .RuleFor(c => c.Id, f => f.Random.Guid())
                             .RuleFor(c => c.CompanyName, f => f.Company.CompanyName())
                             .RuleFor(c => c.NumberOfEmployees, 0)
-                            .RuleFor(c => c.TaxNumber, f => f.Random.ULong(1000000000, 9999999999).ToString())
+                            .RuleFor(c => c.TaxNumber, f => f.Random.ReplaceNumbers($"##########"))
                             .RuleFor(c => c.TaxOffice, f => f.Address.City())
                             .RuleFor(c => c.Address, f => f.Address.FullAddress())
                             .RuleFor(c => c.PhoneNumber, f => f.Phone.PhoneNumber("+90##########"))
@@ -131,15 +131,15 @@ namespace humanResourceProject.Infrastructure.SeedData
                             departments.Add(departmentFake.Generate());
                         }
 
-                        var departmentFakeForCompanyManager = new Faker<Department>()
-                            .RuleFor(d => d.Id, f => f.Random.Guid())
-                            .RuleFor(d => d.DepartmentName, "President & Managing Director")
-                            .RuleFor(d => d.Description, f => f.Lorem.Sentence())
-                            .RuleFor(d => d.CreateDate, f => f.Date.Past(1))
-                            .RuleFor(d => d.Status, f => Status.Active)
-                            .RuleFor(d => d.CompanyId, company.Id);
+                        //var departmentFakeForCompanyManager = new Faker<Department>()
+                        //    .RuleFor(d => d.Id, f => f.Random.Guid())
+                        //    .RuleFor(d => d.DepartmentName, "President & Managing Director")
+                        //    .RuleFor(d => d.Description, f => f.Lorem.Sentence())
+                        //    .RuleFor(d => d.CreateDate, f => f.Date.Past(1))
+                        //    .RuleFor(d => d.Status, f => Status.Active)
+                        //    .RuleFor(d => d.CompanyId, company.Id);
 
-                        departments.Add(departmentFakeForCompanyManager.Generate());
+                        //departments.Add(departmentFakeForCompanyManager.Generate());
 
                     }
                     foreach (var department in departments)
@@ -155,29 +155,32 @@ namespace humanResourceProject.Infrastructure.SeedData
                     }
                 }
 
-                async Task CreateJobsAsync(int maxJobCount)
+                async Task CreateJobsAsync(int maxJobCountPerCompany)
                 {
-                    for (int i = 0; i < maxJobCount; i++)
+                    foreach (var company in companies)
                     {
-                        var jobFake = new Faker<Job>()
-                        .RuleFor(j => j.Id, f => f.Random.Guid())
-                        .RuleFor(j => j.Title, f => f.Name.JobTitle())
-                        .RuleFor(j => j.Description, f => f.Lorem.Sentence())
-                        .RuleFor(j => j.CreateDate, f => f.Date.Past(1))
-                        .RuleFor(j => j.Status, f => f.Random.Bool(0.9f) ? Status.Active : (f.Random.Bool(0.5f) ? Status.Modified : (f.Random.Bool(0.25f) ? Status.Inactive : Status.Deleted)));
+                        for (int i = 0; i < maxJobCountPerCompany; i++)
+                        {
+                            var jobFake = new Faker<Job>()
+                            .RuleFor(j => j.Id, f => f.Random.Guid())
+                            .RuleFor(j => j.Title, f => f.Name.JobTitle())
+                            .RuleFor(j => j.Description, f => f.Lorem.Sentence())
+                            .RuleFor(j => j.CreateDate, f => f.Date.Past(1))
+                            .RuleFor(j => j.Status, f => f.Random.Bool(0.9f) ? Status.Active : (f.Random.Bool(0.5f) ? Status.Modified : (f.Random.Bool(0.25f) ? Status.Inactive : Status.Deleted)))
+                            .RuleFor(d => d.CompanyId, company.Id);
 
-                        jobs.Add(jobFake.Generate());
+                            jobs.Add(jobFake.Generate());
+                        }
+
+                        //var jobFakeForAdmin = new Faker<Job>()
+                        //    .RuleFor(j => j.Id, f => f.Random.Guid())
+                        //    .RuleFor(j => j.Title, f => "Administrator")
+                        //    .RuleFor(j => j.Description, f => "A person responsible for carrying out the administration of a business or organization.")
+                        //    .RuleFor(j => j.CreateDate, f => f.Date.Past(1))
+                        //    .RuleFor(j => j.Status, f => Status.Active);
+
+                        //jobs.Add(jobFakeForAdmin.Generate());
                     }
-
-                    var jobFakeForAdmin = new Faker<Job>()
-                        .RuleFor(j => j.Id, f => f.Random.Guid())
-                        .RuleFor(j => j.Title, f => "Administrator")
-                        .RuleFor(j => j.Description, f => "A person responsible for carrying out the administration of a business or organization.")
-                        .RuleFor(j => j.CreateDate, f => f.Date.Past(1))
-                        .RuleFor(j => j.Status, f => Status.Active);
-
-                    jobs.Add(jobFakeForAdmin.Generate());
-
                     foreach (var job in jobs)
                     {
                         if (job.Status == Status.Deleted)
@@ -191,17 +194,21 @@ namespace humanResourceProject.Infrastructure.SeedData
                     }
                 }
 
-                async Task CreateFakeEmployeesAsync(int maxNumberOfEmployeesCountPerDepartment)
+                async Task CreateFakeEmployeesAsync(int maxEmployeeCountPerManager)
                 {
-                    for (int i = 0; i < departments.Count; i++)
+                    foreach (var manager in managers)
                     {
-                        Guid departmentManagerId = departmentManagers.SingleOrDefault(x => x.DepartmentId == departments[i].Id).Id;
+                        var departmentsOfTheCompany = departments.Where(x => x.CompanyId == manager.CompanyId).ToList();
+                        var jobsOfTheCompany = jobs.Where(x => x.CompanyId == manager.CompanyId).ToList();
+
                         Random rnd = new Random();
+                        int earnedLeave = rnd.Next(30, 120);
+                        int remainingLeave = rnd.Next(0, earnedLeave);
 
-
-                        for (int j = 0; j < rnd.Next(1, maxNumberOfEmployeesCountPerDepartment); j++)
+                        for (int j = 0; j < rnd.Next(1, maxEmployeeCountPerManager); j++)
                         {
-                            Guid randomJobId = jobs[rnd.Next(0, jobs.Count)].Id;
+                            Guid randomJobId = jobsOfTheCompany[rnd.Next(0, jobsOfTheCompany.Count)].Id;
+                            Guid randomDepartmentId = departmentsOfTheCompany[rnd.Next(0, departmentsOfTheCompany.Count)].Id;
 
                             var employeeFake = new Faker<AppUser>()
                             .RuleFor(e => e.Id, f => f.Random.Guid())
@@ -215,20 +222,22 @@ namespace humanResourceProject.Infrastructure.SeedData
                             .RuleFor(e => e.NormalizedUserName, (f, e) => e.UserName.ToUpperInvariant())
                             .RuleFor(e => e.Address, f => f.Address.FullAddress())
                             .RuleFor(e => e.PhoneNumber, f => f.Phone.PhoneNumber("+90##########"))
-                            .RuleFor(e => e.IdentificationNumber, f => f.Random.ULong(10000000000, 99999999999).ToString())
+                            .RuleFor(e => e.IdentificationNumber, f => f.Random.ReplaceNumbers($"###########"))
                             .RuleFor(e => e.BloodGroup, f => f.PickRandom<BloodGroup>())
-                            .RuleFor(e => e.Birthdate, f => f.Date.Past(50))
+                            .RuleFor(e => e.Birthdate, f => f.Date.Between(DateTime.Now.AddYears(-40), DateTime.Now.AddYears(-18)))
                             .RuleFor(e => e.Gender, f => f.PickRandom<Gender>())
+                            .RuleFor(e => e.EarnedLeaveDays, earnedLeave)
+                            .RuleFor(e => e.RemainingLeaveDays, remainingLeave)
                             .RuleFor(c => c.CreateDate, f => f.Date.Past(1))
                             .RuleFor(e => e.Status, f => f.Random.Bool(0.9f) ? Status.Active : (f.Random.Bool(0.5f) ? Status.Modified : (f.Random.Bool(0.25f) ? Status.Inactive : Status.Deleted)))
                             .RuleFor(e => e.ImagePath, f => f.PickRandom(femaleDefaultImages))
-                            .RuleFor(e => e.ManagerId, departmentManagerId)
+                            .RuleFor(e => e.ManagerId, manager.Id)
                             .RuleFor(e => e.JobId, randomJobId)
-                            .RuleFor(e => e.DepartmentId, departments[i].Id);
+                            .RuleFor(e => e.DepartmentId, randomDepartmentId)
+                            .RuleFor(e => e.CompanyId, manager.CompanyId);
 
                             appUsers.Add(employeeFake.Generate());
                         }
-
                     }
                     foreach (var appUser in appUsers)
                     {
@@ -248,12 +257,75 @@ namespace humanResourceProject.Infrastructure.SeedData
                         string password = "Pr123+";
                         await userManager.CreateAsync(appUser, password);
                         await userManager.AddToRoleAsync(appUser, "Personel");
-
                     }
                 }
 
-                async Task CreateRequestsAsync(int maxAdvanceCountPerEmployee, int maxExpenseCountPerEmployee, int maxLeaveCountPerEmployee)
+                async Task CreateRequestsAsync(int maxAdvanceCountPerManager, int maxExpenseCountPerManager, int maxLeaveCountPerManager, int maxAdvanceCountPerEmployee, int maxExpenseCountPerEmployee, int maxLeaveCountPerEmployee)
                 {
+                    foreach (var manager in managers)
+                    {
+                        for (int i = 0; i < maxAdvanceCountPerManager; i++)
+                        {
+                            int expireIn = new Random().Next(1, 60);
+                            var advanceFake = new Faker<Advance>()
+                            .RuleFor(a => a.Id, f => f.Random.Guid())
+                            .RuleFor(a => a.AdvanceNo, f => "ADV2023" + f.Random.ReplaceNumbers($"#####"))
+                            .RuleFor(a => a.AmountOfAdvance, f => f.Random.Decimal(100, 99999))
+                            .RuleFor(a => a.Explanation, f => f.Lorem.Sentence())
+                            .RuleFor(a => a.AdvanceType, f => f.PickRandom<AdvanceType>())
+                            .RuleFor(a => a.ExpiryDate, (f, a) => f.Date.Soon(expireIn, a.CreateDate))
+                            .RuleFor(a => a.Currency, f => f.PickRandom<Currency>())
+                            .RuleFor(a => a.AdvanceStatus, f => f.Random.Bool(0.5f) ? RequestStatus.Approved : (f.Random.Bool(0.25f) ? RequestStatus.Pending : RequestStatus.Rejected))
+                            .RuleFor(a => a.CreateDate, f => f.Date.Past(1))
+                            .RuleFor(a => a.Status, f => Status.Active)
+                            .RuleFor(a => a.EmployeeId, manager.Id);
+
+                            advances.Add(advanceFake.Generate());
+                        }
+                        //context.AddRangeAsync(advances);
+
+                        for (int i = 0; i < maxExpenseCountPerManager; i++)
+                        {
+                            int daysAgo = new Random().Next(1, 30);
+                            var expenseFake = new Faker<Expense>()
+                            .RuleFor(e => e.Id, f => f.Random.Guid())
+                            .RuleFor(e => e.ExpenseNo, f => "EXP2023" + f.Random.ReplaceNumbers($"#####"))
+                            .RuleFor(e => e.AmountOfExpense, f => f.Random.Decimal(100, 99999))
+                            .RuleFor(e => e.DateOfExpense, (f, e) => f.Date.Recent(daysAgo, e.CreateDate))
+                            .RuleFor(e => e.ExpenseType, f => f.PickRandom<ExpenseType>())
+                            .RuleFor(e => e.Explanation, f => f.Lorem.Sentence())
+                            .RuleFor(e => e.Currency, f => f.PickRandom<Currency>())
+                            .RuleFor(e => e.FilePath, f => f.PickRandom(receiptDefaultImages))
+                            .RuleFor(e => e.ExpenseStatus, f => f.Random.Bool(0.5f) ? RequestStatus.Approved : (f.Random.Bool(0.25f) ? RequestStatus.Pending : RequestStatus.Rejected))
+                            .RuleFor(e => e.CreateDate, f => f.Date.Past(1))
+                            .RuleFor(e => e.Status, f => Status.Active)
+                            .RuleFor(e => e.EmployeeId, manager.Id);
+
+                            expenses.Add(expenseFake.Generate());
+                        }
+                        //context.AddRangeAsync(expenses);
+
+                        for (int i = 0; i < maxLeaveCountPerManager; i++)
+                        {
+                            int numberOfDays = new Random().Next(1, 30);
+                            var leaveFake = new Faker<Leave>()
+                            .RuleFor(l => l.Id, f => f.Random.Guid())
+                            .RuleFor(l => l.LeaveNo, f => "LEA2023" + f.Random.ReplaceNumbers($"#####"))
+                            .RuleFor(l => l.StartDateOfLeave, f => f.Date.Past(1))
+                            .RuleFor(l => l.EndDateOfLeave, (f, l) => f.Date.Soon(numberOfDays, l.StartDateOfLeave))
+                            .RuleFor(l => l.LeaveType, f => f.PickRandom<LeaveType>())
+                            .RuleFor(l => l.Explanation, f => f.Lorem.Sentence())
+                            .RuleFor(l => l.DaysOfLeave, f => f.Random.Int(1, numberOfDays))
+                            .RuleFor(l => l.LeaveStatus, f => f.Random.Bool(0.5f) ? RequestStatus.Approved : (f.Random.Bool(0.25f) ? RequestStatus.Pending : RequestStatus.Rejected))
+                            .RuleFor(l => l.CreateDate, (f, l) => f.Date.Recent(numberOfDays, l.StartDateOfLeave))
+                            .RuleFor(l => l.Status, f => Status.Active)
+                            .RuleFor(l => l.EmployeeId, manager.Id);
+
+                            leaves.Add(leaveFake.Generate());
+                        }
+                        //context.AddRangeAsync(leaves);
+                    }
+
                     foreach (var employee in appUsers)
                     {
                         for (int i = 0; i < maxAdvanceCountPerEmployee; i++)
@@ -261,6 +333,7 @@ namespace humanResourceProject.Infrastructure.SeedData
                             int expireIn = new Random().Next(1, 60);
                             var advanceFake = new Faker<Advance>()
                             .RuleFor(a => a.Id, f => f.Random.Guid())
+                            .RuleFor(a => a.AdvanceNo, f => "ADV2023" + f.Random.ReplaceNumbers($"#####"))
                             .RuleFor(a => a.AmountOfAdvance, f => f.Random.Decimal(100, 99999))
                             .RuleFor(a => a.Explanation, f => f.Lorem.Sentence())
                             .RuleFor(a => a.AdvanceType, f => f.PickRandom<AdvanceType>())
@@ -280,6 +353,7 @@ namespace humanResourceProject.Infrastructure.SeedData
                             int daysAgo = new Random().Next(1, 30);
                             var expenseFake = new Faker<Expense>()
                             .RuleFor(e => e.Id, f => f.Random.Guid())
+                            .RuleFor(e => e.ExpenseNo, f => "EXP2023" + f.Random.ReplaceNumbers($"#####"))
                             .RuleFor(e => e.AmountOfExpense, f => f.Random.Decimal(100, 99999))
                             .RuleFor(e => e.DateOfExpense, (f, e) => f.Date.Recent(daysAgo, e.CreateDate))
                             .RuleFor(e => e.ExpenseType, f => f.PickRandom<ExpenseType>())
@@ -300,6 +374,7 @@ namespace humanResourceProject.Infrastructure.SeedData
                             int numberOfDays = new Random().Next(1, 30);
                             var leaveFake = new Faker<Leave>()
                             .RuleFor(l => l.Id, f => f.Random.Guid())
+                            .RuleFor(l => l.LeaveNo, f => "LEA2023" + f.Random.ReplaceNumbers($"#####"))
                             .RuleFor(l => l.StartDateOfLeave, f => f.Date.Past(1))
                             .RuleFor(l => l.EndDateOfLeave, (f, l) => f.Date.Soon(numberOfDays, l.StartDateOfLeave))
                             .RuleFor(l => l.LeaveType, f => f.PickRandom<LeaveType>())
@@ -320,7 +395,7 @@ namespace humanResourceProject.Infrastructure.SeedData
 
         private static async Task UpdateCompanyEmployeeCount()
         {
-            companies.ForEach(c => c.NumberOfEmployees = appUsers.Count(x => x.Department.CompanyId == c.Id) + companyManagers.Count(x => x.Department.CompanyId == c.Id) + companyManagers.Count(x => x.Department.CompanyId == c.Id));
+            companies.ForEach(c => c.NumberOfEmployees = appUsers.Count(x => x.CompanyId == c.Id) + managers.Count(x => x.CompanyId == c.Id) + 1); // +1 for company manager
         }
 
         private static async Task CreateCompanyManagerAsync(IServiceScope? serviceScope)
@@ -328,11 +403,11 @@ namespace humanResourceProject.Infrastructure.SeedData
             var userManager = serviceScope.ServiceProvider.GetRequiredService<UserManager<AppUser>>();
             foreach (var company in companies)
             {
-                Random random = new Random();
-                Guid randomJobId = jobs[random.Next(0, jobs.Count)].Id;
+                //Random random = new Random();
+                //Guid randomJobId = jobs[random.Next(0, jobs.Count)].Id;
 
-                var departmentsOfTheCompany = departments.Where(x => x.CompanyId == company.Id).ToList();
-                Guid companyManagerDepartmentId = departments.SingleOrDefault(x => x.DepartmentName == "President & Managing Director" && x.CompanyId == company.Id).Id;
+                //var departmentsOfTheCompany = departments.Where(x => x.CompanyId == company.Id).ToList();
+                //Guid companyManagerDepartmentId = departments.SingleOrDefault(x => x.DepartmentName == "President & Managing Director" && x.CompanyId == company.Id).Id;
 
                 var companyManagerFake = new Faker<AppUser>()
                         .RuleFor(e => e.Id, f => f.Random.Guid())
@@ -346,15 +421,18 @@ namespace humanResourceProject.Infrastructure.SeedData
                         .RuleFor(e => e.NormalizedUserName, (f, e) => e.UserName.ToUpperInvariant())
                         .RuleFor(e => e.Address, f => f.Address.FullAddress())
                         .RuleFor(e => e.PhoneNumber, f => f.Phone.PhoneNumber("+90##########"))
-                        .RuleFor(e => e.IdentificationNumber, f => f.Random.ULong(10000000000, 99999999999).ToString())
+                        .RuleFor(e => e.IdentificationNumber, f => f.Random.ReplaceNumbers($"###########"))
                         .RuleFor(e => e.BloodGroup, f => f.PickRandom<BloodGroup>())
                         .RuleFor(e => e.Birthdate, f => f.Date.Past(50))
                         .RuleFor(e => e.Gender, Gender.Male)
+                        .RuleFor(e => e.EarnedLeaveDays, 999)
+                        .RuleFor(e => e.RemainingLeaveDays, 999)
                         .RuleFor(c => c.CreateDate, f => f.Date.Past(1))
                         .RuleFor(e => e.Status, _ => Status.Active)
                         .RuleFor(e => e.ImagePath, "https://ik.imagekit.io/7ypp4olwr/companymanager.png?tr=h-200,w-200")
-                        .RuleFor(e => e.JobId, randomJobId)
-                        .RuleFor(e => e.DepartmentId, companyManagerDepartmentId);
+                        .RuleFor(e => e.JobId, Guid.Empty)
+                        .RuleFor(e => e.DepartmentId, Guid.Empty)
+                        .RuleFor(e => e.CompanyId, company.Id);
 
                 AppUser companyManagerUser = companyManagerFake.Generate();
                 companyManagers.Add(companyManagerUser);
@@ -362,52 +440,75 @@ namespace humanResourceProject.Infrastructure.SeedData
 
                 await userManager.CreateAsync(companyManagerUser, password);
                 await userManager.AddToRoleAsync(companyManagerUser, "CompanyManager");
-
             }
         }
 
-        private static async Task CreateDepartmentManagerAsync(IServiceScope? serviceScope)
+        private static async Task CreateManagerAsync(IServiceScope? serviceScope, int maxManagerCountPerCompany)
         {
             var userManager = serviceScope.ServiceProvider.GetRequiredService<UserManager<AppUser>>();
 
-            for (int i = 0; i < companies.Count; i++)
+            foreach (var company in companies)
             {
-                var departmentsOfTheCompany = departments.Where(x => x.CompanyId == companies[i].Id);
-                foreach (var department in departmentsOfTheCompany)
+                var companyManager = companyManagers.SingleOrDefault(x => x.CompanyId == company.Id);
+                var departmentsOfTheCompany = departments.Where(x => x.CompanyId == company.Id).ToList();
+                var jobsOfTheCompany = jobs.Where(x => x.CompanyId == company.Id).ToList();
+
+                Random random = new Random();
+
+                for (int j = 0; j < random.Next(1, maxManagerCountPerCompany); j++)
                 {
-                    Random random = new Random();
-                    Guid randomJobId = jobs[random.Next(0, jobs.Count)].Id;
+                    Guid randomJobId = jobsOfTheCompany[random.Next(0, jobsOfTheCompany.Count)].Id;
+                    Guid randomDepartmentId = departmentsOfTheCompany[random.Next(0, departmentsOfTheCompany.Count)].Id;
+                    int earnedLeave = random.Next(30, 120);
+                    int remainingLeave = random.Next(0, earnedLeave);
 
-                    var departmentManagerFake = new Faker<AppUser>()
-                        .RuleFor(e => e.Id, f => f.Random.Guid())
-                        .RuleFor(e => e.FirstName, f => f.Name.FirstName())
-                        .RuleFor(e => e.LastName, f => f.Name.LastName())
-                        .RuleFor(e => e.MiddleName, f => f.Random.Bool(0.2f) ? f.Name.FirstName() : null)
-                        .RuleFor(e => e.Email, (f, e) => f.Internet.Email(e.FirstName, e.LastName).ToLowerInvariant())
-                        .RuleFor(e => e.NormalizedEmail, (f, e) => e.Email.ToUpperInvariant())
-                        .RuleFor(e => e.EmailConfirmed, _ => true)
-                        .RuleFor(e => e.UserName, (f, e) => e.Email)
-                        .RuleFor(e => e.NormalizedUserName, (f, e) => e.UserName.ToUpperInvariant())
-                        .RuleFor(e => e.Address, f => f.Address.FullAddress())
-                        .RuleFor(e => e.PhoneNumber, f => f.Phone.PhoneNumber("+90##########"))
-                        .RuleFor(e => e.IdentificationNumber, f => f.Random.ULong(10000000000, 99999999999).ToString())
-                        .RuleFor(e => e.BloodGroup, f => f.PickRandom<BloodGroup>())
-                        .RuleFor(e => e.Birthdate, f => f.Date.Past(50))
-                        .RuleFor(e => e.Gender, Gender.Female)
-                        .RuleFor(c => c.CreateDate, f => f.Date.Past(1))
-                        .RuleFor(e => e.Status, _ => Status.Active)
-                        .RuleFor(e => e.ImagePath, "https://ik.imagekit.io/7ypp4olwr/departmentmanager.png?tr=h-200,w-200")
-                        .RuleFor(e => e.ManagerId, companyManagers[i].Id)
-                        .RuleFor(e => e.JobId, randomJobId)
-                        .RuleFor(e => e.DepartmentId, department.Id);
+                    var managerFake = new Faker<AppUser>()
+                    .RuleFor(e => e.Id, f => f.Random.Guid())
+                    .RuleFor(e => e.FirstName, f => f.Name.FirstName())
+                    .RuleFor(e => e.LastName, f => f.Name.LastName())
+                    .RuleFor(e => e.MiddleName, f => f.Random.Bool(0.2f) ? f.Name.FirstName() : null)
+                    .RuleFor(e => e.Email, (f, e) => f.Internet.Email(e.FirstName, e.LastName).ToLowerInvariant())
+                    .RuleFor(e => e.NormalizedEmail, (f, e) => e.Email.ToUpperInvariant())
+                    .RuleFor(e => e.EmailConfirmed, _ => true)
+                    .RuleFor(e => e.UserName, (f, e) => e.Email)
+                    .RuleFor(e => e.NormalizedUserName, (f, e) => e.UserName.ToUpperInvariant())
+                    .RuleFor(e => e.Address, f => f.Address.FullAddress())
+                    .RuleFor(e => e.PhoneNumber, f => f.Phone.PhoneNumber("+90##########"))
+                    .RuleFor(e => e.IdentificationNumber, f => f.Random.ReplaceNumbers($"###########"))
+                    .RuleFor(e => e.BloodGroup, f => f.PickRandom<BloodGroup>())
+                    .RuleFor(e => e.Birthdate, f => f.Date.Between(DateTime.Now.AddYears(-65), DateTime.Now.AddYears(-35)))
+                    .RuleFor(e => e.Gender, f => f.PickRandom<Gender>())
+                    .RuleFor(e => e.EarnedLeaveDays, earnedLeave)
+                    .RuleFor(e => e.RemainingLeaveDays, remainingLeave)
+                    .RuleFor(c => c.CreateDate, f => f.Date.Past(1))
+                    .RuleFor(e => e.Status, f => f.Random.Bool(0.9f) ? Status.Active : (f.Random.Bool(0.5f) ? Status.Modified : (f.Random.Bool(0.25f) ? Status.Inactive : Status.Deleted)))
+                    .RuleFor(e => e.ImagePath, f => f.PickRandom(femaleDefaultImages))
+                    .RuleFor(e => e.ManagerId, companyManager.Id)
+                    .RuleFor(e => e.JobId, randomJobId)
+                    .RuleFor(e => e.DepartmentId, randomDepartmentId)
+                    .RuleFor(e => e.CompanyId, company.Id);
 
-                    AppUser departmentManagerUser = departmentManagerFake.Generate();
-                    departmentManagers.Add(departmentManagerUser);
-                    string password = "Dm123+";
-
-                    await userManager.CreateAsync(departmentManagerUser, password);
-                    await userManager.AddToRoleAsync(departmentManagerUser, "DepartmentManager");
+                    managers.Add(managerFake.Generate());
                 }
+            }
+            foreach (var manager in managers)
+            {
+                if (manager.Status == Status.Deleted)
+                {
+                    manager.DeleteDate = GetRandomDayAfterCreateDate(manager.CreateDate);
+                }
+                if (manager.Status == Status.Modified)
+                {
+                    manager.UpdateDate = GetRandomDayAfterCreateDate(manager.CreateDate);
+                }
+                if (manager.Gender == Gender.Male)
+                {
+                    manager.ImagePath = GetRandomImageFromArray(maleDefaultImages);
+                }
+
+                string password = "Mn123+";
+                await userManager.CreateAsync(manager, password);
+                await userManager.AddToRoleAsync(manager, "Manager");
             }
         }
 
@@ -447,18 +548,18 @@ namespace humanResourceProject.Infrastructure.SeedData
                 await _context.Companies.AddAsync(company);
                 await _context.SaveChangesAsync();
 
-                Department department = new Department()
-                {
-                    Id = Guid.NewGuid(),
-                    DepartmentName = "Information Technology Department",
-                    Description = "Information technology management or IT management is the discipline whereby all of the information technology resources of a firm are managed in accordance with its needs and priorities.",
-                    CreateDate = DateTime.Now,
-                    Status = Status.Active,
-                    CompanyId = company.Id
-                };
+                //Department department = new Department()
+                //{
+                //    Id = Guid.NewGuid(),
+                //    DepartmentName = "Information Technology Department",
+                //    Description = "Information technology management or IT management is the discipline whereby all of the information technology resources of a firm are managed in accordance with its needs and priorities.",
+                //    CreateDate = DateTime.Now,
+                //    Status = Status.Active,
+                //    CompanyId = company.Id
+                //};
 
-                await _context.Departments.AddAsync(department);
-                await _context.SaveChangesAsync();
+                //await _context.Departments.AddAsync(department);
+                //await _context.SaveChangesAsync();
 
                 AppUser siteManager = new AppUser()
                 {
@@ -468,7 +569,7 @@ namespace humanResourceProject.Infrastructure.SeedData
                     BloodGroup = BloodGroup.OPositive,
                     Birthdate = DateTime.Now,
                     Gender = Gender.Male,
-                    JobId = jobs.SingleOrDefault(x => x.Title == "Administrator").Id,
+                    JobId = Guid.Empty,
                     Address = "İstanbul",
                     PhoneNumber = "901234567890",
                     CreateDate = DateTime.Now,
@@ -476,7 +577,8 @@ namespace humanResourceProject.Infrastructure.SeedData
                     UserName = "SiteManager",
                     ImagePath = "https://ik.imagekit.io/7ypp4olwr/admin.jpeg?tr=h-200,w-200",
                     Email = email,
-                    DepartmentId = department.Id,
+                    DepartmentId = Guid.Empty,
+                    CompanyId = company.Id,
                     EmailConfirmed = true
                 };
 
@@ -489,7 +591,7 @@ namespace humanResourceProject.Infrastructure.SeedData
         {
             var roleManager = serviceScope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole<Guid>>>();
 
-            var roles = new[] { "SiteManager", "CompanyManager", "DepartmentManager", "Personel" };
+            var roles = new[] { "SiteManager", "CompanyManager", "Manager", "Personel" };
 
             foreach (var role in roles)
             {

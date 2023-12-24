@@ -16,7 +16,7 @@
                 <li>
                     <a asp-action="Home" asp-controller="Employee"><i class="fa-solid fa-calendar-days"></i>Dashboard</a>
                 </li>
-                @if (User.IsInRole("Personel") || User.IsInRole("DepartmentManager"))
+                @if (User.IsInRole("Personel") || User.IsInRole("Manager"))
                 {
                     <li class="parent">
                         <a href="#"><i class="fa fa-users"></i>Taleplerim</a>
@@ -33,7 +33,7 @@
                         </ul>
                     </li>
                 }
-                @if (User.IsInRole("CompanyManager") || User.IsInRole("DepartmentManager"))
+                @if (User.IsInRole("CompanyManager") || User.IsInRole("Manager"))
                 {
                     <li>
                         <a asp-action="Employees" asp-controller="Employee"><i class="fa fa-users"></i>Personeller</a>
@@ -105,7 +105,8 @@
                 data: formData,
                 success: function (response) {
                     // Assuming the response is the updated image path from the server
-                    $('#profileImage').attr('src', response);
+                    var imagePath = response.imageUrl;
+                    $('#profileImg').attr('src', imagePath);
                     console.log('Profile image updated successfully');
                 },
                 error: function (xhr, status, error) {
