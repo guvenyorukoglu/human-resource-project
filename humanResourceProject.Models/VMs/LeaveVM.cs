@@ -9,8 +9,6 @@ namespace humanResourceProject.Models.VMs
         public LeaveType LeaveType { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
-
-        public Guid EmployeeId { get; set; }
         public Guid ManagerId { get; set; }
 
         public string? Explanation { get; set; }
