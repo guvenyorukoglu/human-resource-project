@@ -22,6 +22,20 @@ namespace humanResourceProject.Application.Services.Concrete.AppUserServices
             _userManager = userManager;
         }
 
+        public async Task<DashboardVM> FillDashboard(Guid id)
+        {
+            return await _readRepository.GetFilteredFirstOrDefault(
+                select: x => new DashboardVM()
+                {
+                    Leaves = (List<Leave>)x.Leaves,
+                    Advances = (List<Advance>)x.Advances,
+                    Expenses = (List<Expense>)x.Expenses,
+                    Company = x.Company
+                },
+                where: x => x.Id == id && (x.Status != Domain.Enum.Status.Inactive && x.Status != Domain.Enum.Status.Deleted));
+               
+        }
+
         public async Task<List<PersonelVM>> GetEmployeesByCompanyId(Guid companyId)
         {
             return await _readRepository.GetFilteredList(
@@ -34,7 +48,7 @@ namespace humanResourceProject.Application.Services.Concrete.AppUserServices
                     Email = x.Email,
                     PhoneNumber = x.PhoneNumber,
                     Gender = x.Gender,
-                    JobTitle = x.Company.Jobs.FirstOrDefault(j => j.Id == x.JobId).Title
+                    Title = x.Company.Jobs.FirstOrDefault(j => j.Id == x.JobId).Title
                 },
                 where: x => x.CompanyId == companyId && (x.Status != Domain.Enum.Status.Inactive && x.Status != Domain.Enum.Status.Deleted),
                 orderBy: x => x.OrderBy(x => x.CreateDate),
@@ -53,7 +67,7 @@ namespace humanResourceProject.Application.Services.Concrete.AppUserServices
                     Email = x.Email,
                     PhoneNumber = x.PhoneNumber,
                     Gender = x.Gender,
-                    JobTitle = x.Company.Jobs.FirstOrDefault(j => j.Id == x.JobId).Title
+                    Title = x.Company.Jobs.FirstOrDefault(j => j.Id == x.JobId).Title
                 },
                 where: x => x.DepartmentId == departmentId && (x.Status != Domain.Enum.Status.Inactive && x.Status != Domain.Enum.Status.Deleted),
                 orderBy: x => x.OrderBy(x => x.CreateDate),
@@ -85,5 +99,7 @@ namespace humanResourceProject.Application.Services.Concrete.AppUserServices
         {
             await _signInManager.SignOutAsync();
         }
+
+
     }
 }
