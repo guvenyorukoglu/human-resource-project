@@ -12,8 +12,8 @@ using humanResourceProject.Infrastructure.Context;
 namespace humanResourceProject.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20231223084934_mig-1")]
-    partial class mig1
+    [Migration("20231225095357_mig_1")]
+    partial class mig_1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -29,6 +29,12 @@ namespace humanResourceProject.Infrastructure.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("AdvanceNo")
+                        .IsRequired()
+                        .HasMaxLength(12)
+                        .HasColumnType("nvarchar(12)")
+                        .HasColumnOrder(2);
 
                     b.Property<int>("AdvanceStatus")
                         .HasColumnType("int");
@@ -90,6 +96,9 @@ namespace humanResourceProject.Infrastructure.Migrations
                     b.Property<int>("BloodGroup")
                         .HasColumnType("int");
 
+                    b.Property<Guid>("CompanyId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
@@ -101,8 +110,10 @@ namespace humanResourceProject.Infrastructure.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<Guid?>("DepartmentId")
-                        .IsRequired()
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal>("EarnedLeaveDays")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -129,7 +140,6 @@ namespace humanResourceProject.Infrastructure.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid?>("JobId")
-                        .IsRequired()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("LastName")
@@ -169,6 +179,9 @@ namespace humanResourceProject.Infrastructure.Migrations
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
 
+                    b.Property<decimal>("RemainingLeaveDays")
+                        .HasColumnType("decimal(18,2)");
+
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
 
@@ -187,9 +200,7 @@ namespace humanResourceProject.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("DepartmentId");
-
-                    b.HasIndex("JobId");
+                    b.HasIndex("CompanyId");
 
                     b.HasIndex("ManagerId");
 
@@ -276,8 +287,8 @@ namespace humanResourceProject.Infrastructure.Migrations
                         .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("Description")
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
 
                     b.Property<int>("Status")
                         .HasColumnType("int");
@@ -316,6 +327,12 @@ namespace humanResourceProject.Infrastructure.Migrations
                     b.Property<Guid>("EmployeeId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("ExpenseNo")
+                        .IsRequired()
+                        .HasMaxLength(12)
+                        .HasColumnType("nvarchar(12)")
+                        .HasColumnOrder(2);
+
                     b.Property<int>("ExpenseStatus")
                         .HasColumnType("int");
 
@@ -347,6 +364,9 @@ namespace humanResourceProject.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid>("CompanyId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<DateTime>("CreateDate")
                         .HasColumnType("datetime2");
 
@@ -354,8 +374,8 @@ namespace humanResourceProject.Infrastructure.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
 
                     b.Property<int>("Status")
                         .HasColumnType("int");
@@ -369,6 +389,8 @@ namespace humanResourceProject.Infrastructure.Migrations
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CompanyId");
 
                     b.ToTable("Jobs");
                 });
@@ -396,6 +418,12 @@ namespace humanResourceProject.Infrastructure.Migrations
 
                     b.Property<string>("Explanation")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LeaveNo")
+                        .IsRequired()
+                        .HasMaxLength(12)
+                        .HasColumnType("nvarchar(12)")
+                        .HasColumnOrder(2);
 
                     b.Property<int>("LeaveStatus")
                         .HasColumnType("int");
@@ -563,27 +591,19 @@ namespace humanResourceProject.Infrastructure.Migrations
 
             modelBuilder.Entity("humanResourceProject.Domain.Entities.Concrete.AppUser", b =>
                 {
-                    b.HasOne("humanResourceProject.Domain.Entities.Concrete.Department", "Department")
+                    b.HasOne("humanResourceProject.Domain.Entities.Concrete.Company", "Company")
                         .WithMany("Employees")
-                        .HasForeignKey("DepartmentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("humanResourceProject.Domain.Entities.Concrete.Job", "Job")
-                        .WithMany("Employees")
-                        .HasForeignKey("JobId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .HasForeignKey("CompanyId")
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("humanResourceProject.Domain.Entities.Concrete.AppUser", "Manager")
-                        .WithMany("DepartmentEmployees")
+                        .WithMany("Supervisee")
                         .HasForeignKey("ManagerId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.Navigation("Department");
-
-                    b.Navigation("Job");
+                    b.Navigation("Company");
 
                     b.Navigation("Manager");
                 });
@@ -608,6 +628,17 @@ namespace humanResourceProject.Infrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("Employee");
+                });
+
+            modelBuilder.Entity("humanResourceProject.Domain.Entities.Concrete.Job", b =>
+                {
+                    b.HasOne("humanResourceProject.Domain.Entities.Concrete.Company", "Company")
+                        .WithMany("Jobs")
+                        .HasForeignKey("CompanyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Company");
                 });
 
             modelBuilder.Entity("humanResourceProject.Domain.Entities.Concrete.Leave", b =>
@@ -676,26 +707,20 @@ namespace humanResourceProject.Infrastructure.Migrations
                 {
                     b.Navigation("Advances");
 
-                    b.Navigation("DepartmentEmployees");
-
                     b.Navigation("Expenses");
 
                     b.Navigation("Leaves");
+
+                    b.Navigation("Supervisee");
                 });
 
             modelBuilder.Entity("humanResourceProject.Domain.Entities.Concrete.Company", b =>
                 {
                     b.Navigation("Departments");
-                });
 
-            modelBuilder.Entity("humanResourceProject.Domain.Entities.Concrete.Department", b =>
-                {
                     b.Navigation("Employees");
-                });
 
-            modelBuilder.Entity("humanResourceProject.Domain.Entities.Concrete.Job", b =>
-                {
-                    b.Navigation("Employees");
+                    b.Navigation("Jobs");
                 });
 #pragma warning restore 612, 618
         }

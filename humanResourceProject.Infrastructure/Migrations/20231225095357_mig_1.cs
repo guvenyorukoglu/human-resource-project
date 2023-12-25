@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace humanResourceProject.Infrastructure.Migrations
 {
-    public partial class mig1 : Migration
+    public partial class mig_1 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -45,23 +45,6 @@ namespace humanResourceProject.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Jobs",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Title = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true),
-                    CreateDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UpdateDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    DeleteDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    Status = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Jobs", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "AspNetRoleClaims",
                 columns: table => new
                 {
@@ -83,30 +66,6 @@ namespace humanResourceProject.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Departments",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    DepartmentName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true),
-                    CompanyId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CreateDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UpdateDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    DeleteDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    Status = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Departments", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Departments_Companies_CompanyId",
-                        column: x => x.CompanyId,
-                        principalTable: "Companies",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "AspNetUsers",
                 columns: table => new
                 {
@@ -117,13 +76,16 @@ namespace humanResourceProject.Infrastructure.Migrations
                     Address = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     PhoneNumber = table.Column<string>(type: "nvarchar(13)", maxLength: 13, nullable: false),
                     IdentificationNumber = table.Column<string>(type: "nvarchar(11)", maxLength: 11, nullable: false),
+                    EarnedLeaveDays = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    RemainingLeaveDays = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     BloodGroup = table.Column<int>(type: "int", nullable: false),
                     Birthdate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Gender = table.Column<int>(type: "int", nullable: false),
                     ImagePath = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ManagerId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    JobId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    DepartmentId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CompanyId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    JobId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    DepartmentId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     CreateDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdateDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     DeleteDate = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -149,18 +111,58 @@ namespace humanResourceProject.Infrastructure.Migrations
                         name: "FK_AspNetUsers_AspNetUsers_ManagerId",
                         column: x => x.ManagerId,
                         principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_AspNetUsers_Departments_DepartmentId",
-                        column: x => x.DepartmentId,
-                        principalTable: "Departments",
+                        name: "FK_AspNetUsers_Companies_CompanyId",
+                        column: x => x.CompanyId,
+                        principalTable: "Companies",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Departments",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    DepartmentName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
+                    CompanyId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CreateDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdateDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    DeleteDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Status = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Departments", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Departments_Companies_CompanyId",
+                        column: x => x.CompanyId,
+                        principalTable: "Companies",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Jobs",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Title = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
+                    CompanyId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CreateDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdateDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    DeleteDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Status = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Jobs", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_AspNetUsers_Jobs_JobId",
-                        column: x => x.JobId,
-                        principalTable: "Jobs",
+                        name: "FK_Jobs_Companies_CompanyId",
+                        column: x => x.CompanyId,
+                        principalTable: "Companies",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -169,6 +171,7 @@ namespace humanResourceProject.Infrastructure.Migrations
                 name: "Advances",
                 columns: table => new
                 {
+                    AdvanceNo = table.Column<string>(type: "nvarchar(12)", maxLength: 12, nullable: false),
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     AmountOfAdvance = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     Explanation = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -282,6 +285,7 @@ namespace humanResourceProject.Infrastructure.Migrations
                 name: "Expenses",
                 columns: table => new
                 {
+                    ExpenseNo = table.Column<string>(type: "nvarchar(12)", maxLength: 12, nullable: false),
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     AmountOfExpense = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     DateOfExpense = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -311,6 +315,7 @@ namespace humanResourceProject.Infrastructure.Migrations
                 name: "Leaves",
                 columns: table => new
                 {
+                    LeaveNo = table.Column<string>(type: "nvarchar(12)", maxLength: 12, nullable: false),
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     StartDateOfLeave = table.Column<DateTime>(type: "datetime2", nullable: false),
                     EndDateOfLeave = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -373,14 +378,9 @@ namespace humanResourceProject.Infrastructure.Migrations
                 column: "NormalizedEmail");
 
             migrationBuilder.CreateIndex(
-                name: "IX_AspNetUsers_DepartmentId",
+                name: "IX_AspNetUsers_CompanyId",
                 table: "AspNetUsers",
-                column: "DepartmentId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_AspNetUsers_JobId",
-                table: "AspNetUsers",
-                column: "JobId");
+                column: "CompanyId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetUsers_ManagerId",
@@ -403,6 +403,11 @@ namespace humanResourceProject.Infrastructure.Migrations
                 name: "IX_Expenses_EmployeeId",
                 table: "Expenses",
                 column: "EmployeeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Jobs_CompanyId",
+                table: "Jobs",
+                column: "CompanyId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Leaves_EmployeeId",
@@ -431,7 +436,13 @@ namespace humanResourceProject.Infrastructure.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "Departments");
+
+            migrationBuilder.DropTable(
                 name: "Expenses");
+
+            migrationBuilder.DropTable(
+                name: "Jobs");
 
             migrationBuilder.DropTable(
                 name: "Leaves");
@@ -441,12 +452,6 @@ namespace humanResourceProject.Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
-
-            migrationBuilder.DropTable(
-                name: "Departments");
-
-            migrationBuilder.DropTable(
-                name: "Jobs");
 
             migrationBuilder.DropTable(
                 name: "Companies");
