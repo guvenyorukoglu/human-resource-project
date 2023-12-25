@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using humanResourceProject.Application.Services.Abstract.ILeaveServices;
 using humanResourceProject.Application.Services.Concrete.BaseServices;
 using humanResourceProject.Domain.Entities.Concrete;
@@ -11,23 +11,23 @@ namespace humanResourceProject.Application.Services.Concrete.LeaveServices
 {
     public class LeaveWriteService : BaseWriteService<Leave>, ILeaveWriteService
     {
-        private readonly IBaseWriteRepository<Leave> _leaveWriteRepository;
-        private readonly IBaseReadRepository<Leave> _leaveReadRepository;
+        private readonly IBaseWriteRepository<Leave> _baseWriteRepository;
+        private readonly IBaseReadRepository<Leave> _baseReadRepository;
         private readonly IMapper _mapper;
-        public LeaveWriteService(IBaseWriteRepository<Leave> leaveWriteRepository, IBaseReadRepository<Leave> leaveReadRepository, IMapper mapper) : base(leaveWriteRepository, leaveReadRepository)
+        public LeaveWriteService(IBaseWriteRepository<Leave> writeRepository, IBaseReadRepository<Leave> readRepository, IMapper mapper) : base(writeRepository, readRepository)
         {
-            _leaveWriteRepository = leaveWriteRepository;
-            _leaveReadRepository = leaveReadRepository;
+            _baseWriteRepository = writeRepository;
+            _baseReadRepository = readRepository;
             _mapper = mapper;
         }
 
         public async Task<IdentityResult> DeleteLeave(Guid id)
         {
-            Leave leave = await _leaveReadRepository.GetById(id);
+            Leave leave = await _baseReadRepository.GetById(id);
             leave.Status = Domain.Enum.Status.Deleted;
             leave.DeleteDate = DateTime.Now;
 
-            if (await _leaveWriteRepository.Delete(id))
+            if (await _baseWriteRepository.Delete(id))
                 return IdentityResult.Success;
             else
                 return IdentityResult.Failed();
@@ -41,7 +41,6 @@ namespace humanResourceProject.Application.Services.Concrete.LeaveServices
             Leave newLeave = _mapper.Map<Leave>(model);
             newLeave.Status = Domain.Enum.Status.Active;
             newLeave.CreateDate = DateTime.Now;
-
             int currentLeaveCount = await _leaveReadRepository.GetCountAsync();
             newLeave.LeaveNo = Leave.GenerateLeaveNumber(currentLeaveCount);
 
@@ -53,18 +52,18 @@ namespace humanResourceProject.Application.Services.Concrete.LeaveServices
 
         public async Task<IdentityResult> UpdateLeave(UpdateLeaveDTO model)
         {
-            Leave leave = await _leaveReadRepository.GetSingleDefault(x => x.Id == model.Id);
-            if (leave == null)
+            Leave updateleave = await _baseReadRepository.GetSingleDefault(x => x.Id == model.Id);
+            if (updateleave == null)
                 return IdentityResult.Failed();
 
-            _leaveWriteRepository.DetachEntity(leave);
+            _baseWriteRepository.DetachEntity(updateleave);
 
-            leave = _mapper.Map<Leave>(model);
+            updateleave = _mapper.Map<Leave>(model);
 
-            leave.Status = Domain.Enum.Status.Modified;
-            leave.UpdateDate = DateTime.Now;
+            updateleave.Status = Domain.Enum.Status.Modified;
+            updateleave.UpdateDate = DateTime.Now;
 
-            if (await _leaveWriteRepository.Update(leave))
+            if (await _baseWriteRepository.Update(updateleave))
                 return IdentityResult.Success;
             else
                 return IdentityResult.Failed();

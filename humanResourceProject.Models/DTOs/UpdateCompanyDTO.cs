@@ -29,8 +29,8 @@ namespace humanResourceProject.Models.DTOs
         [Required(ErrorMessage = "Personel sayısı alanı boş geçilemez!")]
         [DisplayName("Personel Sayısı")]
         public int NumberOfEmployees { get; set; }
-        public DateTime UpdateDate => DateTime.Now;
-        public Status Status => Status.Modified;
+        public DateTime UpdateDate { get; set; }
+        public Status Status { get; set; }
 
     }
 }

@@ -1,4 +1,4 @@
-﻿using humanResourceProject.Application.Services.Abstract.IAppUserServices;
+using humanResourceProject.Application.Services.Abstract.IAppUserServices;
 using humanResourceProject.Application.Services.Concrete.BaseServices;
 using humanResourceProject.Domain.Entities.Concrete;
 using humanResourceProject.Domain.IRepository.BaseRepos;
@@ -37,7 +37,7 @@ namespace humanResourceProject.Application.Services.Concrete.AppUserServices
                     JobTitle = x.Company.Jobs.FirstOrDefault(j => j.Id == x.JobId).Title
                 },
                 where: x => x.CompanyId == companyId && (x.Status != Domain.Enum.Status.Inactive && x.Status != Domain.Enum.Status.Deleted),
-                orderBy: x => x.OrderBy(x => x.FirstName),
+                orderBy: x => x.OrderBy(x => x.CreateDate),
                 include: x => x.Include(x => x.Company).ThenInclude(x => x.Jobs));
         }
 
@@ -56,7 +56,7 @@ namespace humanResourceProject.Application.Services.Concrete.AppUserServices
                     JobTitle = x.Company.Jobs.FirstOrDefault(j => j.Id == x.JobId).Title
                 },
                 where: x => x.DepartmentId == departmentId && (x.Status != Domain.Enum.Status.Inactive && x.Status != Domain.Enum.Status.Deleted),
-                orderBy: x => x.OrderBy(x => x.FirstName),
+                orderBy: x => x.OrderBy(x => x.CreateDate),
                 include: x => x.Include(x => x.Company).ThenInclude(x => x.Jobs));
         }
 

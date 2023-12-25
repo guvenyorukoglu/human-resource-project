@@ -1,7 +1,7 @@
 ﻿@model List<LeaveVM>
 
 @{
-    ViewData["Title"] = "EmployeesLeaves";
+    ViewData["Title"] = "LeaveRequests";
     Layout = "~/Views/Shared/_HRLayout.cshtml";
 }
 
@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.css" />
 
     <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.js"></script>
+
     <style>
         .panel {
             height: 120vh;
@@ -17,26 +18,32 @@
 
         a {
             text-decoration: none;
+            font-size: 1vw;
+            color: #ffffff;
+        }
+
+        .aside {
+            margin-top: 100px;
+            margin-left: 50px;
+        }
+
+        h6 {
+            font-size: 1vw;
+            color: #ffffff;
         }
     </style>
 </head>
-
 <body>
-    <h3>Personel İzin Talepleri</h3>
     <div class="row">
         @Html.Partial("_PanelPartial")
 
         <div class="aside container mt-5 col-md-9 col-sm-9">
-
+            <h3>Personel İzin Talepleri</h3>
             <div class="pagination-container">
 
                 <script>
                     $(document).ready(function () {
-                        $('#leaverequests').DataTable({
-                            "order": [
-                                [3, 'desc']
-                            ]
-                        });
+                        $('#leaverequests').DataTable();
                     });
                 </script>
 
@@ -44,16 +51,16 @@
                        class="display">
                     <thead>
                         <tr>
+                            <th style="width: 12%">İzin Türü</th>
+                            <th style="width: 7%">Talep Tarihi</th>
+                            <th style="width: 10%">İzin Günü</th>
                             <th style="width: 7%">Ad</th>
                             <th style="width: 7%">Soyad</th>
-                            <th style="width: 10%">İzin Günü</th>
-                            <th style="width: 7%">Talep Tarihi</th>
-                            <th style="width: 7%">Başlangıç Tarihi</th>
-                            <th style="width: 7%">Bitiş Tarihi</th>
-                            <th style="width: 12%">İzin Türü</th>
-                            <th style="width: 20%">Açıklama</th>
+                            <th style="width: 7%">İzin Başlangıç Tarihi</th>
+                            <th style="width: 7%">İzin Bitiş Tarihi</th>
+                            <th style="width: 14%">Açıklama</th>
                             <th style="width: 8%">Statü</th>
-                            <th style="width: 15%">İşlemler</th>
+                            <th style="width: 21%">İşlemler</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -70,13 +77,13 @@
                                     var displayLeaveStatus = typeof(RequestStatus).GetMember(item.LeaveStatus.ToString())[0].GetCustomAttribute<DisplayAttribute>();
                                     var displayNameLeaveStatus = displayLeaveStatus?.GetName() ?? item.LeaveStatus.ToString();
                                     <tr>
-                                        <td>@item.EmployeeName</td>
-                                        <td>@item.EmployeeSurname</td>
-                                        <td>@item.DaysOfLeave</td>
+                                        <td>@displayNameLeaveType</td>
                                         <td>@item.CreateDate.ToString("dd.MM.yyyy")</td>
+                                        <td>@item.DaysOfLeave</td>
+                                        <td>@item.FirstName</td>
+                                        <td>@item.LastName</td>
                                         <td>@item.StartDate.ToString("dd.MM.yyyy")</td>
                                         <td>@item.EndDate.ToString("dd.MM.yyyy")</td>
-                                        <td>@displayNameLeaveType</td>
                                         <td>@item.Explanation</td>
                                         <td>@displayNameLeaveStatus</td>
                                         <td>
@@ -94,7 +101,7 @@
                                                             </div>
                                                             <div class="modal-footer">
                                                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>
-                                                <a asp-action="ApproveLeave"
+                                                                <a asp-action="ApproveLeave"
                                                                    asp-controller="Leave"
                                                                    asp-route-id="@item.Id">
                                                                     <button type="button" class="btn btn-primary">Onaylıyorum</button>
@@ -136,6 +143,13 @@
                                                     </button>
                                                 </a>
                                             }
+                                            <a asp-action="UpdateLeave"
+                                               asp-controller="Leave"
+                                               asp-route-id="@item.Id">
+                                                <button class="btn btn-secondary btn-sm d-inline-flex bg-primary gap-1 align-items-center">
+                                                    <i class="fa fa-pen"></i><span>Güncelle</span>
+                                                </button>
+                                            </a>
                                         </td>
                                     </tr>
                                 }
@@ -143,6 +157,9 @@
                         }
                     </tbody>
                 </table>
+                <div>
+                    <a asp-controller="Employee" asp-action="Home"><button class="custom-button custom-button--create-entity">Ana Sayfaya Dön</button></a>
+                </div>
             </div>
         </div>
     </div>

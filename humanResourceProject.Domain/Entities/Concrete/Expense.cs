@@ -22,7 +22,7 @@ namespace humanResourceProject.Domain.Entities.Concrete
         public AppUser Employee { get; set; }
         public Guid EmployeeId { get; set; }
 
-        public DateTime CreateDate { get; set; } = DateTime.Now;
+        public DateTime CreateDate { get; set; }
         public DateTime? UpdateDate { get; set; }
         public DateTime? DeleteDate { get; set; }
         public Status Status { get; set; } = Status.Active;

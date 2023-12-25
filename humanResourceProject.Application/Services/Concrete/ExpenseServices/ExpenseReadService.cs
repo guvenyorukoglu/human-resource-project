@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using humanResourceProject.Application.Services.Abstract.IExpenseServices;
 using humanResourceProject.Application.Services.Concrete.BaseServices;
 using humanResourceProject.Domain.Entities.Concrete;
@@ -36,8 +36,8 @@ namespace humanResourceProject.Application.Services.Concrete.ExpenseServices
                                                   Explanation = x.Explanation,
                                                   AmountOfExpense = x.AmountOfExpense,
                                                   Currency = x.Currency,
-                                                  EmployeeName = x.Employee.FirstName,
-                                                  EmployeeSurname = x.Employee.LastName,
+                                                  FirstName = x.Employee.FirstName,
+                                                  LastName = x.Employee.LastName,
                                                   EmployeeId = x.EmployeeId,
                                                   DepartmentId = (Guid)x.Employee.DepartmentId,
                                                   ManagerId = (Guid)x.Employee.Manager.ManagerId,
@@ -86,8 +86,8 @@ namespace humanResourceProject.Application.Services.Concrete.ExpenseServices
                                                   Explanation = x.Explanation,
                                                   AmountOfExpense = x.AmountOfExpense,
                                                   Currency = x.Currency,
-                                                  EmployeeName = x.Employee.FirstName,
-                                                  EmployeeSurname = x.Employee.LastName,
+                                                  FirstName = x.Employee.FirstName,
+                                                  LastName = x.Employee.LastName,
                                                   EmployeeId = x.EmployeeId,
                                                   DepartmentId = (Guid)x.Employee.DepartmentId,
                                                   ManagerId = (Guid)x.Employee.Manager.ManagerId,
@@ -113,8 +113,8 @@ namespace humanResourceProject.Application.Services.Concrete.ExpenseServices
                                                                  Explanation = x.Explanation,
                                                                  AmountOfExpense = x.AmountOfExpense,
                                                                  Currency = x.Currency,
-                                                                 EmployeeName = x.Employee.FirstName,
-                                                                 EmployeeSurname = x.Employee.LastName,
+                                                                 FirstName = x.Employee.FirstName,
+                                                                 LastName = x.Employee.LastName,
                                                                  EmployeeId = x.EmployeeId,
                                                                  DepartmentId = (Guid)x.Employee.DepartmentId,
                                                                  ManagerId = (Guid)x.Employee.Manager.ManagerId,

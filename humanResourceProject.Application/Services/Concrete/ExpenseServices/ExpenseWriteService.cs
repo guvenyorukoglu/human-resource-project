@@ -55,17 +55,18 @@ namespace humanResourceProject.Application.Services.Concrete.ExpenseServices
 
         public async Task<IdentityResult> UpdateExpense(UpdateExpenseDTO model)
         {
-            Expense expense = await _expenseReadRepository.GetSingleDefault(x => x.Id == model.Id);
-            if (expense == null)
+            Expense updateExpense = await _expenseReadRepository.GetSingleDefault(x => x.Id == model.Id);
+            if (updateExpense == null)
                 return IdentityResult.Failed();
 
-            _expenseWriteRepository.DetachEntity(expense);
+            _expenseWriteRepository.DetachEntity(updateExpense);
 
-            expense = _mapper.Map<Expense>(model);
-            expense.Status = Domain.Enum.Status.Modified;
-            expense.UpdateDate = DateTime.Now;
+            updateExpense = _mapper.Map<Expense>(model);
 
-            if (await _expenseWriteRepository.Update(expense))
+            updateExpense.Status = Domain.Enum.Status.Modified;
+            updateExpense.UpdateDate = DateTime.Now;
+
+            if (await _expenseWriteRepository.Update(updateExpense))
                 return IdentityResult.Success;
             else
                 return IdentityResult.Failed();

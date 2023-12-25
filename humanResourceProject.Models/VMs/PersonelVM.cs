@@ -12,14 +12,14 @@ namespace humanResourceProject.Models.VMs
         public string Email { get; set; }
         public string PhoneNumber { get; set; }
         public Gender Gender { get; set; }
-        public string JobTitle { get; set; }
+        public Guid JobId { get; set; }
+        public string Title { get; set; }
         public Leave? Leave { get; set; }
         public List<Leave>? Leaves { get; set; }
         public Advance? Advance { get; set; }
         public List<Advance>? Advances { get; set; }
         public Expense? Expense { get; set; }   
         public List<Expense>? Expenses { get; set; }
-
         public Company Company { get; set; }
 
     }

@@ -116,7 +116,6 @@ namespace humanResourceProject.Presentation.Controllers
                 var updateLeaveDTO = JsonConvert.DeserializeObject<UpdateLeaveDTO>(cont);
                 return View(updateLeaveDTO);
             }
-
             return View("Error");
         }
 
@@ -129,7 +128,7 @@ namespace humanResourceProject.Presentation.Controllers
             var json = JsonConvert.SerializeObject(model);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-            var response = await _httpClient.PutAsync($"api/Leave/{model.Id}", content);
+            var response = await _httpClient.PutAsync($"api/Leave", content);
 
             if (response.IsSuccessStatusCode)
                 return RedirectToAction(nameof(MyLeaves));

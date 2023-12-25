@@ -1,16 +1,20 @@
-﻿
+@model List<AdvancePersonnelVM>
+@using System.ComponentModel.DataAnnotations;
+@using System.Reflection;
+@using humanResourceProject.Domain.Enum;
+@using humanResourceProject.Models.VMs;
+
 @{
     ViewData["Title"] = "MyAdvances";
     Layout = "~/Views/Shared/_HRLayout.cshtml";
 }
-
-@model List<AdvancePersonnelVM>
 
 <head>
 
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.css" />
 
     <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.js"></script>
+
     <style>
         .panel {
             height: 120vh;
@@ -18,53 +22,55 @@
 
         a {
             text-decoration: none;
+            font-size: 1vw;
+            color: #ffffff;
+        }
+
+        .aside {
+            margin-top: 100px;
+            margin-left: 50px;
+        }
+
+        h6 {
+            font-size: 1vw;
+            color: #ffffff;
         }
     </style>
 </head>
-
 <body>
-    <h3>Avans Taleplerim</h3>
+
     <div class="row">
         @Html.Partial("_PanelPartial")
 
-
         <div class="aside container mt-5 col-md-9 col-sm-9">
-            @* <div class="search-bar" style="display: flex">
-            <input type="text" id="searchInput" placeholder="Arama Yap" /><i class="fas fa-search mt-2"></i>
-            </div>
-            <hr /> *@
+            <h3>Avans Taleplerim</h3>
             @if (Model != null)
             {
                 <a asp-action="CreateAdvance" asp-controller="Advance">
                     <button class="custom-button custom-button--create-entity">Avans Ekle</button>
                 </a>
             }
-
+            <h3 class="text-center">Avans Taleplerim</h3>
             <div class="pagination-container">
 
                 <script>
                     $(document).ready(function () {
-                        $('#advances').DataTable({
-                            "order": [
-                                [0, 'desc']
-                            ]
-                        });
+                        $('#advances').DataTable();
                     });
                 </script>
-
 
                 <table id="advances"
                        class="display">
                     <thead>
                         <tr>
+                            <th style="width: 8%">Avans Tipi</th>
                             <th style="width: 7%">Talep Tarihi</th>
-                            <th style="width: 7%">Son İstenen Tarih</th>
                             <th style="width: 10%">Avans Miktarı</th>
                             <th style="width: 5%">Para Birimi</th>
-                            <th style="width: 8%">Avans Tipi</th>
-                            <th style="width: 30%">Açıklama</th>
+                            <th style="width: 7%">Son İstenen Tarih</th>
+                            <th style="width: 20%">Açıklama</th>
                             <th style="width: 10%">Statü</th>
-                            <th style="width: 15%">İşlemler</th>
+                            <th style="width: 25%">İşlemler</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -78,30 +84,53 @@
                                 var displayAdvanceStatus = typeof(RequestStatus).GetMember(item.AdvanceStatus.ToString())[0].GetCustomAttribute<DisplayAttribute>();
                                 var displayNameAdvanceStatus = displayAdvanceStatus?.GetName() ?? item.AdvanceStatus.ToString();
                                 <tr>
-                                    <td>@item.CreateDate.ToString("dd.MM.yyyy"))</td>
-                                    <td>@item.ExpiryDate.ToString("dd.MM.yyyy")</td>
+                                    <td>@displayNameAdvanceType</td>
+                                    <td>@item.CreateDate.ToString("dd.MM.yyyy")</td>
                                     <td>@item.AmountOfAdvance</td>
                                     <td>@item.Currency</td>
-                                    <td>@displayNameAdvanceType</td>
+                                    <td>@item.ExpiryDate.ToString("dd.MM.yyyy")</td>
                                     <td>@item.Explanation</td>
                                     <td>@displayNameAdvanceStatus</td>
                                     <td>
-                                        @if(item.AdvanceStatus == RequestStatus.Pending)
+                                        @if (item.AdvanceStatus == RequestStatus.Pending)
                                         {
                                             <a asp-action="UpdateAdvance"
-                                           asp-controller="Advance"
-                                               asp-route-id="@item.Id" onclick="return confirm('Güncellemek istediğinize emin misiniz?')">
-                                            <button class="btn btn-secondary btn-sm d-inline-flex bg-primary gap-1 align-items-center">
-                                                <i class="fa fa-pen"></i><span>Güncelle</span>
-                                            </button>
-                                        </a>
-                                        <a asp-action="DeleteAdvance"
                                                asp-controller="Advance"
-                                               asp-route-id="@item.Id" onclick="return confirm('Silmek istediğinize emin misiniz?')">
-                                            <button class="btn btn-danger btn-sm d-inline-flex gap-1 align-items-center">
-                                                <i class="fa fa-trash"></i><span>Kaldır</span>
-                                            </button>
-                                        </a>
+                                               asp-route-id="@item.Id">
+                                                <button class="btn btn-secondary btn-sm d-inline-flex bg-primary gap-1 align-items-center">
+                                                    <i class="fa fa-pen"></i><span>Güncelle</span>
+                                                </button>
+                                            </a>
+                                            <a asp-action="DeleteAdvance"
+                                               asp-controller="Advance"
+                                               data-bs-toggle="modal"
+                                               data-bs-target="#confirmDeleteModal_@item.Id">
+                                                <button class="btn btn-danger btn-sm d-inline-flex gap-1 align-items-center">
+                                                    <i class="fa fa-trash"></i><span>Kaldır</span>
+                                                </button>
+                                            </a>
+                                            <!-- Modal -->
+                                            <div class="modal fade" id="confirmDeleteModal_@item.Id" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
+                                                <div class="modal-dialog" role="document">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title" id="confirmDeleteModalLabel">Silme İşlemi Onayı</h5>
+                                                            <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                                                                <span aria-hidden="true">&times;</span>
+                                                            </button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            Silmek istediğinize emin misiniz?
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>
+                                                            <a asp-action="DeleteAdvance" asp-controller="Advance" asp-route-id="@item.Id">
+                                                                <button type="button" class="btn btn-danger">Sil</button>
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         }
                                     </td>
                                 </tr>
@@ -109,6 +138,9 @@
                         }
                     </tbody>
                 </table>
+                <div>
+                    <a asp-controller="Employee" asp-action="Home"><button class="custom-button custom-button--create-entity">Ana Sayfaya Dön</button></a>
+                </div>
             </div>
         </div>
     </div>

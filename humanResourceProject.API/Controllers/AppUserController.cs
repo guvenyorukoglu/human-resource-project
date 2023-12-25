@@ -1,4 +1,5 @@
 using humanResourceProject.Application.Services.Abstract.IAppUserServices;
+using humanResourceProject.Application.Services.Abstract.IJobServices;
 using humanResourceProject.Application.Services.Abstract.IMailServices;
 using humanResourceProject.Domain.Entities.Concrete;
 using humanResourceProject.Models.DTOs;
@@ -15,12 +16,14 @@ namespace humanResourceProject.API.Controllers
         private readonly IAppUserReadService _appUserReadService;
         private readonly IAppUserWriteService _appUserWriteService;
         private readonly UserManager<AppUser> _userManager;
+        private readonly IJobReadService _jobReadServices;
 
-        public AppUserController(IAppUserReadService appUserReadService, IAppUserWriteService appUserWriteService, UserManager<AppUser> userManager)
+        public AppUserController(IAppUserReadService appUserReadService, IAppUserWriteService appUserWriteService, UserManager<AppUser> userManager, IJobReadService jobReadServices)
         {
             _appUserReadService = appUserReadService;
             _appUserWriteService = appUserWriteService;
             _userManager = userManager;
+            _jobReadServices = jobReadServices;
         }
 
         [HttpGet]
@@ -98,6 +101,7 @@ namespace humanResourceProject.API.Controllers
         public async Task<IActionResult> UpdateEmployee([FromBody] UpdateUserDTO updatedPersonel) // Personel Güncelleme
         {
             var result = await _appUserWriteService.Update(updatedPersonel);
+            var jobs = await _jobReadServices.GetAllJobs();
             if (!result.Succeeded)
                 return BadRequest(result.Errors);
 
@@ -114,6 +118,7 @@ namespace humanResourceProject.API.Controllers
 
             return Ok("Silme işlemi gerçekleşti.");
         }
+
 
 
 

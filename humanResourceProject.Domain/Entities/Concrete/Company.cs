@@ -1,4 +1,4 @@
-﻿using humanResourceProject.Domain.Entities.Abstract;
+using humanResourceProject.Domain.Entities.Abstract;
 using humanResourceProject.Domain.Enum;
 
 namespace humanResourceProject.Domain.Entities.Concrete
@@ -22,7 +22,8 @@ namespace humanResourceProject.Domain.Entities.Concrete
         public ICollection<AppUser> Employees { get; set; }
         public ICollection<Department> Departments { get; set; }
         public ICollection<Job> Jobs { get; set; }
-        public DateTime CreateDate { get; set; } = DateTime.Now;
+
+        public DateTime CreateDate { get; set; }
         public DateTime? UpdateDate { get; set; }
         public DateTime? DeleteDate { get; set; }
         public Status Status { get; set; } = Status.Active;

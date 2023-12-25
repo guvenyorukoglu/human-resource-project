@@ -43,8 +43,8 @@ namespace humanResourceProject.API.Controllers
 
             AppUser user = await _appUserReadService.GetSingleDefault(x => x.Id == model.EmployeeId);
             string action = "";
-            string recipientEmail = "efeyzyum@gmail.com";
-            string mailToName = "Admin";
+            string recipientEmail = user.Email;
+            string mailToName = $"{user.FirstName} {user.LastName}";
             if (model.LeaveStatus == Domain.Enum.RequestStatus.Approved)
             {
                 model.LeaveStatus = Domain.Enum.RequestStatus.Approved;

@@ -1,25 +1,51 @@
-﻿
+@using System.Reflection;
+@using System.ComponentModel.DataAnnotations;
+@using humanResourceProject.Domain.Enum;
+@using humanResourceProject.Models.DTOs;
 @model AdvanceDTO
+@{
+    ViewData["Title"] = "CreateAdvance";
+    Layout = "~/Views/Shared/_HRLayout.cshtml";
+}
+<head>
 
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.css" />
 
-<h1>Avans Talebi</h1>
+    <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.js"></script>
+    <style>
+        .panel {
+            height: 120vh;
+        }
 
+        a {
+            text-decoration: none;
+        }
+    </style>
+</head>
 <hr />
+<body>
 <div class="row">
-    <div class="col-md-4">
+        
+    @Html.Partial("_PanelPartial")
+
+        <div class="col-md-4" style="margin: 0 auto">
         <form asp-action="CreateAdvance">
+                <h1 class="text-center">Avans Talebi</h1>
             <div class="form-group mb-3">
                 <label asp-for="AdvanceType" class="control-label"></label>
                 <select asp-for="AdvanceType" class="form-control">
                     @{
                         var enumType = typeof(AdvanceType);
                         var enumValues = enumType.GetEnumValues();
+                            
                         foreach (var enumValue in enumValues)
                         {
                             var displayAttribute = enumType.GetMember(enumValue.ToString())[0].GetCustomAttribute<DisplayAttribute>();
                             var displayName = displayAttribute?.GetName() ?? enumValue.ToString();
+                                
                             <option value="@enumValue">@displayName</option>
                         }
+                            <option value="" disabled selected>Avans Tipi seçiniz!</option>
                     }
 
                 </select>
@@ -35,26 +61,28 @@
                 <input type="number" min="1" asp-for="AmountOfAdvance" class="form-control" />
                 <span asp-validation-for="AmountOfAdvance" class="text-danger"></span>
             </div>
-            
+
             <div class="form-group mb-3">
                 <label asp-for="Currency" class="control-label"></label>
                 <select asp-for="Currency" class="form-control">
                     @{
                         var enumTypeCurrency = typeof(Currency);
                         var enumValuesCurrency = enumTypeCurrency.GetEnumValues();
+                            
                         foreach (var enumValue in enumValuesCurrency)
                         {
                             var displayAttribute = enumTypeCurrency.GetMember(enumValue.ToString())[0].GetCustomAttribute<DisplayAttribute>();
                             var displayName = displayAttribute?.GetName() ?? enumValue.ToString();
-                            <option value="" disabled selected>Para birimi seçiniz!</option>
+                           
                             <option value="@enumValue">@displayName</option>
                         }
+                            <option value="" disabled selected>Para birimi seçiniz!</option>
                     }
 
                 </select>
                 <span asp-validation-for="Currency" class="text-danger"></span>
             </div>
-            
+
             <div class="form-group mb-3">
                 <label asp-for="Explanation" class="control-label"></label>
                 <textarea asp-for="Explanation" class="form-control"></textarea>
@@ -65,19 +93,16 @@
                 <span asp-validation-for="EmployeeId" class="text-danger"></span>
             </div>
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group mb-3">
+            <div class="text-center">
+             <div class="form-group mb-3">
                 <input type="submit" value="Oluştur" class="btn btn-primary" />
+             </div>
+
+                    <div>
+                         <a asp-controller="Employee" asp-action="Home"><button class="custom-button custom-button--create-entity">Ana Sayfaya Dön</button></a>
+                    </div>
             </div>
         </form>
     </div>
 </div>
-
-<div>
-    <a asp-action="Index">Anasayfaya Dön</a>
-</div>
-
-@section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
-}
+</body>

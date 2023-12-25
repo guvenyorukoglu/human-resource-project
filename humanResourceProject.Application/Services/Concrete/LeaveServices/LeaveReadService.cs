@@ -36,13 +36,14 @@ namespace humanResourceProject.Application.Services.Concrete.LeaveServices
                                                                  LeaveType = x.LeaveType,
                                                                  StartDate = x.StartDateOfLeave,
                                                                  EndDate = x.EndDateOfLeave,
-                                                                 EmployeeName = x.Employee.FirstName,
-                                                                 EmployeeSurname = x.Employee.LastName,
+                                                                 FirstName = x.Employee.FirstName,
+                                                                 LastName = x.Employee.LastName,
                                                                  EmployeeId = x.Employee.Id,
                                                                  ManagerId = (Guid)x.Employee.Manager.ManagerId,
                                                                  LeaveStatus = x.LeaveStatus,
                                                                  DaysOfLeave = x.DaysOfLeave,
-                                                                 CreateDate = x.CreateDate
+                                                                 CreateDate = x.CreateDate,
+                                                                 Explanation = x.Explanation
                                                              },
                                                              where: x => x.Status != Status.Deleted && x.Status != Status.Inactive,
                                                              //commented out because of the error
@@ -56,17 +57,18 @@ namespace humanResourceProject.Application.Services.Concrete.LeaveServices
             List<LeaveVM>? leaves = await _leaveReadRepository.GetFilteredList(
                                                             select: x => new LeaveVM
                                                             {
-                                                                    Id = x.Id,
-                                                                    LeaveType = x.LeaveType,
-                                                                    StartDate = x.StartDateOfLeave,
-                                                                    EndDate = x.EndDateOfLeave,
-                                                                    EmployeeName = x.Employee.FirstName,
-                                                                    EmployeeSurname = x.Employee.LastName,
-                                                                    EmployeeId = x.Employee.Id,
-                                                                    ManagerId = (Guid)x.Employee.Manager.ManagerId,
-                                                                    LeaveStatus = x.LeaveStatus,
-                                                                    DaysOfLeave = x.DaysOfLeave,
-                                                                    CreateDate = x.CreateDate
+                                                                Id = x.Id,
+                                                                LeaveType = x.LeaveType,
+                                                                StartDate = x.StartDateOfLeave,
+                                                                EndDate = x.EndDateOfLeave,
+                                                                FirstName = x.Employee.FirstName,
+                                                                LastName = x.Employee.LastName,
+                                                                EmployeeId = x.Employee.Id,
+                                                                LeaveStatus = x.LeaveStatus,
+                                                                DaysOfLeave = x.DaysOfLeave,
+                                                                ManagerId = (Guid)x.Employee.Manager.ManagerId,
+                                                                CreateDate = x.CreateDate,
+                                                                Explanation = x.Explanation
                                                             },
                                                             where: x => (x.Status != Status.Deleted && x.Status != Status.Inactive) && x.Employee.CompanyId == id,
                                                             orderBy: x => x.OrderByDescending(x => x.CreateDate),
@@ -83,13 +85,14 @@ namespace humanResourceProject.Application.Services.Concrete.LeaveServices
                                                                  LeaveType = x.LeaveType,
                                                                  StartDate = x.StartDateOfLeave,
                                                                  EndDate = x.EndDateOfLeave,
-                                                                 EmployeeName = x.Employee.FirstName,
-                                                                 EmployeeSurname = x.Employee.LastName,
+                                                                 FirstName = x.Employee.FirstName,
+                                                                 LastName = x.Employee.LastName,
                                                                  EmployeeId = x.Employee.Id,
                                                                  ManagerId = (Guid)x.Employee.Manager.ManagerId,
                                                                  LeaveStatus = x.LeaveStatus,
                                                                  DaysOfLeave = x.DaysOfLeave,
-                                                                 CreateDate = x.CreateDate
+                                                                 CreateDate = x.CreateDate,
+                                                                 Explanation = x.Explanation
                                                              },
                                                              where: x => (x.Status != Status.Deleted && x.Status != Status.Inactive) && x.Employee.DepartmentId == id,
                                                              orderBy: x => x.OrderByDescending(x => x.CreateDate),

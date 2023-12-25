@@ -34,6 +34,8 @@ namespace humanResourceProject.Models.DTOs
         [DisplayName("Masraf Türü*")]
         public ExpenseType ExpenseType { get; set; }
 
+        public RequestStatus ExpenseStatus { get; set; }
+
         [Required(ErrorMessage = "Masraf tarihi alanı boş geçilemez!")]
         [DisplayName("Masraf Tarihi*")]
         public DateTime DateOfExpense { get; set; }

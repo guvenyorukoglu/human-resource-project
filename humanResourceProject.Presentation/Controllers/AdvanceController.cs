@@ -113,6 +113,7 @@ namespace humanResourceProject.Presentation.Controllers
         public async Task<IActionResult> UpdateAdvance(Guid id)
         {
             var response = await _httpClient.GetAsync($"api/Advance/GetUpdateAdvanceDTO/{id}");
+
             if (response.IsSuccessStatusCode)
             {
                 var content = await response.Content.ReadAsStringAsync();
