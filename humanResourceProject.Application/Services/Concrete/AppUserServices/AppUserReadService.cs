@@ -34,7 +34,7 @@ namespace humanResourceProject.Application.Services.Concrete.AppUserServices
                     Email = x.Email,
                     PhoneNumber = x.PhoneNumber,
                     Gender = x.Gender,
-                    JobTitle = x.Company.Jobs.FirstOrDefault(j => j.Id == x.JobId).Title
+                    Title = x.Company.Jobs.FirstOrDefault(j => j.Id == x.JobId).Title
                 },
                 where: x => x.CompanyId == companyId && (x.Status != Domain.Enum.Status.Inactive && x.Status != Domain.Enum.Status.Deleted),
                 orderBy: x => x.OrderBy(x => x.FirstName),
@@ -53,7 +53,7 @@ namespace humanResourceProject.Application.Services.Concrete.AppUserServices
                     Email = x.Email,
                     PhoneNumber = x.PhoneNumber,
                     Gender = x.Gender,
-                    JobTitle = x.Company.Jobs.FirstOrDefault(j => j.Id == x.JobId).Title
+                    Title = x.Company.Jobs.FirstOrDefault(j => j.Id == x.JobId).Title
                 },
                 where: x => x.DepartmentId == departmentId && (x.Status != Domain.Enum.Status.Inactive && x.Status != Domain.Enum.Status.Deleted),
                 orderBy: x => x.OrderBy(x => x.FirstName),

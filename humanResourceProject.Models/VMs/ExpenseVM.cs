@@ -21,6 +21,8 @@ namespace humanResourceProject.Models.VMs
         public IFormFile? UploadPath { get; set; }
         public RequestStatus ExpenseStatus { get; set; }
         public DateTime CreateDate { get; set; }
+        public Guid DepartmentId { get; set; }
+        public Guid ManagerId { get; set; }
 
     }
 }

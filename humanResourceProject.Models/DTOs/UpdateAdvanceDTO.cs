@@ -27,8 +27,5 @@ namespace humanResourceProject.Models.DTOs
         [Required(ErrorMessage = "Para birimi alanı boş geçilemez!")]
         [DisplayName("Para Birimi*")]
         public Currency Currency { get; set; }
-        [Required(ErrorMessage = "Avans tarihi boş geçilemez!")]
-        [DisplayName("Son İstenen Tarihi*")]
-        public DateTime ExpiryDate { get; set; }
     }
 }

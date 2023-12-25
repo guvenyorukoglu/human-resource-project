@@ -126,49 +126,50 @@
                                 <option value="" disabled selected>Cinsiyet seçiniz!</option>
                             }
 
-                </select>
-                <span asp-validation-for="Gender" class="text-danger"></span>
+                        </select>
+                        <span asp-validation-for="Gender" class="text-danger"></span>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label asp-for="JobId" class="control-label"></label>
+                        <select asp-for="JobId" asp-items="@Model.Jobs.Select(job => new SelectListItem { Text = job.Title, Value = job.Id.ToString() })" class="form-control">
+                            <option value="" disabled selected>Meslek seçiniz!</option>
+                        </select>
+                        <span asp-validation-for="JobId" class="text-danger"></span>
+                    </div>
+                    @if (User.IsInRole("CompanyManager"))
+                    {
+                        <div class="form-group mb-3">
+                            <label asp-for="DepartmentId" class="control-label"></label>
+                            <select asp-for="DepartmentId" asp-items="@Model.Departments.Select(department => new SelectListItem { Text = department.DepartmentName, Value = department.Id.ToString() })" class="form-control">
+                                <option value="" disabled selected>Departman seçiniz!</option>
+                            </select>
+                            <span asp-validation-for="DepartmentId" class="text-danger"></span>
+                        </div>
+                    }
+                    else if (User.IsInRole("Manager"))
+                    {
+                        <div class="form-group mb-3">
+                            <input asp-for="DepartmentId" type="hidden" class="form-control" />
+                            <span asp-validation-for="DepartmentId" class="text-danger"></span>
+                        </div>
+                    }
+                    <div class="form-group mb-3">
+                        <input asp-for="ManagerId" type="hidden" class="form-control" />
+                        <span asp-validation-for="ManagerId" class="text-danger"></span>
+                    </div>
+                    <div>
+                        <label>*Zorunlu alan</label>
+                    </div>
+                    <div class="form-group mb-3">
+                        <input type="submit" value="Ekle" class="btn btn-primary" />
+                    </div>
+                </form>
             </div>
-            <div class="form-group mb-3">
-                <label asp-for="JobId" class="control-label"></label>
-                <select asp-for="JobId" asp-items="@Model.Jobs.Select(job => new SelectListItem { Text = job.Title, Value = job.Id.ToString() })" class="form-control">
-                    <option value="" disabled selected>Meslek seçiniz!</option>
-                </select>
-                <span asp-validation-for="JobId" class="text-danger"></span>
-            </div>
-            @if (User.IsInRole("CompanyManager"))
-            {
-                <div class="form-group mb-3">
-                    <label asp-for="DepartmentId" class="control-label"></label>
-                    <select asp-for="DepartmentId" asp-items="@Model.Departments.Select(department => new SelectListItem { Text = department.DepartmentName, Value = department.Id.ToString() })" class="form-control">
-                        <option value="" disabled selected>Departman seçiniz!</option>
-                    </select>
-                    <span asp-validation-for="DepartmentId" class="text-danger"></span>
-                </div>
-            }
-            else if (User.IsInRole("Manager"))
-            {
-                <div class="form-group mb-3">
-                    <input asp-for="DepartmentId" type="hidden" class="form-control" />
-                    <span asp-validation-for="DepartmentId" class="text-danger"></span>
-                </div>
-            }
-            <div class="form-group mb-3">
-                <input asp-for="ManagerId" type="hidden" class="form-control" />
-                <span asp-validation-for="ManagerId" class="text-danger"></span>
-            </div>
-            <div>
-                <label>*Zorunlu alan</label>
-            </div>
-            <div class="form-group mb-3">
-                <input type="submit" value="Ekle" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
-</div>
+        </div>
+</body>
 
-@section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
-}
+        @section Scripts {
+            @{
+                await Html.RenderPartialAsync("_ValidationScriptsPartial");
+            }
+        }

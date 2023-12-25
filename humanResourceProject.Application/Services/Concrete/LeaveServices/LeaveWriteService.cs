@@ -3,7 +3,6 @@ using humanResourceProject.Application.Services.Abstract.ILeaveServices;
 using humanResourceProject.Application.Services.Concrete.BaseServices;
 using humanResourceProject.Domain.Entities.Concrete;
 using humanResourceProject.Domain.IRepository.BaseRepos;
-using humanResourceProject.Infrastructure.Repositories.BaseRepos;
 using humanResourceProject.Models.DTOs;
 using Microsoft.AspNetCore.Identity;
 
@@ -42,10 +41,10 @@ namespace humanResourceProject.Application.Services.Concrete.LeaveServices
             newLeave.Status = Domain.Enum.Status.Active;
             newLeave.CreateDate = DateTime.Now;
 
-            int currentLeaveCount = await _leaveReadRepository.GetCountAsync();
+            int currentLeaveCount = await _baseReadRepository.GetCountAsync();
             newLeave.LeaveNo = Leave.GenerateLeaveNumber(currentLeaveCount);
 
-            if (await _leaveWriteRepository.Insert(newLeave))
+            if (await _baseWriteRepository.Insert(newLeave))
                 return IdentityResult.Success;
             else
                 return IdentityResult.Failed();

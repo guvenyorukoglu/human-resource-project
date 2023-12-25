@@ -107,24 +107,24 @@ namespace humanResourceProject.Application.Services.Concrete.ExpenseServices
         public async Task<List<ExpenseVM>> GetExpensesByCompanyId(Guid id)
         {
             List<ExpenseVM>? expenses = await _expenseReadRepository.GetFilteredList(
-                                                             select: x => new ExpenseVM
-                                                             {
-                                                                 Id = x.Id,
-                                                                 Explanation = x.Explanation,
-                                                                 AmountOfExpense = x.AmountOfExpense,
-                                                                 Currency = x.Currency,
-                                                                 FirstName = x.Employee.FirstName,
-                                                                 LastName = x.Employee.LastName,
-                                                                 EmployeeId = x.EmployeeId,
-                                                                 DepartmentId = (Guid)x.Employee.DepartmentId,
-                                                                 ManagerId = (Guid)x.Employee.Manager.ManagerId,
-                                                                 ExpenseStatus = x.ExpenseStatus,
-                                                                 DateOfExpense = x.DateOfExpense,
-                                                                 FilePath = x.FilePath,
-                                                                 UploadPath = x.UploadPath,
-                                                                 CreateDate = x.CreateDate,
-                                                                 ExpenseType = x.ExpenseType
-                                                             },
+                                                select: x => new ExpenseVM
+                                                {
+                                                    Id = x.Id,
+                                                    Explanation = x.Explanation,
+                                                    AmountOfExpense = x.AmountOfExpense,
+                                                    Currency = x.Currency,
+                                                    FirstName = x.Employee.FirstName,
+                                                    LastName = x.Employee.LastName,
+                                                    EmployeeId = x.EmployeeId,
+                                                    DepartmentId = (Guid)x.Employee.DepartmentId,
+                                                    ManagerId = (Guid)x.Employee.Manager.ManagerId,
+                                                    ExpenseStatus = x.ExpenseStatus,
+                                                    DateOfExpense = x.DateOfExpense,
+                                                    FilePath = x.FilePath,
+                                                    UploadPath = x.UploadPath,
+                                                    CreateDate = x.CreateDate,
+                                                    ExpenseType = x.ExpenseType
+                                                },
                                                 where: x => (x.Status != Status.Deleted && x.Status != Status.Inactive) && x.Employee.CompanyId == id,
                                                 orderBy: x => x.OrderByDescending(x => x.CreateDate),
                                                 include: x => x.Include(x => x.Employee).ThenInclude(x => x.Manager));
