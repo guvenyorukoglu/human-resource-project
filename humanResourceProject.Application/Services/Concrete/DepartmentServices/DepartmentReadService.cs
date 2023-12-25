@@ -53,7 +53,7 @@ namespace humanResourceProject.Application.Services.Concrete.DeparmentServices
                                    Description = x.Description
                                },
                                where: x => (x.Status != Domain.Enum.Status.Deleted && x.Status != Domain.Enum.Status.Inactive) && x.CompanyId == id,
-                               orderBy: x => x.OrderByDescending(x => x.DepartmentName)
+                               orderBy: x => x.OrderBy(x => x.DepartmentName)
                );
             return departments;
         }

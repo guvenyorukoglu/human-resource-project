@@ -55,9 +55,7 @@ namespace humanResourceProject.Application.Services.Concrete.AppUserServices
             IdentityResult result = await _userManager.CreateAsync(newUser, model.Password);
             if (result.Succeeded)
             {
-               
                 await _userManager.AddToRoleAsync(newUser, "Personel");
-               
             }
             return result;
         }

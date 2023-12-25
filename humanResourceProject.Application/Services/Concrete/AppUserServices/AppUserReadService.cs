@@ -60,6 +60,25 @@ namespace humanResourceProject.Application.Services.Concrete.AppUserServices
                 include: x => x.Include(x => x.Company).ThenInclude(x => x.Jobs));
         }
 
+        public async Task<List<ManagerVM>> GetManagersByCompanyId(Guid companyId)
+        {
+            List<AppUser> managers = (List<AppUser>)await _userManager.GetUsersInRoleAsync("Manager");
+            List<AppUser> companyManager = (List<AppUser>)await _userManager.GetUsersInRoleAsync("CompanyManager");
+
+            managers.AddRange(companyManager);
+
+            var filteredManagers = managers.Where(x => x.CompanyId == companyId && (x.Status != Domain.Enum.Status.Inactive && x.Status != Domain.Enum.Status.Deleted))
+                .Select(x => new ManagerVM
+                {
+                    Id = x.Id,
+                    FullName = x.FirstName + " " + x.LastName
+                })
+                .OrderBy(x => x.FullName)
+                .ToList();
+
+            return filteredManagers;
+        }
+
         public async Task<List<ManagerVM>> GetManagersByDepartmentId(Guid deparmentId)
         {
             return await _readRepository.GetFilteredList(

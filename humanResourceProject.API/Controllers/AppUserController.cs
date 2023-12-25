@@ -49,8 +49,15 @@ namespace humanResourceProject.API.Controllers
                 {
                     return Ok(employee);
                 }
-            }            
+            }
             return Ok();
+        }
+
+        [HttpGet]
+        [Route("GetManagersByCompanyId/{id}")]
+        public async Task<IActionResult> GetManagersByCompanyId(Guid id) // Şirket Id'sine göre Yöneticiler
+        {
+            return Ok(await _appUserReadService.GetManagersByCompanyId(id));
         }
 
         [HttpGet]
@@ -82,19 +89,19 @@ namespace humanResourceProject.API.Controllers
                 return BadRequest(result.Errors);
 
 
-            return RedirectToAction("ForgotPassword", "Account", new {email = model.Email});
+            return RedirectToAction("ForgotPassword", "Account", new { email = model.Email });
         }
 
         [HttpPost]
         [Route("CreatePersonelManager")]
-        public async Task<IActionResult> CreatePersonelManager([FromBody] CreateEmployeeDTO model) 
+        public async Task<IActionResult> CreatePersonelManager([FromBody] CreateEmployeeDTO model)
         {
             IdentityResult result = await _appUserWriteService.RegisterPersonelManager(model);
             if (!result.Succeeded)
                 return BadRequest(result.Errors);
 
 
-            return RedirectToAction("ForgotPassword", "Account", new {email=model.Email});
+            return RedirectToAction("ForgotPassword", "Account", new { email = model.Email });
         }
 
         [HttpPut]

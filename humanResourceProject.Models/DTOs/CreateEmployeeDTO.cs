@@ -73,9 +73,10 @@ namespace humanResourceProject.Models.DTOs
         public Guid DepartmentId { get; set; }
         public List<DepartmentVM>? Departments { get; set; }
 
-        [Required(ErrorMessage = "Müdür alanı boş geçilemez!")]
-        [DisplayName("Müdür*")]
+        [Required(ErrorMessage = "Yönetici alanı boş geçilemez!")]
+        [DisplayName("Yönetici*")]
         public Guid ManagerId { get; set; }
         public List<ManagerVM>? Managers { get; set; }
+        public Guid CompanyId { get; set; }
     }
 }

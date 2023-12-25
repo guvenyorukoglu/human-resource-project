@@ -1,7 +1,4 @@
-@using System.ComponentModel.DataAnnotations
-@using System.Reflection
-@using humanResourceProject.Domain.Enum
-@model humanResourceProject.Models.DTOs.CreateEmployeeDTO
+@model CreateEmployeeDTO
 
 @{
     ViewData["Title"] = "CreatePersonel";
@@ -38,138 +35,138 @@
     <div class="row">
         @Html.Partial("_PanelPartial")
 
-        <div class="aside container mt-5 col-md-9 col-sm-9">
-            <h3>Çalışan Oluştur</h3>
-            <h4>Personel bilgilerini lütfen eksiksiz giriniz.</h4>
-            <hr />
-            <div class="col-md-4">
-                <form asp-action="CreatePersonel">
-                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                    <div class="form-group mb-3">
-                        <label asp-for="FirstName" class="control-label"></label>
-                        <input asp-for="FirstName" class="form-control" />
-                        <span asp-validation-for="FirstName" class="text-danger"></span>
-                    </div>
-                    <div class="form-group mb-3">
-                        <label asp-for="MiddleName" class="control-label"></label>
-                        <input asp-for="MiddleName" class="form-control" />
 
+        <div class="col-md-8 mt-5" style="margin: 0 auto">
+            <form asp-action="CreatePersonel">
+                <div class="card shadow p-3 mb-5 bg-body rounded">
+                    <div class="card-header">
+                        <h1 class="card-title text-center">Yeni Çalışan Ekle</h1>
                     </div>
-                    <div class="form-group mb-3">
-                        <label asp-for="LastName" class="control-label"></label>
-                        <input asp-for="LastName" class="form-control" />
-                        <span asp-validation-for="LastName" class="text-danger"></span>
-                    </div>
-                    <div class="form-group mb-3">
-                        <label asp-for="Email" class="control-label"></label>
-                        <input asp-for="Email" class="form-control" />
-                        <span asp-validation-for="Email" class="text-danger"></span>
-                    </div>
-                    <div class="form-group mb-3">
-                        <input asp-for="Password" type="hidden" class="form-control" />
-                    </div>
-                    <div class="form-group mb-3">
-                        <input asp-for="ConfirmPassword" type="hidden" class="form-control" />
-                    </div>
-                    <div class="form-group mb-3">
-                        <label asp-for="PhoneNumber" class="control-label"></label>
-                        <input asp-for="PhoneNumber" class="form-control" />
-                        <span asp-validation-for="PhoneNumber" class="text-danger"></span>
-                    </div>
-                    <div class="form-group mb-3">
-                        <label asp-for="Birthdate" class="control-label"></label>
-                        <input value="@DateTime.Now.ToString("dd.MM.yyyy")" max="@DateTime.Now" asp-for="Birthdate" type="date" class="form-control" />
-                        <span asp-validation-for="Birthdate" class="text-danger"></span>
-                    </div>
-                    <div class="form-group mb-3">
-                        <label asp-for="Address" class="control-label"></label>
-                        <input asp-for="Address" class="form-control" />
-                        <span asp-validation-for="Address" class="text-danger"></span>
-                    </div>
-                    <div class="form-group mb-3">
-                        <label asp-for="IdentificationNumber" class="control-label"></label>
-                        <input asp-for="IdentificationNumber" class="form-control" />
-                        <span asp-validation-for="IdentificationNumber" class="text-danger"></span>
-                    </div>
-                    <div class="form-group mb-3">
-                        <label asp-for="BloodGroup" class="control-label"></label>
-                        <select asp-for="BloodGroup" class="form-control">
-                            @{
-                                var enumType = typeof(BloodGroup);
-                                var enumValues = enumType.GetEnumValues();
-                                foreach (var enumValue in enumValues)
-                                {
-                                    var displayAttribute = enumType.GetMember(enumValue.ToString())[0].GetCustomAttribute<DisplayAttribute>();
-                                    var displayName = displayAttribute?.GetName() ?? enumValue.ToString();
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label asp-for="FirstName" class="control-label"></label>
+                                    <input asp-for="FirstName" class="form-control" />
+                                    <span asp-validation-for="FirstName" class="text-danger"></span>
+                                </div>
+                                <div class="form-group mb-3">
+                                    <label asp-for="MiddleName" class="control-label"></label>
+                                    <input asp-for="MiddleName" class="form-control" />
 
-                                    <option value="@enumValue">@displayName</option>
-                                }
-                                <option value="" disabled selected>Kan grubu seçiniz!</option>
-                            }
+                                </div>
+                                <div class="form-group mb-3">
+                                    <label asp-for="LastName" class="control-label"></label>
+                                    <input asp-for="LastName" class="form-control" />
+                                    <span asp-validation-for="LastName" class="text-danger"></span>
+                                </div>
+                                <div class="form-group mb-3">
+                                    <label asp-for="IdentificationNumber" class="control-label"></label>
+                                    <input asp-for="IdentificationNumber" class="form-control" />
+                                    <span asp-validation-for="IdentificationNumber" class="text-danger"></span>
+                                </div>
+                                <div class="form-group mb-3">
+                                    <label asp-for="Email" class="control-label"></label>
+                                    <input asp-for="Email" class="form-control" />
+                                    <span asp-validation-for="Email" class="text-danger"></span>
+                                </div>
+                                <div class="form-group mb-3">
+                                    <input asp-for="Password" type="hidden" class="form-control" />
+                                    <input asp-for="ConfirmPassword" type="hidden" class="form-control" />
+                                    <input asp-for="CompanyId" type="hidden" class="form-control" />
+                                </div>
+                                <div class="form-group mb-3">
+                                    <label asp-for="PhoneNumber" class="control-label"></label>
+                                    <input asp-for="PhoneNumber" class="form-control" />
+                                    <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                                </div>
+                                <div class="form-group mb-3">
+                                    <label asp-for="Birthdate" class="control-label"></label>
+                                    <input value="@DateTime.Now.ToString("yyyy-MM-dd")" max="@DateTime.Now" asp-for="Birthdate" type="date" class="form-control" />
+                                    <span asp-validation-for="Birthdate" class="text-danger"></span>
+                                </div>
+                                
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label asp-for="Address" class="control-label"></label>
+                                    <input asp-for="Address" class="form-control" />
+                                    <span asp-validation-for="Address" class="text-danger"></span>
+                                </div>
+                                <div class="form-group mb-3">
+                                    <label asp-for="BloodGroup" class="control-label"></label>
+                                    <select asp-for="BloodGroup" class="form-control">
+                                        @{
+                                            var enumType = typeof(BloodGroup);
+                                            var enumValues = enumType.GetEnumValues();
+                                            foreach (var enumValue in enumValues)
+                                            {
+                                                var displayAttribute = enumType.GetMember(enumValue.ToString())[0].GetCustomAttribute<DisplayAttribute>();
+                                                var displayName = displayAttribute?.GetName() ?? enumValue.ToString();
 
-                        </select>
-                        <span asp-validation-for="BloodGroup" class="text-danger"></span>
-                    </div>
-                    <div class="form-group mb-3">
-                        <label asp-for="Gender" class="control-label"></label>
-                        <select asp-for="Gender" class="form-control">
-                            @{
-                                var enumTypeGender = typeof(Gender);
-                                var enumValuesGender = enumTypeGender.GetEnumValues();
-                                foreach (var enumValue in enumValuesGender)
-                                {
-                                    var displayAttribute = enumTypeGender.GetMember(enumValue.ToString())[0].GetCustomAttribute<DisplayAttribute>();
-                                    var displayName = displayAttribute?.GetName() ?? enumValue.ToString();
+                                                <option value="@enumValue">@displayName</option>
+                                            }
+                                            <option value="" disabled selected>Kan grubu seçiniz!</option>
+                                        }
 
-                                    <option value="@enumValue">@displayName</option>
-                                }
-                                <option value="" disabled selected>Cinsiyet seçiniz!</option>
-                            }
+                                    </select>
+                                    <span asp-validation-for="BloodGroup" class="text-danger"></span>
+                                </div>
+                                <div class="form-group mb-3">
+                                    <label asp-for="Gender" class="control-label"></label>
+                                    <select asp-for="Gender" class="form-control">
+                                        @{
+                                            var enumTypeGender = typeof(Gender);
+                                            var enumValuesGender = enumTypeGender.GetEnumValues();
+                                            foreach (var enumValue in enumValuesGender)
+                                            {
+                                                var displayAttribute = enumTypeGender.GetMember(enumValue.ToString())[0].GetCustomAttribute<DisplayAttribute>();
+                                                var displayName = displayAttribute?.GetName() ?? enumValue.ToString();
 
-                        </select>
-                        <span asp-validation-for="Gender" class="text-danger"></span>
-                    </div>
-                    <div class="form-group mb-3">
-                        <label asp-for="JobId" class="control-label"></label>
-                        <select asp-for="JobId" asp-items="@Model.Jobs.Select(job => new SelectListItem { Text = job.Title, Value = job.Id.ToString() })" class="form-control">
-                            <option value="" disabled selected>Meslek seçiniz!</option>
-                        </select>
-                        <span asp-validation-for="JobId" class="text-danger"></span>
-                    </div>
-                    @if (User.IsInRole("CompanyManager"))
-                    {
-                        <div class="form-group mb-3">
-                            <label asp-for="DepartmentId" class="control-label"></label>
-                            <select asp-for="DepartmentId" asp-items="@Model.Departments.Select(department => new SelectListItem { Text = department.DepartmentName, Value = department.Id.ToString() })" class="form-control">
-                                <option value="" disabled selected>Departman seçiniz!</option>
-                            </select>
-                            <span asp-validation-for="DepartmentId" class="text-danger"></span>
+                                                <option value="@enumValue">@displayName</option>
+                                            }
+                                            <option value="" disabled selected>Cinsiyet seçiniz!</option>
+                                        }
+
+                                    </select>
+                                    <span asp-validation-for="Gender" class="text-danger"></span>
+                                </div>
+                                <div class="form-group mb-3">
+                                    <label asp-for="JobId" class="control-label"></label>
+                                    <select asp-for="JobId" asp-items="@Model.Jobs.Select(job => new SelectListItem { Text = job.Title, Value = job.Id.ToString() })" class="form-control">
+                                        <option value="" disabled selected>Meslek seçiniz!</option>
+                                    </select>
+                                    <span asp-validation-for="JobId" class="text-danger"></span>
+                                </div>
+
+                                <div class="form-group mb-3">
+                                    <label asp-for="DepartmentId" class="control-label"></label>
+                                    <select asp-for="DepartmentId" asp-items="@Model.Departments.Select(department => new SelectListItem { Text = department.DepartmentName, Value = department.Id.ToString() })" class="form-control">
+                                        <option value="" disabled selected>Departman seçiniz!</option>
+                                    </select>
+                                    <span asp-validation-for="DepartmentId" class="text-danger"></span>
+                                </div>
+
+                                <div class="form-group mb-3">
+                                    <label asp-for="ManagerId" class="control-label"></label>
+                                    <select asp-for="ManagerId" asp-items="@Model.Managers.Select(manager => new SelectListItem { Text = manager.FullName, Value = manager.Id.ToString() })" class="form-control">
+                                        <option value="" disabled selected>Yönetici seçiniz!</option>
+                                    </select>
+                                    <span asp-validation-for="ManagerId" class="text-danger"></span>
+                                </div>
+                            </div>
                         </div>
-                    }
-                    else if (User.IsInRole("Manager"))
-                    {
-                        <div class="form-group mb-3">
-                            <input asp-for="DepartmentId" type="hidden" class="form-control" />
-                            <span asp-validation-for="DepartmentId" class="text-danger"></span>
+                        <div class="mb-3">
+                            <label>*Zorunlu alan</label>
                         </div>
-                    }
-                    <div class="form-group mb-3">
-                        <input asp-for="ManagerId" type="hidden" class="form-control" />
-                        <span asp-validation-for="ManagerId" class="text-danger"></span>
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <div class="form-group mb-3 d-grid">
+                            <input type="submit" value="Ekle" class="btn btn-primary" />
+                        </div>
                     </div>
-                    <div>
-                        <label>*Zorunlu alan</label>
-                    </div>
-                    <div class="form-group mb-3">
-                        <input type="submit" value="Ekle" class="btn btn-primary" />
-                    </div>
-                </form>
-            </div>
+                </div>
+            </form>
         </div>
+    </div>
 </body>
 
-        @section Scripts {
-            @{
-                await Html.RenderPartialAsync("_ValidationScriptsPartial");
-            }
-        }
