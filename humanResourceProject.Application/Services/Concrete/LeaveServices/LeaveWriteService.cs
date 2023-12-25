@@ -43,8 +43,7 @@ namespace humanResourceProject.Application.Services.Concrete.LeaveServices
             newLeave.CreateDate = DateTime.Now;
             int currentLeaveCount = await _leaveReadRepository.GetCountAsync();
             newLeave.LeaveNo = Leave.GenerateLeaveNumber(currentLeaveCount);
-
-            if (await _leaveWriteRepository.Insert(newLeave))
+            if (await _baseWriteRepository.Insert(newLeave))
                 return IdentityResult.Success;
             else
                 return IdentityResult.Failed();

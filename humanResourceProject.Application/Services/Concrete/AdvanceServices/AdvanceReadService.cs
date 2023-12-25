@@ -123,7 +123,6 @@ namespace humanResourceProject.Application.Services.Concrete.AdvanceServices
                                                 where: x => (x.Status != Status.Deleted && x.Status != Status.Inactive) && x.Employee.CompanyId == id,
                                                 orderBy: x => x.OrderByDescending(x => x.CreateDate),
                                                 include: x => x.Include(x => x.Employee));
-
             return advances;
         }
     }

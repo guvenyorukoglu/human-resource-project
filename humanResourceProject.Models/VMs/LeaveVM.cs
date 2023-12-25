@@ -12,7 +12,6 @@ namespace humanResourceProject.Models.VMs
 
         public Guid EmployeeId { get; set; }
         public Guid ManagerId { get; set; }
-        //public Guid DepartmentId { get; set; }
 
         public string? Explanation { get; set; }
         public string FirstName { get; set; }
