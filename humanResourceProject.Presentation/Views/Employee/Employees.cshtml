@@ -50,7 +50,7 @@
                         <button class="custom-button custom-button--create-entity">Personel Ekle</button>
                     </a>
                 }
-                if (User.IsInRole("DepartmentManager"))
+                if (User.IsInRole("Manager"))
                 {
                     <a asp-action="CreatePersonel" asp-controller="Employee">
                         <button class="custom-button custom-button--create-entity">Personel Ekle</button>

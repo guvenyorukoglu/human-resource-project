@@ -241,6 +241,7 @@ namespace humanResourceProject.Presentation.Controllers
                 string surname = parsedResponse.surname;
                 string companyId = parsedResponse.companyId;
                 string departmentId = parsedResponse.departmentId;
+                string managerId = parsedResponse.managerId;
                 string imagePath = parsedResponse.imagePath;
                 var roles = parsedResponse.roles;
 
@@ -251,6 +252,7 @@ namespace humanResourceProject.Presentation.Controllers
                 claims.Add(new Claim(ClaimTypes.Surname, surname));
                 claims.Add(new Claim("CompanyId", companyId));
                 claims.Add(new Claim("DepartmentId", departmentId));
+                claims.Add(new Claim("ManagerId", managerId));
                 claims.Add(new Claim("ImagePath", imagePath));
 
                 foreach (var role in roles)
@@ -348,9 +350,21 @@ namespace humanResourceProject.Presentation.Controllers
             var response = await _httpClient.PostAsync($"api/Account/UpdateProfileImage/", multipartContent);
             if (response.IsSuccessStatusCode)
             {
-                return RedirectToAction("Home", "Employee");
+                var identity = (ClaimsIdentity)User.Identity;
+                var existingImageUrlClaim = identity.FindFirst("ImagePath");
+                if (existingImageUrlClaim != null)
+                {
+                    identity.RemoveClaim(existingImageUrlClaim);
+                }
+
+                string imageUrl = await response.Content.ReadAsStringAsync();
+                identity.AddClaim(new Claim("ImagePath", imageUrl));
+
+                await HttpContext.SignInAsync(new ClaimsPrincipal(identity));
+
+                return Json(new { imageUrl });
             }
-            return View("Error");
+                return RedirectToAction("Home", "Employee");
         }
 
     }

@@ -6,6 +6,7 @@ namespace humanResourceProject.Domain.Entities.Concrete
     public class Leave : IBaseEntity
     {
         public Guid Id { get; set; }
+        public string LeaveNo { get; set; }
         public DateTime StartDateOfLeave { get; set; }
         public DateTime EndDateOfLeave { get; set; }
         public LeaveType LeaveType { get; set; }
@@ -20,5 +21,16 @@ namespace humanResourceProject.Domain.Entities.Concrete
         public DateTime? UpdateDate { get; set; }
         public DateTime? DeleteDate { get; set; }
         public Status Status { get; set; } = Status.Active;
+
+        public static string GenerateLeaveNumber(int currentLeaveCount)
+        {
+            const string prefix = "LEA";
+
+            string sequentialNumber = (currentLeaveCount + 1).ToString("D5");
+
+            string leaveNo = $"{prefix}{DateTime.Now.Year}{sequentialNumber}";
+
+            return leaveNo;
+        }
     }
 }

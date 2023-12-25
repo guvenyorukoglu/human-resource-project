@@ -14,7 +14,7 @@ namespace humanResourceProject.Domain.Entities.Concrete
             Expenses = new HashSet<Expense>();
             Advances = new HashSet<Advance>();
             Leaves = new HashSet<Leave>();
-            DepartmentEmployees = new HashSet<AppUser>();
+            Supervisee = new HashSet<AppUser>();
 
         }
         public string FirstName { get; set; }
@@ -23,6 +23,8 @@ namespace humanResourceProject.Domain.Entities.Concrete
         public string Address { get; set; }
         public string PhoneNumber { get; set; }
         public string IdentificationNumber { get; set; }
+        public decimal EarnedLeaveDays { get; set; }
+        public decimal RemainingLeaveDays { get; set; }
         public BloodGroup BloodGroup { get; set; }
         public DateTime Birthdate { get; set; }
         public Gender Gender { get; set; }
@@ -38,14 +40,14 @@ namespace humanResourceProject.Domain.Entities.Concrete
         public Guid? ManagerId { get; set; }
 
         [JsonIgnore]
-        public ICollection<AppUser>? DepartmentEmployees { get; set; }
+        public ICollection<AppUser>? Supervisee { get; set; }
+        public Company Company { get; set; }
+        public Guid CompanyId { get; set; }
 
-        public Job Job { get; set; }
+        //public Job Job { get; set; }
         public Guid? JobId { get; set; }
-        //public Company Company { get; set; }
-        //public Guid CompanyId { get; set; }
 
-        public Department Department { get; set; }
+        //public Department Department { get; set; }
         public Guid? DepartmentId { get; set; }
 
         public DateTime CreateDate { get; set; }

@@ -8,6 +8,7 @@ namespace humanResourceProject.Domain.Entities.Concrete
     public class Expense : IBaseEntity
     {
         public Guid Id { get; set; }
+        public string ExpenseNo { get; set; }
         public decimal AmountOfExpense { get; set; }
         public DateTime DateOfExpense { get; set; }
         public ExpenseType ExpenseType { get; set; }
@@ -25,5 +26,16 @@ namespace humanResourceProject.Domain.Entities.Concrete
         public DateTime? UpdateDate { get; set; }
         public DateTime? DeleteDate { get; set; }
         public Status Status { get; set; } = Status.Active;
+
+        public static string GenerateExpenseNumber(int currentExpenseCount)
+        {
+            const string prefix = "EXP";
+
+            string sequentialNumber = (currentExpenseCount + 1).ToString("D5");
+
+            string expenseNo = $"{prefix}{DateTime.Now.Year}{sequentialNumber}";
+
+            return expenseNo;
+        }
     }
 }

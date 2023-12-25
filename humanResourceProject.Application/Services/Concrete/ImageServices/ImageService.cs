@@ -121,7 +121,7 @@ namespace humanResourceProject.Application.Services.Concrete.ImageServices
             await model.UploadPath.CopyToAsync(fileUploadStream);
             fileUploadStream.Position = 0;
 
-            var fileName = Guid.NewGuid().ToString() + fileExtension;
+            var fileName = "exp-" + Guid.NewGuid().ToString() + fileExtension;
 
             var connectionString = _configuration["AzureStorage:ConnectionString"];
             var containerName = _configuration["AzureStorage:Container"];

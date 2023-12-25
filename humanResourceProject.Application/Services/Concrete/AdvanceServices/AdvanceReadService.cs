@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using humanResourceProject.Application.Services.Abstract.IAdvanceServices;
 using humanResourceProject.Application.Services.Concrete.BaseServices;
 using humanResourceProject.Domain.Entities.Concrete;
@@ -120,9 +120,10 @@ namespace humanResourceProject.Application.Services.Concrete.AdvanceServices
                                                     AdvanceStatus = x.AdvanceStatus,
                                                     Currency = x.Currency
                                                 },
-                                                where: x => (x.Status != Status.Deleted && x.Status != Status.Inactive) && x.Employee.Department.CompanyId == id,
+                                                where: x => (x.Status != Status.Deleted && x.Status != Status.Inactive) && x.Employee.CompanyId == id,
                                                 orderBy: x => x.OrderByDescending(x => x.CreateDate),
-                                                include: x => x.Include(x => x.Employee).ThenInclude(e => e.Department));
+                                                include: x => x.Include(x => x.Employee));
+
             return advances;
         }
     }

@@ -45,7 +45,7 @@ namespace humanResourceProject.API.Controllers
             foreach (var employee in employees)
             {
                 AppUser appUser = await _userManager.FindByIdAsync(employee.Id.ToString());
-                if (await _userManager.IsInRoleAsync(appUser, "DepartmentManager"))
+                if (await _userManager.IsInRoleAsync(appUser, "Manager"))
                 {
                     return Ok(employee);
                 }

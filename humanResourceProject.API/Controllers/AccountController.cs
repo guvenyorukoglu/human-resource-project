@@ -78,6 +78,7 @@ namespace humanResourceProject.API.Controllers
                     surname = appUser.LastName,
                     departmentId = appUser.DepartmentId,
                     companyId = department.CompanyId,
+                    managerId = appUser.ManagerId,
                     imagePath = appUser.ImagePath,
                     roles = await _userManager.GetRolesAsync(appUser)
                 });
@@ -197,7 +198,8 @@ namespace humanResourceProject.API.Controllers
             if (!result.Succeeded)
                 return BadRequest(result.Errors);
 
-            return Ok(result.Succeeded);
+            AppUser user = await _userManager.FindByIdAsync(model.Id.ToString());
+            return Ok(user.ImagePath);
         }
 
         [HttpGet]
