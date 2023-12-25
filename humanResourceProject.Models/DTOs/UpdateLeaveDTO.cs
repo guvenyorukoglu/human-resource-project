@@ -12,6 +12,8 @@ namespace humanResourceProject.Models.DTOs
     public class UpdateLeaveDTO
     {
         public Guid Id { get; set; }
+        [Required(ErrorMessage = "İzin tipi boş geçilemez!")]
+        [DisplayName("İzin tipi*")]
         public LeaveType LeaveType { get; set; }
         [Required(ErrorMessage = "İzin başlangıç tarihi boş geçilemez!")]
         [DisplayName("İzin başlangıç Tarihi*")]
@@ -27,6 +29,9 @@ namespace humanResourceProject.Models.DTOs
         [Required(ErrorMessage = "İzin süresi boş geçilemez!")]
         [DisplayName("İzin süresi*")]
         public decimal DaysOfLeave { get; set; }
+        
+        [Required(ErrorMessage = "İzin açıklaması boş geçilemez!")]
+        [DisplayName("İzin Açıklaması*")]
         public string Explanation { get; set; }
     }
 }

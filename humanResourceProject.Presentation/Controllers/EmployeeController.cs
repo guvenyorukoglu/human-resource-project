@@ -286,12 +286,21 @@ namespace humanResourceProject.Presentation.Controllers
             return View(employee);
         }
 
-
+        [HttpGet]
         public async Task<IActionResult> Home()
         {
-            //DashboardVM doldur apiden çek view'e gönder
+            //var response = await _httpClient.GetAsync($"api/AppUser/EmployeeById/{Guid.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value)}");
+
+            //if (response.IsSuccessStatusCode)
+            //{
+            //    var content = await response.Content.ReadAsStringAsync();
+            //    var employee = JsonConvert.DeserializeObject<DashboardVM>(content);
+            //    return View("Home", employee);
+            //}
+
             return View();
         }
+
 
     }
 }

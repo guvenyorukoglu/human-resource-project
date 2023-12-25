@@ -1,4 +1,7 @@
-﻿@using humanResourceProject.Models.VMs;
+﻿@using System.Reflection;
+@using System.ComponentModel.DataAnnotations;
+@using humanResourceProject.Domain.Enum;
+@using humanResourceProject.Models.VMs;
 
 @{
     ViewData["Title"] = "MyExpenses";
@@ -24,7 +27,6 @@
 </head>
 
 <body>
-    <h3>Masraf Taleplerim</h3>
     <div class="row">
         @Html.Partial("_PanelPartial")
 
@@ -35,7 +37,7 @@
                     <button class="custom-button custom-button--create-entity">Harcama Ekle</button>
                 </a>
             }
-
+            <h3 class="text-center">Masraf Taleplerim</h3>
             <div class="pagination-container">
 
                 <script>
@@ -91,18 +93,43 @@
                                         {
                                             <a asp-action="UpdateExpense"
                                                asp-controller="Expense"
-                                               asp-route-id="@item.Id" onclick="return confirm('Güncellemek istediğinize emin misiniz?')">
+                                               asp-route-id="@item.Id">
                                                 <button class="btn btn-secondary btn-sm d-inline-flex bg-primary gap-1 align-items-center">
                                                     <i class="fa fa-pen"></i><span>Güncelle</span>
                                                 </button>
                                             </a>
                                             <a asp-action="DeleteExpense"
                                                asp-controller="Expense"
-                                               asp-route-id="@item.Id" onclick="return confirm('Silmek istediğinize emin misiniz?')">
+                                               data-bs-toggle="modal"
+                                               data-bs-target="#confirmDeleteModal_@item.Id">
                                                 <button class="btn btn-danger btn-sm d-inline-flex gap-1 align-items-center">
                                                     <i class="fa fa-trash"></i><span>Kaldır</span>
                                                 </button>
                                             </a>
+
+                                            <!-- Modal -->
+                                            <div class="modal fade" id="confirmDeleteModal_@item.Id" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
+                                                <div class="modal-dialog" role="document">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title" id="confirmDeleteModalLabel">Silme İşlemi Onayı</h5>
+                                                            <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                                                                <span aria-hidden="true">&times;</span>
+                                                            </button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            Silmek istediğinize emin misiniz?
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>
+                                                            <a asp-action="DeleteExpense" asp-controller="Advance" asp-route-id="@item.Id">
+                                                                <button type="button" class="btn btn-danger">Sil</button>
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
                                         }
                                     </td>
                                 </tr>

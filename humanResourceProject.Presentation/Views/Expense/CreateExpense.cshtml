@@ -1,11 +1,41 @@
-﻿@model ExpenseDTO
+﻿@using System.Reflection;
+@using System.ComponentModel.DataAnnotations;
+@using humanResourceProject.Domain.Enum;
+@using humanResourceProject.Models.DTOs;
+@model ExpenseDTO
 
-<h1>Masraf Oluştur</h1>
+@{
+    ViewData["Title"] = "CreateExpence";
+    Layout = "~/Views/Shared/_HRLayout.cshtml";
+}
+
+<head>
+
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.css" />
+
+    <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.js"></script>
+    <style>
+        .panel {
+            height: 120vh;
+        }
+
+        a {
+            text-decoration: none;
+        }
+    </style>
+</head>
+
+
 
 <hr />
-<div class="row">
-    <div class="col-md-4">
+<body>
+    <div class="row">
+
+        @Html.Partial("_PanelPartial")
+
+        <div class="col-md-4" style="margin: 0 auto">
         <form asp-action="CreateExpense">
+                <h1 class="text-center">Masraf Talebi</h1>
 
             <div class="form-group mb-3">
                 <label asp-for="AmountOfExpense" class="control-label"></label>
@@ -24,6 +54,7 @@
                             var displayName = displayAttribute?.GetName() ?? enumValue.ToString();
                             <option value="@enumValue">@displayName</option>
                         }
+                            <option value="" disabled selected>Masraf Tipi seçiniz!</option>
                     }
 
                 </select>
@@ -41,6 +72,7 @@
                             var displayName = displayAttribute?.GetName() ?? enumValue.ToString();
                             <option value="@enumValue">@displayName</option>
                         }
+                            <option value="" disabled selected>Para Birimi seçiniz!</option>
                     }
 
                 </select>
@@ -66,19 +98,19 @@
                 <span asp-validation-for="EmployeeId" class="text-danger"></span>
             </div>
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+           <div class="text-center"
             <div class="form-group mb-3">
                 <input type="submit" value="Oluştur" class="btn btn-primary" />
             </div>
+                <div>
+                    <a asp-controller="Employee" asp-action="Home">Anasayfaya Dön</a>
+                </div>
+            </div>
         </form>
     </div>
-</div>
+ </div>
+</body>
 
 <div>
     <a asp-action="Home">Anasayfaya Dön</a>
 </div>
-
-@section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
-}
