@@ -299,6 +299,17 @@ namespace humanResourceProject.Presentation.Controllers
         }
 
         [HttpGet]
+        public async Task<IActionResult> FireEmployee(Guid id)
+        {
+            var response = await _httpClient.GetAsync($"api/AppUser/FireEmployee/{id}");
+            if (response.IsSuccessStatusCode)
+            {
+                return RedirectToAction(nameof(Employees));
+            }
+            return View("Error");
+        }
+
+        [HttpGet]
         public async Task<IActionResult> Home()
         {
             //var userId = Guid.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value);

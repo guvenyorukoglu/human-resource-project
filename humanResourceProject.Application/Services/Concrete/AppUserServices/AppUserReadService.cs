@@ -93,7 +93,7 @@ namespace humanResourceProject.Application.Services.Concrete.AppUserServices
         public async Task<SignInResult> Login(LoginDTO model)
         {
             AppUser appUser = await _userManager.FindByEmailAsync(model.Email);
-            if (appUser == null)
+            if (appUser == null || appUser.Status == Domain.Enum.Status.Inactive || appUser.Status == Domain.Enum.Status.Deleted)
                 return SignInResult.Failed;
 
             var result = await _signInManager.PasswordSignInAsync(appUser, model.Password, false, false);

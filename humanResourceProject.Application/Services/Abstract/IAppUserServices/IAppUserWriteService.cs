@@ -1,7 +1,6 @@
 ﻿using humanResourceProject.Application.Services.Abstract.IBaseServices;
 using humanResourceProject.Domain.Entities.Concrete;
 using humanResourceProject.Models.DTOs;
-using humanResourceProject.Presentation.Controllers;
 using Microsoft.AspNetCore.Identity;
 
 namespace humanResourceProject.Application.Services.Abstract.IAppUserServices
@@ -15,6 +14,6 @@ namespace humanResourceProject.Application.Services.Abstract.IAppUserServices
         Task<UpdateUserDTO> GetUpdateUserDTOById(Guid id); // Güncelleme sayfası için UpdateUserDTO döndürür.
         Task<IdentityResult> Update(UpdateUserDTO model); // UpdateUserDTO modelini alır, veritabanında günceller.
         Task<IdentityResult> UpdateProfileImage(Guid id); // Profil resmini günceller.
-
+        Task<IdentityResult> FireEmployee(Guid id); // Personeli işten çıkarır.
     }
 }
