@@ -32,6 +32,13 @@ namespace humanResourceProject.API.Controllers
         }
 
         [HttpGet]
+        [Route("GetCompanyVM/{id}")]
+        public async Task<IActionResult> GetCompanyVM(Guid id)
+        {
+            return Ok(await _companyReadService.GetCompanyVM(id));
+        }
+
+        [HttpGet]
         [Route("GetUpdateCompanyDTO/{id}")]
         public async Task<IActionResult> GetUpdateCompanyDTO(Guid id) // Şirket Güncellemek için View'e DTO gönderir
         {
