@@ -22,20 +22,6 @@ namespace humanResourceProject.Application.Services.Concrete.AppUserServices
             _userManager = userManager;
         }
 
-        public async Task<DashboardVM> FillDashboard(Guid id)
-        {
-            return await _readRepository.GetFilteredFirstOrDefault(
-                select: x => new DashboardVM()
-                {
-                    Leaves = (List<Leave>)x.Leaves,
-                    Advances = (List<Advance>)x.Advances,
-                    Expenses = (List<Expense>)x.Expenses,
-                    Company = x.Company
-                },
-                where: x => x.Id == id && (x.Status != Domain.Enum.Status.Inactive && x.Status != Domain.Enum.Status.Deleted));
-               
-        }
-
         public async Task<List<PersonelVM>> GetEmployeesByCompanyId(Guid companyId)
         {
             return await _readRepository.GetFilteredList(

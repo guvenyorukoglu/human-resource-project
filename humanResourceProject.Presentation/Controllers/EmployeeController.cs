@@ -178,9 +178,9 @@ namespace humanResourceProject.Presentation.Controllers
             {
                 return View("Error");
             }
-            
+
         }
-                    
+
 
         [HttpPost]
         public async Task<IActionResult> CreatePersonel(CreateEmployeeDTO model)
@@ -219,7 +219,7 @@ namespace humanResourceProject.Presentation.Controllers
         [HttpPost]
         public async Task<IActionResult> CreatePersonelManager(CreateEmployeeDTO model)
         {
-            if(!ModelState.IsValid)
+            if (!ModelState.IsValid)
                 return View(model);
 
             model.ImagePath = model.Gender == Domain.Enum.Gender.Female ? "https://ik.imagekit.io/7ypp4olwr/femaledefault.png?tr=h-200,w-200" : "https://ik.imagekit.io/7ypp4olwr/maledefault.png?tr=h-200,w-200";
@@ -300,17 +300,40 @@ namespace humanResourceProject.Presentation.Controllers
             ModelState.AddModelError(response.StatusCode.ToString(), "Bir hata oluştu.");
             return View(model);
         }
-        [HttpGet]
 
+        [HttpGet]
         public async Task<IActionResult> Home()
         {
             var userId = Guid.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value);
-            var response = await _httpClient.GetAsync($"api/AppUser/FillDashboard/{userId}");
+            var companyId = Guid.Parse(User.Claims.FirstOrDefault(x => x.Type == "CompanyId").Value);
 
-            if (response.IsSuccessStatusCode)
+            var responseLeave = await _httpClient.GetAsync($"api/Leave/FillDashboardLeaveVM/{userId}");
+            var responseAdvance = await _httpClient.GetAsync($"api/Advance/FillDashboardAdvanceVM/{userId}");
+            var responseExpense = await _httpClient.GetAsync($"api/Expense/FillDashboardExpenseVM/{userId}");
+            var responseCompany = await _httpClient.GetAsync($"api/Company/GetCompanyVM/{companyId}");
+
+            if (responseLeave.IsSuccessStatusCode && responseAdvance.IsSuccessStatusCode && responseExpense.IsSuccessStatusCode && responseCompany.IsSuccessStatusCode)
             {
-                var content = await response.Content.ReadAsStringAsync();
-                var dashboardVM = JsonConvert.DeserializeObject<DashboardVM>(content);
+                var contentLeave = await responseLeave.Content.ReadAsStringAsync();
+                var dashboardLeaveVM = JsonConvert.DeserializeObject<List<DashboardLeaveVM>>(contentLeave);
+
+                var contentAdvance = await responseAdvance.Content.ReadAsStringAsync();
+                var dashboardAdvanceVM = JsonConvert.DeserializeObject<List<DashboardAdvanceVM>>(contentAdvance);
+
+                var contentExpense = await responseExpense.Content.ReadAsStringAsync();
+                var dashboardExpenseVM = JsonConvert.DeserializeObject<List<DashboardExpenseVM>>(contentExpense);
+
+                var contentCompany = await responseCompany.Content.ReadAsStringAsync();
+                var dashboardCompanyVM = JsonConvert.DeserializeObject<CompanyVM>(contentCompany);
+
+                DashboardVM dashboardVM = new DashboardVM()
+                {
+                    Leaves = dashboardLeaveVM,
+                    Advances = dashboardAdvanceVM,
+                    Expenses = dashboardExpenseVM,
+                    Company = dashboardCompanyVM
+                };
+
                 return View(dashboardVM);
             }
 

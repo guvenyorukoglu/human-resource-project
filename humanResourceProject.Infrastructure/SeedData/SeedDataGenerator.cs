@@ -291,13 +291,13 @@ namespace humanResourceProject.Infrastructure.SeedData
                             .RuleFor(e => e.Id, f => f.Random.Guid())
                             .RuleFor(e => e.ExpenseNo, f => "EXP2023" + f.Random.ReplaceNumbers($"#####"))
                             .RuleFor(e => e.AmountOfExpense, f => f.Random.Decimal(100, 99999))
+                            .RuleFor(e => e.CreateDate, f => f.Date.Past(1))
                             .RuleFor(e => e.DateOfExpense, (f, e) => f.Date.Recent(daysAgo, e.CreateDate))
                             .RuleFor(e => e.ExpenseType, f => f.PickRandom<ExpenseType>())
                             .RuleFor(e => e.Explanation, f => f.Lorem.Sentence())
                             .RuleFor(e => e.Currency, f => f.PickRandom<Currency>())
                             .RuleFor(e => e.FilePath, f => f.PickRandom(receiptDefaultImages))
                             .RuleFor(e => e.ExpenseStatus, f => f.Random.Bool(0.5f) ? RequestStatus.Approved : (f.Random.Bool(0.25f) ? RequestStatus.Pending : RequestStatus.Rejected))
-                            .RuleFor(e => e.CreateDate, f => f.Date.Past(1))
                             .RuleFor(e => e.Status, f => Status.Active)
                             .RuleFor(e => e.EmployeeId, manager.Id);
 
@@ -355,13 +355,13 @@ namespace humanResourceProject.Infrastructure.SeedData
                             .RuleFor(e => e.Id, f => f.Random.Guid())
                             .RuleFor(e => e.ExpenseNo, f => "EXP2023" + f.Random.ReplaceNumbers($"#####"))
                             .RuleFor(e => e.AmountOfExpense, f => f.Random.Decimal(100, 99999))
+                            .RuleFor(e => e.CreateDate, f => f.Date.Past(1))
                             .RuleFor(e => e.DateOfExpense, (f, e) => f.Date.Recent(daysAgo, e.CreateDate))
                             .RuleFor(e => e.ExpenseType, f => f.PickRandom<ExpenseType>())
                             .RuleFor(e => e.Explanation, f => f.Lorem.Sentence())
                             .RuleFor(e => e.Currency, f => f.PickRandom<Currency>())
                             .RuleFor(e => e.FilePath, f => f.PickRandom(receiptDefaultImages))
                             .RuleFor(e => e.ExpenseStatus, f => f.Random.Bool(0.5f) ? RequestStatus.Approved : (f.Random.Bool(0.25f) ? RequestStatus.Pending : RequestStatus.Rejected))
-                            .RuleFor(e => e.CreateDate, f => f.Date.Past(1))
                             .RuleFor(e => e.Status, f => Status.Active)
                             .RuleFor(e => e.EmployeeId, employee.Id);
 

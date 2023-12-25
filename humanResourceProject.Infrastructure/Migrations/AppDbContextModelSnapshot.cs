@@ -31,7 +31,8 @@ namespace humanResourceProject.Infrastructure.Migrations
                     b.Property<string>("AdvanceNo")
                         .IsRequired()
                         .HasMaxLength(12)
-                        .HasColumnType("nvarchar(12)");
+                        .HasColumnType("nvarchar(12)")
+                        .HasColumnOrder(2);
 
                     b.Property<int>("AdvanceStatus")
                         .HasColumnType("int");
@@ -327,7 +328,8 @@ namespace humanResourceProject.Infrastructure.Migrations
                     b.Property<string>("ExpenseNo")
                         .IsRequired()
                         .HasMaxLength(12)
-                        .HasColumnType("nvarchar(12)");
+                        .HasColumnType("nvarchar(12)")
+                        .HasColumnOrder(2);
 
                     b.Property<int>("ExpenseStatus")
                         .HasColumnType("int");
@@ -418,7 +420,8 @@ namespace humanResourceProject.Infrastructure.Migrations
                     b.Property<string>("LeaveNo")
                         .IsRequired()
                         .HasMaxLength(12)
-                        .HasColumnType("nvarchar(12)");
+                        .HasColumnType("nvarchar(12)")
+                        .HasColumnOrder(2);
 
                     b.Property<int>("LeaveStatus")
                         .HasColumnType("int");
