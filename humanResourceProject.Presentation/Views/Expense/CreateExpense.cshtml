@@ -26,13 +26,11 @@
 </head>
 <hr />
 <body>
-    <div class="row">
-
-        @Html.Partial("_PanelPartial")
-
-        <div class="col-md-4" style="margin: 0 auto">
+<div class="row">
+  @Html.Partial("_PanelPartial")
+    <div class="col-md-4" style="margin: 0 auto">
+        <form asp-action="CreateExpense" asp-controller="Expense" method="post" enctype="multipart/form-data">
                 <h1 class="text-center">Masraf Talebi</h1>
-        <form asp-action="CreateExpense">
             <div class="form-group mb-3">
                 <label asp-for="ExpenseType" class="control-label"></label>
                 <select asp-for="ExpenseType" class="form-control">

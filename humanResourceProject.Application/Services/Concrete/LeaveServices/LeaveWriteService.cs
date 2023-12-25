@@ -1,8 +1,9 @@
-﻿using AutoMapper;
+using AutoMapper;
 using humanResourceProject.Application.Services.Abstract.ILeaveServices;
 using humanResourceProject.Application.Services.Concrete.BaseServices;
 using humanResourceProject.Domain.Entities.Concrete;
 using humanResourceProject.Domain.IRepository.BaseRepos;
+using humanResourceProject.Infrastructure.Repositories.BaseRepos;
 using humanResourceProject.Models.DTOs;
 using Microsoft.AspNetCore.Identity;
 
@@ -40,10 +41,8 @@ namespace humanResourceProject.Application.Services.Concrete.LeaveServices
             Leave newLeave = _mapper.Map<Leave>(model);
             newLeave.Status = Domain.Enum.Status.Active;
             newLeave.CreateDate = DateTime.Now;
-
-            int currentLeaveCount = await _baseReadRepository.GetCountAsync();
+            int currentLeaveCount = await _leaveReadRepository.GetCountAsync();
             newLeave.LeaveNo = Leave.GenerateLeaveNumber(currentLeaveCount);
-
             if (await _baseWriteRepository.Insert(newLeave))
                 return IdentityResult.Success;
             else

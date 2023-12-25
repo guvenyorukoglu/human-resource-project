@@ -119,6 +119,13 @@ namespace humanResourceProject.API.Controllers
             return Ok("Silme işlemi gerçekleşti.");
         }
 
+        [HttpGet]
+        [Route("FillDashboard/{id}")]
+        public async Task<IActionResult> FillDashboard(Guid id) // Dashboard için gerekli verileri döndürür
+        {
+            return Ok(await _appUserReadService.FillDashboard(id));
+        }
+
 
 
 

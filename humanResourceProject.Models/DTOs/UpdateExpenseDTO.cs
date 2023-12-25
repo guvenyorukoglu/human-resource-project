@@ -1,4 +1,4 @@
-﻿using humanResourceProject.Domain.Enum;
+using humanResourceProject.Domain.Enum;
 using Microsoft.AspNetCore.Http;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
@@ -17,14 +17,18 @@ namespace humanResourceProject.Models.DTOs
         [DisplayName("Harcama Miktarı*")]
         public decimal AmountOfExpense { get; set; }
         public RequestStatus ExpenseStatus { get; set; }
-        public DateTime DateOfExpense { get; set; }
         [Required(ErrorMessage = "Masraf türü alanı boş geçilemez!")]
         [DisplayName("Masraf Türü*")]
         public ExpenseType ExpenseType { get; set; }
         [Required(ErrorMessage = "Para birimi alanı boş geçilemez!")]
         [DisplayName("Para Birimi*")]
         public Currency Currency { get; set; }
+
         public string? FilePath { get; set; }
+
+        [Required(ErrorMessage = "Masraf tarihi alanı boş geçilemez!")]
+        [DisplayName("Masraf Tarihi*")]
+        public DateTime DateOfExpense { get; set; }
         [Required(ErrorMessage = "Dosya alanı boş geçilemez!")]
         [DisplayName("Dosya*")]
         public IFormFile? UploadPath { get; set; }

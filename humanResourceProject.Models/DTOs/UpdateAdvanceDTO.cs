@@ -1,4 +1,4 @@
-﻿using humanResourceProject.Domain.Enum;
+using humanResourceProject.Domain.Enum;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
