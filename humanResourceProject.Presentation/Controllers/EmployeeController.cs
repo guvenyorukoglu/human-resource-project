@@ -304,17 +304,17 @@ namespace humanResourceProject.Presentation.Controllers
 
         public async Task<IActionResult> Home()
         {
+            var userId = Guid.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value);
+            var response = await _httpClient.GetAsync($"api/AppUser/FillDashboard/{userId}");
 
-            //var response = await _httpClient.GetAsync($"api/AppUser/EmployeeById/{Guid.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value)}");
+            if (response.IsSuccessStatusCode)
+            {
+                var content = await response.Content.ReadAsStringAsync();
+                var dashboardVM = JsonConvert.DeserializeObject<DashboardVM>(content);
+                return View(dashboardVM);
+            }
 
-            //if (response.IsSuccessStatusCode)
-            //{
-            //    var content = await response.Content.ReadAsStringAsync();
-            //    var employee = JsonConvert.DeserializeObject<DashboardVM>(content);
-            //    return View("Home", employee);
-            //}
-
-            return View();
+            return View("Error");
         }
 
 

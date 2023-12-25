@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace humanResourceProject.Models.VMs
 {
-    public class DashbordVM
+    public class DashboardVM
     {
         public List<Leave>? Leaves { get; set; }
         public List<Advance>? Advances { get; set; }
