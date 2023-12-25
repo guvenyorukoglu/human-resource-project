@@ -1,7 +1,10 @@
-﻿@model UpdateAdvanceDTO
-
+@using System.Reflection;
+@using System.ComponentModel.DataAnnotations;
+@using humanResourceProject.Domain.Enum;
+@using humanResourceProject.Models.DTOs;
+@model UpdateAdvanceDTO
 @{
-    ViewData["Title"] = "UpdateAdvances";
+    ViewData["Title"] = "UpdateAdvance";
     Layout = "~/Views/Shared/_HRLayout.cshtml";
 }
 <head>
@@ -16,64 +19,58 @@
 
         a {
             text-decoration: none;
-            font-size: 1vw;
-            color: #ffffff;
-        }
-
-        .aside {
-            margin-top: 100px;
-            margin-left: 50px;
-        }
-
-        h6 {
-            font-size: 1vw;
-            color: #ffffff;
         }
     </style>
 </head>
-<body>
-    <div class="row">
-        @Html.Partial("_PanelPartial")
 
-        <div class="aside container mt-5 col-md-9 col-sm-9">
-            <h3>Avans Güncelle</h3>
-            <form asp-action="UpdateAdvance">
-                <div class="form-group mb-3">
-                    <label asp-for="AdvanceType" class="control-label"></label>
-                    <select asp-for="AdvanceType" class="form-control">
-                        @{
-                            var enumType = typeof(AdvanceType);
-                            var enumValues = enumType.GetEnumValues();
-                            foreach (var enumValue in enumValues)
-                            {
-                                var displayAttribute = enumType.GetMember(enumValue.ToString())[0].GetCustomAttribute<DisplayAttribute>();
-                                var displayName = displayAttribute?.GetName() ?? enumValue.ToString();
-                                <option value="@enumValue">@displayName</option>
-                            }
-                            <option value="" disabled selected>Avans tipi seçiniz!</option>
+<hr />
+<body>
+  <div class="row">
+
+     @Html.Partial("_PanelPartial")
+
+     <div class="col-md-4" style="margin: 0 auto">
+        <form asp-action="UpdateAdvance">
+                <h1>Avans Talebi Güncelle</h1>
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="form-group mb-3">
+                <label asp-for="AmountOfAdvance" class="control-label"></label>
+                <input id="amountInput" value="@Model.AmountOfAdvance" type="number" min="1" asp-for="AmountOfAdvance" class="form-control" />
+                <span asp-validation-for="AmountOfAdvance" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-3">
+                <label asp-for="AdvanceType" class="control-label"></label>
+                <select asp-for="AdvanceType" class="form-control">
+                    @{
+                        var enumType = typeof(AdvanceType);
+                        var enumValues = enumType.GetEnumValues();
+                        foreach (var enumValue in enumValues)
+                        {
+                            var displayAttribute = enumType.GetMember(enumValue.ToString())[0].GetCustomAttribute<DisplayAttribute>();
+                            var displayName = displayAttribute?.GetName() ?? enumValue.ToString();
+                            <option value="@enumValue">@displayName</option>
                         }
-                    </select>
-                    <span asp-validation-for="AdvanceType" class="text-danger"></span>
-                </div>
-                <div class="form-group mb-3">
-                    <label asp-for="AmountOfAdvance" class="control-label"></label>
-                    <input id="amountInput" value="@Model.AmountOfAdvance" type="number" min="1" asp-for="AmountOfAdvance" class="form-control" />
-                    <span asp-validation-for="AmountOfAdvance" class="text-danger"></span>
-                </div>
-                <div class="form-group mb-3">
-                    <label asp-for="Currency" class="control-label"></label>
-                    <select asp-for="Currency" class="form-control">
-                        @{
-                            var enumTypeCurrency = typeof(Currency);
-                            var enumValuesCurrency = enumTypeCurrency.GetEnumValues();
-                            foreach (var enumValue in enumValuesCurrency)
-                            {
-                                var displayAttribute = enumTypeCurrency.GetMember(enumValue.ToString())[0].GetCustomAttribute<DisplayAttribute>();
-                                var displayName = displayAttribute?.GetName() ?? enumValue.ToString();
-                                <option value="@enumValue">@displayName</option>
-                            }
-                            <option value="" disabled selected>Para birimi seçiniz!</option>
+                            <option value="" disabled selected>Avans Tipi seçiniz!</option>
+                    }
+
+                </select>
+                <span asp-validation-for="AdvanceType" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-3">
+                <label asp-for="Currency" class="control-label"></label>
+                <select asp-for="Currency" class="form-control">
+                    @{
+                        var enumTypeCurrency = typeof(Currency);
+                        var enumValuesCurrency = enumTypeCurrency.GetEnumValues();
+                        foreach (var enumValue in enumValuesCurrency)
+                        {
+                            var displayAttribute = enumTypeCurrency.GetMember(enumValue.ToString())[0].GetCustomAttribute<DisplayAttribute>();
+                            var displayName = displayAttribute?.GetName() ?? enumValue.ToString();
+                            <option value="@enumValue">@displayName</option>
                         }
+                            <option value="" disabled selected>Para Birimi seçiniz!</option>
+                    }
                     </select>
                     <span asp-validation-for="Currency" class="text-danger"></span>
                 </div>

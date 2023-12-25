@@ -1,12 +1,16 @@
-﻿@model LeaveDTO
+@using System.Reflection;
+@using System.ComponentModel.DataAnnotations;
+@using humanResourceProject.Domain.Enum;
+@using humanResourceProject.Models.DTOs;
+@model LeaveDTO
 
 @{
     ViewData["Title"] = "CreateLeaves";
+
     Layout = "~/Views/Shared/_HRLayout.cshtml";
 }
 
 <head>
-
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.css" />
 
     <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.js"></script>
@@ -18,25 +22,18 @@
         a {
             text-decoration: none;
         }
-
-        .aside {
-            margin-top: 100px;
-            margin-left: 50px;
-        }
-
-        h6 {
-            font-size: 1vw;
-            color: #ffffff;
-        }
     </style>
 </head>
+
+<hr />
 <body>
-    <div class="row">
+   <div class="row">
+
         @Html.Partial("_PanelPartial")
 
-        <div class="aside container mt-5 col-md-9 col-sm-9">
-            <h3>İzin Oluştur</h3>
-            <form asp-action="CreateLeave">
+    <div class="col-md-4" style="margin: 0 auto">
+        <form asp-action="CreateLeave">
+                <h1 class="text-center">İzin Talebi</h1>
                 <div class="form-group mb-4">
                     <label asp-for="LeaveType" class="control-label"></label>
                     <select asp-for="LeaveType" class="form-control">

@@ -1,4 +1,5 @@
-﻿@model List<PersonelVM>;
+﻿@using humanResourceProject.Models.VMs;
+@model List<DashbordVM>;
 @{
     ViewData["Title"] = "Home";
     Layout = "~/Views/Shared/_HRLayout.cshtml";
@@ -124,7 +125,7 @@
                 </div>
                 </div>
 
-            <div class="row text-center">
+    <div class="row text-center">
                 <div class="col-md-4 upcoming-leave-info card">
                     <h6>
                         <a asp-action="MyLeaves"
@@ -142,25 +143,32 @@
                             @if (Model != null)
                             {
                                 int count = 0;
-                                foreach (var item in Model)
+                                foreach (var leave in Model)
                                 {
-                                    if (count >= 3)
+                                    foreach (var item in leave.Leaves)
                                     {
-                                        break;
+                                        if (count >= 3)
+                                        {
+                                            break;
+                                        }
+
+                                        if (item != null) // Leave özelliğini kontrol et
+                                        {
+                                            <tr>
+                                                <td>@item.DaysOfLeave</td>
+                                                <td>@item.CreateDate</td>
+                                            </tr>
+                                            count++;
+                                        }
                                     }
-
-                                    <tr>
-
-                                        <td>@item.Leave.DaysOfLeave</td>
-                                        <td>@item.Leave.CreateDate</td>
-                                    </tr>
-                                    count++;
+                                    
                                 }
                             }
                         </tbody>
                     </table>
                 </div>
-                     <div class="col-md-4 upcoming-leave-info card">
+             
+                 <div class="col-md-4 upcoming-leave-info card">
                     <h6>
                         <a asp-action="Expenses"
                            asp-controller="Expense">MASRAFLAR</a>
@@ -177,24 +185,30 @@
                             @if (Model != null)
                             {
                                 int count = 0;
-                                foreach (var item in Model)
+                                foreach (var expense in Model)
                                 {
-                                    if (count >= 3)
+                                    foreach (var item in expense.Expenses)
                                     {
-                                        break;
+                                        if (count >= 3)
+                                        {
+                                            break;
+                                        }
+
+                                        if (item != null) 
+                                        {
+                                            <tr>
+                                                <td>@item.AmountOfExpense</td>
+                                                <td>@item.CreateDate</td>
+                                            </tr>
+                                            count++;
+                                        }
                                     }
 
-                                    <tr>
-
-                                        <td>@item.Expense.AmountOfExpense</td>
-                                        <td>@item.Expense.CreateDate</td>
-                                    </tr>
-                                    count++;
                                 }
                             }
                         </tbody>
                     </table>
-                    </div>
+                 </div>
                 <div class="col-md-3 upcoming-leave-info card">
                     <h6>
                         <a asp-action="MyAdvances"
@@ -212,19 +226,25 @@
                             @if (Model != null)
                             {
                                 int count = 0;
-                                foreach (var item in Model)
+                                foreach (var advance in Model)
                                 {
-                                    if (count >= 3)
+                                    foreach (var item in advance.Advances)
                                     {
-                                        break;
+                                        if (count >= 3)
+                                        {
+                                            break;
+                                        }
+
+                                        if (item != null) 
+                                        {
+                                            <tr>
+                                                <td>@item.AmountOfAdvance</td>
+                                                <td>@item.CreateDate</td>
+                                            </tr>
+                                            count++;
+                                        }
                                     }
 
-                                    <tr>
-
-                                        <td>@item.Advance.AmountOfAdvance</td>
-                                        <td>@item.Advance.CreateDate</td>
-                                    </tr>
-                                    count++;
                                 }
                             }
                         </tbody>

@@ -1,7 +1,11 @@
-﻿@model ExpenseDTO
+@using System.Reflection;
+@using System.ComponentModel.DataAnnotations;
+@using humanResourceProject.Domain.Enum;
+@using humanResourceProject.Models.DTOs;
+@model ExpenseDTO
 
 @{
-    ViewData["Title"] = "CreateExpenses";
+    ViewData["Title"] = "CreateExpence";
     Layout = "~/Views/Shared/_HRLayout.cshtml";
 }
 
@@ -18,24 +22,17 @@
         a {
             text-decoration: none;
         }
-
-        .aside {
-            margin-top: 100px;
-            margin-left: 50px;
-        }
-
-        h6 {
-            font-size: 1vw;
-            color: #ffffff;
-        }
     </style>
 </head>
+<hr />
 <body>
     <div class="row">
+
         @Html.Partial("_PanelPartial")
 
-        <div class="aside container mt-5 col-md-9 col-sm-9">
-            <h3>Harcama Oluştur</h3>
+        <div class="col-md-4" style="margin: 0 auto">
+        <form asp-action="CreateExpense">
+                <h1 class="text-center">Masraf Talebi</h1>
         <form asp-action="CreateExpense">
             <div class="form-group mb-3">
                 <label asp-for="ExpenseType" class="control-label"></label>
@@ -49,7 +46,8 @@
                             var displayName = displayAttribute?.GetName() ?? enumValue.ToString();
                             <option value="@enumValue">@displayName</option>
                         }
-                            <option value="" disabled selected>Harcama tipi seçiniz!</option>
+                            <option value="" disabled selected>Masraf Tipi seçiniz!</option>
+
                     }
                 </select>
                 <span asp-validation-for="ExpenseType" class="text-danger"></span>
@@ -77,6 +75,7 @@
                             <option value="@enumValue">@displayName</option>
                         }
                             <option value="" disabled selected>Para birimi seçiniz!</option>
+
                     }
                 </select>
                 <span asp-validation-for="Currency" class="text-danger"></span>
@@ -96,8 +95,13 @@
                 <span asp-validation-for="EmployeeId" class="text-danger"></span>
             </div>
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+           <div class="text-center"
             <div class="form-group mb-3">
                 <input type="submit" value="Oluştur" class="btn btn-primary" />
+            </div>
+                <div>
+                    <a asp-controller="Employee" asp-action="Home">Anasayfaya Dön</a>
+                </div>
             </div>
         </form>
         <div>
@@ -106,3 +110,4 @@
     </div>
 </div>
 </body>
+
