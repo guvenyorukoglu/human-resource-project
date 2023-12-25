@@ -8,9 +8,6 @@ namespace humanResourceProject.Domain.IRepository.BaseRepos
         Task<bool> Update(T entity);
         Task<bool> Delete(Guid id);
         Task<int> SaveChangesAsync();
-
         void DetachEntity(T entity);
-
-
     }
 }

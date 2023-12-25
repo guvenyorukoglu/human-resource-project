@@ -20,7 +20,7 @@ namespace humanResourceProject.Models.VMs
         public string FilePath { get; set; }
         [DisplayName("Masraf Fotoğrafı")]
         public IFormFile UploadPath { get; set; }
-        public RequestStatus ExpenseStatus { get; set; } = RequestStatus.Pending;
+        public RequestStatus ExpenseStatus { get; set; }
         public Guid EmployeeId { get; set; }
         public Currency Currency { get; set; }
         public ExpenseType ExpenseType { get; set; }

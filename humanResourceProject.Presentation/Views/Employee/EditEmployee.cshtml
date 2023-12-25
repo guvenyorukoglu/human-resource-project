@@ -4,74 +4,106 @@
 @model humanResourceProject.Models.DTOs.UpdateUserDTO
 
 @{
-    ViewData["Title"] = "EditEmployee";
+    ViewData["Title"] = "UpdateEmployee";
+    Layout = "~/Views/Shared/_HRLayout.cshtml";
 }
+<head>
 
-<h2>Personel Güncelleme</h2>
-<h4>Personel bilgilerini lütfen eksiksiz giriniz.</h4>
-<hr />
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.css" />
 
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="EditEmployee">
-            <div class="form-group mb-3">
-                <label asp-for="Email" class="control-label"></label>
-                <input asp-for="Email" class="form-control" />
-                <span asp-validation-for="Email" class="text-danger"></span>
-            </div>
-            <div class="form-group mb-3">
-                <label asp-for="LastName" class="control-label"></label>
-                <input asp-for="LastName" class="form-control" />
-                <span asp-validation-for="LastName" class="text-danger"></span>
-            </div>
-            <div class="form-group mb-3">
-                <label asp-for="Address" class="control-label"></label>
-                <input asp-for="Address" class="form-control" />
-                <span asp-validation-for="Address" class="text-danger"></span>
-            </div>
-            <div class="form-group mb-3">
-                <label asp-for="PhoneNumber" class="control-label"></label>
-                <input asp-for="PhoneNumber" class="form-control" />
-                <span asp-validation-for="PhoneNumber" class="text-danger"></span>
-            </div>
-            <div class="form-group mb-3">
-                <label asp-for="Gender" class="control-label"></label>
-                <select asp-for="Gender" class="form-control">
-                    @{
-                        var enumType = typeof(Gender);
-                        var enumValues = enumType.GetEnumValues();
-                        foreach (var enumValue in enumValues)
-                        {
-                            var displayAttribute = enumType.GetMember(enumValue.ToString())[0].GetCustomAttribute<DisplayAttribute>();
-                            var displayName = displayAttribute?.GetName() ?? enumValue.ToString();
-                            <option value="@enumValue">@displayName</option>
+    <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.js"></script>
+    <style>
+        .panel {
+            height: 120vh;
+        }
+
+        a {
+            text-decoration: none;
+            font-size: 1vw;
+            color: #ffffff;
+        }
+
+        .aside {
+            margin-top: 100px;
+            margin-left: 50px;
+        }
+
+        h6 {
+            font-size: 1vw;
+            color: #ffffff;
+        }
+    </style>
+</head>
+<body>
+    <div class="row">
+        @Html.Partial("_PanelPartial")
+
+        <div class="aside container mt-5 col-md-9 col-sm-9">
+            <h3>Çalışan Güncelle</h3>
+            <form asp-action="EditEmployee">
+                <div class="form-group mb-3">
+                    <label asp-for="Email" class="control-label"></label>
+                    <input value="@Model.Email" asp-for="Email" class="form-control" />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+                <div class="form-group mb-3">
+                    <label asp-for="LastName" class="control-label"></label>
+                    <input value="@Model.LastName" asp-for="LastName" class="form-control" />
+                    <span asp-validation-for="LastName" class="text-danger"></span>
+                </div>
+                <div class="form-group mb-3">
+                    <label asp-for="Address" class="control-label"></label>
+                    <input value="@Model.Address" asp-for="Address" class="form-control" />
+                    <span asp-validation-for="Address" class="text-danger"></span>
+                </div>
+                <div class="form-group mb-3">
+                    <label asp-for="PhoneNumber" class="control-label"></label>
+                    <input value="@Model.PhoneNumber" asp-for="PhoneNumber" class="form-control" />
+                    <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                </div>
+                <div class="form-group mb-3">
+                    <label asp-for="Gender" class="control-label"></label>
+                    <select asp-for="Gender" class="form-control">
+                        @{
+                            var enumType = typeof(Gender);
+                            var enumValues = enumType.GetEnumValues();
+                            foreach (var enumValue in enumValues)
+                            {
+                                var displayAttribute = enumType.GetMember(enumValue.ToString())[0].GetCustomAttribute<DisplayAttribute>();
+                                var displayName = displayAttribute?.GetName() ?? enumValue.ToString();
+                                <option value="@enumValue">@displayName</option>
+                            }
+                            <option value="" disabled selected>Cinsiyet seçiniz!</option>
                         }
-                    }
+                    </select>
+                    <span asp-validation-for="Gender" class="text-danger"></span>
+                </div>
+                <div class="form-group mb-3">
+                    <label asp-for="JobId" class="control-label"></label>
+                    @* <select asp-for="JobId" asp-items="@Model.Jobs.Select(job => new SelectListItem { Text = job.Title, Value = job.Id.ToString() })" class="form-control"> *@
+                    <select asp-for="JobId" asp-items="@Model.Jobs.Select(job => new SelectListItem { Text = job.Title, Value = job.Id.ToString() })" class="form-control">
 
-                </select>
-                <span asp-validation-for="Gender" class="text-danger"></span>
+                        <option value="" disabled selected>Meslek seçiniz!</option>
+                    </select>
+                    <span asp-validation-for="JobId" class="text-danger"></span>
+                </div>
+                <div class="form-group mb-4">
+                    <input asp-for="Id" type="hidden" class="form-control" />
+                    <span asp-validation-for="Id" class="text-danger"></span>
+                </div>
+                <div class="form-group mb-3">
+                    <input value=@Model.DepartmentId asp-for="DepartmentId" type="hidden" class="form-control" />
+                    <span asp-validation-for="DepartmentId" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Güncelle" class="btn btn-primary" />
+                </div>
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            </form>
+            <div>
+                <hr>
+                <a asp-controller="Employee" asp-action="Home"><button class="custom-button custom-button--create-entity">Anasayfaya Dön</button></a>
             </div>
-            <div class="form-group mb-3">
-                <label asp-for="Job" class="control-label"></label>
-                <input asp-for="Job" class="form-control" />
-                <span asp-validation-for="Job" class="text-danger"></span>
-            </div>
-            <div class="form-group mb-3">
-                <input value=@Model.DepartmentId asp-for="DepartmentId" type="hidden" class="form-control" />
-                <span asp-validation-for="DepartmentId" class="text-danger"></span>
-            </div>
-            <div class="form-group d-grid mb-3">
-                <input type="submit" value="Güncelle" class="btn btn-primary" />
-            </div>
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-        </form>
+        </div>
     </div>
-</div>
-
-<div>
-    <a asp-action="Employees">Back to List</a>
-</div>
-
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}
+</body>

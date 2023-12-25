@@ -9,12 +9,12 @@ namespace humanResourceProject.Models.VMs
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public decimal AmountOfAdvance { get; set; }
-        public DateTime CreateDate { get; set; }
+        public Currency Currency { get; set; }
         public DateTime ExpiryDate { get; set; }
         public AdvanceType AdvanceType { get; set; }
         public string Explanation { get; set; }
         public RequestStatus AdvanceStatus { get; set;}
-        public Currency Currency { get; set; }
+        public DateTime CreateDate { get; set; }
 
     }
 }

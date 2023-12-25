@@ -36,17 +36,16 @@ namespace humanResourceProject.Models.DTOs
         [DisplayName("Cinsiyet*")]
         public Gender Gender { get; set; }
 
+        public Guid DepartmentId { get; set; }
+        //public List<DepartmentVM>? Departments { get; set; }
+
         [Required(ErrorMessage = "Meslek alanı boş geçilemez!")]
         [DisplayName("Meslek*")]
-        [RegularExpression(@"^[a-zA-ZğĞıİşŞüÜöÖçÇ\s]*$", ErrorMessage = "Yalnızca alfabetik karakterlere izin verilir.")]
-        public string Job { get; set; }
-        public Guid DepartmentId { get; set; }
-        public List<DepartmentVM>? Departments { get; set; }
         public Guid JobId { get; set; }
-        public List<JobVM>? Jobs { get; set; }
-        public DateTime UpdateDate => DateTime.Now;
-        public Status Status => Status.Modified;
-        public RequestStatus RequestStatus => RequestStatus.Pending;
+        public List<JobVM> Jobs { get; set; }
+        public DateTime UpdateDate { get; set; }
+        public Status Status { get; set; }
+        //public RequestStatus RequestStatus { get; set; }
 
     }
 }

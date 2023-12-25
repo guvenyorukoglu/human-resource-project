@@ -146,7 +146,7 @@ namespace humanResourceProject.Presentation.Controllers
             if (response.IsSuccessStatusCode)
             {
                 var content = await response.Content.ReadAsStringAsync();
-                var expense = JsonConvert.DeserializeObject<ExpensePersonnelVM>(content);
+                var expense = JsonConvert.DeserializeObject<UpdateExpenseDTO>(content);
                 return View(expense);
 
             }
@@ -154,17 +154,18 @@ namespace humanResourceProject.Presentation.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> UpdateExpense(ExpenseDTO model)
+        public async Task<IActionResult> UpdateExpense(UpdateExpenseDTO model)
         {
             if (!ModelState.IsValid)
                 return View(model);
+
             var json = JsonConvert.SerializeObject(model);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
 
             var response = await _httpClient.PutAsync($"api/Expense", content);
 
             if (response.IsSuccessStatusCode)
-                return RedirectToAction("Expense");
+                return RedirectToAction(nameof(MyExpenses));
 
             ModelState.AddModelError(response.StatusCode.ToString(), "Bir hata oluştu.");
             return View(model);
@@ -175,10 +176,12 @@ namespace humanResourceProject.Presentation.Controllers
         [HttpGet]
         public async Task<IActionResult> ApproveExpense(Guid id)
         {
-            var response = await _httpClient.GetAsync($"api/Expense/GetUpdateExpenceDTO/{id}");
+            var response = await _httpClient.GetAsync($"api/Expense/GetUpdateExpenseDTO/{id}");
 
             if (!response.IsSuccessStatusCode)
+            {
                 return View("Error");
+            }
 
             var content = await response.Content.ReadAsStringAsync();
             var model = JsonConvert.DeserializeObject<UpdateExpenseDTO>(content);
@@ -200,7 +203,7 @@ namespace humanResourceProject.Presentation.Controllers
         [HttpGet]
         public async Task<IActionResult> RejectExpense(Guid id)
         {
-            var response = await _httpClient.GetAsync($"api/Expense/GetUpdateExpenceDTO/{id}");
+            var response = await _httpClient.GetAsync($"api/Expense/GetUpdateExpenseDTO/{id}");
 
             if (!response.IsSuccessStatusCode)
                 return View("Error");

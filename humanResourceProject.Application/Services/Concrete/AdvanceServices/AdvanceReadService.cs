@@ -46,7 +46,7 @@ namespace humanResourceProject.Application.Services.Concrete.AdvanceServices
                                                     Currency = x.Currency
                                                 },
                                                 where: x => x.Status != Status.Deleted && x.Status != Status.Inactive,
-                                                orderBy: x => x.OrderByDescending(x => x.ExpiryDate),
+                                                orderBy: x => x.OrderByDescending(x => x.CreateDate),
                                                 include: x => x.Include(x => x.Employee));
             return advances;
         }
@@ -69,7 +69,7 @@ namespace humanResourceProject.Application.Services.Concrete.AdvanceServices
                                                     Currency = x.Currency
                                                 },
                                                 where: x => (x.Status != Status.Deleted && x.Status != Status.Inactive) && x.Employee.DepartmentId == id,
-                                                orderBy: x => x.OrderByDescending(x => x.ExpiryDate),
+                                                orderBy: x => x.OrderByDescending(x => x.CreateDate),
                                                 include: x => x.Include(x => x.Employee));
             return advances;
         }
@@ -91,7 +91,7 @@ namespace humanResourceProject.Application.Services.Concrete.AdvanceServices
                                                     Currency = x.Currency
                                                 },
                                                 where: x => (x.Status != Status.Deleted && x.Status != Status.Inactive) && x.Employee.Id == id,
-                                                orderBy: x => x.OrderByDescending(x => x.ExpiryDate),
+                                                orderBy: x => x.OrderByDescending(x => x.CreateDate),
                                                 include: x => x.Include(x => x.Employee));
             return advances;
         }
@@ -121,7 +121,7 @@ namespace humanResourceProject.Application.Services.Concrete.AdvanceServices
                                                     Currency = x.Currency
                                                 },
                                                 where: x => (x.Status != Status.Deleted && x.Status != Status.Inactive) && x.Employee.Department.CompanyId == id,
-                                                orderBy: x => x.OrderByDescending(x => x.ExpiryDate),
+                                                orderBy: x => x.OrderByDescending(x => x.CreateDate),
                                                 include: x => x.Include(x => x.Employee).ThenInclude(e => e.Department));
             return advances;
         }
