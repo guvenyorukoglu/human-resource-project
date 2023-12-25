@@ -6,7 +6,7 @@ namespace humanResourceProject.Models.DTOs
 {
     public class LeaveDTO
     {
-        //public Guid Id { get; set; }
+        public Guid Id { get; set; }
         [Required(ErrorMessage = "İzin türü boş geçilemez!")]
         [DisplayName("İzin Türü*")]
         public LeaveType LeaveType { get; set; }
@@ -19,7 +19,7 @@ namespace humanResourceProject.Models.DTOs
         public Guid EmployeeId { get; set; }
         public Guid ManagerId { get; set; }
         //public Status Status { get; set; } = Status.Active;
-        public DateTime CreateDate { get; set; } = DateTime.Now;
+        public DateTime CreateDate { get; set; }
         //public DateTime? UpdateDate { get; set; }
         //public RequestStatus LeaveStatus { get; set; }
         [Required(ErrorMessage = "İzin gün miktarı boş geçilemez!")]

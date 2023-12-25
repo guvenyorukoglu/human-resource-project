@@ -12,26 +12,23 @@ namespace humanResourceProject.Models.DTOs
     public class UpdateLeaveDTO
     {
         public Guid Id { get; set; }
-        [Required(ErrorMessage = "İzin tipi boş geçilemez!")]
-        [DisplayName("İzin tipi*")]
+        public Guid EmployeeId { get; set; }
+        [Required(ErrorMessage = "İzin tipi alanı boş geçilemez!")]
+        [DisplayName("İzin Tipi*")]
         public LeaveType LeaveType { get; set; }
         [Required(ErrorMessage = "İzin başlangıç tarihi boş geçilemez!")]
-        [DisplayName("İzin başlangıç Tarihi*")]
+        [DisplayName("İzin Başlangıç Tarihi*")]
         public DateTime StartDateOfLeave { get; set; }
         [Required(ErrorMessage = "İzin bitiş tarihi boş geçilemez!")]
-        [DisplayName("İzin bitiş Tarihi*")]
+        [DisplayName("İzin Bitiş Tarihi*")]
         public DateTime EndDateOfLeave { get; set; }
-        public Guid EmployeeId { get; set; }
-        //public Guid ManagerId { get; set; }
-        //public Status Status { get; set; } = Status.Modified;
-        //public DateTime? UpdateDate { get; set; } = DateTime.Now;
         public RequestStatus LeaveStatus { get; set; }
-        [Required(ErrorMessage = "İzin süresi boş geçilemez!")]
-        [DisplayName("İzin süresi*")]
+        [Required(ErrorMessage = "İzin gün miktarı boş geçilemez!")]
+        [DisplayName("İzinli Gün Miktarı*")]
         public decimal DaysOfLeave { get; set; }
-        
-        [Required(ErrorMessage = "İzin açıklaması boş geçilemez!")]
-        [DisplayName("İzin Açıklaması*")]
+        [Required(ErrorMessage = "Açıklama alanı boş geçilemez!")]
+        [DisplayName("Açıklama*")]
+        [StringLength(500, ErrorMessage = "Açıklama en fazla 500 en az 5 karakter olmalıdır.", MinimumLength = 5)]
         public string Explanation { get; set; }
     }
 }

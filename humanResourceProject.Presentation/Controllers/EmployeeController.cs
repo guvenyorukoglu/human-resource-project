@@ -262,31 +262,46 @@ namespace humanResourceProject.Presentation.Controllers
             if (response.IsSuccessStatusCode)
             {
                 var content = await response.Content.ReadAsStringAsync();
-                var employee = JsonConvert.DeserializeObject<UpdateUserDTO>(content);
-                return View(employee);
-
+                var model = JsonConvert.DeserializeObject<UpdateUserDTO>(content);
+                foreach (var job in jobs)
+                {
+                    jobs.Add(new JobVM()
+                    {
+                        Id = job.Id,
+                        Title = job.Title,
+                        Description = job.Description
+                    });
+                }
+                model.Jobs = jobs;
+                return View(model);
             }
             return View("Error");
         }
 
         [HttpPost]
-        public async Task<IActionResult> EditEmployee(UpdateUserDTO employee)
+        public async Task<IActionResult> EditEmployee(UpdateUserDTO model)
         {
-            var json = JsonConvert.SerializeObject(employee);
+            if (!ModelState.IsValid)
+            {
+                TempData["Result"] = "modelinvalid";
+                return View(model);
+            }
+
+            var json = JsonConvert.SerializeObject(model);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
 
             var response = await _httpClient.PutAsync($"api/AppUser", content);
 
             if (response.IsSuccessStatusCode)
             {
-                return RedirectToAction("Employees");
+                return RedirectToAction(nameof(Employees));
             }
 
             ModelState.AddModelError(response.StatusCode.ToString(), "Bir hata oluştu.");
-            return View(employee);
+            return View(model);
         }
-
         [HttpGet]
+
         public async Task<IActionResult> Home()
         {
             //var response = await _httpClient.GetAsync($"api/AppUser/EmployeeById/{Guid.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value)}");

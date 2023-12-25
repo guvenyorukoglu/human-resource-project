@@ -1,4 +1,4 @@
-﻿@using System.Reflection;
+@using System.Reflection;
 @using System.ComponentModel.DataAnnotations;
 @using humanResourceProject.Domain.Enum;
 @using humanResourceProject.Models.DTOs;
@@ -23,10 +23,6 @@
         }
     </style>
 </head>
-
-
-
-<hr />
 <body>
    <div class="row">
 
@@ -38,12 +34,12 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group  mb-4">
                 <label asp-for="StartDateOfLeave" class="control-label"></label>
-                <input id="dateInputStart" value="@Model.StartDateOfLeave.ToString("yyyy-MM-dd")" min="@DateTime.Now.ToString("yyyy-MM-dd")" type="date" asp-for="StartDateOfLeave" class="form-control" />
+                <input id="dateInputStart" value="@Model.StartDateOfLeave.ToString("yyyy-MM-dd")" min="@DateTime.Now." type="date" asp-for="StartDateOfLeave" class="form-control" />
                 <span asp-validation-for="StartDateOfLeave" class="text-danger"></span>
             </div>
             <div class="form-group  mb-4">
                 <label asp-for="EndDateOfLeave" class="control-label"></label>
-                <input id="dateInputEnd" value="@Model.EndDateOfLeave.ToString("yyyy-MM-dd")" min="@DateTime.Now.ToString("yyyy-MM-dd")" type="date" asp-for="EndDateOfLeave" class="form-control" />
+                <input id="dateInputEnd" value="@Model.EndDateOfLeave.ToString("yyyy-MM-dd")" min="@DateTime.Now" type="date" asp-for="EndDateOfLeave" class="form-control" />
                 <span asp-validation-for="EndDateOfLeave" class="text-danger"></span>
             </div>
             <div class="form-group  mb-4">
@@ -84,22 +80,11 @@
             <div class="form-group">
                 <input type="submit" value="Güncelle" class="btn btn-primary" />
             </div>
-        </form>
+            </form>
+            <div>
+                <hr>
+                <a asp-controller="Employee" asp-action="Home"><button class="custom-button custom-button--create-entity">Anasayfaya Dön</button></a>
+            </div>
+        </div>
     </div>
-  </div>
 </body>
-
-<div>
-    <a asp-action="Index">Anasayfaya Dön</a>
-</div>
-
-<script>
-    // Set the initial value in the input field
-    document.getElementById('amountInput').value = @Model.DaysOfLeave;
-    document.getElementById('dateInputStart').value = @Model.StartDateOfLeave.ToString("yyyy-MM-dd");
-    document.getElementById('dateInputEnd').value = @Model.EndDateOfLeave.ToString("yyyy-MM-dd");
-
-    document.getElementById('amountInput').addEventListener('input', function () {
-        this.value = parseFloat(this.value) - (parseFloat(this.value) % 0.5);
-    });
-</script>

@@ -9,9 +9,6 @@ using humanResourceProject.Domain.IRepository.BaseRepos;
 using humanResourceProject.Models.DTOs;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Http;
-using humanResourceProject.Presentation.Controllers;
 
 
 namespace humanResourceProject.Application.Services.Concrete.AppUserServices
@@ -54,6 +51,7 @@ namespace humanResourceProject.Application.Services.Concrete.AppUserServices
 
             AppUser newUser = _mapper.Map<AppUser>(model);
             newUser.UserName = newUser.Email;
+            newUser.CreateDate = DateTime.Now;
             IdentityResult result = await _userManager.CreateAsync(newUser, model.Password);
             if (result.Succeeded)
             {
@@ -70,6 +68,7 @@ namespace humanResourceProject.Application.Services.Concrete.AppUserServices
 
             AppUser newUser = _mapper.Map<AppUser>(model);
             newUser.UserName = newUser.Email;
+            newUser.CreateDate = DateTime.Now;
             IdentityResult result = await _userManager.CreateAsync(newUser, model.Password);
             if (result.Succeeded)
             {
@@ -89,6 +88,7 @@ namespace humanResourceProject.Application.Services.Concrete.AppUserServices
 
             AppUser newUser = _mapper.Map<AppUser>(model);
             newUser.UserName = newUser.Email;
+            newUser.CreateDate = DateTime.Now;
             IdentityResult result = await _userManager.CreateAsync(newUser, model.Password);
 
             if (result.Succeeded)
@@ -101,17 +101,11 @@ namespace humanResourceProject.Application.Services.Concrete.AppUserServices
             AppUser updatedUser = await _readRepository.GetSingleDefault(x => x.Id == model.Id);
             if (updatedUser == null)
                 return IdentityResult.Failed();
-
+            AppUser newUser = _mapper.Map<AppUser>(model);
             updatedUser.Email = model.Email.Trim().ToLowerInvariant() ?? updatedUser.Email;
             updatedUser.NormalizedEmail = model.Email.Trim().ToUpperInvariant() ?? updatedUser.NormalizedEmail;
             updatedUser.UserName = model.Email.Trim().ToLowerInvariant() ?? updatedUser.UserName;
             updatedUser.NormalizedUserName = model.Email.Trim().ToUpperInvariant() ?? updatedUser.NormalizedUserName;
-            updatedUser.LastName = model.LastName ?? updatedUser.LastName;
-            updatedUser.Address = model.Address ?? updatedUser.Address;
-            updatedUser.PhoneNumber = model.PhoneNumber ?? updatedUser.PhoneNumber;
-            updatedUser.Gender = model.Gender;
-            updatedUser.JobId = model.JobId;
-            updatedUser.DepartmentId = model.DepartmentId;
             updatedUser.UpdateDate = DateTime.Now;
             updatedUser.Status = Status.Modified;
 

@@ -1,32 +1,31 @@
 ﻿using humanResourceProject.Domain.Enum;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using humanResourceProject.Domain.Entities.Concrete;
+using Microsoft.AspNetCore.Http;
 
 namespace humanResourceProject.Models.DTOs
 {
     public class UpdateExpenseDTO
     {
-
-
         public Guid Id { get; set; }
-
+        public Guid EmployeeId { get; set; }
         [Required(ErrorMessage = "Açıklama alanı boş geçilemez!")]
         [DisplayName("Açıklama*")]
         [StringLength(500, ErrorMessage = "Açıklama en fazla 500 en az 5 karakter olmalıdır.", MinimumLength = 5)]
-        public string? Explanation { get; set; }
+        public string Explanation { get; set; }
         [Required(ErrorMessage = "Miktar alanı boş geçilemez!")]
         [DisplayName("Harcama Miktarı*")]
         public decimal AmountOfExpense { get; set; }
-        public DateTime? UpdateDate { get; set; }=DateTime.Now;
-        public Status Status { get; set; } = Status.Active;
-        public RequestStatus ExpenseStatus { get; set; } = RequestStatus.Pending;
-      
-
+        public RequestStatus ExpenseStatus { get; set; }
+        [Required(ErrorMessage = "Masraf türü alanı boş geçilemez!")]
+        [DisplayName("Masraf Türü*")]
+        public ExpenseType ExpenseType { get; set; }
+        [Required(ErrorMessage = "Para birimi alanı boş geçilemez!")]
+        [DisplayName("Para Birimi*")]
+        public Currency Currency { get; set; }
+        [Required(ErrorMessage = "Masraf tarihi alanı boş geçilemez!")]
+        [DisplayName("Masraf Tarihi*")]
+        public DateTime DateOfExpense { get; set; }
+        public IFormFile? UploadPath { get; set; }
     }
 }
