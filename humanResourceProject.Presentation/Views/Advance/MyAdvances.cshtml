@@ -39,13 +39,14 @@
         @Html.Partial("_PanelPartial")
 
         <div class="aside container mt-5 col-md-9 col-sm-9">
+            <h3 class="text-center">Avans Taleplerim</h3>
             @if (Model != null)
             {
                 <a asp-action="CreateAdvance" asp-controller="Advance" asp-route-id="@Guid.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value)">
                     <button class="custom-button custom-button--create-entity">Avans Ekle</button>
                 </a>
             }
-            <h3 class="text-center">Avans Taleplerim</h3>
+            
             <div class="pagination-container">
 
                 <script>
