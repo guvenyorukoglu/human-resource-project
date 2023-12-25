@@ -41,9 +41,9 @@ namespace humanResourceProject.Presentation.Controllers
         {
             if(User.IsInRole("Manager"))
             {
-                Guid depatmentId = Guid.Parse(User.Claims.FirstOrDefault(x => x.Type == "DepartmentId").Value);
+                Guid managerId = Guid.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value);
 
-                var response = await _httpClient.GetAsync($"api/Leave/GetLeavesByDepartmentId/{depatmentId}");
+                var response = await _httpClient.GetAsync($"api/Leave/GetLeavesByManagerId/{managerId}");
                 if (response.IsSuccessStatusCode)
                 {
                     var cont = await response.Content.ReadAsStringAsync();
@@ -68,13 +68,18 @@ namespace humanResourceProject.Presentation.Controllers
             return View();
         }
 
+
         [HttpGet]
-        public IActionResult CreateLeave()
+        public async Task<IActionResult> CreateLeave(Guid id)
         {
-            return View(new LeaveDTO()
+            var response = await _httpClient.GetAsync($"api/Leave/GetLeaveDTO/{id}");
+            if (response.IsSuccessStatusCode)
             {
-                EmployeeId = Guid.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value)
-            });
+                var cont = await response.Content.ReadAsStringAsync();
+                var leaveDTO = JsonConvert.DeserializeObject<LeaveDTO>(cont);
+                return View(leaveDTO);
+            }
+            return View();
         }
 
         [HttpPost]

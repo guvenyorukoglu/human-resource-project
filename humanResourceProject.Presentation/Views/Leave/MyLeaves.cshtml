@@ -41,10 +41,9 @@
         @Html.Partial("_PanelPartial")
 
         <div class="aside container mt-5 col-md-9 col-sm-9">
-            <h3>İzin Taleplerim</h3>
             @if (Model != null)
             {
-                <a asp-action="CreateLeave" asp-controller="Leave">
+                <a asp-action="CreateLeave" asp-controller="Leave" asp-route-id="@Guid.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value)">
                     <button class="custom-button custom-button--create-entity">İzin Ekle</button>
                 </a>
             }
@@ -53,7 +52,11 @@
 
                 <script>
                     $(document).ready(function () {
-                        $('#leaves').DataTable();
+                        $('#leaves').DataTable({
+                            "order": [
+                                [2, 'desc']
+                            ]
+                        });
                     });
                 </script>
 
@@ -61,14 +64,16 @@
                        class="display">
                     <thead>
                         <tr>
-                            <th style="width: 10%">İzin Türü</th>
-                            <th style="width: 10%">Talep Tarihi</th>
-                            <th style="width: 10%">İzin Gün Sayısı</th>
+                            <th style="width: 8%">İzin No</th>
+                            <th style="width: 8%">İzin Türü</th>
+                            <th style="width: 6%">Talep Tarihi</th>
+                            <th style="width: 8%">İzin Gün Sayısı</th>
                             <th style="width: 10%">İzin Başlangıç Tarihi</th>
                             <th style="width: 10%">İzin Bitiş Tarihi</th>
                             <th style="width: 15%">Açıklama</th>
+                            <th style="width: 10%">Yönetici</th>
                             <th style="width: 10%">Statü</th>
-                            <th style="width: 25%">İşlemler</th>
+                            <th style="width: 15%">İşlemler</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -82,12 +87,14 @@
                                 var displayLeaveStatus = typeof(RequestStatus).GetMember(item.LeaveStatus.ToString())[0].GetCustomAttribute<DisplayAttribute>();
                                 var displayNameLeaveStatus = displayLeaveStatus?.GetName() ?? item.LeaveStatus.ToString();
                                 <tr>
+                                    <td>@item.LeaveNo</td>
                                     <td>@displayNameLeaveType</td>
-                                    <td>@item.CreateDate.ToString("dd-MM-yyyy")</td>
+                                    <td>@item.CreateDate.ToString("dd.MM.yyyy")</td>
                                     <td>@item.DaysOfLeave</td>
-                                    <td>@item.StartDateOfLeave.ToString("dd-MM-yyyy")</td>
-                                    <td>@item.EndDateOfLeave.ToString("dd-MM-yyyy")</td>
+                                    <td>@item.StartDateOfLeave.ToString("dd.MM.yyyy")</td>
+                                    <td>@item.EndDateOfLeave.ToString("dd.MM.yyyy")</td>
                                     <td>@item.Explanation</td>
+                                    <td>@item.ManagerFullName</td>
                                     <td>@displayNameLeaveStatus</td>
                                     <td>
                                         @if (item.LeaveStatus == RequestStatus.Pending)

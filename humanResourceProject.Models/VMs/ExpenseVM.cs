@@ -23,6 +23,7 @@ namespace humanResourceProject.Models.VMs
         public DateTime CreateDate { get; set; }
         public Guid DepartmentId { get; set; }
         public Guid ManagerId { get; set; }
+        public string ExpenseNo { get; set; }
 
     }
 }

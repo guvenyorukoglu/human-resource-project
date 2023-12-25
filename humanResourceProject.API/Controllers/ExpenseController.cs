@@ -34,6 +34,13 @@ namespace humanResourceProject.API.Controllers
             return Ok(await _expenseReadService.GetAllExpenses());
         }
 
+        [HttpGet]
+        [Route("GetExpenseDTO/{employeeId}")]
+        public async Task<IActionResult> GetExpenseDTO(Guid employeeId)
+        {
+            return Ok(await _expenseReadService.GetExpenseDTO(employeeId));
+        }
+
 
         [HttpPut]
         [Route("UpdateStatus")]
@@ -78,10 +85,10 @@ namespace humanResourceProject.API.Controllers
         }
 
         [HttpGet]
-        [Route("GetExpensesByDepartmentId/{id}")]
-        public async Task<IActionResult> GetExpensesByDepartmentId(Guid id)
+        [Route("GetExpensesByManagerId/{id}")]
+        public async Task<IActionResult> GetExpensesByManagerId(Guid id)
         {
-            return Ok(await _expenseReadService.GetExpensesByDepartmentId(id));
+            return Ok(await _expenseReadService.GetExpensesByManagerId(id));
         }
 
         [HttpGet]

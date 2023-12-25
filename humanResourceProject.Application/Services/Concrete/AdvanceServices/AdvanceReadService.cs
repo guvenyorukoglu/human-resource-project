@@ -6,6 +6,7 @@ using humanResourceProject.Domain.Enum;
 using humanResourceProject.Domain.IRepository.BaseRepos;
 using humanResourceProject.Models.DTOs;
 using humanResourceProject.Models.VMs;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace humanResourceProject.Application.Services.Concrete.AdvanceServices
@@ -14,11 +15,13 @@ namespace humanResourceProject.Application.Services.Concrete.AdvanceServices
     {
         private readonly IBaseReadRepository<Advance> _advanceReadRepository;
         private readonly IMapper _mapper;
+        private readonly UserManager<AppUser> _userManager;
 
-        public AdvanceReadService(IBaseReadRepository<Advance> advanceReadRepository, IMapper mapper) : base(advanceReadRepository)
+        public AdvanceReadService(IBaseReadRepository<Advance> advanceReadRepository, IMapper mapper, UserManager<AppUser> userManager) : base(advanceReadRepository)
         {
             _advanceReadRepository = advanceReadRepository;
             _mapper = mapper;
+            _userManager = userManager;
         }
 
         public async Task<AdvanceDTO> GetAdvanceById(Guid id)
@@ -43,7 +46,8 @@ namespace humanResourceProject.Application.Services.Concrete.AdvanceServices
                                                     LastName = x.Employee.LastName,
                                                     ExpiryDate = x.ExpiryDate,
                                                     AdvanceStatus = x.AdvanceStatus,
-                                                    Currency = x.Currency
+                                                    Currency = x.Currency,
+                                                    AdvanceNo = x.AdvanceNo
                                                 },
                                                 where: x => x.Status != Status.Deleted && x.Status != Status.Inactive,
                                                 orderBy: x => x.OrderByDescending(x => x.CreateDate),
@@ -51,7 +55,7 @@ namespace humanResourceProject.Application.Services.Concrete.AdvanceServices
             return advances;
         }
 
-        public async Task<List<AdvanceVM>> GetAdvancesByDepartmentId(Guid id)
+        public async Task<List<AdvanceVM>> GetAdvancesByManagerId(Guid id)
         {
             List<AdvanceVM>? advances = await _advanceReadRepository.GetFilteredList(
                                                 select: x => new AdvanceVM
@@ -66,9 +70,10 @@ namespace humanResourceProject.Application.Services.Concrete.AdvanceServices
                                                     LastName = x.Employee.LastName,
                                                     ExpiryDate = x.ExpiryDate,
                                                     AdvanceStatus = x.AdvanceStatus,
-                                                    Currency = x.Currency
+                                                    Currency = x.Currency,
+                                                    AdvanceNo = x.AdvanceNo
                                                 },
-                                                where: x => (x.Status != Status.Deleted && x.Status != Status.Inactive) && x.Employee.DepartmentId == id,
+                                                where: x => (x.Status != Status.Deleted && x.Status != Status.Inactive) && x.Employee.ManagerId == id,
                                                 orderBy: x => x.OrderByDescending(x => x.CreateDate),
                                                 include: x => x.Include(x => x.Employee));
             return advances;
@@ -88,11 +93,14 @@ namespace humanResourceProject.Application.Services.Concrete.AdvanceServices
                                                     Explanation = x.Explanation,
                                                     AdvanceStatus = x.AdvanceStatus,
                                                     CreateDate = x.CreateDate,
-                                                    Currency = x.Currency
+                                                    Currency = x.Currency,
+                                                    ManagerFullName = x.Employee.Manager.FirstName + " " + x.Employee.Manager.LastName,
+                                                    AdvanceNo = x.AdvanceNo
+
                                                 },
                                                 where: x => (x.Status != Status.Deleted && x.Status != Status.Inactive) && x.Employee.Id == id,
                                                 orderBy: x => x.OrderByDescending(x => x.CreateDate),
-                                                include: x => x.Include(x => x.Employee));
+                                                include: x => x.Include(x => x.Employee).ThenInclude(e => e.Manager));
             return advances;
         }
 
@@ -118,12 +126,26 @@ namespace humanResourceProject.Application.Services.Concrete.AdvanceServices
                                                     LastName = x.Employee.LastName,
                                                     ExpiryDate = x.ExpiryDate,
                                                     AdvanceStatus = x.AdvanceStatus,
-                                                    Currency = x.Currency
+                                                    Currency = x.Currency,
+                                                    AdvanceNo = x.AdvanceNo
                                                 },
                                                 where: x => (x.Status != Status.Deleted && x.Status != Status.Inactive) && x.Employee.CompanyId == id,
                                                 orderBy: x => x.OrderByDescending(x => x.CreateDate),
                                                 include: x => x.Include(x => x.Employee));
             return advances;
+        }
+
+        public async Task<AdvanceDTO> GetAdvanceDTO(Guid employeeId)
+        {
+            AppUser employee = _userManager.FindByIdAsync(employeeId.ToString()).Result;
+            AppUser managerOfEmployee = _userManager.FindByIdAsync(employee.ManagerId.ToString()).Result;
+            AdvanceDTO advanceDTO = new AdvanceDTO()
+            {
+                EmployeeId = employee.Id,
+                ManagerFullName = managerOfEmployee.FirstName + " " + managerOfEmployee.LastName,
+                ManagerEmail = managerOfEmployee.Email
+            };
+            return advanceDTO;
         }
     }
 }

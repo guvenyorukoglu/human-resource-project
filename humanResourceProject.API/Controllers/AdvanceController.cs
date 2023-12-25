@@ -74,10 +74,10 @@ namespace humanResourceProject.API.Controllers
         }
 
         [HttpGet]
-        [Route("GetAdvancesByDepartmentId/{id}")]
-        public async Task<IActionResult> GetAdvancesByDepartmentId(Guid id)
+        [Route("GetAdvancesByManagerId/{id}")]
+        public async Task<IActionResult> GetAdvancesByManagerId(Guid id)
         {
-            return Ok(await _advanceReadService.GetAdvancesByDepartmentId(id));
+            return Ok(await _advanceReadService.GetAdvancesByManagerId(id));
         }
 
         [HttpGet]
@@ -85,6 +85,13 @@ namespace humanResourceProject.API.Controllers
         public async Task<IActionResult> GetAdvancesByCompanyId(Guid id)
         {
             return Ok(await _advanceReadService.GetAdvancesByCompanyId(id));
+        }
+
+        [HttpGet]
+        [Route("GetAdvanceDTO/{employeeId}")]
+        public async Task<IActionResult> GetAdvanceDTO(Guid employeeId)
+        {
+            return Ok(await _advanceReadService.GetAdvanceDTO(employeeId));
         }
 
         [HttpPost]

@@ -1,7 +1,4 @@
-@using System.Reflection;
-@using System.ComponentModel.DataAnnotations;
-@using humanResourceProject.Domain.Enum;
-@using humanResourceProject.Models.DTOs;
+
 @model AdvanceDTO
 @{
     ViewData["Title"] = "CreateAdvance";
@@ -22,87 +19,101 @@
         }
     </style>
 </head>
-<hr />
 <body>
-<div class="row">
-        
-    @Html.Partial("_PanelPartial")
+    <div class="row">
 
-        <div class="col-md-4" style="margin: 0 auto">
-        <form asp-action="CreateAdvance">
-                <h1 class="text-center">Avans Talebi</h1>
-            <div class="form-group mb-3">
-                <label asp-for="AdvanceType" class="control-label"></label>
-                <select asp-for="AdvanceType" class="form-control">
-                    @{
-                        var enumType = typeof(AdvanceType);
-                        var enumValues = enumType.GetEnumValues();
-                            
-                        foreach (var enumValue in enumValues)
-                        {
-                            var displayAttribute = enumType.GetMember(enumValue.ToString())[0].GetCustomAttribute<DisplayAttribute>();
-                            var displayName = displayAttribute?.GetName() ?? enumValue.ToString();
-                                
-                            <option value="@enumValue">@displayName</option>
-                        }
-                            <option value="" disabled selected>Avans Tipi seçiniz!</option>
-                    }
+        @Html.Partial("_PanelPartial")
 
-                </select>
-                <span asp-validation-for="AdvanceType" class="text-danger"></span>
-            </div>
-            <div class="form-group mb-3">
-                <label asp-for="ExpiryDate" class="control-label"></label>
-                <input value="@DateTime.Now.ToString("yyyy-MM-dd")" min="@DateTime.Now.ToString("yyyy-MM-dd")" type="date" asp-for="ExpiryDate" class="form-control" />
-                <span asp-validation-for="ExpiryDate" class="text-danger"></span>
-            </div>
-            <div class="form-group mb-3">
-                <label asp-for="AmountOfAdvance" class="control-label"></label>
-                <input type="number" min="1" asp-for="AmountOfAdvance" class="form-control" />
-                <span asp-validation-for="AmountOfAdvance" class="text-danger"></span>
-            </div>
+        <div class="col-md-4 mt-5" style="margin: 0 auto">
 
-            <div class="form-group mb-3">
-                <label asp-for="Currency" class="control-label"></label>
-                <select asp-for="Currency" class="form-control">
-                    @{
-                        var enumTypeCurrency = typeof(Currency);
-                        var enumValuesCurrency = enumTypeCurrency.GetEnumValues();
-                            
-                        foreach (var enumValue in enumValuesCurrency)
-                        {
-                            var displayAttribute = enumTypeCurrency.GetMember(enumValue.ToString())[0].GetCustomAttribute<DisplayAttribute>();
-                            var displayName = displayAttribute?.GetName() ?? enumValue.ToString();
-                           
-                            <option value="@enumValue">@displayName</option>
-                        }
-                            <option value="" disabled selected>Para birimi seçiniz!</option>
-                    }
 
-                </select>
-                <span asp-validation-for="Currency" class="text-danger"></span>
-            </div>
-
-            <div class="form-group mb-3">
-                <label asp-for="Explanation" class="control-label"></label>
-                <textarea asp-for="Explanation" class="form-control"></textarea>
-                <span asp-validation-for="Explanation" class="text-danger"></span>
-            </div>
-            <div class="form-group mb-3">
-                <input asp-for="EmployeeId" type="hidden" class="form-control" />
-                <span asp-validation-for="EmployeeId" class="text-danger"></span>
-            </div>
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="text-center">
-             <div class="form-group mb-3">
-                <input type="submit" value="Oluştur" class="btn btn-primary" />
-             </div>
-
-                    <div>
-                         <a asp-controller="Employee" asp-action="Home"><button class="custom-button custom-button--create-entity">Ana Sayfaya Dön</button></a>
+            <form asp-action="CreateAdvance">
+                <div class="card shadow p-3 mb-5 bg-body rounded">
+                    <div class="card-header">
+                        <h1 class="card-title">Yeni Avans Talebi</h1>
                     </div>
-            </div>
-        </form>
+                    <div class="card-body">
+                        <div class="form-group mb-3">
+                            <label asp-for="AdvanceType" class="control-label"></label>
+                            <select asp-for="AdvanceType" class="form-control">
+                                @{
+                                    var enumType = typeof(AdvanceType);
+                                    var enumValues = enumType.GetEnumValues();
+
+                                    foreach (var enumValue in enumValues)
+                                    {
+                                        var displayAttribute = enumType.GetMember(enumValue.ToString())[0].GetCustomAttribute<DisplayAttribute>();
+                                        var displayName = displayAttribute?.GetName() ?? enumValue.ToString();
+
+                                        <option value="@enumValue">@displayName</option>
+                                    }
+                                    <option value="" disabled selected>Avans Tipi seçiniz!</option>
+                                }
+
+                            </select>
+                            <span asp-validation-for="AdvanceType" class="text-danger"></span>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label asp-for="ExpiryDate" class="control-label"></label>
+                            <input value="@DateTime.Now.ToString("yyyy-MM-dd")" min="@DateTime.Now.ToString("yyyy-MM-dd")" type="date" asp-for="ExpiryDate" class="form-control" />
+                            <span asp-validation-for="ExpiryDate" class="text-danger"></span>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label asp-for="AmountOfAdvance" class="control-label"></label>
+                            <input type="number" min="1" asp-for="AmountOfAdvance" class="form-control" />
+                            <span asp-validation-for="AmountOfAdvance" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label asp-for="Currency" class="control-label"></label>
+                            <select asp-for="Currency" class="form-control">
+                                @{
+                                    var enumTypeCurrency = typeof(Currency);
+                                    var enumValuesCurrency = enumTypeCurrency.GetEnumValues();
+
+                                    foreach (var enumValue in enumValuesCurrency)
+                                    {
+                                        var displayAttribute = enumTypeCurrency.GetMember(enumValue.ToString())[0].GetCustomAttribute<DisplayAttribute>();
+                                        var displayName = displayAttribute?.GetName() ?? enumValue.ToString();
+
+                                        <option value="@enumValue">@displayName</option>
+                                    }
+                                    <option value="" disabled selected>Para birimi seçiniz!</option>
+                                }
+
+                            </select>
+                            <span asp-validation-for="Currency" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label asp-for="Explanation" class="control-label"></label>
+                            <textarea asp-for="Explanation" class="form-control" rows="8"></textarea>
+                            <span asp-validation-for="Explanation" class="text-danger"></span>
+                        </div>
+                        <div class="form-group mb-3">
+                            <input asp-for="EmployeeId" type="hidden" class="form-control" />
+                            <input asp-for="ManagerFullName" type="hidden" class="form-control" />
+                            <input asp-for="ManagerEmail" type="hidden" class="form-control" />
+                        </div>
+                        <div class="mb-3">
+                            <label>*Zorunlu alan</label>
+                        </div>
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <div class="text-center">
+                            <div class="form-group mb-3 d-grid">
+                                <input type="submit" value="Oluştur" class="btn btn-primary" />
+                            </div>
+                            <div class="mb-5">
+                                <label title="@Model.ManagerEmail"><em class="fs-6 text-muted">Onaylaması gereken yönetici: <span class="text-uppercase">@Model.ManagerFullName</span></em></label>
+                            </div>
+                            <div>
+                                <a asp-controller="Employee" asp-action="Home"><button class="btn btn-secondary">Ana Sayfaya Dön</button></a>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </form>
+        </div>
     </div>
-</div>
 </body>
