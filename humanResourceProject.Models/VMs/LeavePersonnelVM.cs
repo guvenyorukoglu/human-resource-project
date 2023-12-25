@@ -1,11 +1,6 @@
 ﻿using humanResourceProject.Domain.Enum;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations;
 
 namespace humanResourceProject.Models.VMs
 {
@@ -35,7 +30,8 @@ namespace humanResourceProject.Models.VMs
         public RequestStatus LeaveStatus { get; set; }
         //public Status Status { get; set; }
         public DateTime CreateDate { get; set; }
-
+        public string ManagerFullName { get; set; }
+        public string LeaveNo { get; set; }
 
     }
 }

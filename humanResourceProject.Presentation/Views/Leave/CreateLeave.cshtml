@@ -1,7 +1,3 @@
-@using System.Reflection;
-@using System.ComponentModel.DataAnnotations;
-@using humanResourceProject.Domain.Enum;
-@using humanResourceProject.Models.DTOs;
 @model LeaveDTO
 
 @{
@@ -24,65 +20,78 @@
         }
     </style>
 </head>
-
-<hr />
 <body>
-   <div class="row">
+    <div class="row">
 
         @Html.Partial("_PanelPartial")
 
-    <div class="col-md-4" style="margin: 0 auto">
-        <form asp-action="CreateLeave">
-                <h1 class="text-center">İzin Talebi</h1>
-                <div class="form-group mb-4">
-                    <label asp-for="LeaveType" class="control-label"></label>
-                    <select asp-for="LeaveType" class="form-control">
-                        @{
-                            var enumType = typeof(LeaveType);
-                            var enumValues = enumType.GetEnumValues();
-                            foreach (var enumValue in enumValues)
-                            {
-                                var displayAttribute = enumType.GetMember(enumValue.ToString())[0].GetCustomAttribute<DisplayAttribute>();
-                                var displayName = displayAttribute?.GetName() ?? enumValue.ToString();
-                                <option value="@enumValue">@displayName</option>
-                            }
-                            <option value="" disabled selected>İzin tipi seçiniz!</option>
-                        }
-                    </select>
-                    <span asp-validation-for="LeaveType" class="text-danger"></span>
-                </div>
-                <div class="form-group mb-4">
-                    <label asp-for="DaysOfLeave" class="control-label"></label>
-                    <input type="number" min="0.5" step="0.5" asp-for="DaysOfLeave" class="form-control" />
-                    <span asp-validation-for="DaysOfLeave" class="text-danger"></span>
-                </div>
-                <div class="form-group mb-4">
-                    <label asp-for="StartDateOfLeave" class="control-label"></label>
-                    <input value="@DateTime.Now.ToString("dd.MM.yyyy")" min="@DateTime.Now" type="date" asp-for="StartDateOfLeave" class="form-control" />
-                    <span asp-validation-for="StartDateOfLeave" class="text-danger"></span>
-                </div>
-                <div class="form-group mb-4">
-                    <label asp-for="EndDateOfLeave" class="control-label"></label>
-                    <input value="@DateTime.Now.ToString("dd.MM.yyyy")" min="@DateTime.Now" type="date" asp-for="EndDateOfLeave" class="form-control" />
-                    <span asp-validation-for="EndDateOfLeave" class="text-danger"></span>
-                </div>
-                <div class="form-group mb-4">
-                    <label asp-for="Explanation" class="control-label"></label>
-                    <textarea asp-for="Explanation" class="form-control"></textarea>
-                    <span asp-validation-for="Explanation" class="text-danger"></span>
-                </div>
-                <div class="form-group mb-4">
-                    <input asp-for="EmployeeId" type="hidden" class="form-control" />
-                    <span asp-validation-for="EmployeeId" class="text-danger"></span>
-                </div>
-                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <div class="form-group mb-3">
-                    <input type="submit" value="Oluştur" class="btn btn-primary" />
+        <div class="col-md-4 mt-5" style="margin: 0 auto">
+            <form asp-action="CreateLeave">
+                <div class="card shadow p-3 mb-5 bg-body rounded">
+                    <div class="card-header">
+                        <h1 class="card-title">Yeni İzin Talebi</h1>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group mb-3">
+                            <label asp-for="LeaveType" class="control-label"></label>
+                            <select asp-for="LeaveType" class="form-control">
+                                @{
+                                    var enumType = typeof(LeaveType);
+                                    var enumValues = enumType.GetEnumValues();
+                                    foreach (var enumValue in enumValues)
+                                    {
+                                        var displayAttribute = enumType.GetMember(enumValue.ToString())[0].GetCustomAttribute<DisplayAttribute>();
+                                        var displayName = displayAttribute?.GetName() ?? enumValue.ToString();
+                                        <option value="@enumValue">@displayName</option>
+                                    }
+                                    <option value="" disabled selected>İzin türü seçiniz!</option>
+                                }
+                            </select>
+                            <span asp-validation-for="LeaveType" class="text-danger"></span>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label asp-for="DaysOfLeave" class="control-label"></label>
+                            <input type="number" min="0.5" step="0.5" asp-for="DaysOfLeave" class="form-control" />
+                            <span asp-validation-for="DaysOfLeave" class="text-danger"></span>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label asp-for="StartDateOfLeave" class="control-label"></label>
+                            <input value="@DateTime.Now.ToString("yyyy-MM-dd")" min="@DateTime.Now" type="date" asp-for="StartDateOfLeave" class="form-control" />
+                            <span asp-validation-for="StartDateOfLeave" class="text-danger"></span>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label asp-for="EndDateOfLeave" class="control-label"></label>
+                            <input value="@DateTime.Now.ToString("yyyy-MM-dd")" min="@DateTime.Now" type="date" asp-for="EndDateOfLeave" class="form-control" />
+                            <span asp-validation-for="EndDateOfLeave" class="text-danger"></span>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label asp-for="Explanation" class="control-label"></label>
+                            <textarea asp-for="Explanation" class="form-control" rows="8"></textarea>
+                            <span asp-validation-for="Explanation" class="text-danger"></span>
+                        </div>
+                        <div class="form-group mb-3">
+                            <input asp-for="EmployeeId" type="hidden" class="form-control" />
+                            <input asp-for="ManagerFullName" type="hidden" class="form-control" />
+                            <input asp-for="ManagerEmail" type="hidden" class="form-control" />
+                        </div>
+                        <div class="mb-3">
+                            <label>*Zorunlu alan</label>
+                        </div>
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <div class="text-center">
+                        <div class="form-group mb-3 d-grid">
+                            <input type="submit" value="Oluştur" class="btn btn-primary" />
+                        </div>
+                        <div class="mb-5">
+                            <label title="@Model.ManagerEmail"><em class="fs-6 text-muted">Onaylaması gereken yönetici: <span class="text-uppercase">@Model.ManagerFullName</span></em></label>
+                        </div>
+                        <div>
+                                <a asp-controller="Employee" asp-action="Home"><button class="btn btn-secondary">Ana Sayfaya Dön</button></a>
+                        </div>
+                        </div>
+                    </div>
                 </div>
             </form>
-            <div>
-                <a asp-controller="Employee" asp-action="Home"><button class="custom-button custom-button--create-entity">Ana Sayfaya Dön</button></a>
-            </div>
         </div>
     </div>
 </body>

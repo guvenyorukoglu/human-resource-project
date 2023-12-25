@@ -304,40 +304,41 @@ namespace humanResourceProject.Presentation.Controllers
         [HttpGet]
         public async Task<IActionResult> Home()
         {
-            var userId = Guid.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value);
-            var companyId = Guid.Parse(User.Claims.FirstOrDefault(x => x.Type == "CompanyId").Value);
+            //var userId = Guid.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value);
+            //var companyId = Guid.Parse(User.Claims.FirstOrDefault(x => x.Type == "CompanyId").Value);
 
-            var responseLeave = await _httpClient.GetAsync($"api/Leave/FillDashboardLeaveVM/{userId}");
-            var responseAdvance = await _httpClient.GetAsync($"api/Advance/FillDashboardAdvanceVM/{userId}");
-            var responseExpense = await _httpClient.GetAsync($"api/Expense/FillDashboardExpenseVM/{userId}");
-            var responseCompany = await _httpClient.GetAsync($"api/Company/GetCompanyVM/{companyId}");
+            //var responseLeave = await _httpClient.GetAsync($"api/Leave/FillDashboardLeaveVM/{userId}");
+            //var responseAdvance = await _httpClient.GetAsync($"api/Advance/FillDashboardAdvanceVM/{userId}");
+            //var responseExpense = await _httpClient.GetAsync($"api/Expense/FillDashboardExpenseVM/{userId}");
+            //var responseCompany = await _httpClient.GetAsync($"api/Company/GetCompanyVM/{companyId}");
 
-            if (responseLeave.IsSuccessStatusCode && responseAdvance.IsSuccessStatusCode && responseExpense.IsSuccessStatusCode && responseCompany.IsSuccessStatusCode)
-            {
-                var contentLeave = await responseLeave.Content.ReadAsStringAsync();
-                var dashboardLeaveVM = JsonConvert.DeserializeObject<List<DashboardLeaveVM>>(contentLeave);
+            //if (responseLeave.IsSuccessStatusCode && responseAdvance.IsSuccessStatusCode && responseExpense.IsSuccessStatusCode && responseCompany.IsSuccessStatusCode)
+            //{
+            //    var contentLeave = await responseLeave.Content.ReadAsStringAsync();
+            //    var dashboardLeaveVM = JsonConvert.DeserializeObject<List<DashboardLeaveVM>>(contentLeave);
 
-                var contentAdvance = await responseAdvance.Content.ReadAsStringAsync();
-                var dashboardAdvanceVM = JsonConvert.DeserializeObject<List<DashboardAdvanceVM>>(contentAdvance);
+            //    var contentAdvance = await responseAdvance.Content.ReadAsStringAsync();
+            //    var dashboardAdvanceVM = JsonConvert.DeserializeObject<List<DashboardAdvanceVM>>(contentAdvance);
 
-                var contentExpense = await responseExpense.Content.ReadAsStringAsync();
-                var dashboardExpenseVM = JsonConvert.DeserializeObject<List<DashboardExpenseVM>>(contentExpense);
+            //    var contentExpense = await responseExpense.Content.ReadAsStringAsync();
+            //    var dashboardExpenseVM = JsonConvert.DeserializeObject<List<DashboardExpenseVM>>(contentExpense);
 
-                var contentCompany = await responseCompany.Content.ReadAsStringAsync();
-                var dashboardCompanyVM = JsonConvert.DeserializeObject<CompanyVM>(contentCompany);
+            //    var contentCompany = await responseCompany.Content.ReadAsStringAsync();
+            //    var dashboardCompanyVM = JsonConvert.DeserializeObject<CompanyVM>(contentCompany);
 
-                DashboardVM dashboardVM = new DashboardVM()
-                {
-                    Leaves = dashboardLeaveVM,
-                    Advances = dashboardAdvanceVM,
-                    Expenses = dashboardExpenseVM,
-                    Company = dashboardCompanyVM
-                };
+            //    DashboardVM dashboardVM = new DashboardVM()
+            //    {
+            //        Leaves = dashboardLeaveVM,
+            //        Advances = dashboardAdvanceVM,
+            //        Expenses = dashboardExpenseVM,
+            //        Company = dashboardCompanyVM
+            //    };
 
-                return View(dashboardVM);
-            }
+            //    return View(dashboardVM);
+            //}
 
-            return View("Error");
+            //return View("Error");
+            return View();
         }
 
 

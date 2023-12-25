@@ -39,6 +39,8 @@ namespace humanResourceProject.Models.DTOs
         [Required(ErrorMessage = "Masraf tarihi alanı boş geçilemez!")]
         [DisplayName("Masraf Tarihi*")]
         public DateTime DateOfExpense { get; set; }
+        public string ManagerFullName { get; set; }
+        public string ManagerEmail { get; set; }
 
     }
 }

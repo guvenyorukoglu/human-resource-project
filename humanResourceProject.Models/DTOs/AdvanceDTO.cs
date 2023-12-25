@@ -1,21 +1,14 @@
 ﻿using humanResourceProject.Domain.Enum;
-using System.ComponentModel.DataAnnotations;
 using System.ComponentModel;
-using humanResourceProject.Domain.Entities.Concrete;
+using System.ComponentModel.DataAnnotations;
 
 namespace humanResourceProject.Models.DTOs
 {
     public class AdvanceDTO
     {
         public Guid EmployeeId { get; set; }
-        //[Required(ErrorMessage = "İsim alanı boş geçilemez!")]
-        //[DisplayName("İsim*")]
-        //[RegularExpression(@"^[a-zA-ZğĞıİşŞüÜöÖçÇ]*$", ErrorMessage = "Yalnızca alfabetik karakterlere izin verilir.")]
-        //public string EmployeeName { get; set; }
-        //[Required(ErrorMessage = "Soyisim alanı boş geçilemez!")]
-        //[DisplayName("Soyisim*")]
-        //[RegularExpression(@"^[a-zA-ZğĞıİşŞüÜöÖçÇ]*$", ErrorMessage = "Yalnızca alfabetik karakterlere izin verilir.")]
-        //public string EmployeeSurname { get; set; }
+        public string ManagerFullName { get; set; }
+        public string ManagerEmail { get; set; }
         [Required(ErrorMessage = "Miktar alanı boş geçilemez!")]
         [DisplayName("Avans Miktarı*")]
         public decimal AmountOfAdvance { get; set; }

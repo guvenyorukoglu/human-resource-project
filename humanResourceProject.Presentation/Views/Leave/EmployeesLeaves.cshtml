@@ -38,12 +38,16 @@
         @Html.Partial("_PanelPartial")
 
         <div class="aside container mt-5 col-md-9 col-sm-9">
-            <h3>Personel İzin Talepleri</h3>
+            <h3 class="text-center">Personel İzin Talepleri</h3>
             <div class="pagination-container">
 
                 <script>
                     $(document).ready(function () {
-                        $('#leaverequests').DataTable();
+                        $('#leaverequests').DataTable({
+                            "order": [
+                                [2, 'desc']
+                            ]
+                        });
                     });
                 </script>
 
@@ -51,16 +55,17 @@
                        class="display">
                     <thead>
                         <tr>
-                            <th style="width: 12%">İzin Türü</th>
+                            <th style="width: 8%">İzin No</th>
+                            <th style="width: 8%">İzin Türü</th>
                             <th style="width: 7%">Talep Tarihi</th>
-                            <th style="width: 10%">İzin Günü</th>
+                            <th style="width: 9%">İzin Günü</th>
                             <th style="width: 7%">Ad</th>
                             <th style="width: 7%">Soyad</th>
                             <th style="width: 7%">İzin Başlangıç Tarihi</th>
                             <th style="width: 7%">İzin Bitiş Tarihi</th>
                             <th style="width: 14%">Açıklama</th>
                             <th style="width: 8%">Statü</th>
-                            <th style="width: 21%">İşlemler</th>
+                            <th style="width: 18%">İşlemler</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -77,6 +82,7 @@
                                     var displayLeaveStatus = typeof(RequestStatus).GetMember(item.LeaveStatus.ToString())[0].GetCustomAttribute<DisplayAttribute>();
                                     var displayNameLeaveStatus = displayLeaveStatus?.GetName() ?? item.LeaveStatus.ToString();
                                     <tr>
+                                        <td>@item.LeaveNo</td>
                                         <td>@displayNameLeaveType</td>
                                         <td>@item.CreateDate.ToString("dd.MM.yyyy")</td>
                                         <td>@item.DaysOfLeave</td>
@@ -143,13 +149,7 @@
                                                     </button>
                                                 </a>
                                             }
-                                            <a asp-action="UpdateLeave"
-                                               asp-controller="Leave"
-                                               asp-route-id="@item.Id">
-                                                <button class="btn btn-secondary btn-sm d-inline-flex bg-primary gap-1 align-items-center">
-                                                    <i class="fa fa-pen"></i><span>Güncelle</span>
-                                                </button>
-                                            </a>
+                                            
                                         </td>
                                     </tr>
                                 }

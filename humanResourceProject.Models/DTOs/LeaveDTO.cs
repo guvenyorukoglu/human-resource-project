@@ -11,10 +11,10 @@ namespace humanResourceProject.Models.DTOs
         [DisplayName("İzin Türü*")]
         public LeaveType LeaveType { get; set; }
         [Required(ErrorMessage = "İzin başlangıç tarihi boş geçilemez!")]
-        [DisplayName("İzin başlangıç Tarihi*")]
+        [DisplayName("İzin Başlangıç Tarihi*")]
         public DateTime StartDateOfLeave { get; set; }
         [Required(ErrorMessage = "İzin bitiş tarihi boş geçilemez!")]
-        [DisplayName("İzin bitiş Tarihi*")]
+        [DisplayName("İzin Bitiş Tarihi*")]
         public DateTime EndDateOfLeave { get; set; }
         public Guid EmployeeId { get; set; }
         public Guid ManagerId { get; set; }
@@ -28,5 +28,7 @@ namespace humanResourceProject.Models.DTOs
         [Required(ErrorMessage = "İzin açıklaması boş geçilemez!")]
         [DisplayName("İzin Açıklaması*")]
         public string Explanation { get; set; }
+        public string ManagerFullName { get; set; }
+        public string ManagerEmail { get; set; }
     }
 }

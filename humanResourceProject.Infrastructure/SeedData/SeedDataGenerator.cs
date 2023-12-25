@@ -273,10 +273,10 @@ namespace humanResourceProject.Infrastructure.SeedData
                             .RuleFor(a => a.AmountOfAdvance, f => f.Random.Decimal(100, 99999))
                             .RuleFor(a => a.Explanation, f => f.Lorem.Sentence())
                             .RuleFor(a => a.AdvanceType, f => f.PickRandom<AdvanceType>())
+                            .RuleFor(a => a.CreateDate, f => f.Date.Past(1))
                             .RuleFor(a => a.ExpiryDate, (f, a) => f.Date.Soon(expireIn, a.CreateDate))
                             .RuleFor(a => a.Currency, f => f.PickRandom<Currency>())
                             .RuleFor(a => a.AdvanceStatus, f => f.Random.Bool(0.5f) ? RequestStatus.Approved : (f.Random.Bool(0.25f) ? RequestStatus.Pending : RequestStatus.Rejected))
-                            .RuleFor(a => a.CreateDate, f => f.Date.Past(1))
                             .RuleFor(a => a.Status, f => Status.Active)
                             .RuleFor(a => a.EmployeeId, manager.Id);
 
@@ -337,10 +337,10 @@ namespace humanResourceProject.Infrastructure.SeedData
                             .RuleFor(a => a.AmountOfAdvance, f => f.Random.Decimal(100, 99999))
                             .RuleFor(a => a.Explanation, f => f.Lorem.Sentence())
                             .RuleFor(a => a.AdvanceType, f => f.PickRandom<AdvanceType>())
+                            .RuleFor(a => a.CreateDate, f => f.Date.Past(1))
                             .RuleFor(a => a.ExpiryDate, (f, a) => f.Date.Soon(expireIn, a.CreateDate))
                             .RuleFor(a => a.Currency, f => f.PickRandom<Currency>())
                             .RuleFor(a => a.AdvanceStatus, f => f.Random.Bool(0.5f) ? RequestStatus.Approved : (f.Random.Bool(0.25f) ? RequestStatus.Pending : RequestStatus.Rejected))
-                            .RuleFor(a => a.CreateDate, f => f.Date.Past(1))
                             .RuleFor(a => a.Status, f => Status.Active)
                             .RuleFor(a => a.EmployeeId, employee.Id);
 

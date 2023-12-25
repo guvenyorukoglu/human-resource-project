@@ -45,8 +45,8 @@ namespace humanResourceProject.Presentation.Controllers
         {
             if (User.IsInRole("Manager"))
             {
-                Guid depatmentId = Guid.Parse(User.Claims.FirstOrDefault(x => x.Type == "DepartmentId").Value);
-                var response = await _httpClient.GetAsync($"api/Expense/GetExpensesByDepartmentId/{depatmentId}");
+                Guid managerId = Guid.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value);
+                var response = await _httpClient.GetAsync($"api/Expense/GetExpensesByManagerId/{managerId}");
                 if (response.IsSuccessStatusCode)
                 {
                     var cont = await response.Content.ReadAsStringAsync();
@@ -72,14 +72,16 @@ namespace humanResourceProject.Presentation.Controllers
         }
 
         [HttpGet]
-        public IActionResult CreateExpense()
+        public async Task<IActionResult> CreateExpense(Guid id)
         {
-            return View(new ExpenseDTO()
+            var response = await _httpClient.GetAsync($"api/Expense/GetExpenseDTO/{id}");
+            if (response.IsSuccessStatusCode)
             {
-                EmployeeId = Guid.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value),
-                ManagerId = Guid.Parse(User.Claims.FirstOrDefault(x => x.Type == "ManagerId").Value),
-                CreateDate = DateTime.Now
-            });
+                var cont = await response.Content.ReadAsStringAsync();
+                var expenseDTO = JsonConvert.DeserializeObject<ExpenseDTO>(cont);
+                return View(expenseDTO);
+            }
+            return View();
         }
 
         [HttpPost]

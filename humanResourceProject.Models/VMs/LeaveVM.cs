@@ -17,5 +17,6 @@ namespace humanResourceProject.Models.VMs
         public decimal DaysOfLeave { get; set; }
         public RequestStatus LeaveStatus { get; set; }
         public DateTime CreateDate { get; set; }
+        public string LeaveNo { get; set; }
     }
 }
