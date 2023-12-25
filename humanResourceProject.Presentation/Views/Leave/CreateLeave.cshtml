@@ -1,15 +1,41 @@
-﻿@model LeaveDTO
+﻿@using System.Reflection;
+@using System.ComponentModel.DataAnnotations;
+@using humanResourceProject.Domain.Enum;
+@using humanResourceProject.Models.DTOs;
+@model LeaveDTO
 
 @{
     ViewData["Title"] = "CreateLeave";
+    Layout = "~/Views/Shared/_HRLayout.cshtml";
 }
 
-<h1>İzin Oluştur</h1>
+<head>
+
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.css" />
+
+    <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.js"></script>
+    <style>
+        .panel {
+            height: 120vh;
+        }
+
+        a {
+            text-decoration: none;
+        }
+    </style>
+</head>
+
+
 
 <hr />
-<div class="row">
-    <div class="col-md-4">
+<body>
+   <div class="row">
+
+        @Html.Partial("_PanelPartial")
+
+    <div class="col-md-4" style="margin: 0 auto">
         <form asp-action="CreateLeave">
+                <h1 class="text-center">İzin Talebi</h1>
             <div class="form-group mb-4">
                 <label asp-for="DaysOfLeave" class="control-label"></label>
                 <input id="amountInput" value="@Model.DaysOfLeave" type="number" min="0.5" step="0.5" asp-for="DaysOfLeave" class="form-control" />
@@ -27,6 +53,7 @@
                             var displayName = displayAttribute?.GetName() ?? enumValue.ToString();
                             <option value="@enumValue">@displayName</option>
                         }
+                            <option value="" disabled selected>İzin Tipi seçiniz!</option>
                     }
 
                 </select>
@@ -53,20 +80,20 @@
                 <span asp-validation-for="EmployeeId" class="text-danger"></span>
             </div>
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group mb-3">
+          
+            <div class="text-center">
+              <div class="form-group mb-3">
                 <input type="submit" value="Oluştur" class="btn btn-primary" />
-            </div>
+              </div>
+
+                <div>
+                    <a asp-controller="Employee" asp-action="Home">Anasayfaya Dön</a>
+                </div>
+           </div>
         </form>
     </div>
-</div>
-
-<div>
-    <a asp-action="Index">Anasayfaya Dön</a>
-</div>
+   </div>
+</body>
 
 
-@section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
-}
+

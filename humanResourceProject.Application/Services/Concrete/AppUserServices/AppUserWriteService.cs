@@ -128,5 +128,14 @@ namespace humanResourceProject.Application.Services.Concrete.AppUserServices
             AppUser user = await _readRepository.GetSingleDefault(x => x.Id == id);
             return await _userManager.UpdateAsync(user);
         }
+
+        public async Task<IdentityResult> EmployeeById(Guid id)
+        {
+            AppUser user = await _readRepository.GetSingleDefault(x => x.Id == id);
+            return await _userManager.UpdateAsync(user);
+        }
+        
+
+        
     }
 }
