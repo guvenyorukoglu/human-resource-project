@@ -10,11 +10,12 @@ html {
 
 html {
   position: relative;
-  min-height: 100%;
+  /*min-height: 100%;*/
+  min-height: 100vh;
 }
 
 body {
-    margin-bottom: 60px;
+    /*margin-bottom: 60px;*/
     font-family: 'Plus Jakarta Sans', Roboto, sans-serif;
 }
 
