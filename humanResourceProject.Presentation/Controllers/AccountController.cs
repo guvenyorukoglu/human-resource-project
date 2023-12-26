@@ -86,27 +86,6 @@ namespace humanResourceProject.Presentation.Controllers
                 return View(model); // Model valid değil ise validation errorları ile birlikte register sayfasına geri döner
             }
 
-            //Guid departmentId = await CreateDepartment(model);
-            //CompanyManagerRegisterDTO companyManagerRegisterDTO = new CompanyManagerRegisterDTO()
-            //{
-            //    FirstName = model.FirstName,
-            //    MiddleName = model.MiddleName ?? "",
-            //    LastName = model.LastName,
-            //    Email = model.Email,
-            //    Password = model.Password,
-            //    ConfirmPassword = model.ConfirmPassword,
-            //    PhoneNumber = model.PhoneNumber,
-            //    Birthdate = model.Birthdate,
-            //    Address = model.Address,
-            //    IdentificationNumber = model.IdentificationNumber,
-            //    BloodGroup = model.BloodGroup,
-            //    Gender = model.Gender,
-            //    JobId = model.JobId,
-            //    ImagePath = model.ImagePath ?? "",
-            //    UploadPath = model.UploadPath,
-            //    DepartmentId = departmentId
-            //};
-
             var multipartContent = new MultipartFormDataContent();
 
             var properties = typeof(UserRegisterDTO).GetProperties();
@@ -117,27 +96,6 @@ namespace humanResourceProject.Presentation.Controllers
                 var stringContent = new StringContent(value, Encoding.UTF8, MediaTypeNames.Text.Plain);
                 multipartContent.Add(stringContent, property.Name);
             }
-
-
-            //using var multipartContent = new MultipartFormDataContent
-            //    {
-            //        { new StringContent(companyManagerRegisterDTO.FirstName, Encoding.UTF8, MediaTypeNames.Text.Plain), "FirstName" },
-            //        { new StringContent(companyManagerRegisterDTO.MiddleName, Encoding.UTF8, MediaTypeNames.Text.Plain), "MiddleName" },
-            //        { new StringContent(companyManagerRegisterDTO.LastName, Encoding.UTF8, MediaTypeNames.Text.Plain), "LastName" },
-            //        { new StringContent(companyManagerRegisterDTO.Email, Encoding.UTF8, MediaTypeNames.Text.Plain), "Email" },
-            //        { new StringContent(companyManagerRegisterDTO.Password, Encoding.UTF8, MediaTypeNames.Text.Plain), "Password" },
-            //        { new StringContent(companyManagerRegisterDTO.ConfirmPassword, Encoding.UTF8, MediaTypeNames.Text.Plain), "ConfirmPassword" },
-            //        { new StringContent(companyManagerRegisterDTO.PhoneNumber, Encoding.UTF8, MediaTypeNames.Text.Plain), "PhoneNumber" },
-            //        { new StringContent(companyManagerRegisterDTO.Birthdate.ToString(), Encoding.UTF8, MediaTypeNames.Text.Plain), "Birthdate" },
-            //        { new StringContent(companyManagerRegisterDTO.Address, Encoding.UTF8, MediaTypeNames.Text.Plain), "Address" },
-            //        { new StringContent(companyManagerRegisterDTO.IdentificationNumber, Encoding.UTF8, MediaTypeNames.Text.Plain), "IdentificationNumber" },
-            //        { new StringContent(companyManagerRegisterDTO.BloodGroup.ToString(), Encoding.UTF8, MediaTypeNames.Text.Plain), "BloodGroup" },
-            //        { new StringContent(companyManagerRegisterDTO.Gender.ToString(), Encoding.UTF8, MediaTypeNames.Text.Plain), "Gender" },
-            //        { new StringContent(companyManagerRegisterDTO.JobId.ToString(), Encoding.UTF8, MediaTypeNames.Text.Plain), "JobId" },
-            //        { new StringContent(companyManagerRegisterDTO.ImagePath, Encoding.UTF8, MediaTypeNames.Text.Plain), "ImagePath" },
-            //        { new StringContent(companyManagerRegisterDTO.DepartmentId.ToString(), Encoding.UTF8, MediaTypeNames.Text.Plain), "DepartmentId" }
-            //    };
-
 
             if (model.UploadPath != null && model.UploadPath.Length > 0) // Eğer profil fotoğrafı yüklenmiş ise multipartContent'e ekle
             {

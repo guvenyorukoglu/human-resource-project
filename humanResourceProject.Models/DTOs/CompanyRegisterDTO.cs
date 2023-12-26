@@ -28,6 +28,7 @@ namespace humanResourceProject.Models.DTOs
         public string PhoneNumber { get; set; }
         [Required(ErrorMessage = "Personel sayısı alanı boş geçilemez!")]
         [DisplayName("Personel Sayısı*")]
+        [NumberOfEmployeesValidation(ErrorMessage = "Lütfen geçerli bir personel sayısı giriniz!")]
         public int NumberOfEmployees { get; set; }
 
     }
