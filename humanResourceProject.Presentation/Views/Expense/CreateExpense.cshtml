@@ -50,7 +50,7 @@
                         </div>
                         <div class="form-group mb-3">
                             <label asp-for="DateOfExpense" class="control-label"></label>
-                            <input value="@DateTime.Now.ToString("yyyy-MM-dd")" max="@DateTime.Now" type="date" asp-for="DateOfExpense" class="form-control" />
+                            <input id="DateOfExpense" value="@DateTime.Now.ToString("yyyy-MM-dd")" max="@DateTime.Now" type="date" asp-for="DateOfExpense" class="form-control" />
                             <span asp-validation-for="DateOfExpense" class="text-danger"></span>
                         </div>
                         <div class="form-group mb-3">
@@ -114,5 +114,26 @@
             </form>
         </div>
     </div>
+
+    <script>
+        // Bugünün tarihini al
+        var currentDate = new Date();
+
+        // Geçen ayın ilk gününü al
+        var firstDayOfLastMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 2);
+
+        // Convert the first day of last month to a string formatted as 'yyyy-mm-dd'
+        var formattedFirstDayOfLastMonth = firstDayOfLastMonth.toISOString().split('T')[0];
+
+        // Find the input element by its ID (if there is an ID for the input field)
+        var dateInput = document.querySelector('#DateOfExpense');
+
+        // Set the minimum attribute of the input to the first day of the last month
+        if (dateInput) {
+            dateInput.min = formattedFirstDayOfLastMonth;
+            dateInput.max = currentDate.toISOString().split('T')[0];
+        }
+    </script>
+
 </body>
 
