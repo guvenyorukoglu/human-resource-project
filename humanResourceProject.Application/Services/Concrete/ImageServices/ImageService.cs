@@ -1,6 +1,5 @@
 ﻿using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
-using humanResourceProject.Application.Services.Abstract.IAppUserServices;
 using humanResourceProject.Application.Services.Abstract.IBaseServices;
 using humanResourceProject.Application.Services.Abstract.IImageServices;
 using humanResourceProject.Domain.Entities.Concrete;
@@ -25,7 +24,7 @@ namespace humanResourceProject.Application.Services.Concrete.ImageServices
             _appUserWriteService = appUserWriteService;
         }
 
-        public async Task<CompanyManagerRegisterDTO> UploadImageToAzure(CompanyManagerRegisterDTO model)
+        public async Task<UserRegisterDTO> UploadImageToAzure(UserRegisterDTO model)
         {
             if (model.UploadPath == null || model.UploadPath.FileName == null)
             {
@@ -73,7 +72,7 @@ namespace humanResourceProject.Application.Services.Concrete.ImageServices
             AppUser user = await _appUserReadService.GetSingleDefault(x => x.Id == model.Id);
 
             var fileExtension = Path.GetExtension(model.UploadPath.FileName);
-            
+
             using MemoryStream fileUploadStream = new MemoryStream();
             await model.UploadPath.CopyToAsync(fileUploadStream);
             fileUploadStream.Position = 0;
@@ -111,12 +110,12 @@ namespace humanResourceProject.Application.Services.Concrete.ImageServices
         {
             if (model.UploadPath == null || model.UploadPath.FileName == null)
                 return model;
-           
+
 
             var fileExtension = Path.GetExtension(model.UploadPath.FileName);
             if (fileExtension != ".jpg" && fileExtension != ".png" && fileExtension != ".jpeg")
                 return model;
-            
+
             using MemoryStream fileUploadStream = new MemoryStream();
             await model.UploadPath.CopyToAsync(fileUploadStream);
             fileUploadStream.Position = 0;
