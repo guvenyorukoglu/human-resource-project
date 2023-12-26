@@ -4,7 +4,7 @@ namespace humanResourceProject.Application.Services.Abstract.IMailServices
 {
     public interface IMailService
     {
-        Task SendEmailAsync(AppUser user, string recipientEmail, string mailToName, string action, string subject, string body);
+        Task SendEmailAsync(AppUser user, string recipientEmail, string mailToName, string subject, string body);
         //Task SendMessageAsync(AppUser appUser, string action);
         //Task SendUserRegisteredEmail(AppUser appUser, string action);
         //Task SendAccountConfirmEmail(AppUser user, string action);

@@ -38,29 +38,9 @@ namespace humanResourceProject.Presentation.Controllers
         {
             UserRegisterDTO userRegisterDTO = new UserRegisterDTO();
             userRegisterDTO.CompanyId = companyId;
-
-            HttpResponseMessage response = await _httpClient.GetAsync($"api/Job/GetAllJobs/");
-            if (response.IsSuccessStatusCode)
-            {
-                var apiResponse = await response.Content.ReadAsStringAsync();
-                dynamic jobList = JsonConvert.DeserializeObject(apiResponse);
-
-                foreach (var job in jobList)
-                {
-                    jobs.Add(new JobVM()
-                    {
-                        Id = job.id,
-                        Title = job.title,
-                        Description = job.description
-                    });
-                }
-                userRegisterDTO.Jobs = jobs;
-            }
-            else
-            {
-                ModelState.AddModelError(string.Empty, "Bir hata oluştu. Tekrar deneyiniz!");
-                return View(userRegisterDTO);
-            }
+            userRegisterDTO.JobId = Guid.Empty;
+            userRegisterDTO.DepartmentId = Guid.Empty;
+            
             return View(userRegisterDTO);
         }
 
@@ -103,38 +83,37 @@ namespace humanResourceProject.Presentation.Controllers
             if (!ModelState.IsValid)
             {
                 TempData["Result"] = "modelinvalid";
-                model.Jobs = jobs;
                 return View(model); // Model valid değil ise validation errorları ile birlikte register sayfasına geri döner
             }
 
-            Guid departmentId = await CreateDepartment(model);
-            CompanyManagerRegisterDTO companyManagerRegisterDTO = new CompanyManagerRegisterDTO()
-            {
-                FirstName = model.FirstName,
-                MiddleName = model.MiddleName ?? "",
-                LastName = model.LastName,
-                Email = model.Email,
-                Password = model.Password,
-                ConfirmPassword = model.ConfirmPassword,
-                PhoneNumber = model.PhoneNumber,
-                Birthdate = model.Birthdate,
-                Address = model.Address,
-                IdentificationNumber = model.IdentificationNumber,
-                BloodGroup = model.BloodGroup,
-                Gender = model.Gender,
-                JobId = model.JobId,
-                ImagePath = model.ImagePath ?? "",
-                UploadPath = model.UploadPath,
-                DepartmentId = departmentId
-            };
+            //Guid departmentId = await CreateDepartment(model);
+            //CompanyManagerRegisterDTO companyManagerRegisterDTO = new CompanyManagerRegisterDTO()
+            //{
+            //    FirstName = model.FirstName,
+            //    MiddleName = model.MiddleName ?? "",
+            //    LastName = model.LastName,
+            //    Email = model.Email,
+            //    Password = model.Password,
+            //    ConfirmPassword = model.ConfirmPassword,
+            //    PhoneNumber = model.PhoneNumber,
+            //    Birthdate = model.Birthdate,
+            //    Address = model.Address,
+            //    IdentificationNumber = model.IdentificationNumber,
+            //    BloodGroup = model.BloodGroup,
+            //    Gender = model.Gender,
+            //    JobId = model.JobId,
+            //    ImagePath = model.ImagePath ?? "",
+            //    UploadPath = model.UploadPath,
+            //    DepartmentId = departmentId
+            //};
 
             var multipartContent = new MultipartFormDataContent();
 
-            var properties = typeof(CompanyManagerRegisterDTO).GetProperties();
+            var properties = typeof(UserRegisterDTO).GetProperties();
 
             foreach (var property in properties)
             {
-                var value = property.GetValue(companyManagerRegisterDTO)?.ToString() ?? string.Empty;
+                var value = property.GetValue(model)?.ToString() ?? string.Empty;
                 var stringContent = new StringContent(value, Encoding.UTF8, MediaTypeNames.Text.Plain);
                 multipartContent.Add(stringContent, property.Name);
             }
@@ -160,19 +139,18 @@ namespace humanResourceProject.Presentation.Controllers
             //    };
 
 
-            if (companyManagerRegisterDTO.UploadPath != null && companyManagerRegisterDTO.UploadPath.Length > 0) // Eğer profil fotoğrafı yüklenmiş ise multipartContent'e ekle
+            if (model.UploadPath != null && model.UploadPath.Length > 0) // Eğer profil fotoğrafı yüklenmiş ise multipartContent'e ekle
             {
-                string fileExtension = Path.GetExtension(companyManagerRegisterDTO.UploadPath.FileName).ToLower();
+                string fileExtension = Path.GetExtension(model.UploadPath.FileName).ToLower();
 
                 if (fileExtension != ".png" && fileExtension != ".jpg" && fileExtension != ".jpeg")
                 {
                     ModelState.AddModelError(string.Empty, "Yüklediğiniz profil fotoğrafının uzantısı '.png', '.jpg' veya '.jpeg' olmalıdır.");
-                    model.Jobs = jobs;
                     return View(model);
                 }
 
-                var imageContent = new StreamContent(companyManagerRegisterDTO.UploadPath.OpenReadStream());
-                multipartContent.Add(imageContent, "UploadPath", companyManagerRegisterDTO.UploadPath.FileName);
+                var imageContent = new StreamContent(model.UploadPath.OpenReadStream());
+                multipartContent.Add(imageContent, "UploadPath", model.UploadPath.FileName);
             }
 
             HttpResponseMessage response = await _httpClient.PostAsync("/api/Account/RegisterCompanyManager", multipartContent);
@@ -184,30 +162,9 @@ namespace humanResourceProject.Presentation.Controllers
             else
             {
                 ModelState.AddModelError(string.Empty, "Bir hata oluştu. Tekrar deneyiniz!");
-                model.Jobs = jobs;
                 return View(model);
             }
 
-        }
-
-        private async Task<Guid> CreateDepartment(UserRegisterDTO model) // Register işlemi sırasında departman oluşturur ve departman id'sini döner
-        {
-            DepartmentDTO departmentDTO = new DepartmentDTO()
-            {
-                DepartmentName = model.DepartmentName,
-                Description = model.DepartmentDescription ?? "",
-                CompanyId = model.CompanyId
-            };
-
-            var json = JsonConvert.SerializeObject(departmentDTO);
-            var content = new StringContent(json, Encoding.UTF8, "application/json");
-            HttpResponseMessage response = await _httpClient.PostAsync("/api/Department/CreateDepartment", content);
-            if (!response.IsSuccessStatusCode)
-                return Guid.Empty;
-
-            var departmentId = await response.Content.ReadAsStringAsync();
-            departmentId = departmentId.Replace("\"", "");
-            return Guid.Parse(departmentId);
         }
 
         [AllowAnonymous]
@@ -269,7 +226,7 @@ namespace humanResourceProject.Presentation.Controllers
             }
             else
             {
-                ModelState.AddModelError(string.Empty, "Login işlemi başarısız. Tekrar deneyin...");
+                ModelState.AddModelError(string.Empty, "Giriş işlemi başarısız. Lütfen tekrar deneyiniz.");
                 return View(model);
             }
         }

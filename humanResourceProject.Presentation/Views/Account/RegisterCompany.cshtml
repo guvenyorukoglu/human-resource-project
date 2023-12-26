@@ -1,59 +1,72 @@
-﻿@model humanResourceProject.Models.DTOs.CompanyRegisterDTO
+﻿@model CompanyRegisterDTO
 
 @{
     ViewData["Title"] = "RegisterCompany";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <link href="~/lib/toastr.js/toastr.min.css" rel="stylesheet" />
-<h1>Şirket Kaydı</h1>
 
-<h4>Şirketinizin bilgilerini lütfen eksiksiz giriniz.</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="RegisterCompany">
-            <div class="form-group mb-3">
-                <label asp-for="CompanyName" class="control-label"></label>
-                <input asp-for="CompanyName" class="form-control" />
-                <span asp-validation-for="CompanyName" class="text-danger"></span>
+<body class="fs-6 min-vh-100">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card shadow">
+                    <div class="card-body">
+                        <h3 class="text-center fw-bold">ADIM 1</h3>
+                        <p class="text-center text-secondary" style="margin-top: -5px;">Lütfen Şirketinizin Bilgilerini Eksiksiz Giriniz (1/2)</p>
+                        <form asp-action="RegisterCompany">
+                            <div class="form-group mb-3">
+                                <label asp-for="CompanyName" class="control-label"></label>
+                                <input asp-for="CompanyName" class="form-control" />
+                                <span asp-validation-for="CompanyName" class="text-danger"></span>
+                            </div>
+                            <div class="form-group mb-3">
+                                <label asp-for="Address" class="control-label"></label>
+                                <input asp-for="Address" class="form-control" />
+                                <span asp-validation-for="Address" class="text-danger"></span>
+                            </div>
+                            <div class="form-group mb-3">
+                                <label asp-for="TaxNumber" class="control-label"></label>
+                                <input asp-for="TaxNumber" class="form-control" />
+                                <span asp-validation-for="TaxNumber" class="text-danger"></span>
+                            </div>
+                            <div class="form-group mb-3">
+                                <label asp-for="TaxOffice" class="control-label"></label>
+                                <input asp-for="TaxOffice" class="form-control" />
+                                <span asp-validation-for="TaxOffice" class="text-danger"></span>
+                            </div>
+                            <div class="form-group mb-3">
+                                <label asp-for="PhoneNumber" class="control-label"></label>
+                                <input asp-for="PhoneNumber" class="form-control" placeholder="Başında 0 (sıfır) olmadan giriniz." />
+                                <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                            </div>
+                            <div class="form-group mb-3">
+                                <label asp-for="NumberOfEmployees" class="control-label"></label>
+                                <input type="number" min="1" asp-for="NumberOfEmployees" class="form-control" />
+                                <span asp-validation-for="NumberOfEmployees" class="text-danger"></span>
+                            </div>
+                            <div class="mb-3">
+                                <label>*Zorunlu alan</label>
+                            </div>
+                            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+                            <div class="form-group d-grid">
+                                <input type="submit" value="İleri" class="btn btn-primary" />
+                            </div>
+                        </form>
+                    </div>
+                </div>
             </div>
-            <div class="form-group mb-3">
-                <label asp-for="Address" class="control-label"></label>
-                <input asp-for="Address" class="form-control" />
-                <span asp-validation-for="Address" class="text-danger"></span>
-            </div>
-            <div class="form-group mb-3">
-                <label asp-for="TaxNumber" class="control-label"></label>
-                <input asp-for="TaxNumber" class="form-control" />
-                <span asp-validation-for="TaxNumber" class="text-danger"></span>
-            </div>
-            <div class="form-group mb-3">
-                <label asp-for="TaxOffice" class="control-label"></label>
-                <input asp-for="TaxOffice" class="form-control" />
-                <span asp-validation-for="TaxOffice" class="text-danger"></span>
-            </div>
-            <div class="form-group mb-3">
-                <label asp-for="PhoneNumber" class="control-label"></label>
-                <input asp-for="PhoneNumber" class="form-control" />
-                <span asp-validation-for="PhoneNumber" class="text-danger"></span>
-            </div>
-            <div class="form-group mb-3">
-                <label asp-for="NumberOfEmployees" class="control-label"></label>
-                <input type="number" min="1" asp-for="NumberOfEmployees" class="form-control" />
-                <span asp-validation-for="NumberOfEmployees" class="text-danger"></span>
-            </div>
-            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
-            <div class="form-group d-grid">
-                <input type="submit" value="İleri" class="btn btn-primary" />
-            </div>
-        </form>
+        </div>
     </div>
-</div>
+</body>
 
 @section Scripts {
     <script src="~/lib/toastr.js/toastr.min.js"></script>
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 
-@if (TempData["Result"] == "success")
+    @if (TempData["Result"] == "success")
     {
         <script>
             toastr["success"]("Şirket kaydı gerçekleşmiştir.", "Başarılı")

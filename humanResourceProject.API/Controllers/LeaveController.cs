@@ -4,8 +4,6 @@ using humanResourceProject.Application.Services.Abstract.IMailServices;
 using humanResourceProject.Domain.Entities.Concrete;
 using humanResourceProject.Models.DTOs;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
-using System.Net.Http;
 
 namespace humanResourceProject.API.Controllers
 {
@@ -45,7 +43,7 @@ namespace humanResourceProject.API.Controllers
         public async Task<IActionResult> UpdateStatus([FromBody] UpdateLeaveDTO model)
         {
             var result = await _leaveWriteService.UpdateLeave(model);
-            if(!result.Succeeded)
+            if (!result.Succeeded)
             {
                 return BadRequest(result.Errors);
             }
@@ -58,8 +56,8 @@ namespace humanResourceProject.API.Controllers
             {
                 model.LeaveStatus = Domain.Enum.RequestStatus.Approved;
                 string subject = "İzin Onayı!";
-                string body = $"Sayın {user.FirstName} {user.LastName} İzin talebiniz onaylandı. Güzel günler dileriz.";
-                await _mailService.SendEmailAsync(user, recipientEmail, mailToName, action, subject, body);
+                string body = $"<p>Sayın {user.FirstName} {user.LastName},</p><p>İzin talebiniz onaylandı.</p><p>Güzel günler dileriz.</p><br><hr><br><h3>Team Monitorease</h3>";
+                await _mailService.SendEmailAsync(user, recipientEmail, mailToName, subject, body);
                 //_mailService.SendApproveMail(user, action, $"Sayın {user.FirstName} {user.LastName} İznin onaylandı. Güzel günler dileriz.");
 
             }
@@ -67,8 +65,8 @@ namespace humanResourceProject.API.Controllers
             {
                 model.LeaveStatus = Domain.Enum.RequestStatus.Rejected;
                 string subject = "İzin Reddi!";
-                string body = $"Sayın {user.FirstName} {user.LastName} İzin talebiniz reddedildi.";
-                await _mailService.SendEmailAsync(user, recipientEmail, mailToName, action, subject, body);
+                string body = $"<p>Sayın {user.FirstName} {user.LastName},</p><p>İzin talebiniz reddedildi.</p><p>İyi çalışmalar dileriz.</p><br><hr><br><h3>Team Monitorease</h3>";
+                await _mailService.SendEmailAsync(user, recipientEmail, mailToName, subject, body);
                 //_mailService.SendApproveMail(user, action, $"Sayın {user.FirstName} {user.LastName} İznin maalesef reddedildi");
             }
 
@@ -110,8 +108,8 @@ namespace humanResourceProject.API.Controllers
             string mailToName = $"{manager.FirstName} {manager.LastName}";
             string action = "";
             string subject = "İzin Talebi!";
-            string body = $"Sayın {manager.FirstName} {manager.LastName},{employee.FirstName} {employee.LastName} tarafından {model.CreateDate.ToShortDateString()} tarihli {model.DaysOfLeave} gün izin talebi yapılmıştır. Uygulamaya giriş yapıp onaylamanızı rica ederiz.";
-            await _mailService.SendEmailAsync(manager, recipientEmail, mailToName, action, subject, body);
+            string body = $"<p>Sayın {manager.FirstName} {manager.LastName},</p><p>{employee.FirstName} {employee.LastName} tarafından {model.CreateDate.ToShortDateString()} tarihli {model.DaysOfLeave} gün izin talebi yapılmıştır.</p><p>Uygulama üzerinden onaylama ya da reddetme işlemini yapabilirsiniz.</p><p>İyi çalışmalar dileriz.</p><br><hr><br><h3>Team Monitorease</h3>";
+            await _mailService.SendEmailAsync(manager, recipientEmail, mailToName, subject, body);
             return Ok(result);
         }
 

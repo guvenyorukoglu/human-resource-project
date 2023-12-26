@@ -1,5 +1,4 @@
 using humanResourceProject.Domain.Enum;
-using humanResourceProject.Models.VMs;
 using humanResourceProject.Models.Validations;
 using Microsoft.AspNetCore.Http;
 using System.ComponentModel;
@@ -38,14 +37,14 @@ namespace humanResourceProject.Models.DTOs
         [Compare("Password", ErrorMessage = "Bir önceki girilen şifreyle aynı olmalıdır!")]
         public string ConfirmPassword { get; set; }
 
-        [Required(ErrorMessage = "Telefonu alanı boş geçilemez!")]
-        [DisplayName("Telefon*")]
+        [Required(ErrorMessage = "Telefon numarası alanı boş geçilemez!")]
+        [DisplayName("Telefon Numarası*")]
         [PhoneValidations(ErrorMessage = "Lütfen geçerli bir telefon numarası giriniz!")]
         public string PhoneNumber { get; set; }
 
-        [Required(ErrorMessage = "Doğum tarihi boş geçilemez!")]
+        [Required(ErrorMessage = "Doğum tarihi alanı boş geçilemez!")]
         [DisplayName("Doğum Tarihi*")]
-        [BirthdateValidations(ErrorMessage ="18-85 yaş aralığında bir doğum tarihi giriniz!")]
+        [BirthdateValidations(ErrorMessage = "18-85 yaş aralığında bir doğum tarihi giriniz!")]
         public DateTime Birthdate { get; set; }
 
         // public DateTime DateOfEmployment { get; set; }
@@ -55,12 +54,12 @@ namespace humanResourceProject.Models.DTOs
         [StringLength(200, ErrorMessage = "Adres en fazla 200 en az 5 karakter olmalıdır.", MinimumLength = 5)]
         public string Address { get; set; }
 
-        [Required(ErrorMessage = "TC No alanı boş geçilemez!")]
+        [Required(ErrorMessage = "TC kimlik numarası alanı boş geçilemez!")]
         [DisplayName("TC Kimlik Numarası*")]
         [IdentityNumberValidations(ErrorMessage = "Lütfen geçerli bir TC kimlik numarası giriniz!")]
         public string IdentificationNumber { get; set; }
 
-        [Required(ErrorMessage = "Kan Grubu alanı boş geçilemez!")]
+        [Required(ErrorMessage = "Kan grubu alanı boş geçilemez!")]
         [DisplayName("Kan Grubu*")]
         public BloodGroup BloodGroup { get; set; }
 
@@ -68,27 +67,14 @@ namespace humanResourceProject.Models.DTOs
         [DisplayName("Cinsiyet*")]
         public Gender Gender { get; set; }
 
-        [Required(ErrorMessage = "Meslek alanı boş geçilemez!")]
-        [DisplayName("Meslek*")]
-        public Guid JobId { get; set; }
-
-        public List<JobVM>? Jobs { get; set; }
-
         public string? ImagePath { get; set; }
 
         [DisplayName("Profil Fotoğrafı")]
         public IFormFile? UploadPath { get; set; }
 
-        [Required(ErrorMessage = "Departman alanı boş geçilemez!")]
-        [DisplayName("Departman Adı*")]
-        [RegularExpression(@"^[a-zA-ZğĞıİşŞüÜöÖçÇ\s]*$", ErrorMessage = "Yalnızca alfabetik karakterlere izin verilir.")]
-        public string DepartmentName { get; set; }
-
-        [DisplayName("Departman Tanımı")]
-        [RegularExpression(@"^[a-zA-ZğĞıİşŞüÜöÖçÇ\s]*$", ErrorMessage = "Yalnızca alfabetik karakterlere izin verilir.")]
-        [StringLength(500, ErrorMessage = "Adres en fazla 500 karakter olmalıdır.")]
-        public string? DepartmentDescription { get; set; }
-
+        public Guid? ManagerId { get; set; }
+        public Guid JobId { get; set; } = Guid.Empty;
+        public Guid DepartmentId { get; set; } = Guid.Empty;
         public Guid CompanyId { get; set; }
 
 

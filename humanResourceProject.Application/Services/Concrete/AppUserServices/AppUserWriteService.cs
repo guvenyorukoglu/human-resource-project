@@ -77,7 +77,7 @@ namespace humanResourceProject.Application.Services.Concrete.AppUserServices
             return result;
         }
 
-        public async Task<IdentityResult> RegisterCompanyManager(CompanyManagerRegisterDTO model)
+        public async Task<IdentityResult> RegisterCompanyManager(UserRegisterDTO model)
         {
             if (model == null)
                 return IdentityResult.Failed();
@@ -126,6 +126,8 @@ namespace humanResourceProject.Application.Services.Concrete.AppUserServices
             AppUser user = await _readRepository.GetSingleDefault(x => x.Id == id);
             user.Status = Status.Inactive;
             user.UpdateDate = DateTime.Now;
+
+
             return await _userManager.UpdateAsync(user);
         }
     }

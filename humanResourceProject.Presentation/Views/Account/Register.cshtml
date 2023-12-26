@@ -1,149 +1,146 @@
-﻿
-@model UserRegisterDTO
+﻿@model UserRegisterDTO
 
 @{
     ViewData["Title"] = "Register";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <link href="~/lib/toastr.js/toastr.min.css" rel="stylesheet" />
 
-<h2>Yönetici Kaydı</h2>
-<h4>Yönetici bilgilerini lütfen eksiksiz giriniz.</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
+<body class="fs-6">
+    <div class="container">
+        <div class="row justify-content-center min-vh-100">
+            <div class="col-md-8">
+                <div class="card shadow">
+                    <div class="card-body">
+                        <h3 class="text-center fw-bold">ADIM 2</h3>
+                        <p class="text-center text-secondary" style="margin-top: -5px;">Lütfen Yönetici Bilgilerini Eksiksiz Giriniz (2/2)</p>
+                        <form asp-action="Register" asp-controller="Account" method="post" enctype="multipart/form-data">
 
-        <form asp-action="Register" asp-controller="Account" method="post" enctype="multipart/form-data">
-            <div class="form-group mb-3">
-                <label asp-for="FirstName" class="control-label"></label>
-                <input asp-for="FirstName" class="form-control" />
-                <span asp-validation-for="FirstName" class="text-danger"></span>
-            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                            <div class="form-group mb-3">
+                                <label asp-for="FirstName" class="control-label"></label>
+                                <input asp-for="FirstName" class="form-control" />
+                                <span asp-validation-for="FirstName" class="text-danger"></span>
+                            </div>
 
-            <div class="form-group mb-3">
-                <label asp-for="MiddleName" class="control-label"></label>
-                <input asp-for="MiddleName" class="form-control" />
-                <!-- MiddleName nullable olduğundan dolayı asp-validation-for kullanılmamıştır -->
-            </div>
+                            <div class="form-group mb-3">
+                                <label asp-for="MiddleName" class="control-label"></label>
+                                <input asp-for="MiddleName" class="form-control" />
+                                <!-- MiddleName nullable olduğundan dolayı asp-validation-for kullanılmamıştır -->
+                            </div>
 
-            <div class="form-group mb-3">
-                <label asp-for="LastName" class="control-label"></label>
-                <input asp-for="LastName" class="form-control" />
-                <span asp-validation-for="LastName" class="text-danger"></span>
-            </div>
+                            <div class="form-group mb-3">
+                                <label asp-for="LastName" class="control-label"></label>
+                                <input asp-for="LastName" class="form-control" />
+                                <span asp-validation-for="LastName" class="text-danger"></span>
+                            </div>
 
-            <div class="form-group mb-3">
-                <label asp-for="Email" class="control-label"></label>
-                <input asp-for="Email" class="form-control" />
-                <span asp-validation-for="Email" class="text-danger"></span>
-            </div>
+                            <div class="form-group mb-3">
+                                <label asp-for="Email" class="control-label"></label>
+                                <input asp-for="Email" class="form-control" />
+                                <span asp-validation-for="Email" class="text-danger"></span>
+                            </div>
 
-            <div class="form-group mb-3">
-                <label asp-for="Password" class="control-label"></label>
-                <input asp-for="Password" type="password" class="form-control" />
-                <span asp-validation-for="Password" class="text-danger"></span>
-            </div>
+                            <div class="form-group mb-3">
+                                <label asp-for="Password" class="control-label"></label>
+                                <input asp-for="Password" type="password" class="form-control" />
+                                <span asp-validation-for="Password" class="text-danger"></span>
+                            </div>
 
-            <div class="form-group mb-3">
-                <label asp-for="ConfirmPassword" class="control-label"></label>
-                <input asp-for="ConfirmPassword" type="password" class="form-control" />
-                <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
-            </div>
+                            <div class="form-group mb-3">
+                                <label asp-for="ConfirmPassword" class="control-label"></label>
+                                <input asp-for="ConfirmPassword" type="password" class="form-control" />
+                                <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                            </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group mb-3">
+                                        <label asp-for="IdentificationNumber" class="control-label"></label>
+                                        <input asp-for="IdentificationNumber" class="form-control" />
+                                        <span asp-validation-for="IdentificationNumber" class="text-danger"></span>
+                                    </div>
+                                    <div class="form-group mb-3">
+                                        <label asp-for="Birthdate" class="control-label"></label>
+                                        <input value="Birthdate" value="@DateTime.Now.ToString("yyyy-MM-dd")"  max="@DateTime.Now.ToString("yyyy-MM-dd")" asp-for="Birthdate" type="date" class="form-control" />
+                                        <span asp-validation-for="Birthdate" class="text-danger"></span>
+                                    </div>
+                                    <div class="form-group mb-3">
+                                        <label asp-for="Gender" class="control-label"></label>
+                                        <select asp-for="Gender" class="form-control">
+                                            @{
+                                                var enumTypeGender = typeof(Gender);
+                                                var enumValuesGender = enumTypeGender.GetEnumValues();
+                                                foreach (var enumValue in enumValuesGender)
+                                                {
+                                                    var displayAttribute = enumTypeGender.GetMember(enumValue.ToString())[0].GetCustomAttribute<DisplayAttribute>();
+                                                    var displayName = displayAttribute?.GetName() ?? enumValue.ToString();
 
-            <div class="form-group mb-3">
-                <label asp-for="PhoneNumber" class="control-label"></label>
-                <input asp-for="PhoneNumber" class="form-control" />
-                <span asp-validation-for="PhoneNumber" class="text-danger"></span>
-            </div>
+                                                    <option value="@enumValue">@displayName</option>
+                                                }
+                                                <option value="" disabled selected>Cinsiyet seçiniz!</option>
+                                            }
 
-            <div class="form-group mb-3">
-                <label asp-for="Birthdate" class="control-label"></label>
-                <input value="Birthdate" max="@DateTime.Now.ToString("yyyy-MM-dd")" asp-for="Birthdate" type="date" class="form-control" />
-                <span asp-validation-for="Birthdate" class="text-danger"></span>
-            </div>
+                                        </select>
+                                        <span asp-validation-for="Gender" class="text-danger"></span>
+                                    </div>
+                                    <div class="form-group mb-3">
+                                        <label asp-for="BloodGroup" class="control-label"></label>
+                                        <select asp-for="BloodGroup" class="form-control">
+                                            @{
+                                                var enumType = typeof(BloodGroup);
+                                                var enumValues = enumType.GetEnumValues();
+                                                foreach (var enumValue in enumValues)
+                                                {
+                                                    var displayAttribute = enumType.GetMember(enumValue.ToString())[0].GetCustomAttribute<DisplayAttribute>();
+                                                    var displayName = displayAttribute?.GetName() ?? enumValue.ToString();
 
-            <div class="form-group mb-3">
-                <label asp-for="Address" class="control-label"></label>
-                <input asp-for="Address" class="form-control" />
-                <span asp-validation-for="Address" class="text-danger"></span>
-            </div>
+                                                    <option value="@enumValue">@displayName</option>
+                                                }
+                                                <option value="" disabled selected>Kan grubu seçiniz!</option>
+                                            }
 
-            <div class="form-group mb-3">
-                <label asp-for="IdentificationNumber" class="control-label"></label>
-                <input asp-for="IdentificationNumber" class="form-control" />
-                <span asp-validation-for="IdentificationNumber" class="text-danger"></span>
-            </div>
+                                        </select>
+                                        <span asp-validation-for="BloodGroup" class="text-danger"></span>
+                                    </div>
+                            <div class="form-group mb-3">
+                                <label asp-for="PhoneNumber" class="control-label"></label>
+                                <input asp-for="PhoneNumber" class="form-control" placeholder="Başında 0 (sıfır) olmadan giriniz." />
+                                <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                            </div>
 
-            <div class="form-group mb-3">
-                <label asp-for="BloodGroup" class="control-label"></label>
-                <select asp-for="BloodGroup" class="form-control">
-                    @{
-                        var enumType = typeof(BloodGroup);
-                        var enumValues = enumType.GetEnumValues();
-                        foreach (var enumValue in enumValues)
-                        {
-                            var displayAttribute = enumType.GetMember(enumValue.ToString())[0].GetCustomAttribute<DisplayAttribute>();
-                            var displayName = displayAttribute?.GetName() ?? enumValue.ToString();
-                            <option value="@enumValue">@displayName</option>
-                        }
-                    }
-
-                </select>
-                <span asp-validation-for="BloodGroup" class="text-danger"></span>
+                            <div class="form-group mb-3">
+                                <label asp-for="Address" class="control-label"></label>
+                                <input asp-for="Address" class="form-control" />
+                                <span asp-validation-for="Address" class="text-danger"></span>
+                            </div>
+                                </div>
+                                <div class="form-group mb-3">
+                                    <label asp-for="UploadPath" class="control-label"></label>
+                                    <input asp-for="UploadPath" type="file" accept=".png, .jpg, .jpeg" class="form-control" />
+                                    <span asp-validation-for="UploadPath" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <input asp-for="CompanyId" type="hidden" class="form-control" />
+                                    <input asp-for="DepartmentId" type="hidden" class="form-control" />
+                                    <input asp-for="ManagerId" type="hidden" class="form-control" />
+                                    <input asp-for="JobId" type="hidden" class="form-control" />
+                                </div>
+                                <div class="mb-3">
+                                    <label>*Zorunlu alan</label>
+                                </div>
+                                <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+                                <div class="form-group d-grid mb-3">
+                                    <input type="submit" value="Kayıt Ol" class="btn btn-primary" />
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
             </div>
-
-            <div class="form-group mb-3">
-                <label asp-for="Gender" class="control-label"></label>
-                <select asp-for="Gender" class="form-control">
-                    @{
-                        var enumTyp = typeof(Gender);
-                        var enumValus = enumTyp.GetEnumValues();
-                        foreach (var enumValue in enumValus)
-                        {
-                            var displayAttribute = enumTyp.GetMember(enumValue.ToString())[0].GetCustomAttribute<DisplayAttribute>();
-                            var displayName = displayAttribute?.GetName() ?? enumValue.ToString();
-                            <option value="@enumValue">@displayName</option>
-                        }
-                    }
-                </select>
-                <span asp-validation-for="Gender" class="text-danger"></span>
-            </div>
-            <div class="form-group mb-3">
-                <label asp-for="DepartmentName" class="control-label"></label>
-                <input asp-for="DepartmentName" class="form-control" />
-                <span asp-validation-for="DepartmentName" class="text-danger"></span>
-            </div>
-            <div class="form-group mb-3">
-                <label asp-for="DepartmentDescription" class="control-label"></label>
-                <input asp-for="DepartmentDescription" class="form-control" />
-                <span asp-validation-for="DepartmentDescription" class="text-danger"></span>
-            </div>
-            <div class="form-group mb-3">
-                <label asp-for="JobId" class="control-label"></label>
-                <select asp-for="JobId" asp-items="@Model.Jobs.Select(job => new SelectListItem { Text = job.Title, Value = job.Id.ToString() })" class="form-control">
-                    <option value="" disabled>Meslek seçiniz!</option>
-                </select>
-                <span asp-validation-for="JobId" class="text-danger"></span>
-            </div>
-
-            <div class="form-group mb-3">
-                <label asp-for="UploadPath" class="control-label"></label>
-                <input asp-for="UploadPath" type="file" accept=".png, .jpg, .jpeg" class="form-control" />
-                <span asp-validation-for="UploadPath" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input asp-for="CompanyId" type="hidden" class="form-control" />
-                <span asp-validation-for="CompanyId" class="text-danger"></span>
-            </div>
-            <div class="mb-3">
-                <label>*Zorunlu alan</label>
-            </div>
-            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
-            <div class="form-group d-grid mb-3">
-                <input type="submit" value="Kayıt Ol" class="btn btn-primary" />
-            </div>
-        </form>
+        </div>
     </div>
-</div>
+</body>
 
 @section Scripts {
     <script src="~/lib/toastr.js/toastr.min.js"></script>
