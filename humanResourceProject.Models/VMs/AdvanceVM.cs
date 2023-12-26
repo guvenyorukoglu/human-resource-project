@@ -15,6 +15,7 @@ namespace humanResourceProject.Models.VMs
         public string Explanation { get; set; }
         public RequestStatus AdvanceStatus { get; set;}
         public DateTime CreateDate { get; set; }
+        public string AdvanceNo { get; set; }
 
     }
 }

@@ -33,5 +33,7 @@ namespace humanResourceProject.Models.VMs
         public RequestStatus AdvanceStatus { get; set; }
         public DateTime CreateDate { get; set; }
         public Currency Currency { get; set; }
+        public string ManagerFullName { get; set; }
+        public string AdvanceNo { get; set; }
     }
 }

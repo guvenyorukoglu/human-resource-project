@@ -42,9 +42,9 @@ namespace humanResourceProject.Presentation.Controllers
         {
             if (User.IsInRole("Manager"))
             {
-                Guid depatmentId = Guid.Parse(User.Claims.FirstOrDefault(x => x.Type == "DepartmentId").Value);
+                Guid managerId = Guid.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value); 
 
-                var response = await _httpClient.GetAsync($"api/Advance/GetAdvancesByDepartmentId/{depatmentId}");
+                var response = await _httpClient.GetAsync($"api/Advance/GetAdvancesByManagerId/{managerId}");
                 if (response.IsSuccessStatusCode)
                 {
                     var cont = await response.Content.ReadAsStringAsync();
@@ -70,12 +70,16 @@ namespace humanResourceProject.Presentation.Controllers
         }
 
         [HttpGet]
-        public IActionResult CreateAdvance()
+        public async Task<IActionResult> CreateAdvance(Guid id)
         {
-            return View(new AdvanceDTO()
+            var response = await _httpClient.GetAsync($"api/Advance/GetAdvanceDTO/{id}");
+            if (response.IsSuccessStatusCode)
             {
-                EmployeeId = Guid.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value)
-            });
+                var cont = await response.Content.ReadAsStringAsync();
+                var advanceDTO = JsonConvert.DeserializeObject<AdvanceDTO>(cont);
+                return View(advanceDTO);
+            }
+            return View();
         }
 
         [HttpPost]

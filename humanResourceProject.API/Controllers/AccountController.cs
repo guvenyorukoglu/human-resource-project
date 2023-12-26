@@ -67,7 +67,6 @@ namespace humanResourceProject.API.Controllers
                     new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
                 };
                 var token = GetToken(authClaims);
-                var department = await _departmentReadService.GetSingleDefault(x => x.Id == appUser.DepartmentId);
 
                 return Ok(new
                 {
@@ -77,8 +76,8 @@ namespace humanResourceProject.API.Controllers
                     name = appUser.FirstName,
                     surname = appUser.LastName,
                     departmentId = appUser.DepartmentId,
-                    companyId = department.CompanyId,
-                    managerId = appUser.ManagerId,
+                    companyId = appUser.CompanyId,
+                    managerId = appUser.ManagerId ?? Guid.Empty,
                     imagePath = appUser.ImagePath,
                     roles = await _userManager.GetRolesAsync(appUser)
                 });

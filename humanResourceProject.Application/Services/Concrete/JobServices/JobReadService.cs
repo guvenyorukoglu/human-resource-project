@@ -28,7 +28,7 @@ namespace humanResourceProject.Application.Services.Concrete.JobServices
                                                   Description = x.Description
                                               },
                                               where: x => x.Status != Domain.Enum.Status.Deleted && x.Status != Domain.Enum.Status.Inactive,
-                                              orderBy: x => x.OrderByDescending(x => x.CreateDate)
+                                              orderBy: x => x.OrderBy(x => x.Title)
                                               );
             return jobs;
         }

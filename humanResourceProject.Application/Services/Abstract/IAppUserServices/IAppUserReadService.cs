@@ -13,6 +13,7 @@ namespace humanResourceProject.Application.Services.Abstract.IAppUserServices
         Task<List<PersonelVM>> GetEmployeesByCompanyId(Guid companyId);
         Task<List<PersonelVM>> GetEmployeesByDepartmentId(Guid departmentId);
         Task<List<ManagerVM>> GetManagersByDepartmentId(Guid deparmentId);
+        Task<List<ManagerVM>> GetManagersByCompanyId(Guid companyId);
 
     }
 }

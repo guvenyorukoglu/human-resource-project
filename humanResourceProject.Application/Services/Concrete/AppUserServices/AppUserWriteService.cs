@@ -55,9 +55,7 @@ namespace humanResourceProject.Application.Services.Concrete.AppUserServices
             IdentityResult result = await _userManager.CreateAsync(newUser, model.Password);
             if (result.Succeeded)
             {
-               
                 await _userManager.AddToRoleAsync(newUser, "Personel");
-               
             }
             return result;
         }
@@ -123,13 +121,12 @@ namespace humanResourceProject.Application.Services.Concrete.AppUserServices
             return await _userManager.UpdateAsync(user);
         }
 
-        public async Task<IdentityResult> EmployeeById(Guid id)
+        public async Task<IdentityResult> FireEmployee(Guid id)
         {
             AppUser user = await _readRepository.GetSingleDefault(x => x.Id == id);
+            user.Status = Status.Inactive;
+            user.UpdateDate = DateTime.Now;
             return await _userManager.UpdateAsync(user);
         }
-        
-
-        
     }
 }

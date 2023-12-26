@@ -6,6 +6,7 @@ using humanResourceProject.Domain.Enum;
 using humanResourceProject.Domain.IRepository.BaseRepos;
 using humanResourceProject.Models.DTOs;
 using humanResourceProject.Models.VMs;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace humanResourceProject.Application.Services.Concrete.LeaveServices
@@ -14,10 +15,12 @@ namespace humanResourceProject.Application.Services.Concrete.LeaveServices
     {
         private readonly IBaseReadRepository<Leave> _leaveReadRepository;
         private readonly IMapper _mapper;
-        public LeaveReadService(IBaseReadRepository<Leave> leaveReadRepository, IMapper mapper) : base(leaveReadRepository)
+        private readonly UserManager<AppUser> _userManager;
+        public LeaveReadService(IBaseReadRepository<Leave> leaveReadRepository, IMapper mapper, UserManager<AppUser> userManager) : base(leaveReadRepository)
         {
             _leaveReadRepository = leaveReadRepository;
             _mapper = mapper;
+            _userManager = userManager;
         }
 
         public async Task<LeaveDTO> GetLeaveById(Guid id)
@@ -39,11 +42,12 @@ namespace humanResourceProject.Application.Services.Concrete.LeaveServices
                                                                  FirstName = x.Employee.FirstName,
                                                                  LastName = x.Employee.LastName,
                                                                  EmployeeId = x.Employee.Id,
-                                                                 ManagerId = (Guid)x.Employee.Manager.ManagerId,
+                                                                 ManagerId = (Guid)x.Employee.ManagerId,
                                                                  LeaveStatus = x.LeaveStatus,
                                                                  DaysOfLeave = x.DaysOfLeave,
                                                                  CreateDate = x.CreateDate,
-                                                                 Explanation = x.Explanation
+                                                                 Explanation = x.Explanation,
+                                                                 LeaveNo = x.LeaveNo
                                                              },
                                                              where: x => x.Status != Status.Deleted && x.Status != Status.Inactive,
                                                              //commented out because of the error
@@ -66,9 +70,10 @@ namespace humanResourceProject.Application.Services.Concrete.LeaveServices
                                                                 EmployeeId = x.Employee.Id,
                                                                 LeaveStatus = x.LeaveStatus,
                                                                 DaysOfLeave = x.DaysOfLeave,
-                                                                ManagerId = (Guid)x.Employee.Manager.ManagerId,
+                                                                ManagerId = (Guid)x.Employee.ManagerId,
                                                                 CreateDate = x.CreateDate,
-                                                                Explanation = x.Explanation
+                                                                Explanation = x.Explanation,
+                                                                LeaveNo = x.LeaveNo
                                                             },
                                                             where: x => (x.Status != Status.Deleted && x.Status != Status.Inactive) && x.Employee.CompanyId == id,
                                                             orderBy: x => x.OrderByDescending(x => x.CreateDate),
@@ -76,7 +81,7 @@ namespace humanResourceProject.Application.Services.Concrete.LeaveServices
             return leaves;
         }
 
-        public async Task<List<LeaveVM>> GetLeavesByDepartmentId(Guid id)
+        public async Task<List<LeaveVM>> GetLeavesByManagerId(Guid id)
         {
             List<LeaveVM>? leaves = await _leaveReadRepository.GetFilteredList(
                                                              select: x => new LeaveVM
@@ -88,13 +93,14 @@ namespace humanResourceProject.Application.Services.Concrete.LeaveServices
                                                                  FirstName = x.Employee.FirstName,
                                                                  LastName = x.Employee.LastName,
                                                                  EmployeeId = x.Employee.Id,
-                                                                 ManagerId = (Guid)x.Employee.Manager.ManagerId,
+                                                                 ManagerId = (Guid)x.Employee.ManagerId,
                                                                  LeaveStatus = x.LeaveStatus,
                                                                  DaysOfLeave = x.DaysOfLeave,
                                                                  CreateDate = x.CreateDate,
-                                                                 Explanation = x.Explanation
+                                                                 Explanation = x.Explanation,
+                                                                 LeaveNo = x.LeaveNo
                                                              },
-                                                             where: x => (x.Status != Status.Deleted && x.Status != Status.Inactive) && x.Employee.DepartmentId == id,
+                                                             where: x => (x.Status != Status.Deleted && x.Status != Status.Inactive) && x.Employee.ManagerId == id,
                                                              orderBy: x => x.OrderByDescending(x => x.CreateDate),
                                                              include: x => x.Include(x => x.Employee));
             return leaves;
@@ -113,11 +119,13 @@ namespace humanResourceProject.Application.Services.Concrete.LeaveServices
                                                                  LeaveStatus = x.LeaveStatus,
                                                                  DaysOfLeave = x.DaysOfLeave,
                                                                  CreateDate = x.CreateDate,
-                                                                 Explanation = x.Explanation
+                                                                 Explanation = x.Explanation,
+                                                                 ManagerFullName = $"{x.Employee.Manager.FirstName} {x.Employee.Manager.LastName}",
+                                                                 LeaveNo = x.LeaveNo
                                                              },
                                                              where: x => (x.Status != Status.Deleted && x.Status != Status.Inactive) && x.Employee.Id == id,
                                                              orderBy: x => x.OrderByDescending(x => x.CreateDate),
-                                                             include: x => x.Include(x => x.Employee));
+                                                             include: x => x.Include(x => x.Employee).ThenInclude(x => x.Manager));
             return leaves;
         }
 
@@ -126,6 +134,19 @@ namespace humanResourceProject.Application.Services.Concrete.LeaveServices
             Leave leave = await _leaveReadRepository.GetById(id);
             UpdateLeaveDTO updateLeaveDTO = _mapper.Map<UpdateLeaveDTO>(leave);
             return updateLeaveDTO;
+        }
+
+        public async Task<LeaveDTO> GetLeaveDTO(Guid employeeId)
+        {
+            AppUser employee = _userManager.FindByIdAsync(employeeId.ToString()).Result;
+            AppUser managerOfEmployee = _userManager.FindByIdAsync(employee.ManagerId.ToString()).Result;
+            LeaveDTO leaveDTO = new LeaveDTO()
+            {
+                EmployeeId = employee.Id,
+                ManagerFullName = managerOfEmployee.FirstName + " " + managerOfEmployee.LastName,
+                ManagerEmail = managerOfEmployee.Email
+            };
+            return leaveDTO;
         }
     }
 }
