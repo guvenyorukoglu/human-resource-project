@@ -29,8 +29,10 @@ namespace humanResourceProject.Models.DTOs
         [Required(ErrorMessage = "Masraf tarihi alanı boş geçilemez!")]
         [DisplayName("Masraf Tarihi*")]
         public DateTime DateOfExpense { get; set; }
-        [Required(ErrorMessage = "Dosya alanı boş geçilemez!")]
+        //[Required(ErrorMessage = "Dosya alanı boş geçilemez!")]
         [DisplayName("Dosya*")]
         public IFormFile? UploadPath { get; set; }
+        public DateTime CreateDate { get; set; }
+        public string ExpenseNo { get; set; }
     }
 }

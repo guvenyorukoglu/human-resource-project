@@ -19,7 +19,7 @@ namespace humanResourceProject.Models.VMs
         public DateTime DateOfExpense { get; set; }
         public string FilePath { get; set; }
         [DisplayName("Masraf Fotoğrafı")]
-        public IFormFile UploadPath { get; set; }
+        public IFormFile? UploadPath { get; set; }
         public RequestStatus ExpenseStatus { get; set; }
         public Guid EmployeeId { get; set; }
         public Currency Currency { get; set; }

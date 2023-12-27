@@ -3,6 +3,7 @@ using humanResourceProject.Domain.Enum;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel;
 using Microsoft.AspNetCore.Http;
+using static humanResourceProject.Models.Validations.DateTimeValidations;
 
 namespace humanResourceProject.Models.DTOs
 {
@@ -21,13 +22,13 @@ namespace humanResourceProject.Models.DTOs
         //public AppUser Employee { get; set; }
         public Guid EmployeeId { get; set; }
         public Guid ManagerId { get; set; }
-        public DateTime CreateDate { get; set; } = DateTime.Now;
+        public DateTime CreateDate { get; set; }
         [Required(ErrorMessage = "Para birimi alanı boş geçilemez!")]
         [DisplayName("Para Birimi*")]
         public Currency Currency { get; set; }
-        [Required(ErrorMessage = "Dosya alanı boş geçilemez!")]
+        //[Required(ErrorMessage = "Dosya alanı boş geçilemez!")]
         [DisplayName("Dosya*")]
-        public IFormFile UploadPath { get; set; }
+        public IFormFile? UploadPath { get; set; }
         public string? FilePath { get; set; }
 
         [Required(ErrorMessage = "Masraf türü alanı boş geçilemez!")]
@@ -38,6 +39,7 @@ namespace humanResourceProject.Models.DTOs
 
         [Required(ErrorMessage = "Masraf tarihi alanı boş geçilemez!")]
         [DisplayName("Masraf Tarihi*")]
+        [ExpenseMaxDateTimeValidations(ErrorMessage = "Harcamayı şu anki tarihten sonraya talep edemezsin.")]
         public DateTime DateOfExpense { get; set; }
         public string ManagerFullName { get; set; }
         public string ManagerEmail { get; set; }
