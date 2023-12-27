@@ -11,27 +11,6 @@
 
     <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.js"></script>
 
-   @* <style>
-        .panel {
-            height: 120vh;
-        }
-
-        a {
-            text-decoration: none;
-            font-size: 1vw;
-            color: #ffffff;
-        }
-
-        .aside {
-            margin-top: 100px;
-            margin-left: 50px;
-        }
-
-        h6 {
-            font-size: 1vw;
-            color: #ffffff;
-        }
-    </style>*@
 </head>
 <body>
 
@@ -43,7 +22,7 @@
             @if (Model != null)
             {
                 <a asp-action="CreateAdvance" asp-controller="Advance" asp-route-id="@Guid.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value)">
-          <button class="btn btn-success">Avans Ekle</button>
+                <button class="btn btn-success">Avans Ekle</button>
                 </a>
             }
             
@@ -51,7 +30,7 @@
 
                 <script>
                     $(document).ready(function () {
-                        $('#expenserequests').DataTable({
+                        $('#advances').DataTable({
                             "order": [
                                 [2, 'desc']
                             ],
@@ -118,13 +97,11 @@
                                             </a>
                                             <!-- Modal -->
                                             <div class="modal fade" id="confirmDeleteModal_@item.Id" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
-                                                <div class="modal-dialog" role="document">
+                                                <div class="modal-dialog">
                                                     <div class="modal-content">
                                                         <div class="modal-header">
                                                             <h5 class="modal-title" id="confirmDeleteModalLabel">Silme İşlemi Onayı</h5>
-                                                            <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                                                                <span aria-hidden="true">&times;</span>
-                                                            </button>
+                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                         </div>
                                                         <div class="modal-body">
                                                             Silmek istediğinize emin misiniz?
