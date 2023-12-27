@@ -61,7 +61,7 @@ namespace humanResourceProject.API.Controllers
             {
                 string subject = "Masraf Onayı!";
                 string body = $"<p>Sayın {user.FirstName} {user.LastName},</p><p>{expense.CreateDate.ToShortDateString()} tarihli {expense.AmountOfExpense} {expense.Currency.GetDisplayName()} avans talebiniz onaylannıştır.</p><p>Güzel günlerde kullanmanız dileğiyle.</p><br><hr><br><h3>Team Monitorease</h3>";
-                await _mailService.SendEmailAsync(user, recipientEmail, mailToName, action, subject, body);
+                await _mailService.SendEmailAsync(user, recipientEmail, mailToName, subject, body);
                 //_mailService.SendApproveMail(user, action, $"Sayın {user.FirstName} {user.LastName} Avansın onaylandı. Güzel günlerde kullan");
             }
             else if (model.ExpenseStatus == Domain.Enum.RequestStatus.Rejected)
@@ -69,7 +69,7 @@ namespace humanResourceProject.API.Controllers
                 model.ExpenseStatus = Domain.Enum.RequestStatus.Rejected;
                 string subject = "Masraf Reddi!";
                 string body = $"<p>Sayın {user.FirstName} {user.LastName},</p><p>{expense.CreateDate.ToShortDateString()} tarihli {expense.AmountOfExpense} {expense.Currency.GetDisplayName()} avans talebiniz Reddedilmiştir.</p><br><hr><br><h3>Team Monitorease</h3>";
-                await _mailService.SendEmailAsync(user, recipientEmail, mailToName, action, subject, body);
+                await _mailService.SendEmailAsync(user, recipientEmail, mailToName, subject, body);
                 //_mailService.SendApproveMail(user, action, $"Sayın {user.FirstName} {user.LastName} Avansın reddedildi");
             }
 
@@ -114,7 +114,7 @@ namespace humanResourceProject.API.Controllers
             string action = "";
             string subject = "Masraf Talebi!";
             string body = $"Sayın {manager.FirstName} {manager.LastName}, {employee.FirstName} {employee.LastName} tarafından {model.CreateDate.ToShortDateString()} tarihli {model.AmountOfExpense} {model.Currency.GetDisplayName()} masraf talebi yapılmıştır. Uygulamaya giriş yapıp onaylamanızı rica ederiz.";
-            await _mailService.SendEmailAsync(manager, recipientEmail, mailToName, action, subject, body);
+            await _mailService.SendEmailAsync(manager, recipientEmail, mailToName, subject, body);
             return Ok(result);
         }
 

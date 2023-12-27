@@ -54,7 +54,7 @@
                         </div>
                         <div class="form-group  mb-3">
                             <label asp-for="DaysOfLeave" class="control-label"></label>
-                            <input value="@Model.DaysOfLeave" type="number-decimal" min="0.5" step="0.5" asp-for="DaysOfLeave" class="form-control" />
+                            <input id="amountInput" value="@Model.DaysOfLeave" type="number-decimal" min="0.5" step="0.5" asp-for="DaysOfLeave" class="form-control" />
                             <span asp-validation-for="DaysOfLeave" class="text-danger"></span>
                         </div>
                         <div class="form-group  mb-3">
@@ -90,4 +90,61 @@
             </form>
         </div>
     </div>
+
+    <script>
+        // İzin gün sayısı hesaplama
+        document.addEventListener("DOMContentLoaded", function () {
+            const daysOfLeaveInput = document.querySelector('input[name="DaysOfLeave"]');
+            const startDateInput = document.querySelector('input[name="StartDateOfLeave"]');
+            const endDateInput = document.querySelector('input[name="EndDateOfLeave"]');
+
+            // Başlangıç ve bitiş tarihleri arasındaki farkı hesaplayan fonksiyon
+            function calculateDateDifference(startDate, endDate) {
+                const start = new Date(startDate);
+                const end = new Date(endDate);
+                const differenceInTime = end.getTime() - start.getTime();
+                const differenceInDays = differenceInTime / (1000 * 3600 * 24);
+                return differenceInDays;
+            }
+
+            // Üç ay önceki tarihi döndüren fonksiyon
+            function getDateThreeMonthsAgo() {
+                const today = new Date();
+                const threeMonthsAgo = new Date(today.getFullYear(), today.getMonth() - 3, today.getDate() + 1);
+                return threeMonthsAgo;
+            }
+
+            // İnput değişikliklerini dinleyen fonksiyon
+            function handleInput() {
+                const startDate = startDateInput.value;
+                const endDate = endDateInput.value;
+                const threeMonthsAgo = getDateThreeMonthsAgo();
+
+                // Başlangıç tarihi, 3 ay öncesinden küçük olamaz
+                if (new Date(startDate) < threeMonthsAgo) {
+                    startDateInput.value = threeMonthsAgo.toISOString().slice(0, 10); // 3 ay önceki tarihi inputa yaz
+                }
+
+                if (new Date(startDate) > new Date(endDate)) {
+                    endDateInput.value = startDate;
+                    endDate = startDate;
+                }
+
+                const daysDifference = calculateDateDifference(startDate, endDate);
+                daysOfLeaveInput.max = daysDifference;
+
+                // İzin gün sayısı, başlangıç ve bitiş tarihleri arasındaki farktan fazla olamaz
+                if (parseFloat(daysOfLeaveInput.value) > daysDifference) {
+                    daysOfLeaveInput.value = daysDifference;
+                }
+            }
+
+            // İnput değişikliklerini dinle
+            startDateInput.addEventListener("change", handleInput);
+            endDateInput.addEventListener("change", handleInput);
+
+            // İnput değişikliklerini kontrol et
+            handleInput();
+        });
+    </script>
 </body>
