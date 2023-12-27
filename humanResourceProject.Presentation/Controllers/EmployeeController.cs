@@ -372,10 +372,63 @@ namespace humanResourceProject.Presentation.Controllers
                 return View(dashboardVM);
             }
 
+            return View("Error");           
+        }
+        
+        [HttpGet]
+        public async Task<IActionResult> EditProfile(Guid id)
+        {
+            var response = await _httpClient.GetAsync($"api/AppUser/GetUpdateProfileDTO/{id}");
+
+            if (response.IsSuccessStatusCode)
+            {
+                var content = await response.Content.ReadAsStringAsync();
+                var model = JsonConvert.DeserializeObject<UpdateProfileDTO>(content);
+
+                return View(model);
+            }
             return View("Error");
-            //return View();
         }
 
+        [HttpPost]
+        public async Task<IActionResult> EditProfile(UpdateProfileDTO model)
+        {
+            if (!ModelState.IsValid)
+            {
+                TempData["Result"] = "modelinvalid";
+                return View(model);
+            }
 
+            var json = JsonConvert.SerializeObject(model);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            var response = await _httpClient.PutAsync($"api/AppUser/UpdateProfile", content);
+
+            if (response.IsSuccessStatusCode)
+            {
+                return RedirectToAction(nameof(Employees));
+            }
+
+            ModelState.AddModelError(response.StatusCode.ToString(), "Bir hata oluştu.");
+            return View(model);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> ProfileEmployee()
+        {
+            
+                var employeeId = Guid.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value);
+            var response = await _httpClient.GetAsync($"api/AppUser/ProfileEmployee/{employeeId}");
+            if (response.IsSuccessStatusCode)
+            {
+                var content = await response.Content.ReadAsStringAsync();
+                var model = JsonConvert.DeserializeObject<ProfileEmployeeVM>(content);
+                return View(model);
+            }
+            return View("Error");
+
+        }
     }
+
+         
 }

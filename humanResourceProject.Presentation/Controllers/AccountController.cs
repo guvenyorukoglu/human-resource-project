@@ -281,6 +281,5 @@ namespace humanResourceProject.Presentation.Controllers
             }
                 return RedirectToAction("Home", "Employee");
         }
-
     }
 }

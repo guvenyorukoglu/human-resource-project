@@ -1,4 +1,4 @@
-﻿using humanResourceProject.Application.Services.Abstract.IAppUserServices;
+using humanResourceProject.Application.Services.Abstract.IAppUserServices;
 using humanResourceProject.Application.Services.Abstract.ILeaveServices;
 using humanResourceProject.Application.Services.Abstract.IMailServices;
 using humanResourceProject.Domain.Entities.Concrete;
@@ -31,12 +31,7 @@ namespace humanResourceProject.API.Controllers
             return Ok(await _leaveReadService.GetAllLeaves());
         }
 
-        [HttpGet]
-        [Route("GetLeaveDTO/{employeeId}")]
-        public async Task<IActionResult> GetLeaveDTO(Guid employeeId)
-        {
-            return Ok(await _leaveReadService.GetLeaveDTO(employeeId));
-        }
+      
 
         [HttpPut]
         [Route("UpdateStatus")]
