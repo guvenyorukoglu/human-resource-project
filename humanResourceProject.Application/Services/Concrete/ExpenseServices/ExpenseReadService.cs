@@ -159,5 +159,21 @@ namespace humanResourceProject.Application.Services.Concrete.ExpenseServices
             };
             return expenseDTO;
         }
+
+        public async Task<List<DashboardExpenseVM>> FillDashboardExpenseVM(Guid id)
+        {
+            List<DashboardExpenseVM> dashboardExpenseVMs = await _expenseReadRepository.GetFilteredList(
+                                              select: x => new DashboardExpenseVM
+                                              {
+                                                  ExpenseNo = x.ExpenseNo,
+                                                  AmountOfExpense = x.AmountOfExpense,
+                                                  CreateDate = x.CreateDate
+
+                                              },
+                                               where: x => (x.Status != Status.Deleted && x.Status != Status.Inactive) && x.Employee.Id == id,
+                                               orderBy: x => x.OrderByDescending(x => x.CreateDate),
+                                               include: x => x.Include(x => x.Employee)); ;
+            return dashboardExpenseVMs;
+        }
     }
 }
