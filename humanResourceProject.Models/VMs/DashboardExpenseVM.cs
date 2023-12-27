@@ -2,8 +2,7 @@
 {
     public class DashboardExpenseVM
     {
-        public string ExpenseNo { get; set; }
-        public decimal AmountOfExpense { get; set; }
-        public DateTime CreateDate { get; set; }
+        public List<DashboardMyExpensesVM> MyExpenses { get; set; }
+        public List<DashboardExpensesToBeCompletedByManagerVM> ExpensesToBeCompletedByManager { get; set; }
     }
 }

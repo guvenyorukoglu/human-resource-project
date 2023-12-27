@@ -39,5 +39,20 @@ namespace humanResourceProject.Application.Services.Concrete.JobServices
             JobDTO jobDTO = _mapper.Map<JobDTO>(job);
             return jobDTO;
         }
+
+        public async Task<List<JobVM>> GetJobsByCompanyId(Guid companyId)
+        {
+            List<JobVM>? jobs = await _jobReadRepository.GetFilteredList(
+                                              select: x => new JobVM
+                                              {
+                                                  Id = x.Id,
+                                                  Title = x.Title,
+                                                  Description = x.Description
+                                              },
+                                              where: x => x.Status != Domain.Enum.Status.Deleted && x.Status != Domain.Enum.Status.Inactive && x.CompanyId == companyId,
+                                              orderBy: x => x.OrderBy(x => x.Title)
+                                              );
+            return jobs;
+        }
     }
 }

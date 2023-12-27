@@ -1,9 +1,10 @@
-﻿namespace humanResourceProject.Models.VMs
+﻿using humanResourceProject.Domain.Enum;
+
+namespace humanResourceProject.Models.VMs
 {
     public class DashboardAdvanceVM
     {
-        public string AdvanceNo { get; set; }
-        public decimal AmountOfAdvance { get; set; }
-        public DateTime CreateDate { get; set; }
+        public List<DashboardMyAdvancesVM> MyAdvances { get; set; }
+        public List<DashboardAdvancesToBeCompletedByManagerVM> AdvancesToBeCompletedByManager { get; set; }
     }
 }

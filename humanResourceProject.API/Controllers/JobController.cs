@@ -33,6 +33,13 @@ namespace humanResourceProject.API.Controllers
             return Ok(await _jobReadService.GetAllJobs());
         }
 
+        [HttpGet]
+        [Route("GetJobsByCompanyId/{companyId}")]
+        public async Task<IActionResult> GetJobsByCompanyId(Guid companyId)
+        {
+            return Ok(await _jobReadService.GetJobsByCompanyId(companyId));
+        }
+
         [HttpPost]
         public async Task<IActionResult> InsertJob([FromBody] JobDTO model)
         {

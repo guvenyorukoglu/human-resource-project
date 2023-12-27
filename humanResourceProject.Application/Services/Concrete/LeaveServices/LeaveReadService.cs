@@ -136,19 +136,33 @@ namespace humanResourceProject.Application.Services.Concrete.LeaveServices
             return updateLeaveDTO;
         }
 
-        public async Task<List<DashboardLeaveVM>> FillDashboardLeaveVM(Guid id)
+        public async Task<DashboardLeaveVM> FillDashboardLeaveVM(Guid id)
         {
-            List<DashboardLeaveVM> dashboardLeaveVMs = await _leaveReadRepository.GetFilteredList(
-                                                             select: x => new DashboardLeaveVM
+            List<DashboardMyLeavesVM> dashboardMyLeavesVMs = await _leaveReadRepository.GetFilteredList(
+                                                             select: x => new DashboardMyLeavesVM
                                                              {
                                                                  LeaveNo = x.LeaveNo,
                                                                  DaysOfLeave = x.DaysOfLeave,
-                                                                 CreateDate = x.CreateDate
+                                                                 CreateDate = x.CreateDate,
+                                                                 LeaveStatus = x.LeaveStatus,
                                                              },
                                                              where: x => (x.Status != Status.Deleted && x.Status != Status.Inactive) && x.Employee.Id == id,
                                                              orderBy: x => x.OrderByDescending(x => x.CreateDate),
-                                                             include: x => x.Include(x => x.Employee)); ;
-            return dashboardLeaveVMs;
+                                                             include: x => x.Include(x => x.Employee));
+
+            List<DashboardLeavesToBeCompletedByManagerVM> dashboardLeavesToBeCompletedByManagerVM = await _leaveReadRepository.GetFilteredList(
+                                                            select: x => new DashboardLeavesToBeCompletedByManagerVM
+                                                            {
+                                                                LeaveNo = x.LeaveNo,
+                                                                DaysOfLeave = x.DaysOfLeave,
+                                                                CreateDate = x.CreateDate,
+                                                                LeaveStatus = x.LeaveStatus,
+                                                            },
+                                                            where: x => (x.Status != Status.Deleted && x.Status != Status.Inactive) && x.Employee.ManagerId == id && x.LeaveStatus == RequestStatus.Pending,
+                                                            orderBy: x => x.OrderByDescending(x => x.CreateDate),
+                                                            include: x => x.Include(x => x.Employee));
+
+            return new DashboardLeaveVM() { MyLeaves = dashboardMyLeavesVMs, LeavesToBeCompletedByManager = dashboardLeavesToBeCompletedByManagerVM };
         }
 
         public async Task<LeaveDTO> GetLeaveDTO(Guid employeeId)

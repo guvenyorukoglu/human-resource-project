@@ -2,8 +2,7 @@
 {
     public class DashboardLeaveVM
     {
-        public string LeaveNo { get; set; }
-        public decimal DaysOfLeave { get; set; }
-        public DateTime CreateDate { get; set; }
+        public List<DashboardMyLeavesVM> MyLeaves { get; set; }
+        public List<DashboardLeavesToBeCompletedByManagerVM> LeavesToBeCompletedByManager { get; set; }
     }
 }

@@ -1,4 +1,4 @@
-﻿using humanResourceProject.Application.Services.Abstract.IAppUserServices;
+using humanResourceProject.Application.Services.Abstract.IAppUserServices;
 using humanResourceProject.Application.Services.Abstract.ILeaveServices;
 using humanResourceProject.Application.Services.Abstract.IMailServices;
 using humanResourceProject.Domain.Entities.Concrete;
@@ -89,7 +89,6 @@ namespace humanResourceProject.API.Controllers
         {
             return Ok(await _leaveReadService.GetLeavesByCompanyId(id));
         }
-
 
         [HttpPost]
         public async Task<IActionResult> CreateLeave([FromBody] LeaveDTO model)

@@ -1,6 +1,5 @@
 using humanResourceProject.Application.Services.Abstract.IAppUserServices;
 using humanResourceProject.Application.Services.Abstract.IJobServices;
-using humanResourceProject.Application.Services.Abstract.IMailServices;
 using humanResourceProject.Domain.Entities.Concrete;
 using humanResourceProject.Models.DTOs;
 using Microsoft.AspNetCore.Identity;
@@ -38,10 +37,10 @@ namespace humanResourceProject.API.Controllers
             return Ok(await _appUserReadService.GetSingleDefault(x => x.Id == id));
         }
         [HttpGet]
-        [Route("GetManagerByDepartmentId/{id}")]
-        public async Task<IActionResult> GetManagerByDepartmentId(Guid id) // Departman Id'sine göre Yönetici
+        [Route("GetManagersByDepartmentId/{id}")]
+        public async Task<IActionResult> GetManagersByDepartmentId(Guid id) // Departman Id'sine göre Yönetici
         {
-            var employees = await _appUserReadService.GetEmployeesByDepartmentId(id);
+            var employees = await _appUserReadService.GetManagersByDepartmentId(id);
             foreach (var employee in employees)
             {
                 AppUser appUser = await _userManager.FindByIdAsync(employee.Id.ToString());
@@ -81,10 +80,10 @@ namespace humanResourceProject.API.Controllers
         }
 
         [HttpPost]
-        [Route("GetEmployeesByDepartmentId")]
-        public async Task<IActionResult> GetEmployeesByDepartmentId([FromBody] Guid departmentId) // Şirket Id'sine göre Personeller
+        [Route("GetEmployeesByManagerId")]
+        public async Task<IActionResult> GetEmployeesByManagerId([FromBody] Guid managerId)  // Yönetici Id'sine göre Personeller
         {
-            return Ok(await _appUserReadService.GetEmployeesByDepartmentId(departmentId));
+            return Ok(await _appUserReadService.GetEmployeesByManagerId(managerId));
         }
 
         [HttpPost]
@@ -114,7 +113,7 @@ namespace humanResourceProject.API.Controllers
         public async Task<IActionResult> UpdateEmployee([FromBody] UpdateUserDTO updatedPersonel) // Personel Güncelleme
         {
             var result = await _appUserWriteService.Update(updatedPersonel);
-            var jobs = await _jobReadServices.GetAllJobs();
+
             if (!result.Succeeded)
                 return BadRequest(result.Errors);
 

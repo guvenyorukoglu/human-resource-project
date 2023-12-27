@@ -1,11 +1,13 @@
-﻿@using System.ComponentModel.DataAnnotations
-@using System.Reflection
-@using humanResourceProject.Domain.Enum
-@model humanResourceProject.Models.DTOs.UpdateUserDTO
+﻿@using Newtonsoft.Json
+@model UpdateUserDTO
 
 @{
     ViewData["Title"] = "UpdateEmployee";
     Layout = "~/Views/Shared/_HRLayout.cshtml";
+    
+    var jobsJson = JsonConvert.SerializeObject(Model.Jobs);
+    var departmentsJson = JsonConvert.SerializeObject(Model.Departments);
+    var managersJson = JsonConvert.SerializeObject(Model.Managers);
 }
 <head>
 
@@ -18,70 +20,156 @@
     <div class="row">
         @Html.Partial("_PanelPartial")
 
-        <div class="aside container mt-5 col-md-9 col-sm-9">
-            <h3>Çalışan Güncelle</h3>
+        <div class="col-md-8" style="margin:150px auto">
             <form asp-action="EditEmployee">
-                <div class="form-group mb-3">
-                    <label asp-for="Email" class="control-label"></label>
-                    <input value="@Model.Email" asp-for="Email" class="form-control" />
-                    <span asp-validation-for="Email" class="text-danger"></span>
-                </div>
-                <div class="form-group mb-3">
-                    <label asp-for="LastName" class="control-label"></label>
-                    <input value="@Model.LastName" asp-for="LastName" class="form-control" />
-                    <span asp-validation-for="LastName" class="text-danger"></span>
-                </div>
-                <div class="form-group mb-3">
-                    <label asp-for="Address" class="control-label"></label>
-                    <input value="@Model.Address" asp-for="Address" class="form-control" />
-                    <span asp-validation-for="Address" class="text-danger"></span>
-                </div>
-                <div class="form-group mb-3">
-                    <label asp-for="PhoneNumber" class="control-label"></label>
-                    <input value="@Model.PhoneNumber" asp-for="PhoneNumber" class="form-control" />
-                    <span asp-validation-for="PhoneNumber" class="text-danger"></span>
-                </div>
-                <div class="form-group mb-3">
-                    <label asp-for="Gender" class="control-label"></label>
-                    <select asp-for="Gender" class="form-control">
-                        @{
-                            var enumType = typeof(Gender);
-                            var enumValues = enumType.GetEnumValues();
-                            foreach (var enumValue in enumValues)
-                            {
-                                var displayAttribute = enumType.GetMember(enumValue.ToString())[0].GetCustomAttribute<DisplayAttribute>();
-                                var displayName = displayAttribute?.GetName() ?? enumValue.ToString();
-                                <option value="@enumValue">@displayName</option>
-                            }
-                            <option value="" disabled selected>Cinsiyet seçiniz!</option>
-                        }
-                    </select>
-                    <span asp-validation-for="Gender" class="text-danger"></span>
-                </div>
-                <div class="form-group mb-3">
-                    <label asp-for="JobId" class="control-label"></label>
-                    @* <select asp-for="JobId" asp-items="@Model.Jobs.Select(job => new SelectListItem { Text = job.Title, Value = job.Id.ToString() })" class="form-control"> *@
-                    <select asp-for="JobId" asp-items="@Model.Jobs.Select(job => new SelectListItem { Text = job.Title, Value = job.Id.ToString() })" class="form-control">
+                <div class="card shadow p-3 mb-5 bg-body rounded">
+                    <div class="card-header">
+                        <h1 class="card-title text-center">Çalışan Güncelle</h1>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label asp-for="FirstName" class="control-label"></label>
+                                    <input value="@Model.FirstName" asp-for="FirstName" class="form-control" />
+                                    <span asp-validation-for="FirstName" class="text-danger"></span>
+                                </div>
+                                <div class="form-group mb-3">
+                                    <label value="@Model.MiddleName" asp-for="MiddleName" class="control-label"></label>
+                                    <input asp-for="MiddleName" class="form-control" />
 
-                        <option value="" disabled selected>Meslek seçiniz!</option>
-                    </select>
-                    <span asp-validation-for="JobId" class="text-danger"></span>
+                                </div>
+                                <div class="form-group mb-3">
+                                    <label asp-for="LastName" class="control-label"></label>
+                                    <input value="@Model.LastName" asp-for="LastName" class="form-control" />
+                                    <span asp-validation-for="LastName" class="text-danger"></span>
+                                </div>
+                                <div class="form-group mb-3">
+                                    <label asp-for="IdentificationNumber" class="control-label"></label>
+                                    <input value="@Model.IdentificationNumber" asp-for="IdentificationNumber" class="form-control" />
+                                    <span asp-validation-for="IdentificationNumber" class="text-danger"></span>
+                                </div>
+                                <div class="form-group mb-3">
+                                    <label asp-for="Email" class="control-label"></label>
+                                    <input value="@Model.Email" asp-for="Email" class="form-control" />
+                                    <span asp-validation-for="Email" class="text-danger"></span>
+                                </div>
+                                <div class="form-group mb-3">
+                                    <input asp-for="Password" type="hidden" class="form-control" />
+                                    <input asp-for="ConfirmPassword" type="hidden" class="form-control" />
+                                    <input type="hidden" id="JobsList" name="JobsList" value="@jobsJson" />
+                                    <input type="hidden" id="DepartmentsList" name="DepartmentsList" value="@departmentsJson" />
+                                    <input type="hidden" id="ManagersList" name="ManagersList" value="@managersJson" />
+                                    <input value="@Model.CompanyId" asp-for="CompanyId" type="hidden" class="form-control" />
+                                </div>
+                                <div class="form-group mb-3">
+                                    <label asp-for="PhoneNumber" class="control-label"></label>
+                                    <input value="@Model.PhoneNumber" asp-for="PhoneNumber" class="form-control" />
+                                    <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                                </div>
+                                <div class="form-group mb-3">
+                                    <label asp-for="Birthdate" class="control-label"></label>
+                                    <input value="@Model.Birthdate.ToString("yyyy-MM-dd")" max="@DateTime.Now" asp-for="Birthdate" type="date" class="form-control" />
+                                    <span asp-validation-for="Birthdate" class="text-danger"></span>
+                                </div>
+
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label asp-for="Address" class="control-label"></label>
+                                    <input value="@Model.Address" asp-for="Address" class="form-control" />
+                                    <span asp-validation-for="Address" class="text-danger"></span>
+                                </div>
+                                <div class="form-group mb-3">
+                                    <label asp-for="BloodGroup" class="control-label"></label>
+                                    <select asp-for="BloodGroup" class="form-control">
+                                        @{
+                                            var enumType = typeof(BloodGroup);
+                                            var enumValues = enumType.GetEnumValues();
+                                            foreach (var enumValue in enumValues)
+                                            {
+                                                var displayAttribute = enumType.GetMember(enumValue.ToString())[0].GetCustomAttribute<DisplayAttribute>();
+                                                var displayName = displayAttribute?.GetName() ?? enumValue.ToString();
+                                                var isSelected = enumValue.Equals(Model.BloodGroup);
+
+                                                @if (isSelected)
+                                                {
+                                                    <option value="@enumValue" selected>@displayName</option>
+                                                }
+                                                else
+                                                {
+                                                    <option value="@enumValue">@displayName</option>
+                                                }
+                                            }
+                                            <option value="" disabled>Kan grubu seçiniz!</option>
+                                        }
+
+                                    </select>
+                                    <span asp-validation-for="BloodGroup" class="text-danger"></span>
+                                </div>
+                                <div class="form-group mb-3">
+                                    <label asp-for="Gender" class="control-label"></label>
+                                    <select asp-for="Gender" class="form-control">
+                                        @{
+                                            var enumTypeGender = typeof(Gender);
+                                            var enumValuesGender = enumTypeGender.GetEnumValues();
+                                            foreach (var enumValue in enumValuesGender)
+                                            {
+                                                var displayAttribute = enumTypeGender.GetMember(enumValue.ToString())[0].GetCustomAttribute<DisplayAttribute>();
+                                                var displayName = displayAttribute?.GetName() ?? enumValue.ToString();
+                                                var isSelected = enumValue.Equals(Model.Gender);
+
+                                                @if (isSelected)
+                                                {
+                                                    <option value="@enumValue" selected>@displayName</option>
+                                                }
+                                                else
+                                                {
+                                                    <option value="@enumValue">@displayName</option>
+                                                }
+                                            }
+                                            <option value="" disabled>Cinsiyet seçiniz!</option>
+                                        }
+
+                                    </select>
+                                    <span asp-validation-for="Gender" class="text-danger"></span>
+                                </div>
+                                <div class="form-group mb-3">
+                                    <label asp-for="JobId" class="control-label"></label>
+                                    <select asp-for="JobId" asp-items="@Model.Jobs.Select(job => new SelectListItem { Text = job.Title, Value = job.Id.ToString() })" class="form-control">
+                                        <option value="" disabled selected>Meslek seçiniz!</option>
+                                    </select>
+                                    <span asp-validation-for="JobId" class="text-danger"></span>
+                                </div>
+
+                                <div class="form-group mb-3">
+                                    <label asp-for="DepartmentId" class="control-label"></label>
+                                    <select asp-for="DepartmentId" asp-items="@Model.Departments.Select(department => new SelectListItem { Text = department.DepartmentName, Value = department.Id.ToString() })" class="form-control">
+                                        <option value="" disabled selected>Departman seçiniz!</option>
+                                    </select>
+                                    <span asp-validation-for="DepartmentId" class="text-danger"></span>
+                                </div>
+
+                                <div class="form-group mb-3">
+                                    <label asp-for="ManagerId" class="control-label"></label>
+                                    <select asp-for="ManagerId" asp-items="@Model.Managers.Select(manager => new SelectListItem { Text = manager.FullName, Value = manager.Id.ToString() })" class="form-control">
+                                        <option value="" disabled selected>Yönetici seçiniz!</option>
+                                    </select>
+                                    <span asp-validation-for="ManagerId" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label>*Zorunlu alan</label>
+                        </div>
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <div class="form-group mb-3 d-grid">
+                            <input type="submit" value="Güncelle" class="btn btn-primary" />
+                        </div>
+                    </div>
                 </div>
-                <div class="form-group mb-4">
-                    <input asp-for="Id" type="hidden" class="form-control" />
-                    <span asp-validation-for="Id" class="text-danger"></span>
-                </div>
-                <div class="form-group mb-3">
-                    <input value=@Model.DepartmentId asp-for="DepartmentId" type="hidden" class="form-control" />
-                    <span asp-validation-for="DepartmentId" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <input type="submit" value="Güncelle" class="btn btn-primary" />
-                </div>
-                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             </form>
             <div>
-                <hr>
                 <a asp-controller="Employee" asp-action="Home"><button class="custom-button custom-button--create-entity">Anasayfaya Dön</button></a>
             </div>
         </div>

@@ -9,5 +9,7 @@ namespace humanResourceProject.Application.Services.Abstract.IJobServices
         Task<JobDTO> GetJobById(Guid id);
 
         Task<List<JobVM>> GetAllJobs();
+        Task<List<JobVM>> GetJobsByCompanyId(Guid companyId);
+
     }
 }
