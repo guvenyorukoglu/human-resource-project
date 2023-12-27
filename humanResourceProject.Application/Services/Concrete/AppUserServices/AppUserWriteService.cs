@@ -43,6 +43,15 @@ namespace humanResourceProject.Application.Services.Concrete.AppUserServices
             UpdateUserDTO updateUserDTO = _mapper.Map<UpdateUserDTO>(appUser);
             return updateUserDTO;
         }
+         public async Task<UpdateProfileDTO> GetUpdateProfileDTOById(Guid id)
+        {
+            AppUser appUser = _readRepository.GetSingleDefault(x => x.Id == id).Result;
+            if (appUser == null)
+                return null;
+
+            UpdateProfileDTO updateProfileDTO = _mapper.Map<UpdateProfileDTO>(appUser);
+            return updateProfileDTO;
+        }
 
         public async Task<IdentityResult> RegisterPersonel(CreateEmployeeDTO model)
         {
@@ -129,6 +138,33 @@ namespace humanResourceProject.Application.Services.Concrete.AppUserServices
 
 
             return await _userManager.UpdateAsync(user);
+        }
+
+        public async Task<IdentityResult> UpdateProfile(UpdateProfileDTO model)
+        {
+            AppUser updatedUser = await _readRepository.GetSingleDefault(x => x.Id == model.Id);
+            if (updatedUser == null)
+                return IdentityResult.Failed();
+
+            else
+            {
+                _writeRepository.DetachEntity(updatedUser);
+                updatedUser.BloodGroup = model.BloodGroup;
+                updatedUser.Address = model.Address;
+                updatedUser.PhoneNumber = model.PhoneNumber;
+
+
+                updatedUser.Status = Domain.Enum.Status.Modified;
+
+                updatedUser.UpdateDate = DateTime.Now;
+
+
+                var result = await _writeRepository.Update(updatedUser);
+                if (result)
+                    return IdentityResult.Success;
+                else
+                    return IdentityResult.Failed();
+            }
         }
     }
 }

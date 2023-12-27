@@ -31,12 +31,7 @@ namespace humanResourceProject.API.Controllers
             return Ok(await _leaveReadService.GetAllLeaves());
         }
 
-        [HttpGet]
-        [Route("GetLeaveDTO/{employeeId}")]
-        public async Task<IActionResult> GetLeaveDTO(Guid employeeId)
-        {
-            return Ok(await _leaveReadService.GetLeaveDTO(employeeId));
-        }
+      
 
         [HttpPut]
         [Route("UpdateStatus")]
