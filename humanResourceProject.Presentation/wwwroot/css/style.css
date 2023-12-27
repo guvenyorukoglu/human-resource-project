@@ -14,11 +14,15 @@ body {
     justify-content: space-between;
     align-items: center;
     width: 15vw;
-    background-color: #31374a;
+    background-color: #133a63;
+   
 }
+
+
 
 .profile {
     justify-content: center;
+    margin-bottom: -20px;
 }
 
 .name {
@@ -50,15 +54,16 @@ body {
     justify-content: space-between;
     align-items: center;
     font-size: 20px;
-    margin-top: 80px;
+ /*   margin-top: 80px;*/
     padding: 2vw;
+
 }
 
-.panel-list, .sub-menu {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
+    .panel-list, .sub-menu {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
 
     .panel-list li {
         padding: 10px;

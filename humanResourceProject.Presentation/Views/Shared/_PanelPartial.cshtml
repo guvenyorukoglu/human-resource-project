@@ -11,7 +11,10 @@
         </div>
     </div>
 
+  
+
     <div class="ul">
+    
         <div class="panel-items">
             <ul class="panel-list">
                 <li>
@@ -71,13 +74,35 @@
         </div>
     </div>
     <div class="log-out-button text-center">
+        
         <a asp-controller="Account" asp-action="Logout" class="custom-button custom-button--logout">Çıkış Yap</a>
     </div>
+
 </div>
+
+
+
+
+
+@*<script>
+    //Aktif sayfayı belirleme
+    const activePage = window.location.pathname;
+    const navLinks = document.querySelectorAll('.panel-list a');
+    navLinks.forEach(link => {
+        const listItem = link.parentElement;
+        if (link.href.includes(`${activePage}`)) {
+            link.classList.add('active');
+            listItem.style.backgroundColor = 'gray';
+            listItem.style.color = 'green';
+         
+        } 
+    });
+</script>*@
 
 <script>
     //Açılır kapanır panel menu
     $(document).ready(function () {
+        $(".sub-menu").slideUp();
         $(".parent").click(function () {
             $(this).find(".sub-menu").slideToggle();
         });
@@ -118,3 +143,40 @@
     });
 </script>
 
+@*<style>
+    a:is(:link, :active, :visited).active {
+        color: black;
+        background-color: white;
+    }
+</style>
+*@
+@*<style>
+   
+    .parent:is(:link, :active, :visited).active,
+    .sub-menu .active,
+    .panel-list li .active {
+       color: black;
+        background-color: white;
+       
+    }
+</style>*@
+
+@*<style>
+
+    li .active {
+        color: black;
+        background-color: white;
+    }
+</style>*@
+
+
+            <style>
+                
+                .sub-menu .active{
+                    font-size:12px;
+                }
+
+                .sub-menu {
+                    font-size: 12px;
+                }
+            </style>
