@@ -130,24 +130,6 @@
                     </script>*@
 
 
-
-
-                    @{
-                        decimal totalLeaveDays = 0;
-
-                        if (Model != null)
-                        {
-
-                            if (Model.Leaves != null)
-                            {
-                                foreach (var leave in Model.Leaves)
-                                {
-                                    totalLeaveDays += leave.DaysOfLeave;
-                                }
-                            }
-                        }
-                    }
-
                     <script>
                         document.addEventListener("DOMContentLoaded", function () {
                             const ctx = document.getElementById("myChart");

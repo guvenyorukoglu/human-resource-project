@@ -12,8 +12,8 @@ using humanResourceProject.Infrastructure.Context;
 namespace humanResourceProject.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20231227093943_first")]
-    partial class first
+    [Migration("20231227203957_mig-1-can")]
+    partial class mig1can
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

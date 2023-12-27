@@ -30,20 +30,17 @@ namespace humanResourceProject.Application.Services.Concrete.AppUserServices
         private readonly UserManager<AppUser> _userManager;
         private readonly IMapper _mapper;
         private readonly IImageService _imageService;
-        private readonly IConfiguration _configuration;
-        private readonly IMailService _mailService;
         private readonly IBaseReadRepository<Job> _jobReadRepository;
-        private readonly IBaseReadRepository<Department> _departmentReadRepository;
         private readonly IAppUserReadService _appUserReadService;
+
         private readonly IDepartmentReadService _departmentReadService;
-public AppUserWriteService(IBaseWriteRepository<AppUser> writeRepository, IBaseReadRepository<AppUser> readRepository, IMapper mapper, UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, IImageService imageService, IConfiguration configuration, IBaseReadRepository<Advance> advanceReadRepository, IBaseReadRepository<Leave> leaveReadRepository, IBaseReadRepository<Expense> expenseReadRepository, IBaseWriteRepository<Advance> advanceWriteRepository, IBaseWriteRepository<Expense> expenseWriteRepository, IBaseWriteRepository<Leave> leaveWriteRepository) : base(writeRepository, readRepository)
+        public AppUserWriteService(IBaseWriteRepository<AppUser> writeRepository, IBaseReadRepository<AppUser> readRepository, IMapper mapper, UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, IImageService imageService, IBaseReadRepository<Advance> advanceReadRepository, IBaseReadRepository<Leave> leaveReadRepository, IBaseReadRepository<Expense> expenseReadRepository, IBaseWriteRepository<Advance> advanceWriteRepository, IBaseWriteRepository<Expense> expenseWriteRepository, IBaseWriteRepository<Leave> leaveWriteRepository, IBaseReadRepository<Job> jobReadRepository, IDepartmentReadService departmentReadService, IAppUserReadService appUserReadService) : base(writeRepository, readRepository)
         {
             _writeRepository = writeRepository;
             _readRepository = readRepository;
             _mapper = mapper;
             _userManager = userManager;
             _imageService = imageService;
-            _configuration = configuration;
             _advanceReadRepository = advanceReadRepository;
             _leaveReadRepository = leaveReadRepository;
             _expenseReadRepository = expenseReadRepository;
