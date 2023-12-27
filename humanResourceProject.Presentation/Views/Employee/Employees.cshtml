@@ -81,20 +81,37 @@
                                                 <i class="fa fa-pen"></i><span class="ms-2">Düzenle</span>
                                             </button>
                                         </a>
+                                        <a asp-action="DeleteEmployee"
+                                           asp-controller="Employee"
+                                           data-bs-toggle="modal"
+                                           data-bs-target="#deleteEmployeeModal_@item.Id">
+                                            <button class="btn btn-danger btn-sm d-inline-flex gap-1 align-items-center">
+                                                <i class="fa fa-trash"></i><span>Kaldır</span>
+                                            </button>
+                                        </a>
+                                        <a asp-action="FireEmployee"
+                                           asp-controller="Employee"
+                                           data-bs-toggle="modal"
+                                           data-bs-target="#fireEmployeeModal_@item.Id">
+                                             <button type="button" class="btn btn-dark btn-sm d-inline-flex gap-1 align-items-center">
+                                                <i class="fa-solid fa-user-minus"></i><span class="ms-2">İşten Çıkart</span>
+                                            </button>
+                                        </a>
 
-                                        @* Silme modalı *@
-                                        <div class="modal fade" id="deleteEmployeeModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                        @* Delete Employee modal *@
+                                        <div class="modal fade" id="deleteEmployeeModal_@item.Id" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                             <div class="modal-dialog">
                                                 <div class="modal-content">
                                                     <div class="modal-header">
                                                         <h5 class="modal-title" id="exampleModalLabel">Personel Silme</h5>
-                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                                                        </button>
                                                     </div>
                                                     <div class="modal-body">
                                                         Personeli silmek istediğinizden emin misiniz?
                                                     </div>
                                                     <div class="modal-footer">
-                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hayır</button>
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>
                                                         <a asp-action="DeleteEmployee"
                                                            asp-controller="Employee"
                                                            asp-route-id="@item.Id">
@@ -105,38 +122,29 @@
                                             </div>
                                         </div>
 
-                                        @* İşten çıkarma modalı *@
-                                        <div class="modal fade" id="fireEmployeeModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                        @* Fire Employee modal *@
+                                        <div class="modal fade" id="fireEmployeeModal_@item.Id" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                             <div class="modal-dialog">
                                                 <div class="modal-content">
                                                     <div class="modal-header">
                                                         <h5 class="modal-title" id="exampleModalLabel">Personel İşten Çıkarma</h5>
-                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                                                        </button>
                                                     </div>
                                                     <div class="modal-body">
                                                         Personeli işten çıkarmak istediğinizden emin misiniz?
                                                     </div>
                                                     <div class="modal-footer">
-                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hayır</button>
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>
                                                         <a asp-action="FireEmployee"
                                                            asp-controller="Employee"
                                                            asp-route-id="@item.Id">
-                                                            <button type="button" class="btn btn-primary">Evet</button>
+                                                            <button type="button" class="btn btn-warning">Evet</button>
                                                         </a>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-
-                                        @* Silme modalı açan buton *@
-                                        <button type="button" class="btn btn-danger btn-sm d-inline-flex gap-1 align-items-center" data-bs-toggle="modal" data-bs-target="#deleteEmployeeModal">
-                                            <i class="fa fa-trash"></i><span class="ms-2">Sil</span>
-                                        </button>
-
-                                        @* İşten çıkarma modalı açan buton *@
-                                        <button type="button" class="btn btn-dark btn-sm d-inline-flex gap-1 align-items-center" data-bs-toggle="modal" data-bs-target="#fireEmployeeModal">
-                                            <i class="fa-solid fa-user-minus"></i><span class="ms-2">İşten Çıkart</span>
-                                        </button>
                                     </td>
                                 </tr>
                             }
