@@ -37,8 +37,8 @@ namespace humanResourceProject.Application.Services.Concrete.LeaveServices
                                                              {
                                                                  Id = x.Id,
                                                                  LeaveType = x.LeaveType,
-                                                                 StartDate = x.StartDateOfLeave,
-                                                                 EndDate = x.EndDateOfLeave,
+                                                                 StartDateOfLeave = x.StartDateOfLeave,
+                                                                 EndDateOfLeave = x.EndDateOfLeave,
                                                                  FirstName = x.Employee.FirstName,
                                                                  LastName = x.Employee.LastName,
                                                                  EmployeeId = x.Employee.Id,
@@ -63,8 +63,8 @@ namespace humanResourceProject.Application.Services.Concrete.LeaveServices
                                                             {
                                                                 Id = x.Id,
                                                                 LeaveType = x.LeaveType,
-                                                                StartDate = x.StartDateOfLeave,
-                                                                EndDate = x.EndDateOfLeave,
+                                                                StartDateOfLeave = x.StartDateOfLeave,
+                                                                EndDateOfLeave = x.EndDateOfLeave,
                                                                 FirstName = x.Employee.FirstName,
                                                                 LastName = x.Employee.LastName,
                                                                 EmployeeId = x.Employee.Id,
@@ -88,8 +88,8 @@ namespace humanResourceProject.Application.Services.Concrete.LeaveServices
                                                              {
                                                                  Id = x.Id,
                                                                  LeaveType = x.LeaveType,
-                                                                 StartDate = x.StartDateOfLeave,
-                                                                 EndDate = x.EndDateOfLeave,
+                                                                 StartDateOfLeave = x.StartDateOfLeave,
+                                                                 EndDateOfLeave = x.EndDateOfLeave,
                                                                  FirstName = x.Employee.FirstName,
                                                                  LastName = x.Employee.LastName,
                                                                  EmployeeId = x.Employee.Id,

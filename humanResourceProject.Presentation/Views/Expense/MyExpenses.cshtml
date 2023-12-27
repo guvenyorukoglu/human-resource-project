@@ -48,9 +48,12 @@
 
                 <script>
                     $(document).ready(function () {
-                        $('#expenses').DataTable({
+                        $('#expenserequests').DataTable({
                             "order": [
                                 [2, 'desc']
+                            ],
+                            "columnDefs": [
+                                { "type": "date-eu", "targets": 2 }
                             ]
                         });
                     });
@@ -62,7 +65,7 @@
                         <tr>
                             <th style="width: 8%">Harcama No</th>
                             <th style="width: 8%">Harcama Tipi</th>
-                            <th style="width: 7%">Talep Tarihi</th>
+                            <th style="width: 7%" data-order="desc">Talep Tarihi</th>
                             <th style="width: 10%">Harcama Miktarı</th>
                             <th style="width: 5%">Para Birimi</th>
                             <th style="width: 7%">Harcama Tarihi</th>
@@ -86,10 +89,10 @@
                                 <tr>
                                     <td>@item.ExpenseNo</td>
                                     <td>@displayNameExpenseType</td>
-                                    <td>@item.CreateDate.ToString("dd.MM.yyyy")</td>
+                                    <td data-order="@item.CreateDate.ToString("yyyy-MM-dd")">@item.CreateDate.ToString("dd.MM.yyyy")</td>
                                     <td>@item.AmountOfExpense</td>
                                     <td>@item.Currency</td>
-                                    <td>@item.DateOfExpense.ToString("dd.MM.yyyy")</td>
+                                    <td data-order="@item.DateOfExpense.ToString("yyyy-MM-dd")">@item.DateOfExpense.ToString("dd.MM.yyyy")</td>
                                     <td>@item.Explanation</td>
                                     <td>@item.ManagerFullName</td>
                                     <td>@displayNameExpenseStatus</td>

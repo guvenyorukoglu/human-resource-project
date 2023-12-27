@@ -35,14 +35,13 @@
                                         <option value="@enumValue">@displayName</option>
                                     }
                                     <option value="" disabled selected>Masraf türü seçiniz!</option>
-
                                 }
                             </select>
                             <span asp-validation-for="ExpenseType" class="text-danger"></span>
                         </div>
                         <div class="form-group mb-3">
                             <label asp-for="DateOfExpense" class="control-label"></label>
-                            <input id="DateOfExpense" value="@DateTime.Now.ToString("yyyy-MM-dd")" max="@DateTime.Now" type="date" asp-for="DateOfExpense" class="form-control" />
+                            <input id="DateOfExpense" value="@DateTime.Now.ToString("dd.MM.yyyy")" max="@DateTime.Now" type="date" asp-for="DateOfExpense" class="form-control" />
                             <span asp-validation-for="DateOfExpense" class="text-danger"></span>
                         </div>
                         <div class="form-group mb-3">

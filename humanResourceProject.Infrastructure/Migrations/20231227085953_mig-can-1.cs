@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace humanResourceProject.Infrastructure.Migrations
 {
-    public partial class migcan : Migration
+    public partial class migcan1 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

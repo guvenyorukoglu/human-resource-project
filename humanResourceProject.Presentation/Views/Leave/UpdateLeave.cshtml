@@ -54,7 +54,7 @@
                         </div>
                         <div class="form-group  mb-3">
                             <label asp-for="DaysOfLeave" class="control-label"></label>
-                            <input value="@Model.DaysOfLeave" type="number-decimal" min="0.5" step="0.5" asp-for="DaysOfLeave" class="form-control" />
+                            <input id="amountInput" value="@Model.DaysOfLeave" type="number-decimal" min="0.5" step="0.5" asp-for="DaysOfLeave" class="form-control" />
                             <span asp-validation-for="DaysOfLeave" class="text-danger"></span>
                         </div>
                         <div class="form-group  mb-3">

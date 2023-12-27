@@ -73,7 +73,7 @@
                         </div>
                         <div class="form-group mb-3">
                             <label asp-for="DateOfExpense" class="control-label"></label>
-                            <input value="@Model.DateOfExpense.ToString("dd.MM.yyyy")" min="@DateTime.Now" type="date" asp-for="DateOfExpense" class="form-control" />
+                            <input id="DateOfExpense" value="@Model.DateOfExpense.ToString("dd.MM.yyyy")" min="@DateTime.Now" type="date" asp-for="DateOfExpense" class="form-control" />
                             <span asp-validation-for="DateOfExpense" class="text-danger"></span>
                         </div>
                         <div class="form-group mb-3">

@@ -115,7 +115,7 @@ namespace humanResourceProject.API.Controllers
             string mailToName = "Admin";
             string subject = "Yeni Kullanıcı Kayıt Oldu!";
             string body = $"<p>Merhaba Admin,</p><p>Yeni bir kullanıcı uygulamaya kayıt olmuştur.</p><p>Kullanıcının statüsünü aktif yapmak için <a href ='{action}'>buraya</a> tıklayınız.</p><br><hr><br><h3>Team Monitorease</h3>";
-            string recipientEmail = "yorukoglu.guven@gmail.com";
+            string recipientEmail = "cantokhay@gmail.com";
             await _mailService.SendEmailAsync(user, recipientEmail, mailToName, subject, body);
             //await _mailService.SendUserRegisteredEmail(user, action);
 

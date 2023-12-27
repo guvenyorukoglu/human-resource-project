@@ -7,8 +7,11 @@ using humanResourceProject.Domain.Entities.Concrete;
 using humanResourceProject.Domain.Enum;
 using humanResourceProject.Domain.IRepository.BaseRepos;
 using humanResourceProject.Models.DTOs;
+using humanResourceProject.Models.VMs;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using System.Collections.Generic;
 
 
 namespace humanResourceProject.Application.Services.Concrete.AppUserServices
@@ -17,13 +20,19 @@ namespace humanResourceProject.Application.Services.Concrete.AppUserServices
     {
         private readonly IBaseWriteRepository<AppUser> _writeRepository;
         private readonly IBaseReadRepository<AppUser> _readRepository;
+        private readonly IBaseReadRepository<Advance> _advanceReadRepository;
+        private readonly IBaseReadRepository<Expense> _expenseReadRepository;
+        private readonly IBaseReadRepository<Leave> _leaveReadRepository;
+        private readonly IBaseWriteRepository<Advance> _advanceWriteRepository;
+        private readonly IBaseWriteRepository<Expense> _expenseWriteRepository;
+        private readonly IBaseWriteRepository<Leave> _leaveWriteRepository;
         private readonly UserManager<AppUser> _userManager;
         private readonly IMapper _mapper;
         private readonly IImageService _imageService;
         private readonly IConfiguration _configuration;
         private readonly IMailService _mailService;
-  
-        public AppUserWriteService(IBaseWriteRepository<AppUser> writeRepository, IBaseReadRepository<AppUser> readRepository, IMapper mapper, UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, IImageService imageService, IConfiguration configuration) : base(writeRepository, readRepository)
+
+        public AppUserWriteService(IBaseWriteRepository<AppUser> writeRepository, IBaseReadRepository<AppUser> readRepository, IMapper mapper, UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, IImageService imageService, IConfiguration configuration, IBaseReadRepository<Advance> advanceReadRepository, IBaseReadRepository<Leave> leaveReadRepository, IBaseReadRepository<Expense> expenseReadRepository, IBaseWriteRepository<Advance> advanceWriteRepository, IBaseWriteRepository<Expense> expenseWriteRepository, IBaseWriteRepository<Leave> leaveWriteRepository) : base(writeRepository, readRepository)
         {
             _writeRepository = writeRepository;
             _readRepository = readRepository;
@@ -31,7 +40,12 @@ namespace humanResourceProject.Application.Services.Concrete.AppUserServices
             _userManager = userManager;
             _imageService = imageService;
             _configuration = configuration;
-          
+            _advanceReadRepository = advanceReadRepository;
+            _leaveReadRepository = leaveReadRepository;
+            _expenseReadRepository = expenseReadRepository;
+            _advanceWriteRepository = advanceWriteRepository;
+            _expenseWriteRepository = expenseWriteRepository;
+            _leaveWriteRepository = leaveWriteRepository;
         }
 
         public async Task<UpdateUserDTO> GetUpdateUserDTOById(Guid id)
@@ -59,7 +73,7 @@ namespace humanResourceProject.Application.Services.Concrete.AppUserServices
             }
             return result;
         }
-         public async Task<IdentityResult> RegisterPersonelManager(CreateEmployeeDTO model)
+        public async Task<IdentityResult> RegisterPersonelManager(CreateEmployeeDTO model)
         {
             if (model == null)
                 return IdentityResult.Failed();
@@ -70,9 +84,9 @@ namespace humanResourceProject.Application.Services.Concrete.AppUserServices
             IdentityResult result = await _userManager.CreateAsync(newUser, model.Password);
             if (result.Succeeded)
             {
-               
+
                 await _userManager.AddToRoleAsync(newUser, "Manager");
-               
+
             }
             return result;
         }
@@ -124,9 +138,34 @@ namespace humanResourceProject.Application.Services.Concrete.AppUserServices
         public async Task<IdentityResult> FireEmployee(Guid id)
         {
             AppUser user = await _readRepository.GetSingleDefault(x => x.Id == id);
+            List<Advance>? advanceList = await _advanceReadRepository.GetDefaults(x => x.EmployeeId == id);
+            List<Expense>? expenseList = await _expenseReadRepository.GetDefaults(x => x.EmployeeId == id);
+            List<Leave>? leaveList = await _leaveReadRepository.GetDefaults(x => x.EmployeeId == id);                        
+
+            foreach (var item in advanceList)
+            {
+                item.Status = Status.Deleted;
+                item.AdvanceStatus = RequestStatus.Deleted;
+                await _advanceWriteRepository.Update(item);
+            }
+
+
+            foreach (var item in expenseList)
+            {
+                item.Status = Status.Deleted;
+                item.ExpenseStatus = RequestStatus.Deleted;
+                await _expenseWriteRepository.Update(item);
+            }
+
+            foreach (var item in leaveList)
+            {
+                item.Status = Status.Deleted;
+                item.LeaveStatus = RequestStatus.Deleted;
+                await _leaveWriteRepository.Update(item);
+            }
+
             user.Status = Status.Inactive;
             user.UpdateDate = DateTime.Now;
-
 
             return await _userManager.UpdateAsync(user);
         }

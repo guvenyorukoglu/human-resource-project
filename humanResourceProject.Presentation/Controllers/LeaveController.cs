@@ -68,7 +68,6 @@ namespace humanResourceProject.Presentation.Controllers
             return View();
         }
 
-
         [HttpGet]
         public async Task<IActionResult> CreateLeave(Guid id)
         {
