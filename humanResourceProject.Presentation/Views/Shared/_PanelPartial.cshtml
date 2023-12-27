@@ -1,6 +1,6 @@
 ﻿@using System.Security.Claims;
 
-<div class="panel col-md-3 cold-lg-3">
+<div class="panel col-md-1 col-lg-1">
     <div class="profile row">
         <div class="picture">
             <input type="file" id="uploadInput" style="display: none;" />
@@ -68,7 +68,7 @@
                     <a href="#"><i class="fa fa-envelope"></i>E-posta</a>
                 </li>
                 <li>
-                    <a href="#"><i class="fa fa-cog"></i>Ayarlar</a>
+                    <a asp-action="ProfileEmployee" asp-controller="Employee"><i class="fa fa-users"></i>Profil</a>
                 </li>
             </ul>
         </div>

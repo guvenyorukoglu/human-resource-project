@@ -105,6 +105,28 @@ namespace humanResourceProject.Application.Services.Concrete.AppUserServices
             await _signInManager.SignOutAsync();
         }
 
+        public async Task<ProfileEmployeeVM> ProfileEmployee(Guid employeeId)
+        {
 
+
+            return await _readRepository.GetFilteredFirstOrDefault(
+                select: x => new ProfileEmployeeVM()
+                {
+                    FullName = x.FirstName + " " + x.LastName,
+                    Email = x.Email,
+                    Address = x.Address,
+                    PhoneNumber = x.PhoneNumber,
+                    JobTitle = x.Company.Jobs.FirstOrDefault(j => j.Id == x.JobId).Title,
+                    IdentificationNumber = x.IdentificationNumber,
+                    BloodGroup = x.BloodGroup,
+                    Birthdate = x.Birthdate,
+                    Gender = x.Gender,
+                    ManagerName = x.Manager.FirstName + " " + x.Manager.LastName,
+                    ManagerEmail = x.Manager.Email,
+                    ManagerPhoneNumber = x.Manager.PhoneNumber
+
+                },
+                where: x => x.Id == employeeId, include: x => x.Include(x => x.Manager).Include(x => x.Company).ThenInclude(x => x.Jobs));
+        }
     }
 }
