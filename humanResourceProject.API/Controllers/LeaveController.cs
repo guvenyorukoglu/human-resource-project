@@ -48,6 +48,7 @@ namespace humanResourceProject.API.Controllers
                 return BadRequest(result.Errors);
             }
 
+            Leave leave = await _leaveReadService.GetSingleDefault(x => x.Id == model.Id);
             AppUser user = await _appUserReadService.GetSingleDefault(x => x.Id == model.EmployeeId);
             string action = "";
             string recipientEmail = user.Email;
@@ -92,6 +93,13 @@ namespace humanResourceProject.API.Controllers
         public async Task<IActionResult> GetLeavesByCompanyId(Guid id)
         {
             return Ok(await _leaveReadService.GetLeavesByCompanyId(id));
+        }
+
+        [HttpGet]
+        [Route("GetLeaveDTO/{employeeId}")]
+        public async Task<IActionResult> GetLeaveDTO(Guid employeeId)
+        {
+            return Ok(await _leaveReadService.GetLeaveDTO(employeeId));
         }
 
         [HttpPost]

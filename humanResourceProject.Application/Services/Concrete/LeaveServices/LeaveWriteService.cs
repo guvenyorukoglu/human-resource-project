@@ -3,7 +3,6 @@ using humanResourceProject.Application.Services.Abstract.ILeaveServices;
 using humanResourceProject.Application.Services.Concrete.BaseServices;
 using humanResourceProject.Domain.Entities.Concrete;
 using humanResourceProject.Domain.IRepository.BaseRepos;
-using humanResourceProject.Infrastructure.Repositories.BaseRepos;
 using humanResourceProject.Models.DTOs;
 using Microsoft.AspNetCore.Identity;
 
@@ -51,18 +50,18 @@ namespace humanResourceProject.Application.Services.Concrete.LeaveServices
 
         public async Task<IdentityResult> UpdateLeave(UpdateLeaveDTO model)
         {
-            Leave updateleave = await _baseReadRepository.GetSingleDefault(x => x.Id == model.Id);
-            if (updateleave == null)
+            Leave updateLeave = await _baseReadRepository.GetSingleDefault(x => x.Id == model.Id);
+            if (updateLeave == null)
                 return IdentityResult.Failed();
 
-            _baseWriteRepository.DetachEntity(updateleave);
+            _baseWriteRepository.DetachEntity(updateLeave);
 
-            updateleave = _mapper.Map<Leave>(model);
+            updateLeave = _mapper.Map<Leave>(model);
 
-            updateleave.Status = Domain.Enum.Status.Modified;
-            updateleave.UpdateDate = DateTime.Now;
+            updateLeave.Status = Domain.Enum.Status.Modified;
+            updateLeave.UpdateDate = DateTime.Now;
 
-            if (await _baseWriteRepository.Update(updateleave))
+            if (await _baseWriteRepository.Update(updateLeave))
                 return IdentityResult.Success;
             else
                 return IdentityResult.Failed();

@@ -39,7 +39,7 @@
             @if (Model != null)
             {
                 <a asp-action="CreateExpense" asp-controller="Expense" asp-route-id="@Guid.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value)">
-                    <button class="custom-button custom-button--create-entity">Harcama Ekle</button>
+                    <button class="btn btn-success">Harcama Ekle</button>
                 </a>
             }
             
@@ -131,14 +131,13 @@
                                                         </div>
                                                         <div class="modal-footer">
                                                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>
-                                                            <a asp-action="DeleteExpense" asp-controller="Advance" asp-route-id="@item.Id">
+                                                            <a asp-action="DeleteExpense" asp-controller="Expense" asp-route-id="@item.Id">
                                                                 <button type="button" class="btn btn-danger">Sil</button>
                                                             </a>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
-
                                         }
                                     </td>
                                 </tr>
@@ -147,7 +146,7 @@
                     </tbody>
                 </table>
                 <div>
-                    <a asp-controller="Employee" asp-action="Home"><button class="custom-button custom-button--create-entity">Ana Sayfaya Dön</button></a>
+                    <a asp-controller="Employee" asp-action="Home"><button class="btn btn-secondary">Ana Sayfaya Dön</button></a>
                 </div>
             </div>
         </div>

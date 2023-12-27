@@ -1,11 +1,6 @@
 ﻿using humanResourceProject.Domain.Enum;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace humanResourceProject.Models.DTOs
 {
@@ -26,9 +21,12 @@ namespace humanResourceProject.Models.DTOs
         [Required(ErrorMessage = "İzin gün miktarı boş geçilemez!")]
         [DisplayName("İzinli Gün Miktarı*")]
         public decimal DaysOfLeave { get; set; }
+        public DateTime CreateDate { get; set; }
         [Required(ErrorMessage = "Açıklama alanı boş geçilemez!")]
         [DisplayName("Açıklama*")]
         [StringLength(500, ErrorMessage = "Açıklama en fazla 500 en az 5 karakter olmalıdır.", MinimumLength = 5)]
         public string Explanation { get; set; }
+        public string LeaveNo { get; set; }
+
     }
 }

@@ -1,4 +1,4 @@
-﻿@model List<LeaveVM>
+@model List<LeaveVM>
 
 @{
     ViewData["Title"] = "LeaveRequests";
@@ -149,7 +149,6 @@
                                                     </button>
                                                 </a>
                                             }
-                                            
                                         </td>
                                     </tr>
                                 }
@@ -158,7 +157,7 @@
                     </tbody>
                 </table>
                 <div>
-                    <a asp-controller="Employee" asp-action="Home"><button class="custom-button custom-button--create-entity">Ana Sayfaya Dön</button></a>
+                    <a asp-controller="Employee" asp-action="Home"><button class="btn btn-secondary">Ana Sayfaya Dön</button></a>
                 </div>
             </div>
         </div>
