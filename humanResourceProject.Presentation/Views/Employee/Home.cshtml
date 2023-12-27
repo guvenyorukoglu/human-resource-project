@@ -242,7 +242,15 @@
                             @if (Model != null)
                             {
                                 <tr>
-                                    <td><strong style="font-size: 20px;">Şirket Adı:</strong> @Model.Company.CompanyName</td>
+
+
+                                    <td>@Model.Company.CompanyName</td>
+                                    <td>@Model.Company.TaxOffice</td>
+                                    <td>@Model.Company.TaxNumber</td>
+                                    <td>@Model.Company.PhoneNumber</td>
+                                    <td>@Model.Company.Address</td>
+
+
                                 </tr>
                                 <tr>
                                     <td><strong style="font-size: 20px;">Vergi Dairesi:</strong> @Model.Company.TaxOffice</td>
