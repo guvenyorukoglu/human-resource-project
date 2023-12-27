@@ -125,5 +125,21 @@ namespace humanResourceProject.Application.Services.Concrete.AdvanceServices
                                                 include: x => x.Include(x => x.Employee));
             return advances;
         }
+
+        public async Task<List<DashboardAdvanceVM>> FillDashboardAdvanceVM(Guid id)
+        {
+            List<DashboardAdvanceVM> dashboardAdvanceVMs = await _advanceReadRepository.GetFilteredList(
+                                               select: x => new DashboardAdvanceVM
+                                               {
+
+                                                   CreateDate = x.CreateDate,
+                                                   AdvanceNo = x.AdvanceNo,
+                                                   AmountOfAdvance = x.AmountOfAdvance,
+                                               },
+                                                where: x => (x.Status != Status.Deleted && x.Status != Status.Inactive) && x.Employee.Id == id,
+                                                orderBy: x => x.OrderByDescending(x => x.CreateDate),
+                                                include: x => x.Include(x => x.Employee)); ;
+            return dashboardAdvanceVMs;
+        }
     }
 }

@@ -2,6 +2,8 @@
 {
     public class CompanyVM
     {
+        public Guid Id { get; set; }
+
         public string CompanyName { get; set; }
         public string TaxNumber { get; set; }
         public string TaxOffice { get; set; }

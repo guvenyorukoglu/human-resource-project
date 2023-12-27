@@ -131,5 +131,11 @@ namespace humanResourceProject.API.Controllers
             return Ok(await _expenseWriteService.DeleteExpense(id));
         }
 
+        [HttpGet]
+        [Route("FillDashboardExpenseVM/{id}")]
+        public async Task<IActionResult> FillDashboardExpenseVM(Guid id)
+        {
+            return Ok(await _expenseReadService.FillDashboardExpenseVM(id));
+        }
     }
 }

@@ -1,5 +1,5 @@
 ﻿@using humanResourceProject.Models.VMs;
-@model List<DashboardVM>;
+@model DashboardVM;
 @{
     ViewData["Title"] = "Home";
     Layout = "~/Views/Shared/_HRLayout.cshtml";
@@ -104,153 +104,147 @@
                 </div>
 
 
-                <div class="col-md-3 holiday-info card"><h6>ŞİRKET BİLGİLERİ</h6>
-                    <table class=" table-bordered table-striped">
+                <div class="col-md-3 holiday-info card">
+                    <h6>ŞİRKET BİLGİLERİ</h6>
+                    <table class="table table-striped">
                         <tbody>
-                             @if (Model != null)
+                            @if (Model != null)
                             {
                                 <tr>
-                                    @foreach (var item in Model)
-                                    {
-                                        <td>@item.Company.CompanyName</td>
-                                        <td>@item.Company.TaxOffice</td>
-                                        <td>@item.Company.TaxNumber</td>
-                                        <td>@item.Company.PhoneNumber</td>
-                                        <td>@item.Company.Address</td>
-                                    }
-
+                                    <td><strong style="font-size: 20px;">Şirket Adı:</strong> @Model.Company.CompanyName</td>
+                                </tr>
+                                <tr>
+                                    <td><strong style="font-size: 20px;">Vergi Dairesi:</strong> @Model.Company.TaxOffice</td>
+                                </tr>
+                                <tr>
+                                    <td><strong style="font-size: 20px;">Vergi Numarası:</strong> @Model.Company.TaxNumber</td>
+                                </tr>
+                                <tr>
+                                    <td><strong style="font-size: 20px;">Telefon Numarası:</strong> @Model.Company.PhoneNumber</td>
+                                </tr>
+                                <tr>
+                                    <td><strong style="font-size: 20px;">Adres:</strong> @Model.Company.Address</td>
                                 </tr>
                             }
                         </tbody>
                     </table>
                 </div>
-                </div>
 
     <div class="row text-center">
-                <div class="col-md-4 upcoming-leave-info card">
-                    <h6>
-                        <a asp-action="MyLeaves"
-                           asp-controller="Leave">İZİNLER</a>
-                    </h6>
-                    <table class=" table-bordered table-striped">
-                        <thead>
-                            <tr>
-                                <th style="width: 50%">İzin Gün Sayısı</th>
-                                <th style="width: 50%">İstek Tarihi</th>
-
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @if (Model != null)
-                            {
-                                int count = 0;
-                                foreach (var leave in Model)
+                    <div class="col-md-4 upcoming-leave-info card">
+                        <h6>
+                            <a asp-action="MyLeaves" asp-controller="Leave">İZİNLER</a>
+                        </h6>
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th style="width: 33%; border: none;">İzin No</th>
+                                    <th style="width: 33%; border: none;">İzin Gün Sayısı</th>
+                                    <th style="width: 33%; border: none;">İstek Tarihi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (Model != null)
                                 {
-                                    foreach (var item in leave.Leaves)
+                                    int count = 0;
+                                    foreach (var leave in Model.Leaves)
                                     {
                                         if (count >= 3)
                                         {
                                             break;
                                         }
 
-                                        if (item != null) // Leave özelliğini kontrol et
+                                        if (leave != null)
                                         {
                                             <tr>
-                                                <td>@item.DaysOfLeave</td>
-                                                <td>@item.CreateDate</td>
+                                                <td style="font-size: 16px; text-transform: uppercase;">@leave.LeaveNo</td>
+                                                <td style="font-size: 16px; text-transform: uppercase;">@leave.DaysOfLeave</td>
+                                                <td style="font-size: 16px; text-transform: uppercase;">@leave.CreateDate</td>
                                             </tr>
                                             count++;
                                         }
                                     }
-                                    
                                 }
-                            }
-                        </tbody>
-                    </table>
-                </div>
-             
-                 <div class="col-md-4 upcoming-leave-info card">
-                    <h6>
-                        <a asp-action="Expenses"
-                           asp-controller="Expense">MASRAFLAR</a>
-                    </h6>
-                    <table class=" table-bordered table-striped">
-                        <thead>
-                            <tr>
-                                <th style="width: 50%">Miktarı</th>
-                                <th style="width: 50%">İstek Tarihi</th>
+                            </tbody>
+                        </table>
+                    </div>
 
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @if (Model != null)
-                            {
-                                int count = 0;
-                                foreach (var expense in Model)
+
+                    <div class="col-md-4 upcoming-leave-info card">
+                        <h6>
+                            <a asp-action="Expenses" asp-controller="Expense">MASRAFLAR</a>
+                        </h6>
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th style="width: 33%; border: none;">Masraf No</th>
+                                    <th style="width: 33%; border: none;">Miktarı</th>
+                                    <th style="width: 33%; border: none;">İstek Tarihi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (Model != null)
                                 {
-                                    foreach (var item in expense.Expenses)
+                                    int count = 0;
+                                    foreach (var expense in Model.Expenses)
                                     {
                                         if (count >= 3)
                                         {
                                             break;
                                         }
 
-                                        if (item != null) 
+                                        if (expense != null)
                                         {
                                             <tr>
-                                                <td>@item.AmountOfExpense</td>
-                                                <td>@item.CreateDate</td>
+                                                <td style="font-size: 16px;">@expense.ExpenseNo</td>
+                                                <td style="font-size: 16px;">@expense.AmountOfExpense</td>
+                                                <td style="font-size: 16px;">@expense.CreateDate</td>
                                             </tr>
                                             count++;
                                         }
                                     }
-
                                 }
-                            }
-                        </tbody>
-                    </table>
-                 </div>
-                <div class="col-md-3 upcoming-leave-info card">
-                    <h6>
-                        <a asp-action="MyAdvances"
-                           asp-controller="Advance">AVANSLAR</a>
-                    </h6>
-                    <table class=" table-bordered table-striped">
-                        <thead>
-                            <tr>
-                                <th style="width: 50%">Miktarı</th>
-                                <th style="width: 50%">İstek Tarihi</th>
-
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @if (Model != null)
-                            {
-                                int count = 0;
-                                foreach (var advance in Model)
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="col-md-3 upcoming-leave-info card">
+                        <h6>
+                            <a asp-action="MyAdvances" asp-controller="Advance">AVANSLAR</a>
+                        </h6>
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th style="width: 33%; border: none;">Avans No</th>
+                                    <th style="width: 33%; border: none;">Avans Miktarı</th>
+                                    <th style="width: 33%; border: none;">İstek Tarihi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (Model != null)
                                 {
-                                    foreach (var item in advance.Advances)
+                                    int count = 0;
+                                    foreach (var advance in Model.Advances)
                                     {
                                         if (count >= 3)
                                         {
                                             break;
                                         }
 
-                                        if (item != null) 
+                                        if (advance != null)
                                         {
                                             <tr>
-                                                <td>@item.AmountOfAdvance</td>
-                                                <td>@item.CreateDate</td>
+                                                <td style="font-size: 16px;">@advance.AdvanceNo</td>
+                                                <td style="font-size: 16px;">@advance.AmountOfAdvance</td>
+                                                <td style="font-size: 16px;">@advance.CreateDate</td>
                                             </tr>
                                             count++;
                                         }
                                     }
-
                                 }
-                            }
-                        </tbody>
-                    </table>
-                </div>
+                            </tbody>
+                        </table>
+                    </div>
+
 
 
       

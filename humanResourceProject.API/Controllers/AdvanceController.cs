@@ -127,5 +127,12 @@ namespace humanResourceProject.API.Controllers
         {
             return Ok(await _advanceWriteService.DeleteAdvance(id));
         }
+
+        [HttpGet]
+        [Route("FillDashboardAdvanceVM/{id}")]
+        public async Task<IActionResult> FillDashboardAdvanceVM(Guid id)
+        {
+            return Ok(await _advanceReadService.FillDashboardAdvanceVM(id));
+        }
     }
 }
