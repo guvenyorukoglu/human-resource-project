@@ -37,11 +37,6 @@
                     </div>
                     <div class="card-body">
                         <div class="form-group mb-3">
-                            <label asp-for="AmountOfAdvance" class="control-label"></label>
-                            <input value="@Model.AmountOfAdvance" type="number-decimal" min="1" asp-for="AmountOfAdvance" class="form-control" />
-                            <span asp-validation-for="AmountOfAdvance" class="text-danger"></span>
-                        </div>
-                        <div class="form-group mb-3">
                             <label asp-for="AdvanceType" class="control-label"></label>
                             <select asp-for="AdvanceType" class="form-control">
                                 @{
@@ -60,6 +55,11 @@
                             <span asp-validation-for="AdvanceType" class="text-danger"></span>
                         </div>
                         <div class="form-group mb-3">
+                            <label asp-for="AmountOfAdvance" class="control-label"></label>
+                            <input value="@Model.AmountOfAdvance" type="number-decimal" min="1" asp-for="AmountOfAdvance" class="form-control" />
+                            <span asp-validation-for="AmountOfAdvance" class="text-danger"></span>
+                        </div>
+                        <div class="form-group mb-3">
                             <label asp-for="Currency" class="control-label"></label>
                             <select asp-for="Currency" class="form-control">
                                 @{
@@ -71,14 +71,14 @@
                                         var displayName = displayAttribute?.GetName() ?? enumValue.ToString();
                                         <option value="@enumValue">@displayName</option>
                                     }
-                                    <option value="" disabled selected>Para Birimi seçiniz!</option>
+                                    <option value="" disabled>Para Birimi seçiniz!</option>
                                 }
                             </select>
                             <span asp-validation-for="Currency" class="text-danger"></span>
                         </div>
                         <div class="form-group mb-3">
                             <label asp-for="ExpiryDate" class="control-label"></label>
-                            <input value="@Model.ExpiryDate.ToString("dd.MM.yyyy")" min="@DateTime.Now" type="date" asp-for="ExpiryDate" class="form-control" />
+                            <input value="@Model.ExpiryDate.ToString("yyyy-MM-dd")" min="@DateTime.Now" type="date" asp-for="ExpiryDate" class="form-control" />
                             <span asp-validation-for="ExpiryDate" class="text-danger"></span>
                         </div>
                         <div class="form-group mb-3">
