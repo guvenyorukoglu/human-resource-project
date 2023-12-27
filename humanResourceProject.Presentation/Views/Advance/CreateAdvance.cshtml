@@ -22,10 +22,7 @@
 <body>
     <div class="row">
         @Html.Partial("_PanelPartial")
-
         <div class="col-md-4 mt-5" style="margin: 0 auto">
-
-
             <form asp-action="CreateAdvance">
                 <div class="card shadow p-3 mb-5 bg-body rounded">
                     <div class="card-header">
@@ -54,12 +51,12 @@
                         </div>
                         <div class="form-group mb-3">
                             <label asp-for="ExpiryDate" class="control-label"></label>
-                            <input value="@DateTime.Now.ToString("yyyy-MM-dd")" min="@DateTime.Now.ToString("yyyy-MM-dd")" type="date" asp-for="ExpiryDate" class="form-control" />
+                            <input value="@DateTime.Now.ToString("dd.MM.yyyy")" min="@DateTime.Now" type="date" asp-for="ExpiryDate" class="form-control" />
                             <span asp-validation-for="ExpiryDate" class="text-danger"></span>
                         </div>
                         <div class="form-group mb-3">
                             <label asp-for="AmountOfAdvance" class="control-label"></label>
-                            <input type="number" min="1" asp-for="AmountOfAdvance" class="form-control" />
+                            <input type="number-decimal" min="1" asp-for="AmountOfAdvance" class="form-control" />
                             <span asp-validation-for="AmountOfAdvance" class="text-danger"></span>
                         </div>
 
@@ -83,7 +80,6 @@
                             </select>
                             <span asp-validation-for="Currency" class="text-danger"></span>
                         </div>
-
                         <div class="form-group mb-3">
                             <label asp-for="Explanation" class="control-label"></label>
                             <textarea asp-for="Explanation" class="form-control" rows="8"></textarea>
@@ -109,7 +105,6 @@
                                 <a asp-controller="Employee" asp-action="Home"><button class="btn btn-secondary">Ana Sayfaya Dön</button></a>
                             </div>
                         </div>
-
                     </div>
                 </div>
             </form>

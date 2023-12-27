@@ -45,10 +45,10 @@
             @if (Model != null)
             {
                 <a asp-action="CreateLeave" asp-controller="Leave" asp-route-id="@Guid.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value)">
-                    <button class="custom-button custom-button--create-entity">İzin Ekle</button>
+                    <button class="btn btn-success">İzin Ekle</button>
                 </a>
             }
-            
+
             <div class="pagination-container">
 
                 <script>
@@ -101,43 +101,43 @@
                                         @if (item.LeaveStatus == RequestStatus.Pending)
                                         {
                                             <a asp-action="UpdateLeave"
-                                            asp-controller="Leave"
+                                               asp-controller="Leave"
                                                asp-route-id="@item.Id">
                                                 <button class="btn btn-secondary btn-sm d-inline-flex bg-primary gap-1 align-items-center">
                                                     <i class="fa fa-pen"></i><span>Güncelle</span>
                                                 </button>
                                             </a>
-                                                <a asp-action="DeleteLeave"
+                                            <a asp-action="DeleteLeave"
                                                asp-controller="Leave"
-                                                   data-bs-toggle="modal"
-                                                   data-bs-target="#confirmDeleteModal_@item.Id">
-                                                    <button class="btn btn-danger btn-sm d-inline-flex gap-1 align-items-center">
-                                                        <i class="fa fa-trash"></i><span>Kaldır</span>
-                                                    </button>
-                                                </a>
+                                               data-bs-toggle="modal"
+                                               data-bs-target="#confirmDeleteModal_@item.Id">
+                                                <button class="btn btn-danger btn-sm d-inline-flex gap-1 align-items-center">
+                                                    <i class="fa fa-trash"></i><span>Kaldır</span>
+                                                </button>
+                                            </a>
 
-                                                <!-- Modal -->
-                                                <div class="modal fade" id="confirmDeleteModal_@item.Id" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
-                                                    <div class="modal-dialog" role="document">
-                                                        <div class="modal-content">
-                                                            <div class="modal-header">
-                                                                <h5 class="modal-title" id="confirmDeleteModalLabel">Silme İşlemi Onayı</h5>
+                                            <!-- Modal -->
+                                            <div class="modal fade" id="confirmDeleteModal_@item.Id" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
+                                                <div class="modal-dialog" role="document">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title" id="confirmDeleteModalLabel">Silme İşlemi Onayı</h5>
                                                             <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                                                                    <span aria-hidden="true">&times;</span>
-                                                                </button>
-                                                            </div>
-                                                            <div class="modal-body">
-                                                                Silmek istediğinize emin misiniz?
-                                                            </div>
-                                                            <div class="modal-footer">
-                                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>
-                                                                <a asp-action="DeleteLeave" asp-controller="Advance" asp-route-id="@item.Id">
-                                                                    <button type="button" class="btn btn-danger">Sil</button>
-                                                                </a>
-                                                            </div>
+                                                                <span aria-hidden="true">&times;</span>
+                                                            </button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            Silmek istediğinize emin misiniz?
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>
+                                                            <a asp-action="DeleteLeave" asp-controller="Leave" asp-route-id="@item.Id">
+                                                                <button type="button" class="btn btn-danger">Sil</button>
+                                                            </a>
                                                         </div>
                                                     </div>
                                                 </div>
+                                            </div>
                                         }
                                     </td>
                                 </tr>
@@ -146,7 +146,7 @@
                     </tbody>
                 </table>
                 <div>
-                    <a asp-controller="Employee" asp-action="Home"><button class="custom-button custom-button--create-entity">Ana Sayfaya Dön</button></a>
+                    <a asp-controller="Employee" asp-action="Home"><button class="btn btn-secondary">Ana Sayfaya Dön</button></a>
                 </div>
             </div>
         </div>
