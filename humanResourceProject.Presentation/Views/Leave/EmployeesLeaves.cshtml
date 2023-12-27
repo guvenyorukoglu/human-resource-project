@@ -43,9 +43,12 @@
 
                 <script>
                     $(document).ready(function () {
-                        $('#leaverequests').DataTable({
+                        $('#expenserequests').DataTable({
                             "order": [
                                 [2, 'desc']
+                            ],
+                            "columnDefs": [
+                                { "type": "date-eu", "targets": 2 }
                             ]
                         });
                     });
@@ -84,12 +87,12 @@
                                     <tr>
                                         <td>@item.LeaveNo</td>
                                         <td>@displayNameLeaveType</td>
-                                        <td>@item.CreateDate.ToString("dd.MM.yyyy")</td>
+                                        <td data-order="@item.CreateDate.ToString("yyyy-MM-dd")">@item.CreateDate.ToString("dd.MM.yyyy")</td>
                                         <td>@item.DaysOfLeave</td>
                                         <td>@item.FirstName</td>
                                         <td>@item.LastName</td>
-                                        <td>@item.StartDate.ToString("dd.MM.yyyy")</td>
-                                        <td>@item.EndDate.ToString("dd.MM.yyyy")</td>
+                                        <td data-order="@item.StartDateOfLeave.ToString("yyyy-MM-dd")">@item.StartDateOfLeave.ToString("dd.MM.yyyy")</td>
+                                        <td data-order="@item.EndDateOfLeave.ToString("yyyy-MM-dd")">@item.EndDateOfLeave.ToString("dd.MM.yyyy")</td>
                                         <td>@item.Explanation</td>
                                         <td>@displayNameLeaveStatus</td>
                                         <td>

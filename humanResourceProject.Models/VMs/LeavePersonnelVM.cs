@@ -32,6 +32,7 @@ namespace humanResourceProject.Models.VMs
         public DateTime CreateDate { get; set; }
         public string ManagerFullName { get; set; }
         public string LeaveNo { get; set; }
+        public Status Status { get; set; }
 
     }
 }

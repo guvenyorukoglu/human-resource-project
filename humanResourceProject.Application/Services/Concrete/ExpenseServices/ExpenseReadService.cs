@@ -159,7 +159,6 @@ namespace humanResourceProject.Application.Services.Concrete.ExpenseServices
             };
             return expenseDTO;
         }
-
         public async Task<DashboardExpenseVM> FillDashboardExpenseVM(Guid id)
         {
             List<DashboardMyExpensesVM> dashboardMyExpensesVM = await _expenseReadRepository.GetFilteredList(

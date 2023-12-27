@@ -1,4 +1,4 @@
-﻿namespace humanResourceProject.Models.VMs
+namespace humanResourceProject.Models.VMs
 {
     public class DashboardVM
     {
@@ -15,6 +15,9 @@
         public int PendingAdvancesCountForManager { get; set; }
         public int MyPendingExpensesCount { get; set; }
         public int PendingExpensesCountForManager { get; set; }
+
+        public int? TotalLeaveRequests { get; set; }
+
 
     }
 }

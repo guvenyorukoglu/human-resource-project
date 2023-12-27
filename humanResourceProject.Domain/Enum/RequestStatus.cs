@@ -9,6 +9,8 @@ namespace humanResourceProject.Domain.Enum
         [Display(Name = "Onaylandı")]
         Approved = 1,
         [Display(Name = "Reddedildi")]
-        Rejected = 2
+        Rejected = 2,
+        [Display(Name = "Silindi")]
+        Deleted = 3
     }
 }

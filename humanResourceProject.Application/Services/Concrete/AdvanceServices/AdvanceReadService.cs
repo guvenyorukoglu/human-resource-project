@@ -134,7 +134,6 @@ namespace humanResourceProject.Application.Services.Concrete.AdvanceServices
                                                 include: x => x.Include(x => x.Employee));
             return advances;
         }
-
         public async Task<DashboardAdvanceVM> FillDashboardAdvanceVM(Guid id)
         {
             List<DashboardMyAdvancesVM> dashboardMyAdvancesVM = await _advanceReadRepository.GetFilteredList(

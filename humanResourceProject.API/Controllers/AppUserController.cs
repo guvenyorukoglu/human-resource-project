@@ -126,10 +126,6 @@ namespace humanResourceProject.API.Controllers
         {
             var result = await _appUserWriteService.Delete(id);
 
-            //await _appUserWriteService.SetAdvanceStatusOfEmployeeToDeleted(id);
-            //await _appUserWriteService.SetLeaveStatusOfEmployeeToDeleted(id);
-            //await _appUserWriteService.SetExpenseStatusOfEmployeeToDeleted(id);
-
             if (!result)
                 return BadRequest();
 
@@ -155,10 +151,6 @@ namespace humanResourceProject.API.Controllers
         public async Task<IActionResult> FireEmployee(Guid id) // Personel İşten Çıkarma
         {
             var result = await _appUserWriteService.FireEmployee(id);
-
-            //await _appUserWriteService.SetAdvanceStatusOfEmployeeToDeleted(id);
-            //await _appUserWriteService.SetLeaveStatusOfEmployeeToDeleted(id);
-            //await _appUserWriteService.SetExpenseStatusOfEmployeeToDeleted(id);
 
             if (!result.Succeeded)
                 return BadRequest();

@@ -1,4 +1,4 @@
-﻿@model DashboardVM
+@model DashboardVM
 @{
     ViewData["Title"] = "Home";
     Layout = "~/Views/Shared/_HRLayout.cshtml";
@@ -86,7 +86,6 @@
 <body>
     <div class="row">
         @Html.Partial("_PanelPartial")
-
         <div class="aside col-md-9" style="margin-top:50px;">
             <div class="row text-center">
                 <div class="col-md-4 leave-info card">
@@ -96,11 +95,62 @@
                     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
                     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.min.js"></script>
+
+                    @*<script>
+                    document.addEventListener("DOMContentLoaded", function () {
+                    const ctx = document.getElementById("myChart");
+
+
+                    var leaveType = [];
+                    var used = [];
+                    var remain = [];
+                    var futureDated = [];
+
+                    //Todo: push metotları yazılacak
+
+
+
+                    new Chart(ctx, {
+                    type: "doughnut",
+                    data:
+                    {
+                    labels: [], //leaveType olarak düzelecek
+                    datasets:
+                    [
+                    {
+                    label: "",
+                    data: [12, 19, 8],
+                    borderWidth: 1,
+                    },
+                    ],
+                    },
+                    options: {},
+                    });
+                    });
+                    </script>*@
+
+
+
+
+                    @{
+                        decimal totalLeaveDays = 0;
+
+                        if (Model != null)
+                        {
+
+                            if (Model.Leaves != null)
+                            {
+                                foreach (var leave in Model.Leaves)
+                                {
+                                    totalLeaveDays += leave.DaysOfLeave;
+                                }
+                            }
+                        }
+                    }
+
                     <script>
                         document.addEventListener("DOMContentLoaded", function () {
                             const ctx = document.getElementById("myChart");
-
-
                             var leaveType = [];
                             var used = [];
                             var remain = [];
@@ -125,11 +175,13 @@
                                             },
                                         ],
                                 },
-                                options: {},
                             });
+                            document.getElementById("usedDays").innerText = "Kullanılan İzin: " + used;
+                            document.getElementById("remainDays").innerText = "Kalan İzin: " + remain;
                         });
-                    </script>
 
+
+                    </script>
 
                     @{
                         decimal totalLeaveDays = 0;
@@ -327,6 +379,7 @@
                                 {
                                     int count = 0;
                                     foreach (var expense in Model.MyExpenses)
+
                                     {
                                         if (count >= 5)
                                         {
@@ -384,10 +437,6 @@
                             </tbody>
                         </table>
                     </div>
-
-
-
-
                     <div id="calendarEventModal" class="modal fade" role="dialog">
                         <div class="modal-dialog modal-md text-center">
                             <!-- Modal content-->
@@ -430,6 +479,7 @@
 <style>
     .aside {
         margin-left: 50px;
+       
     }
 
     .card {
