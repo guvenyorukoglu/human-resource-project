@@ -256,6 +256,18 @@
                                 <tr>
                                     <td><strong style="font-size: 20px;">Adres:</strong> @Model.Company.Address</td>
                                 </tr>
+                                <tr>
+                                    <td><strong style="font-size: 20px;">Vergi Dairesi:</strong> @Model.Company.TaxOffice</td>
+                                </tr>
+                                <tr>
+                                    <td><strong style="font-size: 20px;">Vergi Numarası:</strong> @Model.Company.TaxNumber</td>
+                                </tr>
+                                <tr>
+                                    <td><strong style="font-size: 20px;">Telefon Numarası:</strong> @Model.Company.PhoneNumber</td>
+                                </tr>
+                                <tr>
+                                    <td><strong style="font-size: 20px;">Adres:</strong> @Model.Company.Address</td>
+                                </tr>
                             }
                         </tbody>
                     </table>
@@ -378,40 +390,41 @@
 
 
 
+      
 
-                <div id="calendarEventModal" class="modal fade" role="dialog">
-                    <div class="modal-dialog modal-md text-center">
-                        <!-- Modal content-->
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <button type="button" class="close" data-dismiss="modal">
-                                    &times;
-                                </button>
-                                <h4 class="modal-title">Etkinlik Oluştur</h4>
-                            </div>
-                            <div class="modal-body">
-                                <form action="" class="form-control">
-                                    <label for="Etkinlik">Etkinlik Adı</label>
-                                    <input type="text" />
-                                    <hr />
-                                    <label for="Etkinlik">Etkinlik Başlangıç Zamanı</label>
-                                    <input type="date" />
-                                    <hr />
-                                    <label for="Etkinlik">Etkinlik Bitiş Zamanı</label>
-                                    <input type="date" />
-                                    <hr />
-                                    <button class="btn btn-primary">Kaydet</button>
-                                </form>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-default" data-dismiss="modal">
-                                    Close
-                                </button>
-                            </div>
-                        </div>
+        <div id="calendarEventModal" class="modal fade" role="dialog">
+            <div class="modal-dialog modal-md text-center">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">
+                            &times;
+                        </button>
+                        <h4 class="modal-title">Etkinlik Oluştur</h4>
+                    </div>
+                    <div class="modal-body">
+                        <form action="" class="form-control">
+                            <label for="Etkinlik">Etkinlik Adı</label>
+                            <input type="text" />
+                            <hr />
+                            <label for="Etkinlik">Etkinlik Başlangıç Zamanı</label>
+                            <input type="date" />
+                            <hr />
+                            <label for="Etkinlik">Etkinlik Bitiş Zamanı</label>
+                            <input type="date" />
+                            <hr />
+                            <button class="btn btn-primary">Kaydet</button>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">
+                            Close
+                        </button>
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
 </body>
 
 
