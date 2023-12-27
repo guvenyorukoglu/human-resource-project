@@ -95,13 +95,6 @@ namespace humanResourceProject.API.Controllers
             return Ok(await _leaveReadService.GetLeavesByCompanyId(id));
         }
 
-        [HttpGet]
-        [Route("GetLeaveDTO/{employeeId}")]
-        public async Task<IActionResult> GetLeaveDTO(Guid employeeId)
-        {
-            return Ok(await _leaveReadService.GetLeaveDTO(employeeId));
-        }
-
         [HttpPost]
         public async Task<IActionResult> CreateLeave([FromBody] LeaveDTO model)
         {
