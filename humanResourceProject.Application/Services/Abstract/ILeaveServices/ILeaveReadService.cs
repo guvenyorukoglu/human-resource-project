@@ -12,6 +12,7 @@ namespace humanResourceProject.Application.Services.Abstract.ILeaveServices
         Task<List<LeaveVM>> GetLeavesByManagerId(Guid id);
         Task<List<LeaveVM>> GetLeavesByCompanyId(Guid id);
         Task<UpdateLeaveDTO> GetUpdateLeaveDTO(Guid id);
+        Task<List<DashboardLeaveVM>> FillDashboardLeaveVM(Guid id); 
         Task<LeaveDTO> GetLeaveDTO(Guid employeeId);
 
     }
