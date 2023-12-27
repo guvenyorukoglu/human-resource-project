@@ -348,6 +348,43 @@ namespace humanResourceProject.Presentation.Controllers
             //return View("Error");
             return View();
         }
+        [HttpGet]
+        public async Task<IActionResult> EditProfile(Guid id)
+        {
+            var response = await _httpClient.GetAsync($"api/AppUser/GetUpdateProfileDTO/{id}");
+
+            if (response.IsSuccessStatusCode)
+            {
+                var content = await response.Content.ReadAsStringAsync();
+                var model = JsonConvert.DeserializeObject<UpdateProfileDTO>(content);
+
+                return View(model);
+            }
+            return View("Error");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EditProfile(UpdateProfileDTO model)
+        {
+            if (!ModelState.IsValid)
+            {
+                TempData["Result"] = "modelinvalid";
+                return View(model);
+            }
+
+            var json = JsonConvert.SerializeObject(model);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            var response = await _httpClient.PutAsync($"api/AppUser/UpdateProfile", content);
+
+            if (response.IsSuccessStatusCode)
+            {
+                return RedirectToAction(nameof(Employees));
+            }
+
+            ModelState.AddModelError(response.StatusCode.ToString(), "Bir hata oluştu.");
+            return View(model);
+        }
 
 
     }

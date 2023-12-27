@@ -66,6 +66,12 @@ namespace humanResourceProject.API.Controllers
         {
             return Ok(await _appUserWriteService.GetUpdateUserDTOById(id));
         }
+        [HttpGet]
+        [Route("GetUpdateProfileDTO/{id}")]
+        public async Task<IActionResult> GetUpdateProfileDTO(Guid id) // Personel Güncellemek için View'e DTO gönderir
+        {
+            return Ok(await _appUserWriteService.GetUpdateProfileDTOById(id));
+        }
 
         [HttpPost]
         [Route("GetEmployeesByCompanyId")]
@@ -130,6 +136,20 @@ namespace humanResourceProject.API.Controllers
 
             return Ok("Silme işlemi gerçekleşti.");
         }
+
+
+        [HttpPut]
+        [Route("UpdateProfile")]
+        public async Task<IActionResult> UpdateProfile([FromBody] UpdateProfileDTO updatedProfile) // Personel Profili Güncelleme
+        {
+            var result = await _appUserWriteService.UpdateProfile(updatedProfile);
+           
+            if (!result.Succeeded)
+                return BadRequest(result.Errors);
+
+            return Ok("Güncellenmiştir.");
+        }
+
 
         [HttpGet]
         [Route("FireEmployee/{id}")]
