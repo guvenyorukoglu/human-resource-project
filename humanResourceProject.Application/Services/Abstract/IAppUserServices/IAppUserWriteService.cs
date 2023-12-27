@@ -12,7 +12,10 @@ namespace humanResourceProject.Application.Services.Abstract.IAppUserServices
         Task<IdentityResult> RegisterPersonel(CreateEmployeeDTO model); // UserRegisterDTO modelini alır, veritabanına Personel olarak kaydeder.
         Task<IdentityResult> RegisterCompanyManager(UserRegisterDTO model); // UserRegisterDTO modelini alır, veritabanına Şirket Yöneticisi olarak kaydeder.
         Task<UpdateUserDTO> GetUpdateUserDTOById(Guid id); // Güncelleme sayfası için UpdateUserDTO döndürür.
+        Task<UpdateProfileDTO> GetUpdateProfileDTOById(Guid id); // Güncelleme sayfası için UpdateUserDTO döndürür.
         Task<IdentityResult> Update(UpdateUserDTO model); // UpdateUserDTO modelini alır, veritabanında günceller.
+        Task<IdentityResult> UpdateProfile(UpdateProfileDTO model); // UpdateUserDTO modelini alır, veritabanında günceller.
+
         Task<IdentityResult> UpdateProfileImage(Guid id); // Profil resmini günceller.
         Task<IdentityResult> FireEmployee(Guid id); // Personeli işten çıkarır.
     }

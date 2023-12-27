@@ -1,3 +1,4 @@
+using humanResourceProject.Domain.Entities.Concrete;
 using humanResourceProject.Models.DTOs;
 using humanResourceProject.Models.VMs;
 using Microsoft.AspNetCore.Authorization;
@@ -30,6 +31,8 @@ namespace humanResourceProject.Presentation.Controllers
 
         public async Task<IActionResult> Employees()
         {
+            Guid id = Guid.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value);
+
             if (User.IsInRole("CompanyManager")) // Şirket Yöneticisi ise tüm personelleri getirir
             {
                 Guid companyId = Guid.Parse(User.Claims.FirstOrDefault(x => x.Type == "CompanyId").Value);
@@ -41,6 +44,10 @@ namespace humanResourceProject.Presentation.Controllers
                 {
                     var cont = await response.Content.ReadAsStringAsync();
                     var employees = JsonConvert.DeserializeObject<List<PersonelVM>>(cont);
+
+                    // Kendi bilgilerini çıkartır
+                    employees = employees.Except(employees.Where(x => x.Id == id)).ToList();
+
                     return View(employees);
 
                 }
@@ -48,15 +55,19 @@ namespace humanResourceProject.Presentation.Controllers
             }
             else if (User.IsInRole("Manager")) // Departman Yöneticisi ise departmanındaki personelleri getirir
             {
-                Guid departmentId = Guid.Parse(User.Claims.FirstOrDefault(x => x.Type == "DepartmentId").Value);
-                var json = JsonConvert.SerializeObject(departmentId);
+                Guid managerId = Guid.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value);
+                var json = JsonConvert.SerializeObject(managerId);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-                var response = await _httpClient.PostAsync($"api/AppUser/GetEmployeesByDepartmentId/", content);
+                var response = await _httpClient.PostAsync($"api/AppUser/GetEmployeesByManagerId/", content);
                 if (response.IsSuccessStatusCode)
                 {
                     var cont = await response.Content.ReadAsStringAsync();
                     var employees = JsonConvert.DeserializeObject<List<PersonelVM>>(cont);
+
+                    // Kendi bilgilerini çıkartır
+                    employees = employees.Except(employees.Where(x => x.Id == id)).ToList();
+
                     return View(employees);
 
                 }
@@ -72,7 +83,7 @@ namespace humanResourceProject.Presentation.Controllers
         public async Task<IActionResult> CreatePersonel()
         {
             Guid companyId = Guid.Parse(User.Claims.FirstOrDefault(x => x.Type == "CompanyId").Value);
-            HttpResponseMessage messageJobs = await _httpClient.GetAsync($"api/Job/GetAllJobs/");
+            HttpResponseMessage messageJobs = await _httpClient.GetAsync($"api/Job/GetJobsByCompanyId/{companyId}");
             HttpResponseMessage messageDepartments = await _httpClient.GetAsync($"api/Department/GetDepartmentsByCompanyId/{companyId}");
             HttpResponseMessage messageManagers = await _httpClient.GetAsync($"api/AppUser/GetManagersByCompanyId/{companyId}");
 
@@ -134,7 +145,7 @@ namespace humanResourceProject.Presentation.Controllers
         public async Task<IActionResult> CreatePersonelManager()
         {
             Guid companyId = Guid.Parse(User.Claims.FirstOrDefault(x => x.Type == "CompanyId").Value);
-            HttpResponseMessage messageJobs = await _httpClient.GetAsync($"api/Job/GetAllJobs/");
+            HttpResponseMessage messageJobs = await _httpClient.GetAsync($"api/Job/GetJobsByCompanyId/{companyId}");
             HttpResponseMessage messageDepartments = await _httpClient.GetAsync($"api/Department/GetDepartmentsByCompanyId/{companyId}");
             HttpResponseMessage messageManagers = await _httpClient.GetAsync($"api/AppUser/GetManagersByCompanyId/{companyId}");
 
@@ -194,8 +205,16 @@ namespace humanResourceProject.Presentation.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> CreatePersonel(CreateEmployeeDTO model)
+        public async Task<IActionResult> CreatePersonel(CreateEmployeeDTO model, string JobsList, string DepartmentsList, string ManagersList)
         {
+            if (!ModelState.IsValid)
+            {
+                model.Jobs = JsonConvert.DeserializeObject<List<JobVM>>(JobsList);
+                model.Departments = JsonConvert.DeserializeObject<List<DepartmentVM>>(DepartmentsList);
+                model.Managers = JsonConvert.DeserializeObject<List<ManagerVM>>(ManagersList);
+                return View(model);
+            }
+
             model.ImagePath = model.Gender == Domain.Enum.Gender.Female ? "https://ik.imagekit.io/7ypp4olwr/femaledefault.png?tr=h-200,w-200" : "https://ik.imagekit.io/7ypp4olwr/maledefault.png?tr=h-200,w-200";
 
             var json = JsonConvert.SerializeObject(model);
@@ -204,7 +223,7 @@ namespace humanResourceProject.Presentation.Controllers
             var response = await _httpClient.PostAsync($"api/AppUser", content);
             if (response.IsSuccessStatusCode)
             {
-                return RedirectToAction("Employees");
+                return RedirectToAction(nameof(Employees));
             }
             else
             {
@@ -214,10 +233,15 @@ namespace humanResourceProject.Presentation.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreatePersonelManager(CreateEmployeeDTO model)
+        public async Task<IActionResult> CreatePersonelManager(CreateEmployeeDTO model, string JobsList, string DepartmentsList, string ManagersList)
         {
             if (!ModelState.IsValid)
+            {
+                model.Jobs = JsonConvert.DeserializeObject<List<JobVM>>(JobsList);
+                model.Departments = JsonConvert.DeserializeObject<List<DepartmentVM>>(DepartmentsList);
+                model.Managers = JsonConvert.DeserializeObject<List<ManagerVM>>(ManagersList);
                 return View(model);
+            }
 
             model.ImagePath = model.Gender == Domain.Enum.Gender.Female ? "https://ik.imagekit.io/7ypp4olwr/femaledefault.png?tr=h-200,w-200" : "https://ik.imagekit.io/7ypp4olwr/maledefault.png?tr=h-200,w-200";
 
@@ -227,7 +251,7 @@ namespace humanResourceProject.Presentation.Controllers
             var response = await _httpClient.PostAsync($"api/AppUser/CreatePersonelManager", content);
             if (response.IsSuccessStatusCode)
             {
-                return RedirectToAction("Employees");
+                return RedirectToAction(nameof(Employees));
             }
             else
             {
@@ -260,27 +284,24 @@ namespace humanResourceProject.Presentation.Controllers
             {
                 var content = await response.Content.ReadAsStringAsync();
                 var model = JsonConvert.DeserializeObject<UpdateUserDTO>(content);
-                foreach (var job in jobs)
-                {
-                    jobs.Add(new JobVM()
-                    {
-                        Id = job.Id,
-                        Title = job.Title,
-                        Description = job.Description
-                    });
-                }
-                model.Jobs = jobs;
+
                 return View(model);
             }
             return View("Error");
         }
 
         [HttpPost]
-        public async Task<IActionResult> EditEmployee(UpdateUserDTO model)
+        public async Task<IActionResult> EditEmployee(UpdateUserDTO model, string JobsList, string DepartmentsList, string ManagersList)
         {
             if (!ModelState.IsValid)
             {
                 TempData["Result"] = "modelinvalid";
+
+                // Listeleri tekrar doldur
+                model.Jobs = JsonConvert.DeserializeObject<List<JobVM>>(JobsList);
+                model.Departments = JsonConvert.DeserializeObject<List<DepartmentVM>>(DepartmentsList);
+                model.Managers = JsonConvert.DeserializeObject<List<ManagerVM>>(ManagersList);
+
                 return View(model);
             }
 
@@ -312,43 +333,102 @@ namespace humanResourceProject.Presentation.Controllers
         [HttpGet]
         public async Task<IActionResult> Home()
         {
-            //var userId = Guid.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value);
-            //var companyId = Guid.Parse(User.Claims.FirstOrDefault(x => x.Type == "CompanyId").Value);
+            var userId = Guid.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value);
+            var companyId = Guid.Parse(User.Claims.FirstOrDefault(x => x.Type == "CompanyId").Value);
 
-            //var responseLeave = await _httpClient.GetAsync($"api/Leave/FillDashboardLeaveVM/{userId}");
-            //var responseAdvance = await _httpClient.GetAsync($"api/Advance/FillDashboardAdvanceVM/{userId}");
-            //var responseExpense = await _httpClient.GetAsync($"api/Expense/FillDashboardExpenseVM/{userId}");
-            //var responseCompany = await _httpClient.GetAsync($"api/Company/GetCompanyVM/{companyId}");
+            var responseLeave = await _httpClient.GetAsync($"api/Leave/FillDashboardLeaveVM/{userId}");
+            var responseAdvance = await _httpClient.GetAsync($"api/Advance/FillDashboardAdvanceVM/{userId}");
+            var responseExpense = await _httpClient.GetAsync($"api/Expense/FillDashboardExpenseVM/{userId}");
+            var responseCompany = await _httpClient.GetAsync($"api/Company/GetCompanyVM/{companyId}");
 
-            //if (responseLeave.IsSuccessStatusCode && responseAdvance.IsSuccessStatusCode && responseExpense.IsSuccessStatusCode && responseCompany.IsSuccessStatusCode)
-            //{
-            //    var contentLeave = await responseLeave.Content.ReadAsStringAsync();
-            //    var dashboardLeaveVM = JsonConvert.DeserializeObject<List<DashboardLeaveVM>>(contentLeave);
+            if (responseLeave.IsSuccessStatusCode && responseAdvance.IsSuccessStatusCode && responseExpense.IsSuccessStatusCode && responseCompany.IsSuccessStatusCode)
+            {
+                var contentLeave = await responseLeave.Content.ReadAsStringAsync();
+                var dashboardLeaveVM = JsonConvert.DeserializeObject<DashboardLeaveVM>(contentLeave);
 
-            //    var contentAdvance = await responseAdvance.Content.ReadAsStringAsync();
-            //    var dashboardAdvanceVM = JsonConvert.DeserializeObject<List<DashboardAdvanceVM>>(contentAdvance);
+                var contentAdvance = await responseAdvance.Content.ReadAsStringAsync();
+                var dashboardAdvanceVM = JsonConvert.DeserializeObject<DashboardAdvanceVM>(contentAdvance);
 
-            //    var contentExpense = await responseExpense.Content.ReadAsStringAsync();
-            //    var dashboardExpenseVM = JsonConvert.DeserializeObject<List<DashboardExpenseVM>>(contentExpense);
+                var contentExpense = await responseExpense.Content.ReadAsStringAsync();
+                var dashboardExpenseVM = JsonConvert.DeserializeObject<DashboardExpenseVM>(contentExpense);
 
-            //    var contentCompany = await responseCompany.Content.ReadAsStringAsync();
-            //    var dashboardCompanyVM = JsonConvert.DeserializeObject<CompanyVM>(contentCompany);
+                var contentCompany = await responseCompany.Content.ReadAsStringAsync();
+                var dashboardCompanyVM = JsonConvert.DeserializeObject<CompanyVM>(contentCompany);
 
-            //    DashboardVM dashboardVM = new DashboardVM()
-            //    {
-            //        Leaves = dashboardLeaveVM,
-            //        Advances = dashboardAdvanceVM,
-            //        Expenses = dashboardExpenseVM,
-            //        Company = dashboardCompanyVM
-            //    };
+                DashboardVM dashboardVM = new DashboardVM()
+                {
+                    MyLeaves = dashboardLeaveVM.MyLeaves,
+                    MyAdvances = dashboardAdvanceVM.MyAdvances,
+                    MyExpenses = dashboardExpenseVM.MyExpenses,
+                    Company = dashboardCompanyVM,
+                    LeavesToBeCompletedByManager = dashboardLeaveVM.LeavesToBeCompletedByManager,
+                    AdvancesToBeCompletedByManager = dashboardAdvanceVM.AdvancesToBeCompletedByManager,
+                    ExpensesToBeCompletedByManager = dashboardExpenseVM.ExpensesToBeCompletedByManager,
+                    MyPendingLeavesCount = dashboardLeaveVM.MyLeaves.Where(x => x.LeaveStatus == Domain.Enum.RequestStatus.Pending).Count(),
+                    MyPendingAdvancesCount = dashboardAdvanceVM.MyAdvances.Where(x => x.AdvanceStatus == Domain.Enum.RequestStatus.Pending).Count(),
+                    MyPendingExpensesCount = dashboardExpenseVM.MyExpenses.Where(x => x.ExpenseStatus == Domain.Enum.RequestStatus.Pending).Count()
+                };
 
-            //    return View(dashboardVM);
-            //}
+                return View(dashboardVM);
+            }
 
-            //return View("Error");
-            return View();
+            return View("Error");           
+        }
+        
+        [HttpGet]
+        public async Task<IActionResult> EditProfile(Guid id)
+        {
+            var response = await _httpClient.GetAsync($"api/AppUser/GetUpdateProfileDTO/{id}");
+
+            if (response.IsSuccessStatusCode)
+            {
+                var content = await response.Content.ReadAsStringAsync();
+                var model = JsonConvert.DeserializeObject<UpdateProfileDTO>(content);
+
+                return View(model);
+            }
+            return View("Error");
         }
 
+        [HttpPost]
+        public async Task<IActionResult> EditProfile(UpdateProfileDTO model)
+        {
+            if (!ModelState.IsValid)
+            {
+                TempData["Result"] = "modelinvalid";
+                return View(model);
+            }
 
+            var json = JsonConvert.SerializeObject(model);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            var response = await _httpClient.PutAsync($"api/AppUser/UpdateProfile", content);
+
+            if (response.IsSuccessStatusCode)
+            {
+                return RedirectToAction(nameof(Employees));
+            }
+
+            ModelState.AddModelError(response.StatusCode.ToString(), "Bir hata oluştu.");
+            return View(model);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> ProfileEmployee()
+        {
+            
+                var employeeId = Guid.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value);
+            var response = await _httpClient.GetAsync($"api/AppUser/ProfileEmployee/{employeeId}");
+            if (response.IsSuccessStatusCode)
+            {
+                var content = await response.Content.ReadAsStringAsync();
+                var model = JsonConvert.DeserializeObject<ProfileEmployeeVM>(content);
+                return View(model);
+            }
+            return View("Error");
+
+        }
     }
+
+         
 }

@@ -41,7 +41,7 @@ namespace humanResourceProject.Application.Services.Concrete.AppUserServices
                 include: x => x.Include(x => x.Company).ThenInclude(x => x.Jobs));
         }
 
-        public async Task<List<PersonelVM>> GetEmployeesByDepartmentId(Guid departmentId)
+        public async Task<List<PersonelVM>> GetEmployeesByManagerId(Guid managerId)
         {
             return await _readRepository.GetFilteredList(
                 select: x => new PersonelVM()
@@ -55,7 +55,7 @@ namespace humanResourceProject.Application.Services.Concrete.AppUserServices
                     Gender = x.Gender,
                     Title = x.Company.Jobs.FirstOrDefault(j => j.Id == x.JobId).Title
                 },
-                where: x => x.DepartmentId == departmentId && (x.Status != Domain.Enum.Status.Inactive && x.Status != Domain.Enum.Status.Deleted),
+                where: x => x.ManagerId == managerId && (x.Status != Domain.Enum.Status.Inactive && x.Status != Domain.Enum.Status.Deleted),
                 orderBy: x => x.OrderBy(x => x.CreateDate),
                 include: x => x.Include(x => x.Company).ThenInclude(x => x.Jobs));
         }
@@ -105,6 +105,28 @@ namespace humanResourceProject.Application.Services.Concrete.AppUserServices
             await _signInManager.SignOutAsync();
         }
 
+        public async Task<ProfileEmployeeVM> ProfileEmployee(Guid employeeId)
+        {
 
+
+            return await _readRepository.GetFilteredFirstOrDefault(
+                select: x => new ProfileEmployeeVM()
+                {
+                    FullName = x.FirstName + " " + x.LastName,
+                    Email = x.Email,
+                    Address = x.Address,
+                    PhoneNumber = x.PhoneNumber,
+                    JobTitle = x.Company.Jobs.FirstOrDefault(j => j.Id == x.JobId).Title,
+                    IdentificationNumber = x.IdentificationNumber,
+                    BloodGroup = x.BloodGroup,
+                    Birthdate = x.Birthdate,
+                    Gender = x.Gender,
+                    ManagerName = x.Manager.FirstName + " " + x.Manager.LastName,
+                    ManagerEmail = x.Manager.Email,
+                    ManagerPhoneNumber = x.Manager.PhoneNumber
+
+                },
+                where: x => x.Id == employeeId, include: x => x.Include(x => x.Manager).Include(x => x.Company).ThenInclude(x => x.Jobs));
+        }
     }
 }

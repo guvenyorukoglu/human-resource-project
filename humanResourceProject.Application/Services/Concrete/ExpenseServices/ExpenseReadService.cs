@@ -159,21 +159,35 @@ namespace humanResourceProject.Application.Services.Concrete.ExpenseServices
             };
             return expenseDTO;
         }
-
-        public async Task<List<DashboardExpenseVM>> FillDashboardExpenseVM(Guid id)
+        public async Task<DashboardExpenseVM> FillDashboardExpenseVM(Guid id)
         {
-            List<DashboardExpenseVM> dashboardExpenseVMs = await _expenseReadRepository.GetFilteredList(
-                                              select: x => new DashboardExpenseVM
+            List<DashboardMyExpensesVM> dashboardMyExpensesVM = await _expenseReadRepository.GetFilteredList(
+                                              select: x => new DashboardMyExpensesVM
                                               {
                                                   ExpenseNo = x.ExpenseNo,
                                                   AmountOfExpense = x.AmountOfExpense,
-                                                  CreateDate = x.CreateDate
+                                                  CreateDate = x.CreateDate,
+                                                  ExpenseStatus = x.ExpenseStatus,
 
                                               },
                                                where: x => (x.Status != Status.Deleted && x.Status != Status.Inactive) && x.Employee.Id == id,
                                                orderBy: x => x.OrderByDescending(x => x.CreateDate),
-                                               include: x => x.Include(x => x.Employee)); ;
-            return dashboardExpenseVMs;
+                                               include: x => x.Include(x => x.Employee));
+
+            List<DashboardExpensesToBeCompletedByManagerVM> dashboardExpensesToBeCompletedByManagerVM = await _expenseReadRepository.GetFilteredList(
+                                              select: x => new DashboardExpensesToBeCompletedByManagerVM
+                                              {
+                                                  ExpenseNo = x.ExpenseNo,
+                                                  AmountOfExpense = x.AmountOfExpense,
+                                                  CreateDate = x.CreateDate,
+                                                  ExpenseStatus = x.ExpenseStatus,
+
+                                              },
+                                               where: x => (x.Status != Status.Deleted && x.Status != Status.Inactive) && x.Employee.ManagerId == id && x.ExpenseStatus == RequestStatus.Pending,
+                                               orderBy: x => x.OrderByDescending(x => x.CreateDate),
+                                               include: x => x.Include(x => x.Employee));
+
+            return new DashboardExpenseVM() { MyExpenses = dashboardMyExpensesVM, ExpensesToBeCompletedByManager = dashboardExpensesToBeCompletedByManagerVM };
         }
     }
 }
