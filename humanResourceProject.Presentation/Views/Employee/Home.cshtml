@@ -1,9 +1,11 @@
 ﻿@using humanResourceProject.Models.VMs;
-@model List<DashboardVM>;
+@model DashboardVM
 @{
     ViewData["Title"] = "Home";
     Layout = "~/Views/Shared/_HRLayout.cshtml";
 }
+
+
 
 <head>
     <meta charset="UTF-8" />
@@ -58,75 +60,205 @@
     <div class="row">
         @Html.Partial("_PanelPartial")
 
-        <div class="aside mt-5 col-md-9">
+        <div class="aside col-md-9" style="margin-top:50px;" >
             <div class="row text-center">
                 <div class="col-md-4 leave-info card">
                     <h6>İZİN BİLGİLERİM</h6>
 
-                    <canvas id="myChart" style="margin:0 auto;"></canvas>
+                    <canvas id="myChart" style="margin:0 auto;">KALAN İZİN</canvas>
                     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
                     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.min.js"></script>
+
+                    @*<script>
+                    document.addEventListener("DOMContentLoaded", function () {
+                    const ctx = document.getElementById("myChart");
+
+
+                    var leaveType = [];
+                    var used = [];
+                    var remain = [];
+                    var futureDated = [];
+
+                    //Todo: push metotları yazılacak
+
+
+
+                    new Chart(ctx, {
+                    type: "doughnut",
+                    data:
+                    {
+                    labels: [], //leaveType olarak düzelecek
+                    datasets:
+                    [
+                    {
+                    label: "",
+                    data: [12, 19, 8],
+                    borderWidth: 1,
+                    },
+                    ],
+                    },
+                    options: {},
+                    });
+                    });
+                    </script>*@
+
+
+
+
+                    @{
+                        decimal totalLeaveDays = 0;
+
+                        if (Model != null)
+                        {
+
+                            if (Model.Leaves != null)
+                            {
+                                foreach (var leave in Model.Leaves)
+                                {
+                                    totalLeaveDays += leave.DaysOfLeave;
+                                }
+                            }
+                        }
+                    }
+
                     <script>
                         document.addEventListener("DOMContentLoaded", function () {
                             const ctx = document.getElementById("myChart");
-                            var leaveType = [];
-                            var used = [];
-                            var remain = [];
-                            var futureDated = [];
-
-                            //Todo: push metotları yazılacak
 
 
+                            var personnelLeave = 2000;
+
+
+                            //for (var i = 0; i < leavesData.length; i++) {
+                            //    totalLeaveDays += leavesData[i];
+                            //}
+
+                            var used = @totalLeaveDays;
+
+                            var remain = personnelLeave - used;
 
                             new Chart(ctx, {
                                 type: "doughnut",
-                                data:
-                                {
-                                    labels: ["KULLANILAN", "İLERi TARİHLİ", "KALAN"], //leaveType olarak düzelecek
-                                    datasets:
-                                        [
-                                            {
-                                                label: "",
-                                                data: [12, 19, 8],
-                                                borderWidth: 1,
-                                            },
-                                        ],
+                                data: {
+                                    labels: ["Kullanılan", "Kalan"],
+                                    datasets: [
+                                        {
+                                            label: "İzin Durumu",
+                                            data: [used, remain],
+                                            backgroundColor: [
+                                                'rgba(255, 99, 132, 0.6)',
+                                                'rgba(54, 162, 235, 0.6)',
+                                            ],
+                                            borderWidth: 1,
+                                        },
+
+                                    ],
                                 },
-                                options: {},
+                                options: {
+
+                                },
                             });
+                            document.getElementById("usedDays").innerText = "Kullanılan İzin: " + used;
+                            document.getElementById("remainDays").innerText = "Kalan İzin: " + remain;
                         });
+
+
                     </script>
+
+                    <h6 id="usedDays"></h6>
+                    <h6 id="remainDays"></h6>
+
                 </div>
+
+
+
+                @*  <div class="col-md-4 leave-info card">
+                <h6>AVANS BİLGİLERİM</h6>
+
+                <canvas id="myAdvanceChart" style="margin:0 auto;"></canvas>
+                <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.min.js"></script>
+
+
+                <script type="module">
+                document.addEventListener("DOMContentLoaded", function () {
+                const ctx = document.getElementById("myAdvanceChart");
+                var leavesData = @Html.Raw(Json.Serialize(leaves));
+
+                var personnelLeave = 21;
+                var totalLeaveDays = 0;
+
+
+                for (var i = 0; i < leavesData.length; i++) {
+                totalLeaveDays += leavesData[i];
+                }
+
+                var used = totalLeaveDays;
+
+
+                var remain = personnelLeave - used;
+
+                new Chart(ctx, {
+                type: "bar",
+                data: {
+                labels: ['Ocak', 'Şubat', 'Mart', 'Nisan', 'Mayıs', 'Haziran', 'Temmuz', 'Ağustos', 'Eylül', 'Ekim', 'Kasım', 'Aralık'],
+
+                datasets: [
+                {
+                label: "Avans Durumu",
+                data: [used],
+                backgroundColor: [
+                'rgba(255, 99, 132, 0.6)',
+                'rgba(54, 162, 235, 0.6)',
+                ],
+                borderWidth: 1,
+                },
+
+                ],
+                },
+                options: {
+
+                },
+                });
+                });
+                </script>
+
+                </div>*@
+
+
+
 
                 <div class="col-md-4 calender card">
                     <div id="calendar" style="width: 90%"></div>
                 </div>
 
 
-                <div class="col-md-3 holiday-info card"><h6>ŞİRKET BİLGİLERİ</h6>
+                <div class="col-md-3 holiday-info card">
+                    <h6>ŞİRKET BİLGİLERİ</h6>
                     <table class=" table-bordered table-striped">
                         <tbody>
-                             @if (Model != null)
+                            @if (Model != null)
                             {
                                 <tr>
-                                    @foreach (var item in Model)
-                                    {
-                                        <td>@item.Company.CompanyName</td>
-                                        <td>@item.Company.TaxOffice</td>
-                                        <td>@item.Company.TaxNumber</td>
-                                        <td>@item.Company.PhoneNumber</td>
-                                        <td>@item.Company.Address</td>
-                                    }
+
+
+                                    <td>@Model.Company.CompanyName</td>
+                                    <td>@Model.Company.TaxOffice</td>
+                                    <td>@Model.Company.TaxNumber</td>
+                                    <td>@Model.Company.PhoneNumber</td>
+                                    <td>@Model.Company.Address</td>
+
 
                                 </tr>
                             }
                         </tbody>
                     </table>
                 </div>
-                </div>
+            </div>
 
-    <div class="row text-center">
+            <div class="row text-center">
                 <div class="col-md-4 upcoming-leave-info card">
                     <h6>
                         <a asp-action="MyLeaves"
@@ -144,32 +276,29 @@
                             @if (Model != null)
                             {
                                 int count = 0;
-                                foreach (var leave in Model)
+                                foreach (var leave in Model.Leaves)
                                 {
-                                    foreach (var item in leave.Leaves)
+                                    if (count >= 3)
                                     {
-                                        if (count >= 3)
-                                        {
-                                            break;
-                                        }
-
-                                        if (item != null) // Leave özelliğini kontrol et
-                                        {
-                                            <tr>
-                                                <td>@item.DaysOfLeave</td>
-                                                <td>@item.CreateDate</td>
-                                            </tr>
-                                            count++;
-                                        }
+                                        break;
                                     }
-                                    
+
+                                    if (leave != null) // Leave özelliğini kontrol et
+                                    {
+                                        <tr>
+                                            <td>@leave.DaysOfLeave</td>
+                                            <td>@leave.CreateDate</td>
+                                        </tr>
+                                        count++;
+                                    }
+
                                 }
                             }
                         </tbody>
                     </table>
                 </div>
-             
-                 <div class="col-md-4 upcoming-leave-info card">
+
+                <div class="col-md-4 upcoming-leave-info card">
                     <h6>
                         <a asp-action="Expenses"
                            asp-controller="Expense">MASRAFLAR</a>
@@ -186,30 +315,29 @@
                             @if (Model != null)
                             {
                                 int count = 0;
-                                foreach (var expense in Model)
+                                foreach (var expense in Model.Expenses)
                                 {
-                                    foreach (var item in expense.Expenses)
-                                    {
-                                        if (count >= 3)
-                                        {
-                                            break;
-                                        }
 
-                                        if (item != null) 
-                                        {
-                                            <tr>
-                                                <td>@item.AmountOfExpense</td>
-                                                <td>@item.CreateDate</td>
-                                            </tr>
-                                            count++;
-                                        }
+                                    if (count >= 3)
+                                    {
+                                        break;
                                     }
+
+                                    if (expense != null)
+                                    {
+                                        <tr>
+                                            <td>@expense.AmountOfExpense</td>
+                                            <td>@expense.CreateDate</td>
+                                        </tr>
+                                        count++;
+                                    }
+
 
                                 }
                             }
                         </tbody>
                     </table>
-                 </div>
+                </div>
                 <div class="col-md-3 upcoming-leave-info card">
                     <h6>
                         <a asp-action="MyAdvances"
@@ -227,24 +355,23 @@
                             @if (Model != null)
                             {
                                 int count = 0;
-                                foreach (var advance in Model)
+                                foreach (var advance in Model.Advances)
                                 {
-                                    foreach (var item in advance.Advances)
-                                    {
-                                        if (count >= 3)
-                                        {
-                                            break;
-                                        }
 
-                                        if (item != null) 
-                                        {
-                                            <tr>
-                                                <td>@item.AmountOfAdvance</td>
-                                                <td>@item.CreateDate</td>
-                                            </tr>
-                                            count++;
-                                        }
+                                    if (count >= 3)
+                                    {
+                                        break;
                                     }
+
+                                    if (advance != null)
+                                    {
+                                        <tr>
+                                            <td>@advance.AmountOfAdvance</td>
+                                            <td>@advance.CreateDate</td>
+                                        </tr>
+                                        count++;
+                                    }
+
 
                                 }
                             }
@@ -253,48 +380,49 @@
                 </div>
 
 
-      
 
-        <div id="calendarEventModal" class="modal fade" role="dialog">
-            <div class="modal-dialog modal-md text-center">
-                <!-- Modal content-->
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal">
-                            &times;
-                        </button>
-                        <h4 class="modal-title">Etkinlik Oluştur</h4>
-                    </div>
-                    <div class="modal-body">
-                        <form action="" class="form-control">
-                            <label for="Etkinlik">Etkinlik Adı</label>
-                            <input type="text" />
-                            <hr />
-                            <label for="Etkinlik">Etkinlik Başlangıç Zamanı</label>
-                            <input type="date" />
-                            <hr />
-                            <label for="Etkinlik">Etkinlik Bitiş Zamanı</label>
-                            <input type="date" />
-                            <hr />
-                            <button class="btn btn-primary">Kaydet</button>
-                        </form>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">
-                            Close
-                        </button>
+
+                <div id="calendarEventModal" class="modal fade" role="dialog">
+                    <div class="modal-dialog modal-md text-center">
+                        <!-- Modal content-->
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal">
+                                    &times;
+                                </button>
+                                <h4 class="modal-title">Etkinlik Oluştur</h4>
+                            </div>
+                            <div class="modal-body">
+                                <form action="" class="form-control">
+                                    <label for="Etkinlik">Etkinlik Adı</label>
+                                    <input type="text" />
+                                    <hr />
+                                    <label for="Etkinlik">Etkinlik Başlangıç Zamanı</label>
+                                    <input type="date" />
+                                    <hr />
+                                    <label for="Etkinlik">Etkinlik Bitiş Zamanı</label>
+                                    <input type="date" />
+                                    <hr />
+                                    <button class="btn btn-primary">Kaydet</button>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">
+                                    Close
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
 </body>
 
 
 <style>
     .aside {
-        margin-top: 100px;
+      
         margin-left: 50px;
+       
     }
 
     .card {
@@ -358,9 +486,9 @@
         max-height: 300px;
     }
 
-    a{
+    a {
         text-decoration: none;
-        font-size: 1vw;
+        /* font-size: 1vw;*/
         color: #ffffff;
     }
 
