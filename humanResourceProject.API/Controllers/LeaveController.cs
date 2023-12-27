@@ -135,5 +135,12 @@ namespace humanResourceProject.API.Controllers
         {
             return Ok(await _leaveWriteService.DeleteLeave(id));
         }
+
+        [HttpGet]
+        [Route("FillDashboardLeaveVM/{id}")]
+        public async Task<IActionResult> FillDashboardLeaveVM(Guid id)
+        {
+            return Ok(await _leaveReadService.FillDashboardLeaveVM(id));
+        }
     }
 }
