@@ -21,7 +21,6 @@
 <body>
     <div class="row">
         @Html.Partial("_PanelPartial")
-
         <div class="col-md-4 mt-5" style="margin: 0 auto">
             <form asp-action="CreateLeave">
                 <div class="card shadow p-3 mb-5 bg-body rounded">
@@ -76,15 +75,15 @@
                         </div>
                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                         <div class="text-center">
-                            <div class="form-group mb-3 d-grid">
-                                <input type="submit" value="Oluştur" class="btn btn-primary" />
-                            </div>
-                            <div class="mb-5">
-                                <label title="@Model.ManagerEmail"><em class="fs-6 text-muted">Onaylaması gereken yönetici: <span class="text-uppercase">@Model.ManagerFullName</span></em></label>
-                            </div>
-                            <div>
+                        <div class="form-group mb-3 d-grid">
+                            <input type="submit" value="Oluştur" class="btn btn-primary" />
+                        </div>
+                        <div class="mb-5">
+                            <label title="@Model.ManagerEmail"><em class="fs-6 text-muted">Onaylaması gereken yönetici: <span class="text-uppercase">@Model.ManagerFullName</span></em></label>
+                        </div>
+                        <div>
                                 <a asp-controller="Employee" asp-action="Home"><button class="btn btn-secondary">Ana Sayfaya Dön</button></a>
-                            </div>
+                        </div>
                         </div>
                     </div>
                 </div>

@@ -40,7 +40,6 @@
             {
                 <a asp-action="CreateExpense" asp-controller="Expense" asp-route-id="@Guid.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value)">
                     <button class="btn btn-success">Harcama Ekle</button>
-
                 </a>
             }
             

@@ -4,6 +4,8 @@ using humanResourceProject.Application.Services.Abstract.IMailServices;
 using humanResourceProject.Domain.Entities.Concrete;
 using humanResourceProject.Models.DTOs;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using System.Net.Http;
 
 namespace humanResourceProject.API.Controllers
 {
@@ -29,6 +31,13 @@ namespace humanResourceProject.API.Controllers
         public async Task<IActionResult> GetAllLeave()
         {
             return Ok(await _leaveReadService.GetAllLeaves());
+        }
+
+        [HttpGet]
+        [Route("GetLeaveDTO/{employeeId}")]
+        public async Task<IActionResult> GetLeaveDTO(Guid employeeId)
+        {
+            return Ok(await _leaveReadService.GetLeaveDTO(employeeId));
         }
 
         [HttpPut]

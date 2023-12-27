@@ -1,4 +1,4 @@
-﻿using humanResourceProject.Domain.Enum;
+using humanResourceProject.Domain.Enum;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel;
 using static humanResourceProject.Models.Validations.DateTimeValidations;

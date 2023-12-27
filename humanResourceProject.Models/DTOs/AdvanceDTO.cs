@@ -1,8 +1,9 @@
-﻿using humanResourceProject.Domain.Enum;
+using humanResourceProject.Domain.Enum;
 using humanResourceProject.Models.Validations;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using static humanResourceProject.Models.Validations.DateTimeValidations;
+
 
 namespace humanResourceProject.Models.DTOs
 {
