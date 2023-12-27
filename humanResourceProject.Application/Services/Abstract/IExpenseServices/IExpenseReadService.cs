@@ -12,6 +12,7 @@ namespace humanResourceProject.Application.Services.Abstract.IExpenseServices
         Task<List<ExpenseVM>> GetExpensesByManagerId(Guid id);
         Task<List<ExpenseVM>> GetExpensesByCompanyId(Guid id);
         Task<UpdateExpenseDTO> GetUpdateExpenseDTO(Guid id);
+        Task<List<DashboardExpenseVM>> FillDashboardExpenseVM(Guid id);
         Task<ExpenseDTO> GetExpenseDTO(Guid employeeId);
     }
 }

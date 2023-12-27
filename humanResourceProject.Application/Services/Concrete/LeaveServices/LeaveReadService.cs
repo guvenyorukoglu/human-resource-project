@@ -136,6 +136,21 @@ namespace humanResourceProject.Application.Services.Concrete.LeaveServices
             return updateLeaveDTO;
         }
 
+        public async Task<List<DashboardLeaveVM>> FillDashboardLeaveVM(Guid id)
+        {
+            List<DashboardLeaveVM> dashboardLeaveVMs = await _leaveReadRepository.GetFilteredList(
+                                                             select: x => new DashboardLeaveVM
+                                                             {
+                                                                 LeaveNo = x.LeaveNo,
+                                                                 DaysOfLeave = x.DaysOfLeave,
+                                                                 CreateDate = x.CreateDate
+                                                             },
+                                                             where: x => (x.Status != Status.Deleted && x.Status != Status.Inactive) && x.Employee.Id == id,
+                                                             orderBy: x => x.OrderByDescending(x => x.CreateDate),
+                                                             include: x => x.Include(x => x.Employee)); ;
+            return dashboardLeaveVMs;
+        }
+
         public async Task<LeaveDTO> GetLeaveDTO(Guid employeeId)
         {
             AppUser employee = _userManager.FindByIdAsync(employeeId.ToString()).Result;
