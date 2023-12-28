@@ -6,6 +6,9 @@
     int numberOfPendingExpenses;
     int numberOfPendingAdvances;
     string title;
+    List<DashboardLeavesVM> leaves;
+    List<DashboardExpensesVM> expenses;
+    List<DashboardAdvancesVM> advances;
 
     if (User.IsInRole("Personel"))
     {
@@ -13,15 +16,30 @@
         numberOfPendingExpenses = Model.MyPendingExpensesCount;
         numberOfPendingAdvances = Model.MyPendingAdvancesCount;
         title = "ONAY BEKLEYEN TALEPLERİM";
-
+        leaves = Model.MyLeaves;
+        expenses = Model.MyExpenses;
+        advances = Model.MyAdvances;
 
     }
-    else if (User.IsInRole("Manager") || User.IsInRole("CompanyManager"))
+    else if (User.IsInRole("Manager"))
     {
         numberOfPendingLeaves = Model.LeavesToBeCompletedByManager.Count;
         numberOfPendingExpenses = Model.ExpensesToBeCompletedByManager.Count;
         numberOfPendingAdvances = Model.AdvancesToBeCompletedByManager.Count;
         title = "ONAY BEKLEYEN TALEPLER";
+        leaves = Model.MyLeaves;
+        expenses = Model.MyExpenses;
+        advances = Model.MyAdvances;
+    }
+    else if (User.IsInRole("CompanyManager"))
+    {
+        numberOfPendingLeaves = Model.LeavesToBeCompletedByManager.Count;
+        numberOfPendingExpenses = Model.ExpensesToBeCompletedByManager.Count;
+        numberOfPendingAdvances = Model.AdvancesToBeCompletedByManager.Count;
+        title = "ONAY BEKLEYEN TALEPLER";
+        leaves = Model.LeavesToBeCompletedByManager;
+        expenses = Model.ExpensesToBeCompletedByManager;
+        advances = Model.AdvancesToBeCompletedByManager;
     }
     else
     {
@@ -29,6 +47,9 @@
         numberOfPendingExpenses = 0;
         numberOfPendingAdvances = 0;
         title = "";
+        leaves = Model.LeavesToBeCompletedByManager;
+        expenses = Model.ExpensesToBeCompletedByManager;
+        advances = Model.AdvancesToBeCompletedByManager;
     }
 }
 
@@ -306,9 +327,19 @@
 
                 <div class="row text-center">
                     <div class="col-md-3 upcoming-leave-info card">
-                        <h6>
-                            <a asp-action="MyLeaves" asp-controller="Leave">İZİNLER</a>
-                        </h6>
+                        @if (User.IsInRole("Manager") || User.IsInRole("Personel"))
+                        {
+                            <h6>
+                                <a asp-action="MyLeaves" asp-controller="Leave">İZİNLERİM</a>
+                            </h6>
+                        }
+                        else if (User.IsInRole("CompanyManager"))
+                        {
+                            <h6>
+                                <a asp-action="EmployeesLeaves" asp-controller="Leave">ONAY BEKLEYEN İZİNLER</a>
+                            </h6>
+                        }
+
                         <table class="table table-striped table-borderless">
                             <thead>
                                 <tr>
@@ -321,7 +352,7 @@
                                 @if (Model != null)
                                 {
                                     int count = 0;
-                                    foreach (var leave in Model.MyLeaves)
+                                    foreach (var leave in leaves)
                                     {
                                         if (count >= 5)
                                         {
@@ -345,9 +376,18 @@
 
 
                     <div class="col-md-4 upcoming-leave-info card">
-                        <h6>
-                            <a asp-action="MyExpenses" asp-controller="Expense">MASRAFLAR</a>
-                        </h6>
+                        @if (User.IsInRole("Manager") || User.IsInRole("Personel"))
+                        {
+                            <h6>
+                                <a asp-action="MyExpenses" asp-controller="Expense">MASRAFLARIM</a>
+                            </h6>
+                        }
+                        else if (User.IsInRole("CompanyManager"))
+                        {
+                            <h6>
+                                <a asp-action="EmployeesExpenses" asp-controller="Expense">ONAY BEKLEYEN MASRAFLAR</a>
+                            </h6>
+                        }
                         <table class="table table-striped table-borderless">
                             <thead>
                                 <tr>
@@ -360,7 +400,7 @@
                                 @if (Model != null)
                                 {
                                     int count = 0;
-                                    foreach (var expense in Model.MyExpenses)
+                                    foreach (var expense in expenses)
 
                                     {
                                         if (count >= 5)
@@ -383,9 +423,18 @@
                         </table>
                     </div>
                     <div class="col-md-4 upcoming-leave-info card shadow-lg">
-                        <h6>
-                            <a asp-action="MyAdvances" asp-controller="Advance">AVANSLAR</a>
-                        </h6>
+                        @if (User.IsInRole("Manager") || User.IsInRole("Personel"))
+                        {
+                            <h6>
+                                <a asp-action="MyAdvances" asp-controller="Advance">AVANSLARIM</a>
+                            </h6>
+                        }
+                        else if (User.IsInRole("CompanyManager"))
+                        {
+                            <h6>
+                                <a asp-action="EmployeesAdvances" asp-controller="Advance">ONAY BEKLEYEN AVANSLAR</a>
+                            </h6>
+                        }
                         <table class="table table-striped table-borderless">
                             <thead>
                                 <tr>
@@ -398,7 +447,7 @@
                                 @if (Model != null)
                                 {
                                     int count = 0;
-                                    foreach (var advance in Model.MyAdvances)
+                                    foreach (var advance in advances)
                                     {
                                         if (count >= 5)
                                         {
@@ -461,7 +510,6 @@
 <style>
     .aside {
         margin-left: 50px;
-       
     }
 
     .card {

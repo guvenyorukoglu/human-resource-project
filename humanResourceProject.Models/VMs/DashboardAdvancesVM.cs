@@ -2,7 +2,7 @@
 
 namespace humanResourceProject.Models.VMs
 {
-    public class DashboardMyAdvancesVM
+    public class DashboardAdvancesVM
     {
         public string AdvanceNo { get; set; }
         public decimal AmountOfAdvance { get; set; }

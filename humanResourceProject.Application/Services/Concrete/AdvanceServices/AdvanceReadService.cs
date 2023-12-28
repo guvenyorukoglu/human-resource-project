@@ -136,10 +136,9 @@ namespace humanResourceProject.Application.Services.Concrete.AdvanceServices
         }
         public async Task<DashboardAdvanceVM> FillDashboardAdvanceVM(Guid id)
         {
-            List<DashboardMyAdvancesVM> dashboardMyAdvancesVM = await _advanceReadRepository.GetFilteredList(
-                                               select: x => new DashboardMyAdvancesVM
+            List<DashboardAdvancesVM> dashboardMyAdvancesVM = await _advanceReadRepository.GetFilteredList(
+                                               select: x => new DashboardAdvancesVM
                                                {
-
                                                    CreateDate = x.CreateDate,
                                                    AdvanceNo = x.AdvanceNo,
                                                    AmountOfAdvance = x.AmountOfAdvance,
@@ -149,10 +148,9 @@ namespace humanResourceProject.Application.Services.Concrete.AdvanceServices
                                                 orderBy: x => x.OrderByDescending(x => x.CreateDate),
                                                 include: x => x.Include(x => x.Employee));
 
-            List<DashboardAdvancesToBeCompletedByManagerVM> dashboardAdvancesToBeCompletedByManagerVM = await _advanceReadRepository.GetFilteredList(
-                                               select: x => new DashboardAdvancesToBeCompletedByManagerVM
+            List<DashboardAdvancesVM> dashboardAdvancesToBeCompletedByManagerVM = await _advanceReadRepository.GetFilteredList(
+                                               select: x => new DashboardAdvancesVM
                                                {
-
                                                    CreateDate = x.CreateDate,
                                                    AdvanceNo = x.AdvanceNo,
                                                    AmountOfAdvance = x.AmountOfAdvance,
