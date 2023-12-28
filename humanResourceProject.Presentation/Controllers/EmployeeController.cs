@@ -227,7 +227,10 @@ namespace humanResourceProject.Presentation.Controllers
             }
             else
             {
-                ModelState.AddModelError(response.StatusCode.ToString(), "Bir hata oluştu.");
+                ModelState.AddModelError(string.Empty, "Lütfen girdiğiniz verileri kontrol ediniz!");
+                model.Jobs = JsonConvert.DeserializeObject<List<JobVM>>(JobsList);
+                model.Departments = JsonConvert.DeserializeObject<List<DepartmentVM>>(DepartmentsList);
+                model.Managers = JsonConvert.DeserializeObject<List<ManagerVM>>(ManagersList);
                 return View(model);
             }
         }
@@ -255,7 +258,10 @@ namespace humanResourceProject.Presentation.Controllers
             }
             else
             {
-                ModelState.AddModelError(response.StatusCode.ToString(), "Bir hata oluştu.");
+                ModelState.AddModelError(string.Empty, "Lütfen girdiğiniz verileri kontrol ediniz!");
+                model.Jobs = JsonConvert.DeserializeObject<List<JobVM>>(JobsList);
+                model.Departments = JsonConvert.DeserializeObject<List<DepartmentVM>>(DepartmentsList);
+                model.Managers = JsonConvert.DeserializeObject<List<ManagerVM>>(ManagersList);
                 return View(model);
             }
 
