@@ -161,8 +161,8 @@ namespace humanResourceProject.Application.Services.Concrete.ExpenseServices
         }
         public async Task<DashboardExpenseVM> FillDashboardExpenseVM(Guid id)
         {
-            List<DashboardMyExpensesVM> dashboardMyExpensesVM = await _expenseReadRepository.GetFilteredList(
-                                              select: x => new DashboardMyExpensesVM
+            List<DashboardExpensesVM> dashboardMyExpensesVM = await _expenseReadRepository.GetFilteredList(
+                                              select: x => new DashboardExpensesVM
                                               {
                                                   ExpenseNo = x.ExpenseNo,
                                                   AmountOfExpense = x.AmountOfExpense,
@@ -174,8 +174,8 @@ namespace humanResourceProject.Application.Services.Concrete.ExpenseServices
                                                orderBy: x => x.OrderByDescending(x => x.CreateDate),
                                                include: x => x.Include(x => x.Employee));
 
-            List<DashboardExpensesToBeCompletedByManagerVM> dashboardExpensesToBeCompletedByManagerVM = await _expenseReadRepository.GetFilteredList(
-                                              select: x => new DashboardExpensesToBeCompletedByManagerVM
+            List<DashboardExpensesVM> dashboardExpensesToBeCompletedByManagerVM = await _expenseReadRepository.GetFilteredList(
+                                              select: x => new DashboardExpensesVM
                                               {
                                                   ExpenseNo = x.ExpenseNo,
                                                   AmountOfExpense = x.AmountOfExpense,

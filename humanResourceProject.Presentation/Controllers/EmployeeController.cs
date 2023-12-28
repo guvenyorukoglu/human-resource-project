@@ -212,6 +212,7 @@ namespace humanResourceProject.Presentation.Controllers
                 model.Jobs = JsonConvert.DeserializeObject<List<JobVM>>(JobsList);
                 model.Departments = JsonConvert.DeserializeObject<List<DepartmentVM>>(DepartmentsList);
                 model.Managers = JsonConvert.DeserializeObject<List<ManagerVM>>(ManagersList);
+                ModelState.AddModelError(string.Empty, "Lütfen tüm verileri doğru girdiğinizden emin olunuz!");
                 return View(model);
             }
 
@@ -227,7 +228,10 @@ namespace humanResourceProject.Presentation.Controllers
             }
             else
             {
-                ModelState.AddModelError(response.StatusCode.ToString(), "Bir hata oluştu.");
+                ModelState.AddModelError(string.Empty, "Lütfen girdiğiniz verileri kontrol ediniz!");
+                model.Jobs = JsonConvert.DeserializeObject<List<JobVM>>(JobsList);
+                model.Departments = JsonConvert.DeserializeObject<List<DepartmentVM>>(DepartmentsList);
+                model.Managers = JsonConvert.DeserializeObject<List<ManagerVM>>(ManagersList);
                 return View(model);
             }
         }
@@ -255,7 +259,10 @@ namespace humanResourceProject.Presentation.Controllers
             }
             else
             {
-                ModelState.AddModelError(response.StatusCode.ToString(), "Bir hata oluştu.");
+                ModelState.AddModelError(string.Empty, "Lütfen girdiğiniz verileri kontrol ediniz!");
+                model.Jobs = JsonConvert.DeserializeObject<List<JobVM>>(JobsList);
+                model.Departments = JsonConvert.DeserializeObject<List<DepartmentVM>>(DepartmentsList);
+                model.Managers = JsonConvert.DeserializeObject<List<ManagerVM>>(ManagersList);
                 return View(model);
             }
 
@@ -416,16 +423,35 @@ namespace humanResourceProject.Presentation.Controllers
         [HttpGet]
         public async Task<IActionResult> ProfileEmployee()
         {
-            
-                var employeeId = Guid.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value);
-            var response = await _httpClient.GetAsync($"api/AppUser/ProfileEmployee/{employeeId}");
-            if (response.IsSuccessStatusCode)
+            if(User.IsInRole("Personel") || User.IsInRole("Manager"))
             {
-                var content = await response.Content.ReadAsStringAsync();
-                var model = JsonConvert.DeserializeObject<ProfileEmployeeVM>(content);
-                return View(model);
+                var employeeId = Guid.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value);
+                var response = await _httpClient.GetAsync($"api/AppUser/ProfileEmployee/{employeeId}");
+                if (response.IsSuccessStatusCode)
+                {
+                    var content = await response.Content.ReadAsStringAsync();
+                    var model = JsonConvert.DeserializeObject<ProfileEmployeeVM>(content);
+                    return View(model);
+                }
+                return View("Error");
             }
-            return View("Error");
+            else if(User.IsInRole("CompanyManager"))
+            {
+                var companyManagerId = Guid.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value);
+                var response = await _httpClient.GetAsync($"api/AppUser/ProfileCompanyManager/{companyManagerId}");
+                if (response.IsSuccessStatusCode)
+                {
+                    var content = await response.Content.ReadAsStringAsync();
+                    var model = JsonConvert.DeserializeObject<ProfileEmployeeVM>(content);
+                    return View(model);
+                }
+                return View("Error");
+            }
+            else
+            {
+                return View("Error");
+            }
+            
 
         }
     }

@@ -2,7 +2,7 @@
 {
     public class DashboardExpenseVM
     {
-        public List<DashboardMyExpensesVM> MyExpenses { get; set; }
-        public List<DashboardExpensesToBeCompletedByManagerVM> ExpensesToBeCompletedByManager { get; set; }
+        public List<DashboardExpensesVM> MyExpenses { get; set; }
+        public List<DashboardExpensesVM> ExpensesToBeCompletedByManager { get; set; }
     }
 }

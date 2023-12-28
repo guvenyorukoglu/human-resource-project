@@ -1,5 +1,4 @@
-﻿
-@model ProfileEmployeeVM
+﻿@model ProfileEmployeeVM
 
 @{
     ViewData["Title"] = "ProfileEmployee";
@@ -77,38 +76,43 @@
                     </div>
                     <div class="card-body">
                         <div class="form-group">
-                                <span class="form-label">Ad Soyad</span>
-                                <span class="form-control">@Model.FullName</span>
-                            </div>
-                            <div class="form-group">
-                                <span class="form-label">Adres</span>
-                                <span class="form-control">@Model.Address</span>
-                            </div>
-                            <div class="form-group">
-                                <span class="form-label">Telefon Numarası</span>
-                                <span class ="form-control">@Model.PhoneNumber</span>
-                            </div>
-                            <div class="form-group">
-                                <span class="form-label">Email</span>
+                            <span class="form-label">Ad Soyad</span>
+                            <span class="form-control">@Model.FullName</span>
+                        </div>
+                        <div class="form-group">
+                            <span class="form-label">Adres</span>
+                            <span class="form-control">@Model.Address</span>
+                        </div>
+                        <div class="form-group">
+                            <span class="form-label">Telefon Numarası</span>
+                            <span class="form-control">@Model.PhoneNumber</span>
+                        </div>
+                        <div class="form-group">
+                            <span class="form-label">Email</span>
                             <span class="form-control">@Model.Email</span>
-                            </div>
+                        </div>
+                        @if (User.IsInRole("Manager") || User.IsInRole("Personel"))
+                        {
                             <div class="form-group">
                                 <span class="form-label">Meslek</span>
-                            <span class="form-control">@Model.JobTitle</span>
+                                <span class="form-control">@Model.JobTitle</span>
                             </div>
-                            <div class="form-group">
-                                <span class="form-label">TC No</span>
+                        }
+                        <div class="form-group">
+                            <span class="form-label">TC No</span>
                             <span class="form-control">@Model.IdentificationNumber</span>
-                            </div>
-@*                        <div class="form-group">
-                            var enumType = typeof(BloodGroup);
-                            var enumValues = enumType.GetEnumValues();
-                            var displayAttribute = enumType.GetMember(@Model.BloodGroup.ToString())[0].GetCustomAttribute<DisplayAttribute>
-                                ();
-                                var displayName = displayAttribute?.GetName() ?? @Model.BloodGroup.ToString();
+                        </div>
+                        <div class="form-group">
                             <span class="form-label">Kan Grubu</span>
-                                <span class="form-control">@displayName</span>
-                        </div>*@
+                            @{
+                                var enumType = typeof(BloodGroup);
+                                var enumValue = Enum.Parse(enumType, Model.BloodGroup.ToString());
+                                var memberInfo = enumType.GetMember(enumValue.ToString())[0];
+                                var displayAttribute = memberInfo.GetCustomAttributes(typeof(DisplayAttribute), false).FirstOrDefault() as DisplayAttribute;
+                                var displayName = displayAttribute?.GetName() ?? Model.BloodGroup.ToString();
+                            }
+                            <span class="form-control">@displayName</span>
+                        </div>
                         <div class="form-group">
                             <span class="form-label">Doğum Tarihi</span>
                             <span class="form-control">@Model.Birthdate.ToShortDateString()</span>
@@ -117,19 +121,21 @@
                             <span class="form-label">Cinsiyet</span>
                             <span class="form-control">@Model.Gender</span>
                         </div>
-                        <div class="form-group">
-                            <span class="form-label">Yönetici Adı</span>
-                            <span class="form-control">@Model.ManagerName</span>
-                        </div>
-                                              <div class="form-group">
-                            <span class="form-label">Yönetici E-Mail</span>
-                            <span class="form-control">@Model.ManagerEmail</span>
-                        </div>
-                         <div class="form-group">
-                            <span class="form-label">Yönetici Telefon Numarası</span>
-                            <span class="form-control">@Model.ManagerPhoneNumber</span>
-                        </div>
-
+                        @if (User.IsInRole("Manager") || User.IsInRole("Personel"))
+                        {
+                            <div class="form-group">
+                                <span class="form-label">Yönetici Adı</span>
+                                <span class="form-control">@Model.ManagerName</span>
+                            </div>
+                            <div class="form-group">
+                                <span class="form-label">Yönetici E-Mail</span>
+                                <span class="form-control">@Model.ManagerEmail</span>
+                            </div>
+                            <div class="form-group">
+                                <span class="form-label">Yönetici Telefon Numarası</span>
+                                <span class="form-control">@Model.ManagerPhoneNumber</span>
+                            </div>
+                        }
                         <div class="text-center">
                             <div class="form-group mb-3 d-grid">
                                 <input type="submit" value="Güncelle" class="btn btn-primary" />
@@ -142,4 +148,3 @@
     </div>
 </body>
 
-                     

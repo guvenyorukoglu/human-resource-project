@@ -2,7 +2,7 @@
 
 namespace humanResourceProject.Models.VMs
 {
-    public class DashboardExpensesToBeCompletedByManagerVM
+    public class DashboardExpensesVM
     {
         public string ExpenseNo { get; set; }
         public decimal AmountOfExpense { get; set; }

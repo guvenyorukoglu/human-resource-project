@@ -2,7 +2,7 @@
 {
     public class DashboardLeaveVM
     {
-        public List<DashboardMyLeavesVM> MyLeaves { get; set; }
-        public List<DashboardLeavesToBeCompletedByManagerVM> LeavesToBeCompletedByManager { get; set; }
+        public List<DashboardLeavesVM> MyLeaves { get; set; }
+        public List<DashboardLeavesVM> LeavesToBeCompletedByManager { get; set; }
     }
 }
