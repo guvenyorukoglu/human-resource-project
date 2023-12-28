@@ -203,7 +203,7 @@ namespace humanResourceProject.API.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        [Route("ForgotPassword")]
+        [Route("ForgotPassword/{email}")]
         public async Task<IActionResult> ForgotPassword([Required] string email)
         {
             var user = await _userManager.FindByEmailAsync(email);

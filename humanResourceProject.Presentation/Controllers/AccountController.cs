@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Newtonsoft.Json;
 using System.Net.Mime;
 using System.Security.Claims;
@@ -218,6 +219,37 @@ namespace humanResourceProject.Presentation.Controllers
 
         [HttpGet]
         [AllowAnonymous]
+        public IActionResult ForgotPassword()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public async Task<IActionResult> ForgotPassword(ForgotPasswordDTO model)
+        {
+            if (!ModelState.IsValid)
+            {
+                ModelState.AddModelError(string.Empty, "Lütfen geçerli bir e-mail adresi giriniz!");
+                return View(model);
+            }
+
+            HttpResponseMessage response = await _httpClient.GetAsync($"/api/Account/ForgotPassword/{model.Email}");
+            if (response.IsSuccessStatusCode)
+            {
+                ModelState.AddModelError("SuccessMessage", "Şifre sıfırlama linki e-mail adresinize gönderildi.");
+                return View(model);
+            }
+            else
+            {
+                ModelState.AddModelError("ErrorMessage", "Böyle bir e-mail kaydı bulunamadı!");
+                return View(model);
+            }
+        }
+
+
+        [HttpGet]
+        [AllowAnonymous]
         //[ValidateAntiForgeryToken]
         public IActionResult ResetPassword(string id, string token)
         {
@@ -232,6 +264,7 @@ namespace humanResourceProject.Presentation.Controllers
         {
             if (!ModelState.IsValid)
             {
+                ModelState.AddModelError(string.Empty, "Bir hata oluştu tekrar deneyiniz!");
                 return View(model);
             }
             var json = System.Text.Json.JsonSerializer.Serialize(model);
@@ -240,11 +273,12 @@ namespace humanResourceProject.Presentation.Controllers
             HttpResponseMessage response = await _httpClient.PostAsync("/api/Account/ResetPassword", content);
             if (response.IsSuccessStatusCode)
             {
-                return View("ResetPasswordConfirmation");
+                ModelState.AddModelError("SuccessMessage", "Şifreniz başarılı bir şekilde yenilenmiştir.");
+                return View(model);
             }
             else
             {
-                ModelState.AddModelError(string.Empty, "Bir Hata Oluştu Tekrar Deneyiniz!");
+                ModelState.AddModelError("ErrorMessage", "Bağlantı linkiniz geçersiz olduğu için şifreniz yenilenemedi!");
                 return View(model);
             }
         }
