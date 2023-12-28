@@ -1,8 +1,7 @@
-﻿using humanResourceProject.Domain.Entities.Concrete;
-using humanResourceProject.Domain.Enum;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel;
+﻿using humanResourceProject.Domain.Enum;
 using Microsoft.AspNetCore.Http;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using static humanResourceProject.Models.Validations.DateTimeValidations;
 
 namespace humanResourceProject.Models.DTOs
@@ -16,6 +15,7 @@ namespace humanResourceProject.Models.DTOs
         public string? Explanation { get; set; }
         [Required(ErrorMessage = "Miktar alanı boş geçilemez!")]
         [DisplayName("Harcama Miktarı*")]
+        [Range(1, 100000, ErrorMessage = "Harcama miktarı 1 ile 100000 arasında olmalıdır.")]
         public decimal AmountOfExpense { get; set; }
         //public DateTime? UpdateDate { get; set; }
         //public Status Status { get; set; }

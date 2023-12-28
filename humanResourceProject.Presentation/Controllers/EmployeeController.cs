@@ -209,6 +209,14 @@ namespace humanResourceProject.Presentation.Controllers
         {
             if (!ModelState.IsValid)
             {
+                if (ModelState["BloodGroup"].Errors.Count > 0)
+                {
+                    ModelState.AddModelError(string.Empty, "Kan grubunu seçiniz!");
+                }
+                if (ModelState["Gender"].Errors.Count > 0)
+                {
+                    ModelState.AddModelError(string.Empty, "Cinsiyet seçiniz!");
+                }
                 model.Jobs = JsonConvert.DeserializeObject<List<JobVM>>(JobsList);
                 model.Departments = JsonConvert.DeserializeObject<List<DepartmentVM>>(DepartmentsList);
                 model.Managers = JsonConvert.DeserializeObject<List<ManagerVM>>(ManagersList);
@@ -241,6 +249,15 @@ namespace humanResourceProject.Presentation.Controllers
         {
             if (!ModelState.IsValid)
             {
+                if (ModelState["BloodGroup"].Errors.Count > 0)
+                {
+                    ModelState.AddModelError(string.Empty, "Kan grubunu seçiniz!");
+                }
+                if (ModelState["Gender"].Errors.Count > 0)
+                {
+                    ModelState.AddModelError(string.Empty, "Cinsiyet seçiniz!");
+                }
+
                 model.Jobs = JsonConvert.DeserializeObject<List<JobVM>>(JobsList);
                 model.Departments = JsonConvert.DeserializeObject<List<DepartmentVM>>(DepartmentsList);
                 model.Managers = JsonConvert.DeserializeObject<List<ManagerVM>>(ManagersList);
@@ -379,9 +396,9 @@ namespace humanResourceProject.Presentation.Controllers
                 return View(dashboardVM);
             }
 
-            return View("Error");           
+            return View("Error");
         }
-        
+
         [HttpGet]
         public async Task<IActionResult> EditProfile(Guid id)
         {
@@ -423,7 +440,7 @@ namespace humanResourceProject.Presentation.Controllers
         [HttpGet]
         public async Task<IActionResult> ProfileEmployee()
         {
-            if(User.IsInRole("Personel") || User.IsInRole("Manager"))
+            if (User.IsInRole("Personel") || User.IsInRole("Manager"))
             {
                 var employeeId = Guid.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value);
                 var response = await _httpClient.GetAsync($"api/AppUser/ProfileEmployee/{employeeId}");
@@ -435,7 +452,7 @@ namespace humanResourceProject.Presentation.Controllers
                 }
                 return View("Error");
             }
-            else if(User.IsInRole("CompanyManager"))
+            else if (User.IsInRole("CompanyManager"))
             {
                 var companyManagerId = Guid.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value);
                 var response = await _httpClient.GetAsync($"api/AppUser/ProfileCompanyManager/{companyManagerId}");
@@ -451,10 +468,10 @@ namespace humanResourceProject.Presentation.Controllers
             {
                 return View("Error");
             }
-            
+
 
         }
     }
 
-         
+
 }

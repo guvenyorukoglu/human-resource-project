@@ -1,7 +1,4 @@
-@using System.Reflection;
-@using System.ComponentModel.DataAnnotations;
-@using humanResourceProject.Domain.Enum;
-@using humanResourceProject.Models.DTOs;
+
 @model UpdateAdvanceDTO
 @{
     ViewData["Title"] = "UpdateAdvance";
@@ -97,12 +94,13 @@
                             <input type="submit" value="Güncelle" class="btn btn-primary" />
                         </div>
                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                        <div>
-                            <a asp-controller="Employee" asp-action="Home"><button class="btn btn-secondary">Ana Sayfaya Dön</button></a>
-                        </div>
+                        
                     </div>
                 </div>
             </form>
+            <div>
+                <a asp-controller="Employee" asp-action="Home"><button class="btn btn-secondary">Ana Sayfaya Dön</button></a>
+            </div>
         </div>
     </div>
 </body>

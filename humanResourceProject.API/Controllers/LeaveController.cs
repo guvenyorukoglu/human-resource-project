@@ -99,13 +99,15 @@ namespace humanResourceProject.API.Controllers
             {
                 return BadRequest(result.Errors);
             }
+
+
             AppUser employee = await _appUserReadService.GetSingleDefault(x => x.Id == model.EmployeeId);
             AppUser manager = await _appUserReadService.GetSingleDefault(x => x.Id == employee.ManagerId);
             string recipientEmail = manager.Email;
             string mailToName = $"{manager.FirstName} {manager.LastName}";
             string action = "";
             string subject = "İzin Talebi!";
-            string body = $"<p>Sayın {manager.FirstName} {manager.LastName},</p><p>{employee.FirstName} {employee.LastName} tarafından {model.CreateDate.ToShortDateString()} tarihli {model.DaysOfLeave} gün izin talebi yapılmıştır.</p><p>Uygulama üzerinden onaylama ya da reddetme işlemini yapabilirsiniz.</p><p>İyi çalışmalar dileriz.</p><br><hr><br><h3>Team Monitorease</h3>";
+            string body = $"<p>Sayın {manager.FirstName} {manager.LastName},</p><p>{employee.FirstName} {employee.LastName} tarafından {DateTime.Now.ToShortDateString()} tarihli {model.DaysOfLeave} gün izin talebi yapılmıştır.</p><p>Uygulama üzerinden onaylama ya da reddetme işlemini yapabilirsiniz.</p><p>İyi çalışmalar dileriz.</p><br><hr><br><h3>Team Monitorease</h3>";
             await _mailService.SendEmailAsync(manager, recipientEmail, mailToName, subject, body);
             return Ok(result);
         }

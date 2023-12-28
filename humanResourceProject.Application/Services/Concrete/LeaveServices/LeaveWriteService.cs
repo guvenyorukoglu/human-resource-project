@@ -37,7 +37,7 @@ namespace humanResourceProject.Application.Services.Concrete.LeaveServices
             if (model == null)
                 return IdentityResult.Failed();
 
-            Leave newLeave = _mapper.Map<Leave>(model);
+                Leave newLeave = _mapper.Map<Leave>(model);
             newLeave.Status = Domain.Enum.Status.Active;
             newLeave.CreateDate = DateTime.Now;
             int currentLeaveCount = await _baseReadRepository.GetCountAsync();

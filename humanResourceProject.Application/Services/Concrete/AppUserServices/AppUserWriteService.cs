@@ -87,7 +87,7 @@ namespace humanResourceProject.Application.Services.Concrete.AppUserServices
 
         public async Task<IdentityResult> RegisterPersonel(CreateEmployeeDTO model)
         {
-            AppUser user = await _readRepository.GetDefault(x => x.Email == model.Email || x.IdentificationNumber == model.IdentificationNumber);
+            AppUser user = await _readRepository.GetDefault(x => x.Email == model.Email);
             if (model == null || user != null)
                 return IdentityResult.Failed();
 
@@ -103,7 +103,7 @@ namespace humanResourceProject.Application.Services.Concrete.AppUserServices
         }
         public async Task<IdentityResult> RegisterPersonelManager(CreateEmployeeDTO model)
         {
-            AppUser user = await _readRepository.GetDefault(x => x.Email == model.Email || x.IdentificationNumber == model.IdentificationNumber);
+            AppUser user = await _readRepository.GetDefault(x => x.Email == model.Email);
             if (model == null || user != null)
                 return IdentityResult.Failed();
 

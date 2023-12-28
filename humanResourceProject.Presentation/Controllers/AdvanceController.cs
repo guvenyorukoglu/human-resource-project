@@ -85,6 +85,19 @@ namespace humanResourceProject.Presentation.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateAdvance(AdvanceDTO model)
         {
+            if (!ModelState.IsValid)
+            {
+                if (ModelState["AdvanceType"].Errors.Count > 0)
+                {
+                    ModelState.AddModelError(string.Empty, "Avans türünü seçiniz!");
+                }
+                if (ModelState["Currency"].Errors.Count > 0)
+                {
+                    ModelState.AddModelError(string.Empty, "Para birimini seçiniz!");
+                }
+                return View(model);
+            }
+
             var json = JsonConvert.SerializeObject(model);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
 

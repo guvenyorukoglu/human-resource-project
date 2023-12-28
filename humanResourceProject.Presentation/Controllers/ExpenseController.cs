@@ -87,8 +87,19 @@ namespace humanResourceProject.Presentation.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateExpense(ExpenseDTO model)
         {
+
             if (!ModelState.IsValid)
+            {
+                if (ModelState["ExpenseType"].Errors.Count > 0)
+                {
+                    ModelState.AddModelError(string.Empty, "Masraf türünü seçiniz!");
+                }
+                if (ModelState["Currency"].Errors.Count > 0)
+                {
+                    ModelState.AddModelError(string.Empty, "Para birimini seçiniz!");
+                }
                 return View(model);
+            }
 
             var multipartContent = new MultipartFormDataContent();
 

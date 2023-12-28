@@ -15,6 +15,7 @@ namespace humanResourceProject.Models.DTOs
         public string Explanation { get; set; }
         [Required(ErrorMessage = "Miktar alanı boş geçilemez!")]
         [DisplayName("Harcama Miktarı*")]
+        [Range(1, 100000, ErrorMessage = "Harcama miktarı 1 ile 100000 arasında olmalıdır.")]
         public decimal AmountOfExpense { get; set; }
         public RequestStatus ExpenseStatus { get; set; }
         [Required(ErrorMessage = "Masraf türü alanı boş geçilemez!")]
