@@ -15,7 +15,24 @@ body {
     align-items: center;
     width: 15vw;
     background-color: #133a63;
-   
+    height: 200vh;
+    /* position: fixed;*/
+    z-index: 999;
+    margin-top: -8px;
+}
+
+
+
+a {
+    text-decoration: none;
+    color: #000;
+    font-size: 14px;
+}
+
+
+h6 {
+    font-size: 1vw;
+    color: #ffffff;
 }
 
 
@@ -48,27 +65,32 @@ body {
         cursor: pointer;
     }
 
+        .picture img:hover {
+            transform: scale(1.1);
+            transition: ease-in-out 0.3s;
+        }
+
 .panel-items {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
     font-size: 20px;
- /*   margin-top: 80px;*/
+    /*   margin-top: 80px;*/
     padding: 2vw;
-
 }
 
-    .panel-list, .sub-menu {
-        list-style: none;
-        padding: 0;
-        margin: 0;
-    }
+.panel-list, .sub-menu {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
 
     .panel-list li {
         padding: 10px;
     }
 
+   
         .panel-list li a {
             text-decoration: none;
             color: snow;
@@ -207,3 +229,98 @@ body {
     ::-webkit-scrollbar-thumb:hover {
         background: #e48774;
     }
+
+
+
+
+
+
+.card {
+    margin: 10px;
+    padding: 10px;
+}
+
+.leave-info {
+    background-color: #f1d184;
+}
+
+.calender {
+    background-color: #75cfa6;
+    overflow: auto;
+}
+
+.holiday-info {
+    background-color: #e48774;
+}
+
+.upcoming-leave-info {
+    background-color: #e48774;
+}
+
+.upcoming-expense-info {
+    background-color: #f1d184;
+}
+
+.upcoming-advance-info {
+    background-color: #e48774;
+}
+
+.event-info {
+    background-color: #75cfa6;
+}
+
+h6 {
+    font-size: 1vw;
+    color: #ffffff;
+}
+
+/* CALENDAR */
+
+#calendar a {
+    font-size: 0.7vw;
+    color: #000000;
+    text-decoration: none;
+}
+
+.fc .fc-toolbar.fc-header-toolbar {
+    font-size: 0.5vw;
+}
+
+
+.fc-theme-standard td,
+.fc-theme-standard th {
+    border: none;
+}
+
+/* CHART */
+
+#myChart {
+    max-width: 300px;
+    max-height: 300px;
+}
+
+a {
+    text-decoration: none;
+    /* font-size: 1vw;*/
+    color: #ffffff;
+}
+
+
+
+
+.dropdown-menu.dropdown-menu-center {
+    left: 40%;
+    right: auto;
+    transform: translateX(-50%) !important;
+}
+
+.dropdown .btn:hover {
+    transform: scale(1.1);
+}
+
+.dropdown-item {
+    font-size: 14px;
+    transition: all 0.3s ease;
+}
+
+

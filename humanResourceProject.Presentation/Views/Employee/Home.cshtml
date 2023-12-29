@@ -65,6 +65,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 
 
+
     <script>
         var eventName = [];
         var start = [];
@@ -106,60 +107,24 @@
 </head>
 <body>
     <div class="row">
+        
         @Html.Partial("_PanelPartial")
-        <div class="aside col-md-9" style="margin-top:50px;">
+  
+
+        <div class="aside col-md-9 container">
             <div class="row text-center">
-                <div class="col-md-4 leave-info card">
+                <div class="col-md-3 leave-info card">
                     <h6>@title</h6>
 
-                    <canvas id="myChart" style="margin:0 auto;">KALAN İZİN</canvas>
+                    <canvas class="mb-3" id="myChart" style="margin:0 auto; width:250px; "></canvas>
                     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
                     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.min.js"></script>
-
-                    @*<script>
-                    document.addEventListener("DOMContentLoaded", function () {
-                    const ctx = document.getElementById("myChart");
-
-
-                    var leaveType = [];
-                    var used = [];
-                    var remain = [];
-                    var futureDated = [];
-
-                    //Todo: push metotları yazılacak
-
-
-
-                    new Chart(ctx, {
-                    type: "doughnut",
-                    data:
-                    {
-                    labels: [], //leaveType olarak düzelecek
-                    datasets:
-                    [
-                    {
-                    label: "",
-                    data: [12, 19, 8],
-                    borderWidth: 1,
-                    },
-                    ],
-                    },
-                    options: {},
-                    });
-                    });
-                    </script>*@
 
 
                     <script>
                         document.addEventListener("DOMContentLoaded", function () {
                             const ctx = document.getElementById("myChart");
-                            var leaveType = [];
-                            var used = [];
-                            var remain = [];
-                            var futureDated = [];
 
-                            //Todo: push metotları yazılacak
                             var numberOfPendingLeaves;
                             var numberOfPendingExpenses;
                             var numberOfPendingAdvances;
@@ -168,22 +133,120 @@
                                 type: "doughnut",
                                 data:
                                 {
-                                    labels: [], //leaveType olarak düzelecek
+                                    labels: [],
                                     datasets:
                                         [
                                             {
                                                 label: "",
                                                 data: [@numberOfPendingLeaves, @numberOfPendingExpenses, @numberOfPendingAdvances],
+
+                                                backgroundColor: [
+                                                    '#FF6384',
+                                                    '#36A2EB',
+                                                    '#FFCD56'
+                                                ],
                                                 borderWidth: 1,
                                             },
+
                                         ],
                                 },
+
+
+                                options: {
+
+
+
+
+                                    plugins: {
+                                        legend: {
+                                            labels: {
+                                                font: {
+                                                    size: 14
+                                                }
+                                            }
+                                        }
+                                    }
+
+                                },
+
+
+                                onClick: function (evt) {
+                                    var activePoints = myChart.getElementsAtEventForMode(
+                                        evt,
+                                        "point",
+                                        myChart.options
+                                    );
+
+                                    if (activePoints.length > 0) {
+                                        var clickedElementIndex = activePoints[0].index;
+
+                                        // Tıklanan etiketin indeksini kullanarak ilgili bağlantıya yönlendirme
+                                        switch (clickedElementIndex) {
+                                            case 0:
+                                                window.location.href = "/Leave/EmployeesLeaves.html";
+                                                break;
+                                            case 1:
+                                                window.location.href = "link2.html";
+                                                break;
+                                            case 2:
+                                                window.location.href = "link3.html";
+                                                break;
+                                            default:
+                                                break;
+                                        }
+                                    }
+                                },
+
+
+
+
+
+
+
                             });
-                            document.getElementById("usedDays").innerText = "Kullanılan İzin: " + used;
-                            document.getElementById("remainDays").innerText = "Kalan İzin: " + remain;
+
+                            document.getElementById("numberOfPendingLeaves").innerHTML = "Bekleyen İzinler: " + @numberOfPendingLeaves;
+
+                            document.getElementById("numberOfPendingExpenses").innerHTML = "Bekleyen Harcamalar: " + @numberOfPendingExpenses
+
+                                document.getElementById("numberOfPendingAdvances").innerHTML = "Bekleyen Avanslar: " + @numberOfPendingAdvances;
+
                         });
 
 
+                    </script>
+
+                   
+
+                    <button onclick="checkButtonColor(this)" style="background-color:#FF6384;" id="numberOfPendingLeaves" class="numberOfPendingLeaves mt-1">
+                        Bekleyen İzinler
+                    </button>
+
+                    <button onclick="checkButtonColor(this)" style="background-color:#36A2EB;" id="numberOfPendingExpenses" class="numberOfPendingLeaves mt-1">
+                        Bekleyen Harcamalar
+                    </button>
+
+                    <button onclick="checkButtonColor(this)" style="background-color:#FFCD56;" id="numberOfPendingAdvances" class="numberOfPendingLeaves mt-1">
+                        Bekleyen Avanslar
+                    </button>
+
+                    <script>
+                        function checkButtonColor(clickedButton) {
+                            var buttonColor = window.getComputedStyle(clickedButton).backgroundColor;
+
+                         
+                            var rgbLeaves = 'rgb(255, 99, 132)';
+                            var rgbExpenses = 'rgb(54, 162, 235)';
+                            var rgbAdvances = 'rgb(255, 205, 86)';
+
+                            if (buttonColor === rgbLeaves) {
+                                window.location.href = "/Leave/EmployeesLeaves";
+                            } else if (buttonColor === rgbExpenses) {
+                                window.location.href = "/Expense/EmployeesExpenses";
+                            } else if (buttonColor === rgbAdvances) {
+                                window.location.href = "/Advance/EmployeesAdvances";
+                            }
+                        }
                     </script>
 
                     @{
@@ -200,121 +263,14 @@
                             }
                         }
                     }
-
-                    @* <script>
-                    document.addEventListener("DOMContentLoaded", function () {
-                    const ctx = document.getElementById("myChart");
-
-
-                    var personnelLeave = 2000;
-
-
-                    //for (var i = 0; i < leavesData.length; i++) {
-                    //    totalLeaveDays += leavesData[i];
-                    //}
-
-                    var used = @totalLeaveDays;
-
-                    var remain = personnelLeave - used;
-
-                    new Chart(ctx, {
-                    type: "doughnut",
-                    data: {
-                    labels: ["Kullanılan", "Kalan"],
-                    datasets: [
-                    {
-                    label: "İzin Durumu",
-                    data: [used, remain],
-                    backgroundColor: [
-                    'rgba(255, 99, 132, 0.6)',
-                    'rgba(54, 162, 235, 0.6)',
-                    ],
-                    borderWidth: 1,
-                    },
-
-                    ],
-                    },
-                    options: {
-
-                    },
-                    });
-                    document.getElementById("usedDays").innerText = "Kullanılan İzin: " + used;
-                    document.getElementById("remainDays").innerText = "Kalan İzin: " + remain;
-                    });
-
-
-                    </script>
-
-                    <h6 id="usedDays"></h6>
-                    <h6 id="remainDays"></h6> *@
-
                 </div>
-
-
-
-                @*  <div class="col-md-4 leave-info card">
-                <h6>AVANS BİLGİLERİM</h6>
-
-                <canvas id="myAdvanceChart" style="margin:0 auto;"></canvas>
-                <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-                <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.min.js"></script>
-
-
-                <script type="module">
-                document.addEventListener("DOMContentLoaded", function () {
-                const ctx = document.getElementById("myAdvanceChart");
-                var leavesData = @Html.Raw(Json.Serialize(leaves));
-
-                var personnelLeave = 21;
-                var totalLeaveDays = 0;
-
-
-                for (var i = 0; i < leavesData.length; i++) {
-                totalLeaveDays += leavesData[i];
-                }
-
-                var used = totalLeaveDays;
-
-
-                var remain = personnelLeave - used;
-
-                new Chart(ctx, {
-                type: "bar",
-                data: {
-                labels: ['Ocak', 'Şubat', 'Mart', 'Nisan', 'Mayıs', 'Haziran', 'Temmuz', 'Ağustos', 'Eylül', 'Ekim', 'Kasım', 'Aralık'],
-
-                datasets: [
-                {
-                label: "Avans Durumu",
-                data: [used],
-                backgroundColor: [
-                'rgba(255, 99, 132, 0.6)',
-                'rgba(54, 162, 235, 0.6)',
-                ],
-                borderWidth: 1,
-                },
-
-                ],
-                },
-                options: {
-
-                },
-                });
-                });
-                </script>
-
-                </div>*@
-
-
-
 
                 <div class="col-md-4 calender card">
                     <div id="calendar" style="width: 90%"></div>
                 </div>
 
 
-                <div class="col-md-3 holiday-info card">
+                <div class="col-md-4 holiday-info card">
                     <h6>ŞİRKET BİLGİLERİ</h6>
                     <div class="d-flex flex-column gap-2">
                         <div class="d-flex gap-2 justify-content-center align-items-center"><i class="fa-solid fa-building"></i><span>@Model.Company.CompanyName</span></div>
@@ -325,7 +281,7 @@
                     </div>
                 </div>
 
-                <div class="row text-center">
+               @* <div class="row text-center">*@
                     <div class="col-md-3 upcoming-leave-info card">
                         @if (User.IsInRole("Manager") || User.IsInRole("Personel"))
                         {
@@ -374,8 +330,7 @@
                         </table>
                     </div>
 
-
-                    <div class="col-md-4 upcoming-leave-info card">
+                    <div class="col-md-4 upcoming-expense-info card">
                         @if (User.IsInRole("Manager") || User.IsInRole("Personel"))
                         {
                             <h6>
@@ -388,6 +343,7 @@
                                 <a asp-action="EmployeesExpenses" asp-controller="Expense">ONAY BEKLEYEN MASRAFLAR</a>
                             </h6>
                         }
+
                         <table class="table table-striped table-borderless">
                             <thead>
                                 <tr>
@@ -422,7 +378,8 @@
                             </tbody>
                         </table>
                     </div>
-                    <div class="col-md-4 upcoming-leave-info card shadow-lg">
+
+                    <div class="col-md-4 upcoming-advance-info card shadow-lg">
                         @if (User.IsInRole("Manager") || User.IsInRole("Personel"))
                         {
                             <h6>
@@ -435,6 +392,7 @@
                                 <a asp-action="EmployeesAdvances" asp-controller="Advance">ONAY BEKLEYEN AVANSLAR</a>
                             </h6>
                         }
+
                         <table class="table table-striped table-borderless">
                             <thead>
                                 <tr>
@@ -501,83 +459,9 @@
                         </div>
                     </div>
                 </div>
-            </div>
+           @* </div>*@
         </div>
-    </div>
+
 </body>
 
-
-<style>
-    .aside {
-        margin-left: 50px;
-    }
-
-    .card {
-        margin: 10px;
-        padding: 10px;
-        height: 22vw;
-    }
-
-    .leave-info {
-        background-color: #f1d184;
-    }
-
-    .calender {
-        background-color: #75cfa6;
-        overflow: auto;
-    }
-
-    .holiday-info {
-        background-color: #e48774;
-    }
-
-    .upcoming-leave-info {
-        background-color: #e48774;
-    }
-
-    .upcoming-birthday-info {
-        background-color: #f1d184;
-    }
-
-    .event-info {
-        background-color: #75cfa6;
-    }
-
-    h6 {
-        font-size: 1vw;
-        color: #ffffff;
-    }
-
-    /* CALENDAR */
-
-    #calendar a {
-        font-size: 0.7vw;
-        color: #000000;
-        text-decoration: none;
-    }
-
-    .fc .fc-toolbar.fc-header-toolbar {
-        font-size: 0.5vw;
-    }
-
-
-    .fc-theme-standard td,
-    .fc-theme-standard th {
-        border: none;
-    }
-
-    /* CHART */
-
-    #myChart {
-        max-width: 300px;
-        max-height: 300px;
-    }
-
-    a {
-        text-decoration: none;
-        /* font-size: 1vw;*/
-        color: #ffffff;
-    }
-
-</style>
 
