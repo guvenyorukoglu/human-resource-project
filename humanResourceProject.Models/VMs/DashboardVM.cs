@@ -18,6 +18,8 @@ namespace humanResourceProject.Models.VMs
 
         public int? TotalLeaveRequests { get; set; }
 
+        public AppUserVM? AppUser { get; set; }
+
 
     }
 }

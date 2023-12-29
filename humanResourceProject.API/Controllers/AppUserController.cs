@@ -165,6 +165,13 @@ namespace humanResourceProject.API.Controllers
             return Ok(await _appUserReadService.ProfileEmployee(id));
         }
 
+        [HttpGet]
+        [Route("GetAppUserVM/{id}")]
+        public async Task<IActionResult> GetAppUserVM(Guid id)
+        {
+            return Ok(await _appUserReadService.GetAppUserVM(id));
+        }
+
         //[HttpPost]
         //[Route("ResetPassword")]
         //public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordDTO model)

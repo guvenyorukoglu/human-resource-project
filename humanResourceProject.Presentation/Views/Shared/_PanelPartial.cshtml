@@ -20,9 +20,6 @@
                 <li>
                     <a asp-action="Home" asp-controller="Employee"><i class="fa-solid fa-calendar-days"></i>Dashboard</a>
                 </li>
-                <li>
-                    <a asp-action="EditProfile" asp-controller="Employee" asp-route-id=@User.Claims.FirstOrDefault(x=>x.Type==ClaimTypes.NameIdentifier).Value><i class="fa fa-users"></i>Profil Düzenleme</a>
-                </li>
                 @if (User.IsInRole("Personel") || User.IsInRole("Manager"))
                 {
                     <li class="parent">
