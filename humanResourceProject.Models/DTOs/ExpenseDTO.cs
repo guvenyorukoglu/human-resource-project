@@ -26,7 +26,7 @@ namespace humanResourceProject.Models.DTOs
         [Required(ErrorMessage = "Para birimi alanı boş geçilemez!")]
         [DisplayName("Para Birimi*")]
         public Currency Currency { get; set; }
-        //[Required(ErrorMessage = "Dosya alanı boş geçilemez!")]
+        [Required(ErrorMessage = "Dosya alanı boş geçilemez!")]
         [DisplayName("Dosya*")]
         public IFormFile? UploadPath { get; set; }
         public string? FilePath { get; set; }

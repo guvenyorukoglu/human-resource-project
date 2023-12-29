@@ -1,4 +1,3 @@
-
 @model UpdateAdvanceDTO
 @{
     ViewData["Title"] = "UpdateAdvance";
@@ -9,10 +8,8 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.css" />
 
     <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.js"></script>
- 
-</head>
 
-<hr />
+</head>
 <body>
     <div class="row">
 
@@ -35,9 +32,11 @@
                                     {
                                         var displayAttribute = enumType.GetMember(enumValue.ToString())[0].GetCustomAttribute<DisplayAttribute>();
                                         var displayName = displayAttribute?.GetName() ?? enumValue.ToString();
+
                                         <option value="@enumValue">@displayName</option>
+
                                     }
-                                    <option value="" disabled selected>Avans Tipi seçiniz!</option>
+                                    <option value="" disabled>Avans Tipi seçiniz!</option>
                                 }
 
                             </select>
@@ -72,7 +71,7 @@
                         </div>
                         <div class="form-group mb-3">
                             <label asp-for="Explanation" class="control-label"></label>
-                            <textarea value="@Model.Explanation" asp-for="Explanation" class="form-control"></textarea>
+                            <textarea asp-for="Explanation" class="form-control" rows="8"></textarea>
                             <span asp-validation-for="Explanation" class="text-danger"></span>
                         </div>
                         <div class="form-group mb-3">
@@ -82,11 +81,15 @@
                             <input value="@Model.AdvanceNo" asp-for="AdvanceNo" type="hidden" class="form-control" />
                             <input value="@Model.EmployeeId" asp-for="EmployeeId" type="hidden" class="form-control" />
                         </div>
-                        <div class="form-group">
-                            <input type="submit" value="Güncelle" class="btn btn-primary" />
+                        <div class="mb-3">
+                            <label>*Zorunlu alan</label>
                         </div>
                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <div class="form-group d-grid">
+                            <input type="submit" value="Güncelle" class="btn btn-primary" />
+                        </div>
                         
+
                     </div>
                 </div>
             </form>

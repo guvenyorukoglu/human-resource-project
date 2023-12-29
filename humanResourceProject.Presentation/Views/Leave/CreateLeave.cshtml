@@ -96,7 +96,7 @@
             const daysOfLeaveInput = document.querySelector('input[name="DaysOfLeave"]');
             const startDateInput = document.querySelector('input[name="StartDateOfLeave"]');
             const endDateInput = document.querySelector('input[name="EndDateOfLeave"]');
-            const submitButton = document.querySelector('input[type="submit"]');
+            // const submitButton = document.querySelector('input[type="submit"]');
 
             // Başlangıç ve bitiş tarihleri arasındaki farkı hesaplayan fonksiyon
             function calculateDateDifference(startDate, endDate) {
@@ -142,7 +142,8 @@
             // İnput değişikliklerini dinle
             startDateInput.addEventListener("change", handleInput);
             endDateInput.addEventListener("change", handleInput);
-            submitButton.addEventListener("click", handleInput);
+            daysOfLeaveInput.addEventListener("change", handleInput);
+            // submitButton.addEventListener("click", handleInput);
 
             // İnput değişikliklerini kontrol et
             handleInput();
