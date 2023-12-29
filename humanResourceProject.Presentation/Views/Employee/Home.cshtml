@@ -217,18 +217,36 @@
                     </script>
 
                    
+                    @if(User.IsInRole("Manager") || User.IsInRole("CompanyManager"))
+                    {
+                        <a asp-action="EmployeesLeaves" asp-controller="Leave" type="button" style="background-color:#FF6384; border: 2px solid black; border-radius: 5px;color:black;" id="numberOfPendingLeaves" class="numberOfPendingLeaves mt-1">
+                            Bekleyen İzinler
+                        </a>
 
-                    <button onclick="checkButtonColor(this)" style="background-color:#FF6384; border-radius: 5px;" id="numberOfPendingLeaves" class="numberOfPendingLeaves mt-1">
-                        Bekleyen İzinler
-                    </button>
+                        <a asp-action="EmployeesExpenses" asp-controller="Expense" type="button" style="background-color:#36A2EB; border: 2px solid black; border-radius: 5px;color:black" id="numberOfPendingExpenses" class="numberOfPendingLeaves mt-1">
+                            Bekleyen Harcamalar
+                        </a>
 
-                    <button onclick="checkButtonColor(this)" style="background-color:#36A2EB; border-radius: 5px;" id="numberOfPendingExpenses" class="numberOfPendingLeaves mt-1">
-                        Bekleyen Harcamalar
-                    </button>
+                        <a asp-action="EmployeesAdvances" asp-controller="Advance" type="button" style="background-color:#FFCD56; border: 2px solid black; border-radius: 5px;color:black" id="numberOfPendingAdvances" class="numberOfPendingLeaves mt-1">
+                            Bekleyen Avanslar
+                        </a>
+                    }
+                    else
+                    {
+                        <a asp-action="MyLeaves" asp-controller="Leave" type="button" style="background-color:#FF6384; border: 2px solid black; border-radius: 5px;color:black" id="numberOfPendingLeaves" class="numberOfPendingLeaves mt-1">
+                            Bekleyen İzinler
+                        </a>
 
-                    <button onclick="checkButtonColor(this)" style="background-color:#FFCD56; border-radius: 5px;" id="numberOfPendingAdvances" class="numberOfPendingLeaves mt-1">
-                        Bekleyen Avanslar
-                    </button>
+                        <a asp-action="MyExpenses" asp-controller="Expense" type="button" style="background-color:#36A2EB; border: 2px solid black; border-radius: 5px;color:black" id="numberOfPendingExpenses" class="numberOfPendingLeaves mt-1">
+                            Bekleyen Harcamalar
+                        </a>
+
+                        <a asp-action="MyAdvances" asp-controller="Advance" type="button" style="background-color:#FFCD56; border: 2px solid black; border-radius: 5px; color:black" id="numberOfPendingAdvances" class="numberOfPendingLeaves mt-1">
+                            Bekleyen Avanslar
+                        </a>
+                    }
+
+                    
 
                     <script>
                         function checkButtonColor(clickedButton) {
@@ -238,7 +256,7 @@
                             var rgbLeaves = 'rgb(255, 99, 132)';
                             var rgbExpenses = 'rgb(54, 162, 235)';
                             var rgbAdvances = 'rgb(255, 205, 86)';
-
+                            
                             if (buttonColor === rgbLeaves) {
                                 window.location.href = "/Leave/EmployeesLeaves";
                             } else if (buttonColor === rgbExpenses) {

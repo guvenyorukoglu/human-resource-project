@@ -24,8 +24,8 @@
         }
 
         .card-header {
-            background-color: #007bff;
-            color: white;
+            /* background-color: #007bff; */
+            color: #000;
             border-radius: 10px 10px 0 0;
             padding: 15px;
         }
@@ -73,10 +73,12 @@
     <div class="row">
         @Html.Partial("_PanelPartial")
 
-        <div class="aside container mt-5 col-md-9 col-sm-9">
-            <h3 class="text-center mb-4">Bilgilerini Güncelle</h3>
+        <div class="aside container mt-5 col-md-6 col-sm-6 offset-md-1">
             <form asp-action="EditProfile">
                 <div class="card shadow p-3 mb-5 bg-body rounded">
+                    <div class="card-header d-flex gap-1 justify-content-center">
+                        <h3 class="text-center mb-0 card-title">Bilgilerini Güncelle</h3>
+                    </div>
                     <div class="card-body">
 
                         <div class="form-group">
@@ -121,17 +123,17 @@
                             </select>
                             <span asp-validation-for="BloodGroup" class="text-danger"></span>
                         </div>
-
-                        <div class="form-group text-center mt-4">
+                        <div class="mb-3">
+                            <label>*Zorunlu alan</label>
+                        </div>
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <div class="form-group text-center mt-4 d-grid">
                             <input type="submit" value="Güncelle" class="btn btn-primary" />
                         </div>
 
-                        <div asp-validation-summary="ModelOnly" class="text-danger text-center"></div>
                     </div>
                 </div>
             </form>
-
-            <hr>
             <div class="text-center">
                 <a asp-controller="Employee" asp-action="Home" class="custom-button custom-button--create-entity">
                     Anasayfaya Dön
