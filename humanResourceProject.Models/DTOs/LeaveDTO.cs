@@ -2,6 +2,7 @@ using humanResourceProject.Domain.Enum;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel;
 using static humanResourceProject.Models.Validations.DateTimeValidations;
+using humanResourceProject.Models.Validations;
 
 
 namespace humanResourceProject.Models.DTOs
@@ -23,6 +24,7 @@ namespace humanResourceProject.Models.DTOs
         public DateTime CreateDate { get; set; }
         [Required(ErrorMessage = "İzin gün miktarı boş geçilemez!")]
         [DisplayName("İzinli Gün Miktarı*")]
+        [DaysOfLeaveValidations(ErrorMessage ="0.5'den büyük değer giriniz!")]
         public decimal DaysOfLeave { get; set; }
         [Required(ErrorMessage = "İzin açıklaması boş geçilemez!")]
         [DisplayName("İzin Açıklaması*")]

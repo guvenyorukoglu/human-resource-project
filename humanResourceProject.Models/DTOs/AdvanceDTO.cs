@@ -1,8 +1,6 @@
 using humanResourceProject.Domain.Enum;
-using humanResourceProject.Models.Validations;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using static humanResourceProject.Models.Validations.DateTimeValidations;
 
 
 namespace humanResourceProject.Models.DTOs
@@ -14,10 +12,11 @@ namespace humanResourceProject.Models.DTOs
         public string ManagerEmail { get; set; }
         [Required(ErrorMessage = "Miktar alanı boş geçilemez!")]
         [DisplayName("Avans Miktarı*")]
+        [Range(100, 100000, ErrorMessage = "Avans miktarı 100 ile 100000 arasında olmalıdır.")]
         public decimal AmountOfAdvance { get; set; }
         [Required(ErrorMessage = "Avans tarihi boş geçilemez!")]
-        [DisplayName("Son İstenen Tarihi*")]
-        [AdvanceMinDateTimeValidations(ErrorMessage = "Avansı şu anki tarihten önce talep edemezsin.")]
+        [DisplayName("Son İstenen Tarih*")]
+        //[AdvanceMinDateTimeValidations(ErrorMessage = "Avansı şu anki tarihten önce talep edemezsin.")]
         public DateTime ExpiryDate { get; set; }
         [Required(ErrorMessage = "Avans tipi alanı boş geçilemez!")]
         [DisplayName("Avans Tipi*")]

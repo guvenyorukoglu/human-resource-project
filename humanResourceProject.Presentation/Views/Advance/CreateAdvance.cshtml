@@ -1,4 +1,3 @@
-
 @model AdvanceDTO
 @{
     ViewData["Title"] = "CreateAdvance";
@@ -9,12 +8,17 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.css" />
 
     <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.js"></script>
-
+    <style>
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+    </style>
 </head>
 <body>
     <div class="row">
         @Html.Partial("_PanelPartial")
-        
+
         <div class="col-md-4 mt-5" style="margin: 0 auto">
             <form asp-action="CreateAdvance">
                 <div class="card shadow p-3 mb-5 bg-body rounded">
@@ -36,15 +40,15 @@
 
                                         <option value="@enumValue">@displayName</option>
                                     }
-                                    <option value="" disabled selected>Avans Tipi seçiniz!</option>
+                                    <option value="-1" selected>Avans Tipi seçiniz!</option>
                                 }
 
                             </select>
-                            <span asp-validation-for="AdvanceType" class="text-danger"></span>
+                            @* <span asp-validation-for="AdvanceType" class="text-danger"></span> *@
                         </div>
                         <div class="form-group mb-3">
                             <label asp-for="ExpiryDate" class="control-label"></label>
-                            <input value="@DateTime.Now.ToString("dd.MM.yyyy")" min="@DateTime.Now" type="date" asp-for="ExpiryDate" class="form-control" />
+                            <input value="@DateTime.Now.ToString("yyyy-MM-dd")" min="@DateTime.Now.ToString("yyyy-MM-dd")" type="date" asp-for="ExpiryDate" class="form-control" />
                             <span asp-validation-for="ExpiryDate" class="text-danger"></span>
                         </div>
                         <div class="form-group mb-3">
@@ -67,11 +71,11 @@
 
                                         <option value="@enumValue">@displayName</option>
                                     }
-                                    <option value="" disabled selected>Para birimi seçiniz!</option>
+                                    <option value="-1" selected>Para birimi seçiniz!</option>
                                 }
 
                             </select>
-                            <span asp-validation-for="Currency" class="text-danger"></span>
+                            @* <span asp-validation-for="Currency" class="text-danger"></span> *@
                         </div>
                         <div class="form-group mb-3">
                             <label asp-for="Explanation" class="control-label"></label>
@@ -94,13 +98,14 @@
                             <div class="mb-5">
                                 <label title="@Model.ManagerEmail"><em class="fs-6 text-muted">Onaylaması gereken yönetici: <span class="text-uppercase">@Model.ManagerFullName</span></em></label>
                             </div>
-                            <div>
-                                <a asp-controller="Employee" asp-action="Home"><button class="btn btn-secondary">Ana Sayfaya Dön</button></a>
-                            </div>
+
                         </div>
                     </div>
                 </div>
             </form>
+            <div>
+                <a asp-controller="Employee" asp-action="Home"><button class="btn btn-secondary">Ana Sayfaya Dön</button></a>
+            </div>
         </div>
     </div>
 </body>

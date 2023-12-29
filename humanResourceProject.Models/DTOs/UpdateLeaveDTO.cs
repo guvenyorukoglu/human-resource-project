@@ -1,6 +1,7 @@
 ﻿using humanResourceProject.Domain.Enum;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel;
+using humanResourceProject.Models.Validations;
 
 namespace humanResourceProject.Models.DTOs
 {
@@ -20,6 +21,7 @@ namespace humanResourceProject.Models.DTOs
         public RequestStatus LeaveStatus { get; set; }
         [Required(ErrorMessage = "İzin gün miktarı boş geçilemez!")]
         [DisplayName("İzinli Gün Miktarı*")]
+        [DaysOfLeaveValidations(ErrorMessage = "0.5'den büyük değer giriniz!")]
         public decimal DaysOfLeave { get; set; }
         public DateTime CreateDate { get; set; }
         [Required(ErrorMessage = "Açıklama alanı boş geçilemez!")]

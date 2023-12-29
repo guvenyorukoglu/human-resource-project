@@ -83,6 +83,14 @@ namespace humanResourceProject.Presentation.Controllers
         {
             if (!ModelState.IsValid)
             {
+                if (ModelState["BloodGroup"].Errors.Count > 0)
+                {
+                    ModelState.AddModelError(string.Empty, "Kan grubunu seçiniz!");
+                }
+                if (ModelState["Gender"].Errors.Count > 0)
+                {
+                    ModelState.AddModelError(string.Empty, "Cinsiyet seçiniz!");
+                }
                 TempData["Result"] = "modelinvalid";
                 return View(model); // Model valid değil ise validation errorları ile birlikte register sayfasına geri döner
             }

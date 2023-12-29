@@ -84,6 +84,16 @@ namespace humanResourceProject.Presentation.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateLeave(LeaveDTO model)
         {
+
+            if (!ModelState.IsValid)
+            {
+                if (ModelState["LeaveType"].Errors.Count > 0)
+                {
+                    ModelState.AddModelError(string.Empty, "İzin türünü seçiniz!");
+                }
+                return View(model);
+            }
+
             var json = JsonConvert.SerializeObject(model);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
 
