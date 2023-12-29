@@ -23,16 +23,16 @@
                 @if (User.IsInRole("Personel") || User.IsInRole("Manager"))
                 {
                     <li class="parent">
-                        <a href="#"><i class="fa fa-users"></i>Taleplerim</a>
+                        <a href="#"><i class="fa-solid fa-hand-holding"></i>Taleplerim</a>
                         <ul class="sub-menu">
                             <li>
-                                <a asp-action="MyLeaves" asp-controller="Leave"><i class="fa fa-users"></i>İzin Taleplerim</a>
+                                <a asp-action="MyLeaves" asp-controller="Leave"><i class="fa-solid fa-person-walking-luggage"></i> İzin Taleplerim</a>
                             </li>
                             <li>
-                                <a asp-action="MyAdvances" asp-controller="Advance"><i class="fa fa-users"></i>Avans Taleplerim</a>
+                                <a asp-action="MyAdvances" asp-controller="Advance"><i class="fa-solid fa-sack-dollar"></i> Avans Taleplerim</a>
                             </li>
                             <li>
-                                <a asp-action="MyExpenses" asp-controller="Expense"><i class="fa fa-users"></i>Harcama Taleplerim</a>
+                                <a asp-action="MyExpenses" asp-controller="Expense"><i class="fa-solid fa-file-invoice-dollar"></i> Harcama Taleplerim</a>
                             </li>
                         </ul>
                     </li>
@@ -43,16 +43,16 @@
                         <a asp-action="Employees" asp-controller="Employee"><i class="fa fa-users"></i>Personeller</a>
                     </li>
                     <li class="parent">
-                        <a href="#"><i class="fa fa-users"></i>Personel Talepleri</a>
+                        <a href="#"><i class="fa-solid fa-person-circle-exclamation"></i>Personel Talepleri</a>
                         <ul class="sub-menu">
                             <li>
-                                <a asp-action="EmployeesLeaves" asp-controller="Leave"><i class="fa fa-users"></i>Personel İzin Talepleri</a>
+                                <a asp-action="EmployeesLeaves" asp-controller="Leave"><i class="fa-solid fa-person-walking-luggage"></i> Personel İzin Talepleri</a>
                             </li>
                             <li>
-                                <a asp-action="EmployeesAdvances" asp-controller="Advance"><i class="fa fa-users"></i>Personel Avans Talepleri</a>
+                                <a asp-action="EmployeesAdvances" asp-controller="Advance"><i class="fa-solid fa-sack-dollar"></i> Personel Avans Talepleri</a>
                             </li>
                             <li>
-                                <a asp-action="EmployeesExpenses" asp-controller="Expense"><i class="fa fa-users"></i>Personel Harcama Talepleri</a>
+                                <a asp-action="EmployeesExpenses" asp-controller="Expense"><i class="fa-solid fa-file-invoice-dollar"></i> Personel Harcama Talepleri</a>
                             </li>
                         </ul>
                     </li>
