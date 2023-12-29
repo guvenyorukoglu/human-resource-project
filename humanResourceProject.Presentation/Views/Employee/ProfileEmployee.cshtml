@@ -17,12 +17,12 @@
 <body>
     <div class="row">
         @Html.Partial("_PanelPartial")
-        <div class="col-md-6 offset-md-3 mt-5">
+        <div class="col-md-6 offset-md-1 mt-5">
             <form asp-action="ProfileEmployee">
                 <div class="card shadow p-3 mb-5 bg-body rounded">
-                    <div class="card-header d-flex gap-1 justify-content-center">
-                        <h1 class="card-title text-center mb-0">Profil Bilgileri</h1>
-                        <a asp-action="EditProfile" asp-controller="Employee" asp-route-id="@User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value" class="btn btn-primary"><i class="fa fa-pen"></i></a>
+                    <div class="card-header d-flex gap-2 justify-content-center">
+                        <h3 class="card-title text-center mb-0">Profil Bilgileri</h3>
+                        <a asp-action="EditProfile" asp-controller="Employee" asp-route-id="@User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value" class="d-flex justify-content-center align-items-center text-black fs-6"><i class="fa fa-pen"></i></a>
                     </div>
                     <div class="card-body">
 
@@ -72,24 +72,24 @@
                                     <span class="form-control">@displayName</span>
                                 </div>
                                 @if (User.IsInRole("Manager") || User.IsInRole("Personel"))
-                        {
-                            <div class="form-group">
-                                <span class="form-label">Meslek</span>
-                                <span class="form-control">@Model.JobTitle</span>
-                            </div>
-                            <div class="form-group">
-                                <span class="form-label">Yönetici Adı</span>
-                                <span class="form-control">@Model.ManagerName</span>
-                            </div>
-                            <div class="form-group">
-                                <span class="form-label">Yönetici E-Mail</span>
-                                <span class="form-control">@Model.ManagerEmail</span>
-                            </div>
-                            <div class="form-group">
-                                <span class="form-label">Yönetici Telefon Numarası</span>
-                                <span class="form-control">@Model.ManagerPhoneNumber</span>
-                            </div>
-                        }
+                                {
+                                    <div class="form-group">
+                                        <span class="form-label">Meslek</span>
+                                        <span class="form-control">@(Model.JobTitle??"Atanmamış")</span>
+                                    </div>
+                                    <div class="form-group">
+                                        <span class="form-label">Yönetici Adı</span>
+                                        <span class="form-control">@Model.ManagerName</span>
+                                    </div>
+                                    <div class="form-group">
+                                        <span class="form-label">Yönetici E-Mail</span>
+                                        <span class="form-control">@Model.ManagerEmail</span>
+                                    </div>
+                                    <div class="form-group">
+                                        <span class="form-label">Yönetici Telefon Numarası</span>
+                                        <span class="form-control">@Model.ManagerPhoneNumber</span>
+                                    </div>
+                                }
                                 <div class="form-group">
                                     <span class="form-label">Adres</span>
                                     <span class="form-control">@Model.Address</span>
@@ -98,7 +98,7 @@
 
 
                         </div>
-                       
+
                     </div>
                 </div>
             </form>
@@ -109,58 +109,58 @@
 
 
 <style>
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f5f5f5;
-}
-
-
-.card {
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    margin-top: 20px;
-}
-
-.card-header {
-    background-color: #007bff;
-    color: white;
-    border-radius: 10px 10px 0 0;
-    padding: 15px;
-}
-
-.card-body {
-    padding: 20px;
-}
-
-.form-group {
-    margin-bottom: 25px;
-}
-
-.form-label {
-    font-weight: bold;
-    margin-bottom: 5px;
-    display: block;
-}
-
-.form-control {
-    width: 100%;
-    padding: 10px;
-    border-radius: 5px;
-    border: 1px solid #ced4da;
-}
-
-.btn-primary {
-    background-color: #007bff;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
-    color: white;
-    cursor: pointer;
-}
-
-    .btn-primary:hover {
-        background-color: #0056b3;
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f5f5f5;
     }
+
+
+    .card {
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        margin-top: 20px;
+    }
+
+    .card-header {
+        /* background-color: #007bff; */
+        color: #000;
+        border-radius: 10px 10px 0 0;
+        padding: 15px;
+    }
+
+    .card-body {
+        padding: 20px;
+    }
+
+    .form-group {
+        margin-bottom: 25px;
+    }
+
+    .form-label {
+        font-weight: bold;
+        margin-bottom: 5px;
+        display: block;
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 10px;
+        border-radius: 5px;
+        border: 1px solid #ced4da;
+    }
+
+    .btn-primary {
+        background-color: #133A63;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        color: #fff;
+        cursor: pointer;
+    }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
 
 </style>
 

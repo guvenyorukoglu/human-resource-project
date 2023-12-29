@@ -24,7 +24,7 @@
             @if (Model != null)
             {
                 <a asp-action="CreateLeave" asp-controller="Leave" asp-route-id="@Guid.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value)">
-                    <button class="btn btn-success">İzin Ekle</button>
+                    <button class="btn btn-success mb-3">İzin Ekle</button>
                 </a>
             }
             <div class="pagination-container">
@@ -126,7 +126,7 @@
                     </tbody>
                 </table>
                 <div>
-                    <a asp-controller="Employee" asp-action="Home"><button class="btn btn-secondary">Ana Sayfaya Dön</button></a>
+                    <a asp-controller="Employee" asp-action="Home"><button class="btn btn-secondary mt-3">Ana Sayfaya Dön</button></a>
                 </div>
             </div>
         </div>
