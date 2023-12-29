@@ -176,12 +176,12 @@ namespace humanResourceProject.Application.Services.Concrete.AppUserServices
             return await _userManager.UpdateAsync(user);
         }
 
-        public async Task<IdentityResult> FireEmployee(Guid id)
+        public async Task<IdentityResult> DeleteEmployee(Guid id)
         {
             AppUser user = await _readRepository.GetSingleDefault(x => x.Id == id);
             List<Advance>? advanceList = await _advanceReadRepository.GetDefaults(x => x.EmployeeId == id);
             List<Expense>? expenseList = await _expenseReadRepository.GetDefaults(x => x.EmployeeId == id);
-            List<Leave>? leaveList = await _leaveReadRepository.GetDefaults(x => x.EmployeeId == id);                        
+            List<Leave>? leaveList = await _leaveReadRepository.GetDefaults(x => x.EmployeeId == id);
 
             foreach (var item in advanceList)
             {
@@ -201,6 +201,45 @@ namespace humanResourceProject.Application.Services.Concrete.AppUserServices
             foreach (var item in leaveList)
             {
                 item.Status = Status.Deleted;
+                item.LeaveStatus = RequestStatus.Deleted;
+                await _leaveWriteRepository.Update(item);
+            }
+
+            user.Status = Status.Deleted;
+            user.DeleteDate = DateTime.Now;
+            var result = await _writeRepository.Delete(user.Id);
+            
+            if (result)
+                return IdentityResult.Success;
+            else
+                return IdentityResult.Failed();
+        }
+
+        public async Task<IdentityResult> FireEmployee(Guid id)
+        {
+            AppUser user = await _readRepository.GetSingleDefault(x => x.Id == id);
+            List<Advance>? advanceList = await _advanceReadRepository.GetDefaults(x => x.EmployeeId == id);
+            List<Expense>? expenseList = await _expenseReadRepository.GetDefaults(x => x.EmployeeId == id);
+            List<Leave>? leaveList = await _leaveReadRepository.GetDefaults(x => x.EmployeeId == id);                        
+
+            foreach (var item in advanceList)
+            {
+                item.Status = Status.Inactive;
+                item.AdvanceStatus = RequestStatus.Deleted;
+                await _advanceWriteRepository.Update(item);
+            }
+
+
+            foreach (var item in expenseList)
+            {
+                item.Status = Status.Inactive;
+                item.ExpenseStatus = RequestStatus.Deleted;
+                await _expenseWriteRepository.Update(item);
+            }
+
+            foreach (var item in leaveList)
+            {
+                item.Status = Status.Inactive;
                 item.LeaveStatus = RequestStatus.Deleted;
                 await _leaveWriteRepository.Update(item);
             }

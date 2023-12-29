@@ -124,9 +124,9 @@ namespace humanResourceProject.API.Controllers
         [Route("{id}")]
         public async Task<IActionResult> DeleteEmployee(Guid id) // Personel Silme
         {
-            var result = await _appUserWriteService.Delete(id);
+            var result = await _appUserWriteService.DeleteEmployee(id);
 
-            if (!result)
+            if (!result.Succeeded)
                 return BadRequest();
 
             return Ok("Silme işlemi gerçekleşti.");
@@ -166,25 +166,12 @@ namespace humanResourceProject.API.Controllers
         }
 
         [HttpGet]
-
         [Route("GetAppUserVM/{id}")]
         public async Task<IActionResult> GetAppUserVM(Guid id)
         {
             return Ok(await _appUserReadService.GetAppUserVM(id));
-
-           
-            //[HttpPost]
-            //[Route("ResetPassword")]
-            //public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordDTO model)
-            //{
-
-            //    AppUser user = await _userManager.FindByIdAsync(model.Id.ToString());
-            //    var token = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(model.Token));
-            //    var result = await _userManager.ResetPasswordAsync(user, token, model.Password);
-
-            //    return Ok();
-            //}
         }
+
         [HttpGet]
         [Route("ProfileCompanyManager/{id}")]
         public async Task<IActionResult> ProfileCompanyManager(Guid id) //  Personel Bilgileri

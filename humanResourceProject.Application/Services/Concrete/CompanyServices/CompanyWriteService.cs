@@ -5,7 +5,6 @@ using humanResourceProject.Domain.Entities.Concrete;
 using humanResourceProject.Domain.Enum;
 using humanResourceProject.Domain.IRepository.BaseRepos;
 using humanResourceProject.Models.DTOs;
-using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Identity;
 
 namespace humanResourceProject.Application.Services.Concrete.CompanyServices
@@ -38,7 +37,8 @@ namespace humanResourceProject.Application.Services.Concrete.CompanyServices
                 return IdentityResult.Failed();
 
             Company newCompany = _mapper.Map<Company>(model);
-            
+            newCompany.CreateDate = DateTime.Now;
+            newCompany.Status = Status.Active;
             if (await _writeRepository.Insert(newCompany))
                 return IdentityResult.Success;
             else
@@ -57,7 +57,7 @@ namespace humanResourceProject.Application.Services.Concrete.CompanyServices
             updatedCompany.UpdateDate = DateTime.Now;
             updatedCompany.Status = Status.Modified;
 
-            if(await _writeRepository.Update(updatedCompany))
+            if (await _writeRepository.Update(updatedCompany))
                 return IdentityResult.Success;
             else
                 return IdentityResult.Failed();

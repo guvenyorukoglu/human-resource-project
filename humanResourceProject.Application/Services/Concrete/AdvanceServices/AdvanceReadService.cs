@@ -136,6 +136,8 @@ namespace humanResourceProject.Application.Services.Concrete.AdvanceServices
         }
         public async Task<DashboardAdvanceVM> FillDashboardAdvanceVM(Guid id)
         {
+            AppUser appUser = await _userManager.FindByIdAsync(id.ToString());
+
             List<DashboardAdvancesVM> dashboardMyAdvancesVM = await _advanceReadRepository.GetFilteredList(
                                                select: x => new DashboardAdvancesVM
                                                {
@@ -148,7 +150,11 @@ namespace humanResourceProject.Application.Services.Concrete.AdvanceServices
                                                 orderBy: x => x.OrderByDescending(x => x.CreateDate),
                                                 include: x => x.Include(x => x.Employee));
 
-            List<DashboardAdvancesVM> dashboardAdvancesToBeCompletedByManagerVM = await _advanceReadRepository.GetFilteredList(
+            List<DashboardAdvancesVM> dashboardAdvancesToBeCompletedByManagerVM;
+
+            if (_userManager.IsInRoleAsync(appUser, "CompanyManager").Result)
+            {
+                dashboardAdvancesToBeCompletedByManagerVM = await _advanceReadRepository.GetFilteredList(
                                                select: x => new DashboardAdvancesVM
                                                {
                                                    CreateDate = x.CreateDate,
@@ -156,9 +162,24 @@ namespace humanResourceProject.Application.Services.Concrete.AdvanceServices
                                                    AmountOfAdvance = x.AmountOfAdvance,
                                                    AdvanceStatus = x.AdvanceStatus,
                                                },
-                                                where: x => (x.Status != Status.Deleted && x.Status != Status.Inactive) && x.Employee.ManagerId == id && x.AdvanceStatus == RequestStatus.Pending,
+                                                where: x => (x.Status != Status.Deleted && x.Status != Status.Inactive) && x.Employee.CompanyId == appUser.CompanyId && x.AdvanceStatus == RequestStatus.Pending,
                                                 orderBy: x => x.OrderByDescending(x => x.CreateDate),
                                                 include: x => x.Include(x => x.Employee));
+            }
+            else
+            {
+                dashboardAdvancesToBeCompletedByManagerVM = await _advanceReadRepository.GetFilteredList(
+                                                   select: x => new DashboardAdvancesVM
+                                                   {
+                                                       CreateDate = x.CreateDate,
+                                                       AdvanceNo = x.AdvanceNo,
+                                                       AmountOfAdvance = x.AmountOfAdvance,
+                                                       AdvanceStatus = x.AdvanceStatus,
+                                                   },
+                                                    where: x => (x.Status != Status.Deleted && x.Status != Status.Inactive) && x.Employee.ManagerId == id && x.AdvanceStatus == RequestStatus.Pending,
+                                                    orderBy: x => x.OrderByDescending(x => x.CreateDate),
+                                                    include: x => x.Include(x => x.Employee));
+            }
 
             return new DashboardAdvanceVM() { MyAdvances = dashboardMyAdvancesVM, AdvancesToBeCompletedByManager = dashboardAdvancesToBeCompletedByManagerVM };
         }

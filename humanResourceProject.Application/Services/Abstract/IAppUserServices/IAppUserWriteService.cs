@@ -17,6 +17,7 @@ namespace humanResourceProject.Application.Services.Abstract.IAppUserServices
         Task<IdentityResult> UpdateProfile(UpdateProfileDTO model); // UpdateUserDTO modelini alır, veritabanında günceller.
 
         Task<IdentityResult> UpdateProfileImage(Guid id); // Profil resmini günceller.
-        Task<IdentityResult> FireEmployee(Guid id); // Personeli işten çıkarır.
+        Task<IdentityResult> FireEmployee(Guid id); // Personelin statüsünü inactive olarak günceller.
+        Task<IdentityResult> DeleteEmployee(Guid id); // Personelin statüsünü silinmiş olarak günceller.
     }
 }

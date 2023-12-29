@@ -26,14 +26,16 @@
         }
 
         .panel-button {
-            background-color: #133a63;
+            background-color: #FF9190;
+            border-color: #FF9190;
             padding: 5px 20px;
             transition: all 0.3s ease-in-out;
         }
 
             .panel-button:hover {
                 background-color: snow;
-                color: #133a63;
+                color: #5E6ED1;
+                border-color: #5E6ED1;
             }
     </style>
 </head>
@@ -43,7 +45,10 @@
         <div class="logo-container">
             @* <h1>Monitorease</h1>*@
             <h2 class="mt-5" style="z-index:999">İnsan Kaynaklarınızı Yönetmenin Kolay ve Etkili Yolu!</h2>
-            <a asp-action="Home" asp-controller="Employee" style="z-index:999"><button class="btn btn-primary mt-2 panel-button">Panele Git</button></a>
+            @if (User.Identity.IsAuthenticated)
+            {
+                <a asp-action="Home" asp-controller="Employee" style="z-index:999"><button class="btn btn-primary mt-2 panel-button">Panele Git</button></a>
+            }
 
             <div class="banner vector">
                 <img src="~/ImagesLogo/HRBanner.png" alt="Monitorease Logo" style="width:75%;position:relative; top:-50px">

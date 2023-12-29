@@ -16,27 +16,30 @@
 
         @Html.Partial("_PanelPartial")
 
-        <div class="col-md-4" style="margin: 150px auto">
+        <div class="col-md-4" style="margin: 0 auto">
             <form asp-action="UpdateLeave">
                 <div class="card shadow p-3 mb-5 bg-body rounded">
                     <div class="card-header">
                         <h1 class="card-title">İzin Güncelleme</h1>
                     </div>
                     <div class="card-body">
-                        <div class="form-group  mb-3">
+                        <div class="form-group mb-3">
                             <label asp-for="LeaveType" class="control-label"></label>
-                            <select asp-for="LeaveType" class="form-control" />
-                            @{
-                                var enumType = typeof(LeaveType);
-                                var enumValues = enumType.GetEnumValues();
-                                foreach (var enumValue in enumValues)
-                                {
-                                    var displayAttribute = enumType.GetMember(enumValue.ToString())[0].GetCustomAttribute<DisplayAttribute>();
-                                    var displayName = displayAttribute?.GetName() ?? enumValue.ToString();
-                                    <option value="@enumValue">@displayName</option>
+                            <select asp-for="LeaveType" class="form-control">
+                                @{
+                                    var enumType = typeof(LeaveType);
+                                    var enumValues = enumType.GetEnumValues();
+                                    foreach (var enumValue in enumValues)
+                                    {
+                                        var displayAttribute = enumType.GetMember(enumValue.ToString())[0].GetCustomAttribute<DisplayAttribute>();
+                                        var displayName = displayAttribute?.GetName() ?? enumValue.ToString();
+
+                                        <option value="@enumValue">@displayName</option>
+
+                                    }
+                                    <option value="" disabled>İzin Tipi seçiniz!</option>
                                 }
-                                <option value="" disabled selected>İzin Tipi seçiniz!</option>
-                            }
+
                             </select>
                             <span asp-validation-for="LeaveType" class="text-danger"></span>
                         </div>
@@ -57,7 +60,7 @@
                         </div>
                         <div class="form-group  mb-3">
                             <label asp-for="Explanation" class="control-label"></label>
-                            <input asp-for="Explanation" class="form-control" />
+                            <textarea asp-for="Explanation" class="form-control" rows="8"></textarea>
                             <span asp-validation-for="Explanation" class="text-danger"></span>
                         </div>
                         <div class="form-group  mb-3">
@@ -66,7 +69,11 @@
                             <input value="@Model.CreateDate" asp-for="CreateDate" type="hidden" class="form-control" />
                             <input value="@Model.LeaveNo" asp-for="LeaveNo" type="hidden" class="form-control" />
                         </div>
-                        <div class="form-group">
+                        <div class="mb-3">
+                            <label>*Zorunlu alan</label>
+                        </div>
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <div class="form-group d-grid">
                             <input type="submit" value="Güncelle" class="btn btn-primary" />
                         </div>
 
@@ -130,6 +137,7 @@
             // İnput değişikliklerini dinle
             startDateInput.addEventListener("change", handleInput);
             endDateInput.addEventListener("change", handleInput);
+            daysOfLeaveInput.addEventListener("change", handleInput);
 
             // İnput değişikliklerini kontrol et
             handleInput();
