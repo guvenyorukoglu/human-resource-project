@@ -110,7 +110,7 @@ namespace humanResourceProject.API.Controllers
             string mailToName = $"{manager.FirstName} {manager.LastName}";
             string action = "";
             string subject = "Avans Talebi!";
-            string body = $"<p>Sayın {manager.FirstName} {manager.LastName},</p><p>{employee.FirstName} {employee.LastName} tarafından {model.CreateDate.ToShortDateString()} tarihinde {model.AmountOfAdvance} {model.Currency.GetDisplayName()} avans talebi yapılmıştır.</p><p>Uygulamaya giriş yapıp onaylamanızı rica ederiz.</p><br><hr><br><h3>Team Monitorease</h3>";
+            string body = $"<p>Sayın {manager.FirstName} {manager.LastName},</p><p>{employee.FirstName} {employee.LastName} tarafından {DateTime.Now.ToShortDateString()} tarihinde {model.AmountOfAdvance} {model.Currency.GetDisplayName()} avans talebi yapılmıştır.</p><p>Uygulama üzerinden onaylama ya da reddetme işlemini yapabilirsiniz.</p><p>İyi çalışmalar dileriz.</p><br><hr><br><h3>Team Monitorease</h3>";
             await _mailService.SendEmailAsync(manager, recipientEmail, mailToName, subject, body);
             return Ok(result);
         }

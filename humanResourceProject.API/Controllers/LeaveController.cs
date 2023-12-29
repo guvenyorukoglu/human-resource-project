@@ -107,7 +107,7 @@ namespace humanResourceProject.API.Controllers
             string mailToName = $"{manager.FirstName} {manager.LastName}";
             string action = "";
             string subject = "İzin Talebi!";
-            string body = $"<p>Sayın {manager.FirstName} {manager.LastName},</p><p>{employee.FirstName} {employee.LastName} tarafından {DateTime.Now.ToShortDateString()} tarihli {model.DaysOfLeave} gün izin talebi yapılmıştır.</p><p>Uygulama üzerinden onaylama ya da reddetme işlemini yapabilirsiniz.</p><p>İyi çalışmalar dileriz.</p><br><hr><br><h3>Team Monitorease</h3>";
+            string body = $"<p>Sayın {manager.FirstName} {manager.LastName},</p><p>{employee.FirstName} {employee.LastName} tarafından {DateTime.Now.ToShortDateString()} tarihinde, {model.StartDateOfLeave.ToShortDateString()} ve {model.EndDateOfLeave.ToShortDateString()} tarihleri arasında {model.DaysOfLeave} günlük izin talebi yapılmıştır.</p><p>Uygulama üzerinden onaylama ya da reddetme işlemini yapabilirsiniz.</p><p>İyi çalışmalar dileriz.</p><br><hr><br><h3>Team Monitorease</h3>";
             await _mailService.SendEmailAsync(manager, recipientEmail, mailToName, subject, body);
             return Ok(result);
         }

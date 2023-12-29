@@ -138,6 +138,8 @@ namespace humanResourceProject.Application.Services.Concrete.LeaveServices
 
         public async Task<DashboardLeaveVM> FillDashboardLeaveVM(Guid id)
         {
+            AppUser appUser = await _userManager.FindByIdAsync(id.ToString());
+
             List<DashboardLeavesVM> dashboardMyLeavesVMs = await _leaveReadRepository.GetFilteredList(
                                                              select: x => new DashboardLeavesVM
                                                              {
@@ -150,7 +152,25 @@ namespace humanResourceProject.Application.Services.Concrete.LeaveServices
                                                              orderBy: x => x.OrderByDescending(x => x.CreateDate),
                                                              include: x => x.Include(x => x.Employee));
 
-            List<DashboardLeavesVM> dashboardLeavesToBeCompletedByManagerVM = await _leaveReadRepository.GetFilteredList(
+            List<DashboardLeavesVM> dashboardLeavesToBeCompletedByManagerVM;
+
+            if (_userManager.IsInRoleAsync(appUser, "CompanyManager").Result)
+            {
+                dashboardLeavesToBeCompletedByManagerVM = await _leaveReadRepository.GetFilteredList(
+                                                            select: x => new DashboardLeavesVM
+                                                            {
+                                                                LeaveNo = x.LeaveNo,
+                                                                DaysOfLeave = x.DaysOfLeave,
+                                                                CreateDate = x.CreateDate,
+                                                                LeaveStatus = x.LeaveStatus,
+                                                            },
+                                                            where: x => (x.Status != Status.Deleted && x.Status != Status.Inactive) && x.Employee.CompanyId == appUser.CompanyId && x.LeaveStatus == RequestStatus.Pending,
+                                                            orderBy: x => x.OrderByDescending(x => x.CreateDate),
+                                                            include: x => x.Include(x => x.Employee));
+            }
+            else
+            {
+                dashboardLeavesToBeCompletedByManagerVM = await _leaveReadRepository.GetFilteredList(
                                                             select: x => new DashboardLeavesVM
                                                             {
                                                                 LeaveNo = x.LeaveNo,
@@ -161,7 +181,7 @@ namespace humanResourceProject.Application.Services.Concrete.LeaveServices
                                                             where: x => (x.Status != Status.Deleted && x.Status != Status.Inactive) && x.Employee.ManagerId == id && x.LeaveStatus == RequestStatus.Pending,
                                                             orderBy: x => x.OrderByDescending(x => x.CreateDate),
                                                             include: x => x.Include(x => x.Employee));
-
+            }
             return new DashboardLeaveVM() { MyLeaves = dashboardMyLeavesVMs, LeavesToBeCompletedByManager = dashboardLeavesToBeCompletedByManagerVM };
         }
 

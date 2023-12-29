@@ -124,9 +124,9 @@ namespace humanResourceProject.API.Controllers
         [Route("{id}")]
         public async Task<IActionResult> DeleteEmployee(Guid id) // Personel Silme
         {
-            var result = await _appUserWriteService.Delete(id);
+            var result = await _appUserWriteService.DeleteEmployee(id);
 
-            if (!result)
+            if (!result.Succeeded)
                 return BadRequest();
 
             return Ok("Silme işlemi gerçekleşti.");
@@ -166,12 +166,13 @@ namespace humanResourceProject.API.Controllers
         }
 
         [HttpGet]
-
         [Route("GetAppUserVM/{id}")]
         public async Task<IActionResult> GetAppUserVM(Guid id)
         {
             return Ok(await _appUserReadService.GetAppUserVM(id));
+        }
 
+        [HttpGet]
         [Route("ProfileCompanyManager/{id}")]
         public async Task<IActionResult> ProfileCompanyManager(Guid id) //  Personel Bilgileri
         {
