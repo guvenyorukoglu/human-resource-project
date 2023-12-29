@@ -138,7 +138,7 @@ namespace humanResourceProject.API.Controllers
         public async Task<IActionResult> UpdateProfile([FromBody] UpdateProfileDTO updatedProfile) // Personel Profili Güncelleme
         {
             var result = await _appUserWriteService.UpdateProfile(updatedProfile);
-           
+
             if (!result.Succeeded)
                 return BadRequest(result.Errors);
 
@@ -179,16 +179,5 @@ namespace humanResourceProject.API.Controllers
             return Ok(await _appUserReadService.ProfileCompanyManager(id));
         }
 
-        //[HttpPost]
-        //[Route("ResetPassword")]
-        //public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordDTO model)
-        //{
-
-        //    AppUser user = await _userManager.FindByIdAsync(model.Id.ToString());
-        //    var token = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(model.Token));
-        //    var result = await _userManager.ResetPasswordAsync(user, token, model.Password);
-
-        //    return Ok();
-        //}
     }
 }
