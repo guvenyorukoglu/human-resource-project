@@ -60,7 +60,7 @@ namespace humanResourceProject.API.Controllers
             if (expense.ExpenseStatus == Domain.Enum.RequestStatus.Approved)
             {
                 string subject = "Masraf Onayı!";
-                string body = $"<p>Sayın {user.FirstName} {user.LastName},</p><p>{expense.CreateDate.ToShortDateString()} tarihli {expense.AmountOfExpense} {expense.Currency.GetDisplayName()} avans talebiniz onaylannıştır.</p><p>Güzel günlerde kullanmanız dileğiyle.</p><br><hr><br><h3>Team Monitorease</h3>";
+                string body = $"<p>Sayın {user.FirstName} {user.LastName},</p><p>{expense.CreateDate.ToShortDateString()} tarihli {expense.AmountOfExpense} {expense.Currency.GetDisplayName()} harcama talebiniz onaylannıştır.</p><p>Güzel günlerde kullanmanız dileğiyle.</p><br><hr><br><h3>Team Monitorease</h3>";
                 await _mailService.SendEmailAsync(user, recipientEmail, mailToName, subject, body);
                 //_mailService.SendApproveMail(user, action, $"Sayın {user.FirstName} {user.LastName} Avansın onaylandı. Güzel günlerde kullan");
             }
@@ -68,7 +68,7 @@ namespace humanResourceProject.API.Controllers
             {
                 model.ExpenseStatus = Domain.Enum.RequestStatus.Rejected;
                 string subject = "Masraf Reddi!";
-                string body = $"<p>Sayın {user.FirstName} {user.LastName},</p><p>{expense.CreateDate.ToShortDateString()} tarihli {expense.AmountOfExpense} {expense.Currency.GetDisplayName()} avans talebiniz Reddedilmiştir.</p><br><hr><br><h3>Team Monitorease</h3>";
+                string body = $"<p>Sayın {user.FirstName} {user.LastName},</p><p>{expense.CreateDate.ToShortDateString()} tarihli {expense.AmountOfExpense} {expense.Currency.GetDisplayName()} harcama talebiniz Reddedilmiştir.</p><br><hr><br><h3>Team Monitorease</h3>";
                 await _mailService.SendEmailAsync(user, recipientEmail, mailToName, subject, body);
                 //_mailService.SendApproveMail(user, action, $"Sayın {user.FirstName} {user.LastName} Avansın reddedildi");
             }
