@@ -309,14 +309,15 @@ namespace humanResourceProject.Presentation.Controllers
             var content = new StringContent(json, Encoding.UTF8, "application/json");
 
             var response = await _httpClient.PutAsync($"api/AppUser", content);
-
             if (response.IsSuccessStatusCode)
             {
                 return RedirectToAction(nameof(Employees));
             }
-
-            ModelState.AddModelError(response.StatusCode.ToString(), "Bir hata oluştu.");
-            return View(model);
+            else
+            {
+                ModelState.AddModelError(response.StatusCode.ToString(), "Bir hata oluştu.");
+                return View(model);
+            }
         }
 
         [HttpGet]
@@ -406,7 +407,7 @@ namespace humanResourceProject.Presentation.Controllers
 
             if (response.IsSuccessStatusCode)
             {
-                return RedirectToAction(nameof(Employees));
+                return RedirectToAction("Home");
             }
 
             ModelState.AddModelError(response.StatusCode.ToString(), "Bir hata oluştu.");

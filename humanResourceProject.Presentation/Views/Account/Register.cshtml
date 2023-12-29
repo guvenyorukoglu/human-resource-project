@@ -18,41 +18,42 @@
 
                             <div class="row">
                                 <div class="col-md-6">
-                            <div class="form-group mb-3">
-                                <label asp-for="FirstName" class="control-label"></label>
-                                <input asp-for="FirstName" class="form-control" />
-                                <span asp-validation-for="FirstName" class="text-danger"></span>
-                            </div>
+                                    <div class="form-group mb-3">
+                                        <label asp-for="FirstName" class="control-label"></label>
+                                        <input asp-for="FirstName" class="form-control" />
+                                        <span asp-validation-for="FirstName" class="text-danger"></span>
+                                    </div>
 
-                            <div class="form-group mb-3">
-                                <label asp-for="MiddleName" class="control-label"></label>
-                                <input asp-for="MiddleName" class="form-control" />
-                                <!-- MiddleName nullable olduğundan dolayı asp-validation-for kullanılmamıştır -->
-                            </div>
+                                    <div class="form-group mb-3">
+                                        <label asp-for="MiddleName" class="control-label"></label>
+                                        <input asp-for="MiddleName" class="form-control" />
+                                        <span asp-validation-for="MiddleName" class="text-danger"></span>
 
-                            <div class="form-group mb-3">
-                                <label asp-for="LastName" class="control-label"></label>
-                                <input asp-for="LastName" class="form-control" />
-                                <span asp-validation-for="LastName" class="text-danger"></span>
-                            </div>
+                                    </div>
 
-                            <div class="form-group mb-3">
-                                <label asp-for="Email" class="control-label"></label>
-                                <input asp-for="Email" class="form-control" />
-                                <span asp-validation-for="Email" class="text-danger"></span>
-                            </div>
+                                    <div class="form-group mb-3">
+                                        <label asp-for="LastName" class="control-label"></label>
+                                        <input asp-for="LastName" class="form-control" />
+                                        <span asp-validation-for="LastName" class="text-danger"></span>
+                                    </div>
 
-                            <div class="form-group mb-3">
-                                <label asp-for="Password" class="control-label"></label>
-                                <input asp-for="Password" type="password" class="form-control" />
-                                <span asp-validation-for="Password" class="text-danger"></span>
-                            </div>
+                                    <div class="form-group mb-3">
+                                        <label asp-for="Email" class="control-label"></label>
+                                        <input asp-for="Email" class="form-control" />
+                                        <span asp-validation-for="Email" class="text-danger"></span>
+                                    </div>
 
-                            <div class="form-group mb-3">
-                                <label asp-for="ConfirmPassword" class="control-label"></label>
-                                <input asp-for="ConfirmPassword" type="password" class="form-control" />
-                                <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
-                            </div>
+                                    <div class="form-group mb-3">
+                                        <label asp-for="Password" class="control-label"></label>
+                                        <input asp-for="Password" type="password" class="form-control" />
+                                        <span asp-validation-for="Password" class="text-danger"></span>
+                                    </div>
+
+                                    <div class="form-group mb-3">
+                                        <label asp-for="ConfirmPassword" class="control-label"></label>
+                                        <input asp-for="ConfirmPassword" type="password" class="form-control" />
+                                        <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                                    </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group mb-3">
@@ -62,7 +63,7 @@
                                     </div>
                                     <div class="form-group mb-3">
                                         <label asp-for="Birthdate" class="control-label"></label>
-                                        <input value="Birthdate" value="@DateTime.Now.ToString("yyyy-MM-dd")"  max="@DateTime.Now.ToString("yyyy-MM-dd")" asp-for="Birthdate" type="date" class="form-control" />
+                                        <input value="Birthdate" value="@DateTime.Now.ToString("yyyy-MM-dd")" max="@DateTime.Now.ToString("yyyy-MM-dd")" asp-for="Birthdate" type="date" class="form-control" />
                                         <span asp-validation-for="Birthdate" class="text-danger"></span>
                                     </div>
                                     <div class="form-group mb-3">
@@ -103,17 +104,17 @@
                                         </select>
                                         <span asp-validation-for="BloodGroup" class="text-danger"></span>
                                     </div>
-                            <div class="form-group mb-3">
-                                <label asp-for="PhoneNumber" class="control-label"></label>
-                                <input asp-for="PhoneNumber" class="form-control" placeholder="Başında 0 (sıfır) olmadan giriniz." />
-                                <span asp-validation-for="PhoneNumber" class="text-danger"></span>
-                            </div>
+                                    <div class="form-group mb-3">
+                                        <label asp-for="PhoneNumber" class="control-label"></label>
+                                        <input asp-for="PhoneNumber" class="form-control" placeholder="Başında 0 (sıfır) olmadan giriniz." />
+                                        <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                                    </div>
 
-                            <div class="form-group mb-3">
-                                <label asp-for="Address" class="control-label"></label>
-                                <input asp-for="Address" class="form-control" />
-                                <span asp-validation-for="Address" class="text-danger"></span>
-                            </div>
+                                    <div class="form-group mb-3">
+                                        <label asp-for="Address" class="control-label"></label>
+                                        <input asp-for="Address" class="form-control" />
+                                        <span asp-validation-for="Address" class="text-danger"></span>
+                                    </div>
                                 </div>
                                 <div class="form-group mb-3">
                                     <label asp-for="UploadPath" class="control-label"></label>
@@ -163,4 +164,4 @@
             toastr["error"]("Şirket kaydı gerçekleşmemiştir.", "Bir hata oluştu!")
         </script>
     }
-}
+    }
