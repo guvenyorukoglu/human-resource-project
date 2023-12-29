@@ -166,6 +166,12 @@ namespace humanResourceProject.API.Controllers
         }
 
         [HttpGet]
+
+        [Route("GetAppUserVM/{id}")]
+        public async Task<IActionResult> GetAppUserVM(Guid id)
+        {
+            return Ok(await _appUserReadService.GetAppUserVM(id));
+
         [Route("ProfileCompanyManager/{id}")]
         public async Task<IActionResult> ProfileCompanyManager(Guid id) //  Personel Bilgileri
         {

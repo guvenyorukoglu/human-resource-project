@@ -347,6 +347,7 @@ namespace humanResourceProject.Presentation.Controllers
             var responseAdvance = await _httpClient.GetAsync($"api/Advance/FillDashboardAdvanceVM/{userId}");
             var responseExpense = await _httpClient.GetAsync($"api/Expense/FillDashboardExpenseVM/{userId}");
             var responseCompany = await _httpClient.GetAsync($"api/Company/GetCompanyVM/{companyId}");
+            var responseAppUser = await _httpClient.GetAsync($"api/AppUser/GetAppUserVM/{userId}");
 
             if (responseLeave.IsSuccessStatusCode && responseAdvance.IsSuccessStatusCode && responseExpense.IsSuccessStatusCode && responseCompany.IsSuccessStatusCode)
             {
@@ -362,18 +363,25 @@ namespace humanResourceProject.Presentation.Controllers
                 var contentCompany = await responseCompany.Content.ReadAsStringAsync();
                 var dashboardCompanyVM = JsonConvert.DeserializeObject<CompanyVM>(contentCompany);
 
+                var contentAppUser = await responseAppUser.Content.ReadAsStringAsync();
+                var dashboardAppUserVM = JsonConvert.DeserializeObject<AppUserVM>(contentAppUser);
+                
+
                 DashboardVM dashboardVM = new DashboardVM()
                 {
                     MyLeaves = dashboardLeaveVM.MyLeaves,
                     MyAdvances = dashboardAdvanceVM.MyAdvances,
                     MyExpenses = dashboardExpenseVM.MyExpenses,
                     Company = dashboardCompanyVM,
+                    AppUser = dashboardAppUserVM,
                     LeavesToBeCompletedByManager = dashboardLeaveVM.LeavesToBeCompletedByManager,
                     AdvancesToBeCompletedByManager = dashboardAdvanceVM.AdvancesToBeCompletedByManager,
                     ExpensesToBeCompletedByManager = dashboardExpenseVM.ExpensesToBeCompletedByManager,
                     MyPendingLeavesCount = dashboardLeaveVM.MyLeaves.Where(x => x.LeaveStatus == Domain.Enum.RequestStatus.Pending).Count(),
                     MyPendingAdvancesCount = dashboardAdvanceVM.MyAdvances.Where(x => x.AdvanceStatus == Domain.Enum.RequestStatus.Pending).Count(),
-                    MyPendingExpensesCount = dashboardExpenseVM.MyExpenses.Where(x => x.ExpenseStatus == Domain.Enum.RequestStatus.Pending).Count()
+                    MyPendingExpensesCount = dashboardExpenseVM.MyExpenses.Where(x => x.ExpenseStatus == Domain.Enum.RequestStatus.Pending).Count(),
+
+
                 };
 
                 return View(dashboardVM);

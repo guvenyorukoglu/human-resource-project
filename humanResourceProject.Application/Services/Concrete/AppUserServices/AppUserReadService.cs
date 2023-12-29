@@ -22,6 +22,18 @@ namespace humanResourceProject.Application.Services.Concrete.AppUserServices
             _userManager = userManager;
         }
 
+        public async Task<AppUserVM> GetAppUserVM(Guid id)
+        {
+            return await _readRepository.GetFilteredFirstOrDefault(
+                               select: x => new AppUserVM()
+                               {
+                                   EarnedLeaveDays = x.EarnedLeaveDays,
+                                   RemainingLeaveDays = x.RemainingLeaveDays,
+                               },
+                                              where: x => x.Id == id && (x.Status != Domain.Enum.Status.Inactive && x.Status != Domain.Enum.Status.Deleted),
+                                                             include: x => x.Include(x => x.Company));
+        }
+
         public async Task<List<PersonelVM>> GetEmployeesByCompanyId(Guid companyId)
         {
             return await _readRepository.GetFilteredList(
