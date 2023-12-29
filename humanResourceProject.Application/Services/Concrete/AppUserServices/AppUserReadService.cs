@@ -119,9 +119,7 @@ namespace humanResourceProject.Application.Services.Concrete.AppUserServices
 
         public async Task<ProfileEmployeeVM> ProfileEmployee(Guid employeeId)
         {
-
-
-            return await _readRepository.GetFilteredFirstOrDefault(
+            ProfileEmployeeVM profileEmployeeVM = await _readRepository.GetFilteredFirstOrDefault(
                 select: x => new ProfileEmployeeVM()
                 {
                     FullName = x.FirstName + " " + x.LastName,
@@ -138,7 +136,31 @@ namespace humanResourceProject.Application.Services.Concrete.AppUserServices
                     ManagerPhoneNumber = x.Manager.PhoneNumber
 
                 },
-                where: x => x.Id == employeeId, include: x => x.Include(x => x.Manager).Include(x => x.Company).ThenInclude(x => x.Jobs));
+                where: x => x.Id == employeeId, 
+                include: x => x.Include(x => x.Manager).Include(x => x.Company).ThenInclude(x => x.Jobs));
+
+            return profileEmployeeVM;
+        }
+
+        public async Task<ProfileEmployeeVM> ProfileCompanyManager(Guid companyManagerId)
+        {
+            ProfileEmployeeVM profileEmployeeVM = await _readRepository.GetFilteredFirstOrDefault(
+                select: x => new ProfileEmployeeVM()
+                {
+                    FullName = x.FirstName + " " + x.LastName,
+                    Email = x.Email,
+                    Address = x.Address,
+                    PhoneNumber = x.PhoneNumber,
+                    JobTitle = x.Company.Jobs.FirstOrDefault(j => j.Id == x.JobId).Title,
+                    IdentificationNumber = x.IdentificationNumber,
+                    BloodGroup = x.BloodGroup,
+                    Birthdate = x.Birthdate,
+                    Gender = x.Gender
+                },
+                where: x => x.Id == companyManagerId,
+                include: x => x.Include(x => x.Company).ThenInclude(x => x.Jobs));
+
+            return profileEmployeeVM;
         }
     }
 }

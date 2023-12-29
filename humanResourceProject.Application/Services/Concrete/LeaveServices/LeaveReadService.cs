@@ -138,8 +138,8 @@ namespace humanResourceProject.Application.Services.Concrete.LeaveServices
 
         public async Task<DashboardLeaveVM> FillDashboardLeaveVM(Guid id)
         {
-            List<DashboardMyLeavesVM> dashboardMyLeavesVMs = await _leaveReadRepository.GetFilteredList(
-                                                             select: x => new DashboardMyLeavesVM
+            List<DashboardLeavesVM> dashboardMyLeavesVMs = await _leaveReadRepository.GetFilteredList(
+                                                             select: x => new DashboardLeavesVM
                                                              {
                                                                  LeaveNo = x.LeaveNo,
                                                                  DaysOfLeave = x.DaysOfLeave,
@@ -150,8 +150,8 @@ namespace humanResourceProject.Application.Services.Concrete.LeaveServices
                                                              orderBy: x => x.OrderByDescending(x => x.CreateDate),
                                                              include: x => x.Include(x => x.Employee));
 
-            List<DashboardLeavesToBeCompletedByManagerVM> dashboardLeavesToBeCompletedByManagerVM = await _leaveReadRepository.GetFilteredList(
-                                                            select: x => new DashboardLeavesToBeCompletedByManagerVM
+            List<DashboardLeavesVM> dashboardLeavesToBeCompletedByManagerVM = await _leaveReadRepository.GetFilteredList(
+                                                            select: x => new DashboardLeavesVM
                                                             {
                                                                 LeaveNo = x.LeaveNo,
                                                                 DaysOfLeave = x.DaysOfLeave,

@@ -87,7 +87,8 @@ namespace humanResourceProject.Application.Services.Concrete.AppUserServices
 
         public async Task<IdentityResult> RegisterPersonel(CreateEmployeeDTO model)
         {
-            if (model == null)
+            AppUser user = await _readRepository.GetDefault(x => x.Email == model.Email || x.IdentificationNumber == model.IdentificationNumber);
+            if (model == null || user != null)
                 return IdentityResult.Failed();
 
             AppUser newUser = _mapper.Map<AppUser>(model);
@@ -102,7 +103,8 @@ namespace humanResourceProject.Application.Services.Concrete.AppUserServices
         }
         public async Task<IdentityResult> RegisterPersonelManager(CreateEmployeeDTO model)
         {
-            if (model == null)
+            AppUser user = await _readRepository.GetDefault(x => x.Email == model.Email || x.IdentificationNumber == model.IdentificationNumber);
+            if (model == null || user != null)
                 return IdentityResult.Failed();
 
             AppUser newUser = _mapper.Map<AppUser>(model);
