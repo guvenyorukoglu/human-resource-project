@@ -165,6 +165,13 @@ namespace humanResourceProject.API.Controllers
             return Ok(await _appUserReadService.ProfileEmployee(id));
         }
 
+        [HttpGet]
+        [Route("ProfileCompanyManager/{id}")]
+        public async Task<IActionResult> ProfileCompanyManager(Guid id) //  Personel Bilgileri
+        {
+            return Ok(await _appUserReadService.ProfileCompanyManager(id));
+        }
+
         //[HttpPost]
         //[Route("ResetPassword")]
         //public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordDTO model)

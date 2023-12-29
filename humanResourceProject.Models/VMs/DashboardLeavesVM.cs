@@ -2,7 +2,7 @@
 
 namespace humanResourceProject.Models.VMs
 {
-    public class DashboardMyLeavesVM
+    public class DashboardLeavesVM
     {
         public string LeaveNo { get; set; }
         public decimal DaysOfLeave { get; set; }

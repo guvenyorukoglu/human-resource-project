@@ -4,7 +4,7 @@ namespace humanResourceProject.Models.VMs
 {
     public class DashboardAdvanceVM
     {
-        public List<DashboardMyAdvancesVM> MyAdvances { get; set; }
-        public List<DashboardAdvancesToBeCompletedByManagerVM> AdvancesToBeCompletedByManager { get; set; }
+        public List<DashboardAdvancesVM> MyAdvances { get; set; }
+        public List<DashboardAdvancesVM> AdvancesToBeCompletedByManager { get; set; }
     }
 }
