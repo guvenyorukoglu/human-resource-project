@@ -1,17 +1,18 @@
-﻿using humanResourceProject.Domain.Enum;
+﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel;
 
 namespace humanResourceProject.Models.DTOs
 {
     public class JobDTO
     {
-        public Guid Id { get; set; }
-        [Required(ErrorMessage = "İsim alanı boş geçilemez!")]
-        [DisplayName("İşin Adı*")]
-        [RegularExpression(@"^[a-zA-ZğĞıİşŞüÜöÖçÇ]*$", ErrorMessage = "Yalnızca alfabetik karakterlere izin verilir.")]
+        [Required(ErrorMessage = "Pozisyon adı alanı boş geçilemez!")]
+        [DisplayName("Pozisyon Adı*")]
+        [RegularExpression(@"^[a-zA-ZğĞıİşŞüÜöÖçÇ\s]*$", ErrorMessage = "Yalnızca alfabetik karakterlere izin verilir.")]
         public string Title { get; set; }
-        public DateTime? UpdateDate { get; set; }
-        public Status Status { get; set; }
+
+        [DisplayName("Pozisyon Tanımı")]
+        [StringLength(500, ErrorMessage = "Pozisyon tanımı en fazla 500 karakter olmalıdır.")]
+        public string? Description { get; set; }
+        public Guid CompanyId { get; set; }
     }
 }

@@ -137,7 +137,7 @@
                                 <div class="form-group mb-3">
                                     <label asp-for="JobId" class="control-label"></label>
                                     <select asp-for="JobId" asp-items="@Model.Jobs.Select(job => new SelectListItem { Text = job.Title, Value = job.Id.ToString() })" class="form-control">
-                                        <option value="" disabled selected>Meslek seçiniz!</option>
+                                        <option value="" disabled selected>Pozisyon seçiniz!</option>
                                     </select>
                                     <span asp-validation-for="JobId" class="text-danger"></span>
                                 </div>

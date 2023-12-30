@@ -12,15 +12,12 @@
 
 <head>
 
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.css" />
-
-    <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.js"></script>
- <style>
-     ul{
-         list-style-type: none;
-         padding: 0;
-     }
- </style>
+    <style>
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+    </style>
 </head>
 
 <body>
@@ -80,7 +77,7 @@
                                     <input value="@DateTime.Now.ToString("yyyy-MM-dd")" max="@DateTime.Now.ToString("yyyy-MM-dd")" asp-for="Birthdate" type="date" class="form-control" />
                                     <span asp-validation-for="Birthdate" class="text-danger"></span>
                                 </div>
-                                
+
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group mb-3">
@@ -126,19 +123,29 @@
                                     </select>
                                     @* <span asp-validation-for="Gender" class="text-danger"></span> *@
                                 </div>
+
                                 <div class="form-group mb-3">
                                     <label asp-for="JobId" class="control-label"></label>
-                                    <select asp-for="JobId" asp-items="@Model.Jobs.Select(job => new SelectListItem { Text = job.Title, Value = job.Id.ToString() })" class="form-control">
-                                        <option value="" disabled selected>Meslek seçiniz!</option>
-                                    </select>
+                                    <div class="d-flex flex-row gap-2">
+                                        <select asp-for="JobId" asp-items="@Model.Jobs.Select(job => new SelectListItem { Text = job.Title, Value = job.Id.ToString() })" class="form-control">
+                                            <option value="" disabled selected>Pozisyon seçiniz!</option>
+                                        </select>
+                                        <a asp-action="CreateJob" asp-controller="Job"><button type="button" class="btn btn-success" data-bs-toggle="tooltip" data-bs-placement="right" title="Yeni Posizyon Ekle"><i class="fa-solid fa-plus"></i></button></a>
+                                    </div>
                                     <span asp-validation-for="JobId" class="text-danger"></span>
                                 </div>
 
+
+
+
                                 <div class="form-group mb-3">
                                     <label asp-for="DepartmentId" class="control-label"></label>
-                                    <select asp-for="DepartmentId" asp-items="@Model.Departments.Select(department => new SelectListItem { Text = department.DepartmentName, Value = department.Id.ToString() })" class="form-control">
-                                        <option value="" disabled selected>Departman seçiniz!</option>
-                                    </select>
+                                    <div class="d-flex flex-row gap-2">
+                                        <select asp-for="DepartmentId" asp-items="@Model.Departments.Select(department => new SelectListItem { Text = department.DepartmentName, Value = department.Id.ToString() })" class="form-control">
+                                            <option value="" disabled selected>Departman seçiniz!</option>
+                                        </select>
+                                        <a asp-action="CreateDepartment" asp-controller="Department"><button type="button" class="btn btn-success" data-bs-toggle="tooltip" data-bs-placement="right" title="Yeni Departman Ekle"><i class="fa-solid fa-plus"></i></button></a>
+                                    </div>
                                     <span asp-validation-for="DepartmentId" class="text-danger"></span>
                                 </div>
 
@@ -158,7 +165,7 @@
                         <div class="form-group mb-3 d-grid">
                             <input type="submit" value="Ekle" class="btn btn-primary" />
                         </div>
-                        
+
                     </div>
                 </div>
             </form>
@@ -167,5 +174,11 @@
             </div>
         </div>
     </div>
+
+    <script>
+        $(document).ready(function () {
+            $('[data-toggle="tooltip"]').tooltip();
+        });
+    </script>
 </body>
 

@@ -62,8 +62,8 @@ namespace humanResourceProject.Models.DTOs
         [DisplayName("Cinsiyet*")]
         public Gender Gender { get; set; }
 
-        [Required(ErrorMessage = "Meslek alanı boş geçilemez!")]
-        [DisplayName("Meslek*")]
+        [Required(ErrorMessage = "Pozisyon alanı boş geçilemez!")]
+        [DisplayName("Pozisyon*")]
         public Guid JobId { get; set; }
         public List<JobVM>? Jobs { get; set; }
 

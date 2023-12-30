@@ -8,7 +8,7 @@ namespace humanResourceProject.Application.Services.Abstract.IJobServices
     {
         Task<IdentityResult> InsertJob(JobDTO model);
 
-        Task<IdentityResult>  UpdateJob(JobDTO model);
+        Task<IdentityResult>  UpdateJob(UpdateJobDTO model);
 
         Task<IdentityResult> DeleteJob(Guid id);
     }
