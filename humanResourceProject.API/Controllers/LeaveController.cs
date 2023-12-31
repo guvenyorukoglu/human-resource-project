@@ -54,7 +54,7 @@ namespace humanResourceProject.API.Controllers
             {
                 model.LeaveStatus = Domain.Enum.RequestStatus.Approved;
                 string subject = "İzin Onayı!";
-                string body = $"<p>Sayın {user.FirstName} {user.LastName},</p><p>{user.CreateDate} tarihinde oluşturduğunuz izin talebiniz; Sayın {manager.FirstName} {manager.LastName} tarafından onaylandı.</p><p>Güzel günler dileriz.</p><br><hr><br><h3>Team Monitorease</h3>";
+                string body = $"<p>Sayın {user.FirstName} {user.LastName},</p><p>{user.CreateDate.ToShortDateString()} tarihinde oluşturduğunuz izin talebiniz; yöneticiniz {manager.FirstName} {manager.LastName} tarafından onaylandı.</p><p>Güzel günler dileriz.</p><br><hr><br><h3>Team Monitorease</h3>";
                 await _mailService.SendEmailAsync(user, recipientEmail, mailToName, subject, body);
                 //_mailService.SendApproveMail(user, action, $"Sayın {user.FirstName} {user.LastName} İznin onaylandı. Güzel günler dileriz.");
 
@@ -63,7 +63,7 @@ namespace humanResourceProject.API.Controllers
             {
                 model.LeaveStatus = Domain.Enum.RequestStatus.Rejected;
                 string subject = "İzin Reddi!";
-                string body = $"<p>Sayın {user.FirstName} {user.LastName},</p><p>{user.CreateDate} tarihinde oluşturduğunuz izin talebiniz; Sayın {manager.FirstName} {manager.LastName} tarafından reddedildi.</p><p>İyi çalışmalar dileriz.</p><br><hr><br><h3>Team Monitorease</h3>";
+                string body = $"<p>Sayın {user.FirstName} {user.LastName},</p><p>{user.CreateDate.ToShortDateString()} tarihinde oluşturduğunuz izin talebiniz; yöneticiniz {manager.FirstName} {manager.LastName} tarafından reddedildi.</p><p>İyi çalışmalar dileriz.</p><br><hr><br><h3>Team Monitorease</h3>";
                 await _mailService.SendEmailAsync(user, recipientEmail, mailToName, subject, body);
                 //_mailService.SendApproveMail(user, action, $"Sayın {user.FirstName} {user.LastName} İznin maalesef reddedildi");
             }

@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -54,24 +54,22 @@
 
 
                         <div class="dropdown nav-item ms-auto d-flex align-self-center">
-                            <button type="button" class="btn dropdown-toggle border-0" data-bs-toggle="dropdown">
+                            <button type="button" class="btn dropdown-toggle border-0 text-white" data-bs-toggle="dropdown">
                                 <span class="text-white fw-bold">
                                     Hoşgeldin @(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Name).Value + " " + User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Surname).Value)!
 
                                 </span>
                             </button>
                             <ul class="dropdown-menu dropdown-menu-center">
-                                <li><a class="dropdown-item" asp-controller="Employee" asp-action="ProfileEmployee">Profil</a></li>
-                                <li><a class="dropdown-item" asp-action="EditProfile" asp-controller="Employee" asp-route-id=@User.Claims.FirstOrDefault(x=>x.Type==ClaimTypes.NameIdentifier).Value>Ayarlar</a></li>
+                                <li>
+                                    <a class="dropdown-item" asp-action="ProfileEmployee" asp-controller="Employee">Profil</a>
+                                </li>
+                                <li><a class="dropdown-item">Ayarlar</a></li>
                                 <li><hr class="dropdown-divider"></li>
                                 <li><a class="dropdown-item" asp-controller="Account" asp-action="Logout" >Çıkış Yap</a></li>
                               
                             </ul>
                         </div>
-
-
-
-
 
                        @* <li class="nav-item">
                             <a class="nav-link text-white" asp-area="" asp-controller="Account" asp-action="Logout">
