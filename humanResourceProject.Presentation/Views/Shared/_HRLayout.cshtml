@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -23,6 +23,8 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.css" />
 
     <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.js"></script>
+    <script src="https://cdn.datatables.net/plug-ins/1.13.7/i18n/tr.json"></script>
+  
 
     @await RenderSectionAsync("Scripts", required: false)
 
@@ -65,12 +67,9 @@
                                 <li><a class="dropdown-item">Ayarlar</a></li>
                                 <li><hr class="dropdown-divider"></li>
                                 <li><a class="dropdown-item" asp-controller="Account" asp-action="Logout" >Çıkış Yap</a></li>
+                              
                             </ul>
                         </div>
-
-
-
-
 
                        @* <li class="nav-item">
                             <a class="nav-link text-white" asp-area="" asp-controller="Account" asp-action="Logout">

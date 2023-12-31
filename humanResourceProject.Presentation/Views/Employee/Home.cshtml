@@ -111,7 +111,7 @@
         @Html.Partial("_PanelPartial")
   
 
-        <div class="aside col-md-9 container">
+        <div class="aside scrollable  col-md-9 container">
             <div class="row text-center">
                 <div class="col-md-3 leave-info card">
                     <h6>@title</h6>
@@ -180,7 +180,7 @@
                                     if (activePoints.length > 0) {
                                         var clickedElementIndex = activePoints[0].index;
 
-                                        // Tıklanan etiketin indeksini kullanarak ilgili bağlantıya yönlendirme
+                                        
                                         switch (clickedElementIndex) {
                                             case 0:
                                                 window.location.href = "/Leave/EmployeesLeaves.html";
