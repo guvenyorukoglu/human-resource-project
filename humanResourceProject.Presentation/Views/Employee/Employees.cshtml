@@ -211,6 +211,7 @@
 </style>
 
 
+
 <script>
     function toggleView() {
         var table = document.getElementById("employees");
@@ -219,15 +220,15 @@
         var gender = document.querySelectorAll(".card-gender");
         var cardImage = document.querySelectorAll(".card-image");
 
-       
+
         if (table.classList.contains("cards")) {
             table.classList.remove("cards");
             buttonNameToChange.innerHTML = '<i class="fa-solid fa-address-card me-1"></i>Kart Görünümü';
             cardImage.forEach(function (image) {
                 image.style.width = "50px";
             });
-            
-           
+
+
         } else {
             table.classList.add("cards");
             buttonNameToChange.innerHTML = '<i class="fa-solid fa-list me-1"></i>Liste Görünümü';
@@ -238,13 +239,8 @@
         titles.forEach(function (title) {
             title.style.display = table.classList.contains("cards") ? "inline-block" : "none";
             title.style.fontWeight = table.classList.contains("cards") ? "bold" : "normal";
-          
+
         });
-
-      
-
-        
-       
 
     }
 </script>
