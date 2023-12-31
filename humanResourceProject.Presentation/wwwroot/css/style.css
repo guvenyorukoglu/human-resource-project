@@ -1,4 +1,6 @@
 ﻿/*MANAGER PANEL*/
+
+
 * {
     margin: 0;
     padding: 0;
@@ -8,6 +10,8 @@
 body {
     font-family: 'Plus Jakarta Sans', Roboto, sans-serif;
 }
+
+
 
 .panel {
     padding: 1vw;
@@ -19,6 +23,14 @@ body {
     /* position: fixed;*/
     z-index: 999;
     margin-top: -8px;
+}
+
+.aside {
+    overflow-y: auto; 
+    height: 800px; 
+   width: 82%;
+    
+    box-sizing: border-box;
 }
 
 
@@ -90,7 +102,7 @@ h6 {
         padding: 10px;
     }
 
-   
+
         .panel-list li a {
             text-decoration: none;
             color: snow;
@@ -116,10 +128,42 @@ h6 {
         padding-right: 10px;
     }
 
+/*ONLY ICONS*/
+.panelIcons i {
+    font-size: 24px;
+}
+
+.panelIcons {
+    display: none;
+}
+
+
+.panelIcons {
+    padding: 1vw;
+    justify-content: space-between;
+    align-items: center;
+    width: 5vw;
+    background-color: #133a63;
+    height: 200vh;
+    /* position: fixed;*/
+    z-index: 999;
+    margin-top: -8px;
+}
+
+.panel-items-icons {
+    margin-top: 200px;
+    margin-left: 10px;
+}
+
+    .panel-items-icons .sub-menu i {
+        font-size: 16px;
+    }
+
+
 .custom-button {
     align-items: center;
     text-align: center;
-    width: 10vw;
+    width: 10.5vw;
     height: 6vh;
     padding: 10px 40px;
     border: none;
@@ -210,24 +254,24 @@ h6 {
 
 /* width */
 ::-webkit-scrollbar {
-    width: 12px;
+    width: 8px;
 }
 
 /* Track */
 ::-webkit-scrollbar-track {
     box-shadow: inset 0 0 5px grey;
-    border-radius: 10px;
+    border-radius: 8px;
 }
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
-    background: #e48774;
-    border-radius: 10px;
+    background: #A0AAFF;
+    border-radius: 8px;
 }
 
     /* Handle on hover */
     ::-webkit-scrollbar-thumb:hover {
-        background: #e48774;
+        background: #133A63;
     }
 
 
@@ -322,5 +366,3 @@ a {
     font-size: 14px;
     transition: all 0.3s ease;
 }
-
-
