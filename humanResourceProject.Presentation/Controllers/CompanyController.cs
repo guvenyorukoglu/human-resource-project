@@ -8,7 +8,7 @@ using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace humanResourceProject.Presentation.Controllers
 {
-    [Authorize(Roles = "SiteManager")]
+    [Authorize(Roles = "CompanyManager")]
     public class CompanyController : Controller
     {
         private readonly HttpClient _httpClient;
@@ -82,15 +82,15 @@ namespace humanResourceProject.Presentation.Controllers
         {
 
             var response = await _httpClient.GetAsync($"api/Company/GetUpdateCompanyDTO/{id}");
+
             if (response.IsSuccessStatusCode)
             {
                 var content = await response.Content.ReadAsStringAsync();
-                var company = JsonConvert.DeserializeObject<UpdateCompanyDTO>(content);
-                return View(company);
+                var model = JsonConvert.DeserializeObject<UpdateCompanyDTO>(content);
 
+                return View(model);
             }
             return View("Error");
-
 
         }
 
@@ -99,7 +99,11 @@ namespace humanResourceProject.Presentation.Controllers
         [HttpPost]
         public async Task<IActionResult> UpdateCompany(UpdateCompanyDTO model)
         {
-
+            if (!ModelState.IsValid)
+            {
+                TempData["Result"] = "modelinvalid";
+                return View(model);
+            }
 
             var json = JsonConvert.SerializeObject(model);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
@@ -108,11 +112,11 @@ namespace humanResourceProject.Presentation.Controllers
 
             if (response.IsSuccessStatusCode)
             {
-                return RedirectToAction("Companies");
+                return RedirectToAction("Home","Employee");
             }
 
-
-            return View("Error");
+            ModelState.AddModelError(response.StatusCode.ToString(), "Bir hata oluştu.");
+            return View(model);
         }
 
         [HttpPost]
