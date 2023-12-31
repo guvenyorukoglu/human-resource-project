@@ -54,5 +54,16 @@ namespace humanResourceProject.Application.Services.Concrete.JobServices
                                               );
             return jobs;
         }
+
+        public async Task<UpdateJobDTO> GetUpdateJobDTO(Guid id)
+        {
+            Job job = await _jobReadRepository.GetById(id);
+
+            if (job == null)
+                return null;
+
+            UpdateJobDTO updateJobDTO = _mapper.Map<UpdateJobDTO>(job);
+            return updateJobDTO;
+        }
     }
 }

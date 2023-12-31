@@ -5,11 +5,10 @@ using humanResourceProject.Domain.Entities.Concrete;
 using humanResourceProject.Domain.IRepository.BaseRepos;
 using humanResourceProject.Models.DTOs;
 using humanResourceProject.Models.VMs;
-using Microsoft.AspNetCore.Mvc;
 
 namespace humanResourceProject.Application.Services.Concrete.DeparmentServices
 {
-    
+
     public class DepartmentReadService : BaseReadService<Department>, IDepartmentReadService
     {
         private readonly IBaseReadRepository<Department> _departmentReadRepository;
@@ -62,6 +61,17 @@ namespace humanResourceProject.Application.Services.Concrete.DeparmentServices
         {
             Department department = await _departmentReadRepository.GetDefault(x => x.DepartmentName == departmentName);
             return department.Id;
+        }
+
+        public async Task<UpdateDepartmentDTO> GetUpdateDepartmentDTO(Guid id)
+        {
+            Department department = await _departmentReadRepository.GetById(id);
+
+            if (department == null)
+                return null;
+
+            UpdateDepartmentDTO updateDepartmentDTO = _mapper.Map<UpdateDepartmentDTO>(department);
+            return updateDepartmentDTO;
         }
     }
 }

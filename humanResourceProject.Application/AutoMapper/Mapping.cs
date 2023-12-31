@@ -24,9 +24,11 @@ namespace humanResourceProject.Application.AutoMapper
 
             CreateMap<Department, DepartmentVM>().ReverseMap();
             CreateMap<Department, DepartmentDTO>().ReverseMap();
+            CreateMap<Department, UpdateDepartmentDTO>().ReverseMap();
 
             CreateMap<Job, JobVM>().ReverseMap();
             CreateMap<Job, JobDTO>().ReverseMap();
+            CreateMap<Job, UpdateJobDTO>().ReverseMap();
 
             CreateMap<Advance, AdvanceVM>().ReverseMap();
             CreateMap<Advance, AdvanceDTO>().ReverseMap();

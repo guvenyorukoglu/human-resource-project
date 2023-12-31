@@ -125,16 +125,22 @@
                                 </div>
                                 <div class="form-group mb-3">
                                     <label asp-for="JobId" class="control-label"></label>
-                                    <select asp-for="JobId" asp-items="@Model.Jobs.Select(job => new SelectListItem { Text = job.Title, Value = job.Id.ToString() })" class="form-control">
-                                        <option value="" disabled selected>Meslek seçiniz!</option>
-                                    </select>
+                                    <div class="d-flex flex-row gap-2">
+                                        <select asp-for="JobId" asp-items="@Model.Jobs.Select(job => new SelectListItem { Text = job.Title, Value = job.Id.ToString() })" class="form-control">
+                                            <option value="" disabled selected>Pozisyon seçiniz!</option>
+                                        </select>
+                                        <a asp-action="CreateJob" asp-controller="Job"><button type="button" class="btn btn-success" data-bs-toggle="tooltip" data-bs-placement="right" title="Yeni Posizyon Ekle"><i class="fa-solid fa-plus"></i></button></a>
+                                    </div>
                                     <span asp-validation-for="JobId" class="text-danger"></span>
                                 </div>
                                 <div class="form-group mb-3">
                                     <label asp-for="DepartmentId" class="control-label"></label>
-                                    <select asp-for="DepartmentId" asp-items="@Model.Departments.Select(department => new SelectListItem { Text = department.DepartmentName, Value = department.Id.ToString() })" class="form-control">
-                                        <option value="" disabled selected>Departman seçiniz!</option>
-                                    </select>
+                                    <div class="d-flex flex-row gap-2">
+                                        <select asp-for="DepartmentId" asp-items="@Model.Departments.Select(department => new SelectListItem { Text = department.DepartmentName, Value = department.Id.ToString() })" class="form-control">
+                                            <option value="" disabled selected>Departman seçiniz!</option>
+                                        </select>
+                                        <a asp-action="CreateDepartment" asp-controller="Department"><button type="button" class="btn btn-success" data-bs-toggle="tooltip" data-bs-placement="right" title="Yeni Departman Ekle"><i class="fa-solid fa-plus"></i></button></a>
+                                    </div>
                                     <span asp-validation-for="DepartmentId" class="text-danger"></span>
                                 </div>
                                 <div class="form-group mb-3">

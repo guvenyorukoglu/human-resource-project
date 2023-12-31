@@ -1,5 +1,4 @@
-﻿
-using humanResourceProject.Application.Services.Abstract.IJobServices;
+﻿using humanResourceProject.Application.Services.Abstract.IJobServices;
 using humanResourceProject.Models.DTOs;
 using Microsoft.AspNetCore.Mvc;
 
@@ -41,13 +40,25 @@ namespace humanResourceProject.API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> InsertJob([FromBody] JobDTO model)
+        [Route("CreateJob")]
+        public async Task<IActionResult> CreateJob([FromBody] JobDTO model)
         {
-            return Ok(await _jobWriteService.InsertJob(model));
+            var result = await _jobWriteService.InsertJob(model);
+            if (!result.Succeeded)
+                return BadRequest(result.Errors);
+
+            return Ok("Yeni pozisyon oluşturuldu.");
+        }
+
+        [HttpGet]
+        [Route("GetUpdateJobDTO/{id}")]
+        public async Task<IActionResult> GetUpdateJobDTO(Guid id) // Departman güncelleme için DTO döndürür.
+        {
+            return Ok(await _jobReadService.GetUpdateJobDTO(id));
         }
 
         [HttpPut]
-        public async Task<IActionResult> UpdateJob([FromBody] JobDTO model)
+        public async Task<IActionResult> UpdateJob([FromBody] UpdateJobDTO model)
         {
             var result = await _jobWriteService.UpdateJob(model);
             if (!result.Succeeded)

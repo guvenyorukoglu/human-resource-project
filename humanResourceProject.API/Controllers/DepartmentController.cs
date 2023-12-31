@@ -39,19 +39,26 @@ namespace humanResourceProject.API.Controllers
             return Ok(await _departmentReadService.GetDepartmentsByCompanyId(companyId));
         }
 
-        //[HttpPost]
-        //[Route("CreateDepartment")]
-        //public async Task<IActionResult> CreateDepartment([FromBody] DepartmentDTO model)
-        //{
-        //    var result = await _departmentWriteService.InsertDepartment(model);
-        //    if (!result.Succeeded)
-        //        return BadRequest(result.Errors);
+        [HttpPost]
+        [Route("CreateDepartment")]
+        public async Task<IActionResult> CreateDepartment([FromBody] DepartmentDTO model)
+        {
+            var result = await _departmentWriteService.InsertDepartment(model);
+            if (!result.Succeeded)
+                return BadRequest(result.Errors);
 
-        //    return Ok(await _departmentReadService.GetIdByDepartmentName(model.DepartmentName));
-        //}
+            return Ok("Yeni departman oluşturuldu.");
+        }
+
+        [HttpGet]
+        [Route("GetUpdateDepartmentDTO/{id}")]
+        public async Task<IActionResult> GetUpdateDepartmentDTO(Guid id) // Departman güncelleme için DTO döndürür.
+        {
+            return Ok(await _departmentReadService.GetUpdateDepartmentDTO(id));
+        }
 
         [HttpPut]
-        public async Task<IActionResult> UpdateJob([FromBody] UpdateDepartmentDTO model)
+        public async Task<IActionResult> UpdateDepartment([FromBody] UpdateDepartmentDTO model)
         {
             var result = await _departmentWriteService.UpdateDepartment(model);
             if (!result.Succeeded)

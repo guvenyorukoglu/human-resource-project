@@ -57,7 +57,15 @@
                         </ul>
                     </li>
                 }
-
+                @if (User.IsInRole("CompanyManager"))
+                {
+                    <li>
+                        <a asp-action="Departments" asp-controller="Department"><i class="fa-solid fa-building-user"></i>Departmanlar</a>
+                    </li>
+                    <li>
+                        <a asp-action="Jobs" asp-controller="Job"><i class="fa-solid fa-briefcase"></i>Pozisyonlar</a>
+                    </li>
+                }
                 <li>
                     <a href="#"><i class="fa fa-newspaper"></i>Raporlar</a>
                 </li>

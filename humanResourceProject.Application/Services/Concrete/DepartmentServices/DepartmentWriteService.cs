@@ -33,7 +33,8 @@ namespace humanResourceProject.Application.Services.Concrete.DepartmentServices
 
         public async Task<IdentityResult> InsertDepartment(DepartmentDTO model)
         {
-            if (model == null)
+            Department department = await _departmentReadRepository.GetSingleDefault(x => x.DepartmentName == model.DepartmentName && (x.Status == Domain.Enum.Status.Active || x.Status == Domain.Enum.Status.Modified));
+            if (model == null ||department != null)
                 return IdentityResult.Failed();
 
             Department newDepartment = _mapper.Map<Department>(model);
@@ -47,12 +48,22 @@ namespace humanResourceProject.Application.Services.Concrete.DepartmentServices
 
         public async Task<IdentityResult> UpdateDepartment(UpdateDepartmentDTO model)
         {
-            Department department = await _departmentReadRepository.GetSingleDefault(x => x.Id == model.Id);
+            // Id'ye göre departmanı bulur.
+            Department department = await _departmentReadRepository.GetSingleDefault(x => x.Id == model.Id); 
             if (department == null)
                 return IdentityResult.Failed();
 
-            department = _mapper.Map<Department>(model);
+            // Id'si güncellenmek istenen departmanın Id'sine eşit olmayan departmanları getirir.
+            var otherDepartments = await _departmentReadRepository.GetDefaults(x=> x.Id != model.Id); 
 
+            // Güncellenmek istenen departmanın ismi başka bir departmanda var mı diye kontrol eder.
+            bool departmentExistsWithSameName = otherDepartments.Any(x => x.DepartmentName == model.DepartmentName && (x.Status == Domain.Enum.Status.Active || x.Status == Domain.Enum.Status.Modified));
+
+            if (departmentExistsWithSameName == true)
+                return IdentityResult.Failed();
+
+            department.DepartmentName = model.DepartmentName;
+            department.Description = model.Description;
             department.Status = Domain.Enum.Status.Modified;
             department.UpdateDate = DateTime.Now;
 

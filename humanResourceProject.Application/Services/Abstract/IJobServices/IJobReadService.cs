@@ -7,9 +7,9 @@ namespace humanResourceProject.Application.Services.Abstract.IJobServices
     public interface IJobReadService : IBaseReadService<Job>
     {
         Task<JobDTO> GetJobById(Guid id);
-
         Task<List<JobVM>> GetAllJobs();
         Task<List<JobVM>> GetJobsByCompanyId(Guid companyId);
+        Task<UpdateJobDTO> GetUpdateJobDTO(Guid id);
 
     }
 }
