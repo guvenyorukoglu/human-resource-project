@@ -16,39 +16,52 @@
                 if (User.IsInRole("CompanyManager"))
                 {
                     <a asp-action="CreatePersonelManager" asp-controller="Employee">
-                        <button class="custom-button custom-button--create-entity">Yönetici Ekle</button>
+                        <button class="custom-button custom-button--create-entity"><i class="fa-solid fa-user-plus me-1"></i>Yönetici Ekle</button>
                     </a>
                     <a asp-action="CreatePersonel" asp-controller="Employee">
-                        <button class="custom-button custom-button--create-entity">Personel Ekle</button>
+                        <button class="custom-button custom-button--create-entity"><i class="fa-solid fa-user-plus me-1"></i>Personel Ekle</button>
                     </a>
                 }
                 if (User.IsInRole("Manager"))
                 {
                     <a asp-action="CreatePersonel" asp-controller="Employee">
-                        <button class="custom-button custom-button--create-entity">Personel Ekle</button>
+                        <button class="custom-button custom-button--create-entity"><i class="fa-solid fa-user-plus me-1"></i>Personel Ekle</button>
                     </a>
                 }
+
+                <button id="changeView" onclick="toggleView()()" class="float-end custom-button custom-button--create-entity"><i class="fa-solid fa-address-card me-1"></i>Kart Görünümü</button>
+
             }
             <div class="pagination-container">
 
                 <script>
                     $(document).ready(function () {
-                        $('#employees').DataTable();
+                        $('#employees').DataTable({
+                            "language": {
+                                "url": "https://cdn.datatables.net/plug-ins/1.10.25/i18n/Turkish.json"
+                            },
+                            "order": [
+                                [1, 'asc']
+                            ],
+                        });
                     });
-
                 </script>
+                   
+                            
 
                 <table id="employees"
                        class="display">
                     <thead>
                         <tr>
+                            <th style="width: 4%">Fotoğraf</th>
                             <th style="width: 8%">Ad</th>
                             <th style="width: 8%">Soyad</th>
-                            <th style="width: 15%">Telefon</th>
+                            <th style="width: 10%">Telefon</th>
                             <th style="width: 10%">E-posta</th>
                             <th style="width: 7%">Cinsiyet</th>
                             <th style="width: 18%">Pozisyon</th>
                             <th style="width: 28%">İşlemler</th>
+
                         </tr>
                     </thead>
                     <tbody>
@@ -59,17 +72,18 @@
                                 var displayAttribute = typeof(Gender).GetMember(item.Gender.ToString())[0].GetCustomAttribute<DisplayAttribute>();
                                 var displayName = displayAttribute?.GetName() ?? item.Gender.ToString();
                                 <tr>
-                                    <td>@item.FirstName</td>
-                                    <td>@item.LastName</td>
-                                    <td>@item.PhoneNumber</td>
-                                    <td>@item.Email</td>
-                                    <td>@displayName</td>
-                                    <td>@item.Title</td>
+                                    <td><img src="@item.ImagePath" style="width:50px;" alt="profil-fotoğrafı"/></td>
+                                    <td><span id="card-view-header">Ad:&nbsp </span>@item.FirstName</td>
+                                    <td><span id="card-view-header">Soyad:&nbsp</span>@item.LastName</td>
+                                    <td><span id="card-view-header">Telefon:&nbsp</span>@item.PhoneNumber</td>
+                                    <td><span id="card-view-header">E-posta:&nbsp</span>@item.Email</td>
+                                    <td class="card-gender"><span id="card-view-header">Cinsiyet:&nbsp</span>@displayName</td>
+                                    <td><span id="card-view-header" style="font-weight:400;">Meslek:&nbsp</span>@item.Title</td>
                                     <td>
                                         <a asp-action="EditEmployee"
                                            asp-controller="Employee"
                                            asp-route-id="@item.Id">
-                                            <button class="btn btn-secondary btn-sm d-inline-flex bg-primary align-items-center">
+                                            <button class="m-1 btn btn-secondary btn-sm d-inline-flex bg-primary align-items-center">
                                                 <i class="fa fa-pen"></i><span class="ms-2">Düzenle</span>
                                             </button>
                                         </a>
@@ -77,7 +91,7 @@
                                            asp-controller="Employee"
                                            data-bs-toggle="modal"
                                            data-bs-target="#deleteEmployeeModal_@item.Id">
-                                            <button class="btn btn-danger btn-sm d-inline-flex gap-1 align-items-center">
+                                            <button class="m-1 btn btn-danger btn-sm d-inline-flex gap-1 align-items-center">
                                                 <i class="fa fa-trash"></i><span>Kaldır</span>
                                             </button>
                                         </a>
@@ -85,7 +99,7 @@
                                            asp-controller="Employee"
                                            data-bs-toggle="modal"
                                            data-bs-target="#fireEmployeeModal_@item.Id">
-                                             <button type="button" class="btn btn-dark btn-sm d-inline-flex gap-1 align-items-center">
+                                            <button type="button" class="m-1 btn btn-dark btn-sm d-inline-flex gap-1 align-items-center">
                                                 <i class="fa-solid fa-user-minus"></i><span class="ms-2">İşten Çıkart</span>
                                             </button>
                                         </a>
@@ -150,3 +164,78 @@
         </div>
     </div>
 </body>
+
+
+<style>
+    .cards tbody tr {
+        float: left;
+        width: 30rem;
+        margin: 0.5rem;
+        border: 0.0625rem solid rgba(0, 0, 0, .125);
+        border-radius: .25rem;
+        box-shadow: 0.25rem 0.25rem 0.5rem rgba(0, 0, 0, 0.25);
+    }
+
+    .cards tbody td {
+        display: block;
+        text-align: center;
+    }
+
+    .cards thead {
+        display: none;
+    }
+
+    .cards td:before {
+        content: attr(data-label);
+        position: relative;
+        float: left;
+        color: #808080;
+        min-width: 4rem;
+        margin-left: 0;
+        margin-right: 1rem;
+        text-align: left;
+    }
+
+    tr.selected td:before {
+        color: #CCC;
+    }
+
+    .table .avatar {
+        width: 50px;
+    }
+
+    #card-view-header {
+        display: none;
+    }
+
+</style>
+
+
+<script>
+    function toggleView() {
+        var table = document.getElementById("employees");
+        var buttonNameToChange = document.getElementById("changeView");
+        var titles = document.querySelectorAll("#card-view-header");
+        var gender = document.querySelectorAll(".card-gender");
+
+       
+        if (table.classList.contains("cards")) {
+            table.classList.remove("cards");
+            buttonNameToChange.innerHTML = '<i class="fa-solid fa-address-card me-1"></i>Kart Görünümü';
+
+
+        } else {
+            table.classList.add("cards");
+            buttonNameToChange.innerHTML = '<i class="fa-solid fa-list me-1"></i>Liste Görünümü';
+        }
+        titles.forEach(function (title) {
+            title.style.display = table.classList.contains("cards") ? "inline-block" : "none";
+            title.style.fontWeight = table.classList.contains("cards") ? "bold" : "normal";
+          
+        });
+
+        
+       
+
+    }
+</script>

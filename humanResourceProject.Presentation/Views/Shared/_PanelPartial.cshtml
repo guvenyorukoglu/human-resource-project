@@ -1,6 +1,8 @@
 ﻿@using System.Security.Claims;
 
 <div class="panel col-md-1 col-lg-1">
+    <button class="btn btn-sm float-end border-0" style="background-color:#A0AAFF;" onclick="hidePanel()"><i class="fa-solid fa-arrow-left"></i></button>
+
     <div class="profile row">
         <div class="picture">
             <input type="file" id="uploadInput" style="display: none;" />
@@ -10,8 +12,6 @@
             <h3>@(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Name).Value + " " + User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Surname).Value)</h3>
         </div>
     </div>
-
-
 
     <div class="ul">
 
@@ -86,49 +86,82 @@
 
 </div>
 
+@*PANELICONS*@
 
+<div class="panelIcons col-md-1 col-lg-1">
+    <button class="btn btn-sm border-0 " style="background-color:#A0AAFF;margin-left:1vw;" onclick="showPanel()"><i class="fa-solid fa-arrow-right " style="font-size: 16px;"></i></button>
+    <div class="ul">
 
+        <div class="panel-items-icons">
+            <ul class="panel-list">
+                <li>
+                    <a data-toggle="tooltip" title="Dashboard" asp-action="Home" asp-controller="Employee"><i class="fa-solid fa-calendar-days"></i></a>
+                </li>
+                @if (User.IsInRole("Personel") || User.IsInRole("Manager"))
+                {
+                    <li class="parent">
+                        <a data-toggle="tooltip" title="Taleplerim" href="#"><i class="fa-solid fa-hand-holding"></i></a>
+                        <ul class="sub-menu">
+                            <li>
+                                <a data-toggle="tooltip" title="İzinlerim" asp-action="MyLeaves" asp-controller="Leave"><i class="fa-solid fa-person-walking-luggage"></i></a>
+                            </li>
+                            <li>
+                                <a data-toggle="tooltip" title="Avanslarım" asp-action="MyAdvances" asp-controller="Advance"><i class="fa-solid fa-sack-dollar"></i></a>
+                            </li>
+                            <li>
+                                <a data-toggle="tooltip" title="Harcamalarım" asp-action="MyExpenses" asp-controller="Expense"><i class="fa-solid fa-file-invoice-dollar"></i></a>
+                            </li>
+                        </ul>
+                    </li>
+                }
+                @if (User.IsInRole("CompanyManager") || User.IsInRole("Manager"))
+                {
+                    <li>
+                        <a data-toggle="tooltip" title="Personeller" asp-action="Employees" asp-controller="Employee"><i class="fa fa-users"></i></a>
+                    </li>
+                    <li class="parent">
+                        <a data-toggle="tooltip" title="Personel Talepleri" href="#"><i class="fa-solid fa-person-circle-exclamation"></i></a>
+                        <ul class="sub-menu">
+                            <li>
+                                <a data-toggle="tooltip" title="İzin Talepleri" asp-action="EmployeesLeaves" asp-controller="Leave"><i class="fa-solid fa-person-walking-luggage"></i></a>
+                            </li>
+                            <li>
+                                <a data-toggle="tooltip" title="Avans Talepleri" asp-action="EmployeesAdvances" asp-controller="Advance"><i class="fa-solid fa-sack-dollar"></i></a>
+                            </li>
+                            <li>
+                                <a data-toggle="tooltip" title="Harcama Talepleri" asp-action="EmployeesExpenses" asp-controller="Expense"><i class="fa-solid fa-file-invoice-dollar"></i></a>
+                            </li>
+                        </ul>
+                    </li>
+                }
 
+                <li>
+                    <a data-toggle="tooltip" title="Raporlar" href="#"><i class="fa fa-newspaper"></i></a>
+                </li>
+                <li>
+                    <a data-toggle="tooltip" title="Takvim" href="#"><i class="fa fa-calendar"></i></a>
+                </li>
+                <li>
+                    <a data-toggle="tooltip" title="E-posta" href="#"><i class="fa fa-envelope"></i></a>
+                </li>
 
-@*<script>
-    //Aktif sayfayı belirleme
-    const activePage = window.location.pathname;
-    const navLinks = document.querySelectorAll('.panel-list a');
-    navLinks.forEach(link => {
-        const listItem = link.parentElement;
-        if (link.href.includes(`${activePage}`)) {
-            link.classList.add('active');
-            listItem.style.backgroundColor = 'gray';
-            listItem.style.color = 'green';
-
-        }
-    });
-</script>*@
+            </ul>
+        </div>
+    </div>
+</div>
 
 <script>
     //Açılır kapanır panel menu
-    //$(document).ready(function () {
-    //    $(".sub-menu").hide();
-    //    $(".parent").click(function () {
-    //        $(this).find(".sub-menu").slideToggle();
-    //    });
-    //});
-
 
     $(document).ready(function () {
         $(".sub-menu").hide();
-        $(".parent").click(function (event) {
-            var subMenu = $(this).find(".sub-menu");
-            if (subMenu.is(":visible")) {
-                if ($(event.target).is("a")) {
-                    subMenu.slideUp();
-                    return;
-                }
-            }
+
+        $(".parent > a").click(function (event) {
             event.preventDefault();
+            var subMenu = $(this).siblings(".sub-menu");
+            $(".sub-menu").not(subMenu).slideUp();
             subMenu.slideToggle();
         });
-
 
         $(document).click(function (event) {
             if (!$(event.target).closest('.parent').length) {
@@ -137,15 +170,6 @@
         });
     });
 
-
-
-    //$(document).ready(function () {
-    //    $(".sub-menu").hide();
-    //    $(".parent").click(function (event) {
-    //        event.preventDefault();
-    //        $(this).find(".sub-menu").slideToggle();
-    //    });
-    //});
 
     // Profile image upload
     $(document).ready(function () {
@@ -179,5 +203,60 @@
             });
         });
     });
+
+    //sol panel gizleme & gösterme
+
+    function hidePanel() {
+        var panels = document.getElementsByClassName("panel");
+        var panelIcons = document.getElementsByClassName("panelIcons");
+        var aside = document.getElementsByClassName("aside")[0];
+
+        for (var i = 0; i < panels.length; i++) {
+            panels[i].style.display = "none";
+        }
+
+        for (var j = 0; j < panelIcons.length; j++) {
+            panelIcons[j].style.display = "block";
+        }
+
+        aside.style.width = "90%";
+        localStorage.setItem('panelState', 'hidden');
+    };
+
+    function showPanel() {
+        var panels = document.getElementsByClassName("panel");
+        var panelIcons = document.getElementsByClassName("panelIcons");
+        var aside = document.getElementsByClassName("aside")[0];
+
+        for (var i = 0; i < panels.length; i++) {
+            panels[i].style.display = "block";
+        }
+
+        for (var j = 0; j < panelIcons.length; j++) {
+            panelIcons[j].style.display = "none";
+        }
+        aside.style.width = "80%";
+        localStorage.setItem('panelState', 'visible');
+    }
+
+    window.onload = function () {
+        var panelState = localStorage.getItem('panelState');
+
+        if (panelState === 'hidden') {
+            hidePanel();
+        } else {
+            showPanel();
+        }
+    }
+
+    //bootstrap tooltip
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip({
+            placement: 'right'
+        })
+    })
+
+
+
 </script>
 

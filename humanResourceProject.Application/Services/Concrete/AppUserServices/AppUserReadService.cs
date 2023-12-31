@@ -39,6 +39,7 @@ namespace humanResourceProject.Application.Services.Concrete.AppUserServices
             return await _readRepository.GetFilteredList(
                 select: x => new PersonelVM()
                 {
+                    ImagePath = x.ImagePath,
                     Id = x.Id,
                     FirstName = x.FirstName,
                     LastName = x.LastName,
@@ -58,6 +59,7 @@ namespace humanResourceProject.Application.Services.Concrete.AppUserServices
             return await _readRepository.GetFilteredList(
                 select: x => new PersonelVM()
                 {
+                    ImagePath = x.ImagePath,
                     Id = x.Id,
                     FirstName = x.FirstName,
                     LastName = x.LastName,

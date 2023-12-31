@@ -111,7 +111,7 @@
         @Html.Partial("_PanelPartial")
   
 
-        <div class="aside col-md-9 container">
+        <div class="aside scrollable  col-md-9 container">
             <div class="row text-center">
                 <div class="col-md-3 leave-info card">
                     <h6>@title</h6>
@@ -180,7 +180,7 @@
                                     if (activePoints.length > 0) {
                                         var clickedElementIndex = activePoints[0].index;
 
-                                        // Tıklanan etiketin indeksini kullanarak ilgili bağlantıya yönlendirme
+                                        
                                         switch (clickedElementIndex) {
                                             case 0:
                                                 window.location.href = "/Leave/EmployeesLeaves.html";
@@ -290,6 +290,10 @@
 
                 <div class="col-md-4 holiday-info card">
                     <h6>ŞİRKET BİLGİLERİ</h6>
+                    @if ( User.IsInRole("CompanyManager"))
+                    {
+                        <a asp-action="UpdateCompany" asp-controller="Company" asp-route-id="@User.Claims.FirstOrDefault(x => x.Type == "CompanyId").Value" class="d-flex justify-content-center align-items-center text-black fs-6"><i class="fa fa-pen"></i></a>
+                    }
                     <div class="d-flex flex-column gap-2">
                         <div class="d-flex gap-2 justify-content-center align-items-center"><i class="fa-solid fa-building"></i><span>@Model.Company.CompanyName</span></div>
                         <div class="d-flex gap-2 justify-content-center align-items-center"><i class="fa-solid fa-location-dot"></i><span>@Model.Company.Address</span></div>

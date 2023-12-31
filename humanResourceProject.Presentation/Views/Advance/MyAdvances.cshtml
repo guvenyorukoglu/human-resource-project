@@ -7,10 +7,6 @@
 
 <head>
 
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.css" />
-
-    <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.js"></script>
-
 </head>
 <body>
 
@@ -31,6 +27,9 @@
                 <script>
                     $(document).ready(function () {
                         $('#advances').DataTable({
+                            "language": {
+                                "url": "//cdn.datatables.net/plug-ins/1.10.25/i18n/Turkish.json"
+                            },
                             "order": [
                                 [2, 'desc']
                             ],
