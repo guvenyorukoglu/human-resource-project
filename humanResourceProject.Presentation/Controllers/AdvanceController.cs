@@ -194,8 +194,8 @@ namespace humanResourceProject.Presentation.Controllers
         }
 
         [Authorize(Roles = "Manager,CompanyManager")]
-        [HttpGet]
-        public async Task<IActionResult> RejectAdvance(Guid id)
+        [HttpPost]
+        public async Task<IActionResult> RejectAdvance(Guid id, string rejectReason)
         {
             var response = await _httpClient.GetAsync($"api/Advance/GetUpdateAdvanceDTO/{id}");
 
@@ -207,6 +207,7 @@ namespace humanResourceProject.Presentation.Controllers
             var content = await response.Content.ReadAsStringAsync();
             var updateAdvanceDTO = JsonConvert.DeserializeObject<UpdateAdvanceDTO>(content);
             updateAdvanceDTO.AdvanceStatus = RequestStatus.Rejected;
+            updateAdvanceDTO.RejectReason = rejectReason;
 
             var json = JsonConvert.SerializeObject(updateAdvanceDTO);
             var contentDTO = new StringContent(json, Encoding.UTF8, "application/json");
