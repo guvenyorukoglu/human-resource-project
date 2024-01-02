@@ -46,8 +46,8 @@
                         });
                     });
                 </script>
-                   
-                            
+
+
 
                 <table id="employees"
                        class="display">
@@ -60,7 +60,10 @@
                             <th style="width: 10%">E-posta</th>
                             <th style="width: 7%">Cinsiyet</th>
                             <th style="width: 18%">Pozisyon</th>
-                            <th style="width: 28%">İşlemler</th>
+                            @if (User.IsInRole("CompanyManager") || User.IsInRole("Manager"))
+                            {
+                                <th style="width: 28%">İşlemler</th>
+                            }
 
                         </tr>
                     </thead>
@@ -79,79 +82,82 @@
                                     <td><span id="card-view-header">E-posta:&nbsp</span>@item.Email</td>
                                     <td class="card-gender"><span id="card-view-header">Cinsiyet:&nbsp</span>@displayName</td>
                                     <td><span id="card-view-header" style="font-weight:400;">Meslek:&nbsp</span>@item.Title</td>
-                                    <td>
-                                        <a asp-action="EditEmployee"
-                                           asp-controller="Employee"
-                                           asp-route-id="@item.Id">
-                                            <button class="m-1 btn btn-secondary btn-sm d-inline-flex bg-primary align-items-center">
-                                                <i class="fa fa-pen"></i><span class="ms-2">Düzenle</span>
-                                            </button>
-                                        </a>
-                                        <a asp-action="DeleteEmployee"
-                                           asp-controller="Employee"
-                                           data-bs-toggle="modal"
-                                           data-bs-target="#deleteEmployeeModal_@item.Id">
-                                            <button class="m-1 btn btn-danger btn-sm d-inline-flex gap-1 align-items-center">
-                                                <i class="fa fa-trash"></i><span>Kaldır</span>
-                                            </button>
-                                        </a>
-                                        <a asp-action="FireEmployee"
-                                           asp-controller="Employee"
-                                           data-bs-toggle="modal"
-                                           data-bs-target="#fireEmployeeModal_@item.Id">
-                                            <button type="button" class="m-1 btn btn-dark btn-sm d-inline-flex gap-1 align-items-center">
-                                                <i class="fa-solid fa-user-minus"></i><span class="ms-2">İşten Çıkart</span>
-                                            </button>
-                                        </a>
+                                    @if (User.IsInRole("CompanyManager") || User.IsInRole("Manager"))
+                                    {
+                                        <td>
+                                            <a asp-action="EditEmployee"
+                                               asp-controller="Employee"
+                                               asp-route-id="@item.Id">
+                                                <button class="m-1 btn btn-secondary btn-sm d-inline-flex bg-primary align-items-center">
+                                                    <i class="fa fa-pen"></i><span class="ms-2">Düzenle</span>
+                                                </button>
+                                            </a>
+                                            <a asp-action="DeleteEmployee"
+                                               asp-controller="Employee"
+                                               data-bs-toggle="modal"
+                                               data-bs-target="#deleteEmployeeModal_@item.Id">
+                                                <button class="m-1 btn btn-danger btn-sm d-inline-flex gap-1 align-items-center">
+                                                    <i class="fa fa-trash"></i><span>Kaldır</span>
+                                                </button>
+                                            </a>
+                                            <a asp-action="FireEmployee"
+                                               asp-controller="Employee"
+                                               data-bs-toggle="modal"
+                                               data-bs-target="#fireEmployeeModal_@item.Id">
+                                                <button type="button" class="m-1 btn btn-dark btn-sm d-inline-flex gap-1 align-items-center">
+                                                    <i class="fa-solid fa-user-minus"></i><span class="ms-2">İşten Çıkart</span>
+                                                </button>
+                                            </a>
 
-                                        @* Delete Employee modal *@
-                                        <div class="modal fade" id="deleteEmployeeModal_@item.Id" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                            <div class="modal-dialog">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h5 class="modal-title" id="exampleModalLabel">Personel Silme</h5>
-                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-                                                        </button>
-                                                    </div>
-                                                    <div class="modal-body">
-                                                        Personeli silmek istediğinizden emin misiniz?
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>
-                                                        <a asp-action="DeleteEmployee"
-                                                           asp-controller="Employee"
-                                                           asp-route-id="@item.Id">
-                                                            <button type="button" class="btn btn-primary">Evet</button>
-                                                        </a>
+                                            @* Delete Employee modal *@
+                                            <div class="modal fade" id="deleteEmployeeModal_@item.Id" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title" id="exampleModalLabel">Personel Silme</h5>
+                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                                                            </button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            Personeli silmek istediğinizden emin misiniz?
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>
+                                                            <a asp-action="DeleteEmployee"
+                                                               asp-controller="Employee"
+                                                               asp-route-id="@item.Id">
+                                                                <button type="button" class="btn btn-primary">Evet</button>
+                                                            </a>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
 
-                                        @* Fire Employee modal *@
-                                        <div class="modal fade" id="fireEmployeeModal_@item.Id" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                            <div class="modal-dialog">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h5 class="modal-title" id="exampleModalLabel">Personel İşten Çıkarma</h5>
-                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-                                                        </button>
-                                                    </div>
-                                                    <div class="modal-body">
-                                                        Personeli işten çıkarmak istediğinizden emin misiniz?
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>
-                                                        <a asp-action="FireEmployee"
-                                                           asp-controller="Employee"
-                                                           asp-route-id="@item.Id">
-                                                            <button type="button" class="btn btn-warning">Evet</button>
-                                                        </a>
+                                            @* Fire Employee modal *@
+                                            <div class="modal fade" id="fireEmployeeModal_@item.Id" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title" id="exampleModalLabel">Personel İşten Çıkarma</h5>
+                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                                                            </button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            Personeli işten çıkarmak istediğinizden emin misiniz?
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>
+                                                            <a asp-action="FireEmployee"
+                                                               asp-controller="Employee"
+                                                               asp-route-id="@item.Id">
+                                                                <button type="button" class="btn btn-warning">Evet</button>
+                                                            </a>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    </td>
+                                        </td>
+                                    }
                                 </tr>
                             }
                         }

@@ -34,7 +34,7 @@ namespace humanResourceProject.Presentation.Controllers
         {
             Guid id = Guid.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value);
 
-            if (User.IsInRole("CompanyManager")) // Şirket Yöneticisi ise tüm personelleri getirir
+            if (User.IsInRole("CompanyManager") || User.IsInRole("Personel")) // Şirket Yöneticisi veya personel ise şirketindeki personelleri getirir
             {
                 Guid companyId = Guid.Parse(User.Claims.FirstOrDefault(x => x.Type == "CompanyId").Value);
                 var json = JsonConvert.SerializeObject(companyId);
