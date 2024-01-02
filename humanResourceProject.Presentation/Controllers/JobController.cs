@@ -15,7 +15,7 @@ namespace humanResourceProject.Presentation.Controllers
         {
             _httpClient = new HttpClient();
             //_httpClient.BaseAddress = new Uri("https://monitoreaseapi.azurewebsites.net"); // Azure
-            _httpClient.BaseAddress = new Uri("https://localhost:7255/");
+            _httpClient.BaseAddress = new Uri("https://localhost:7255/"); // Local
         }
         public async Task<IActionResult> Jobs()
         {

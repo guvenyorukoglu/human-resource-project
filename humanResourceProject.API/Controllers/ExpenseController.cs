@@ -121,7 +121,7 @@ namespace humanResourceProject.API.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> UpdateExpense([FromBody] UpdateExpenseDTO model)
+        public async Task<IActionResult> UpdateExpense([FromForm] UpdateExpenseDTO model)
         {
             return Ok(await _expenseWriteService.UpdateExpense(model));
         }

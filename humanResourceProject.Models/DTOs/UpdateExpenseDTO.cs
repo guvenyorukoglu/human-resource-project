@@ -35,6 +35,6 @@ namespace humanResourceProject.Models.DTOs
         public IFormFile? UploadPath { get; set; }
         public DateTime CreateDate { get; set; }
         public string ExpenseNo { get; set; }
-        public string RejectReason { get; set; }
+        public string? RejectReason { get; set; }
     }
 }

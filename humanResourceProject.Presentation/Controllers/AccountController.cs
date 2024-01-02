@@ -41,7 +41,7 @@ namespace humanResourceProject.Presentation.Controllers
             userRegisterDTO.CompanyId = companyId;
             userRegisterDTO.JobId = Guid.Empty;
             userRegisterDTO.DepartmentId = Guid.Empty;
-            
+
             return View(userRegisterDTO);
         }
 
@@ -259,8 +259,15 @@ namespace humanResourceProject.Presentation.Controllers
         [HttpGet]
         [AllowAnonymous]
         //[ValidateAntiForgeryToken]
-        public IActionResult ResetPassword(string id, string token)
+        public async Task<IActionResult> ResetPassword(string id, string token)
         {
+            if (User.Identity.IsAuthenticated)
+            {
+                await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+                // Redirect to the ResetPassword action after successful logout
+                return RedirectToAction("ResetPassword", new { id = id, token = token });
+            }
+
             string tokenFromQueryString = Request.Query["token"];
             string idFromQueryString = Request.Query["id"];
             return token == null ? View("Error") : View(new ResetPasswordDTO() { Id = idFromQueryString, Token = tokenFromQueryString });
@@ -295,7 +302,7 @@ namespace humanResourceProject.Presentation.Controllers
         [HttpPost]
         public async Task<IActionResult> UpdateProfileImage(UpdateProfileImageDTO model)
         {
-            model.Id =  Guid.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value);
+            model.Id = Guid.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value);
             using var multipartContent = new MultipartFormDataContent
                 {
                     { new StringContent(model.Id.ToString(), Encoding.UTF8, MediaTypeNames.Text.Plain), "Id" }
@@ -321,7 +328,7 @@ namespace humanResourceProject.Presentation.Controllers
 
                 return Json(new { imageUrl });
             }
-                return RedirectToAction("Home", "Employee");
+            return RedirectToAction("Home", "Employee");
         }
     }
 }
