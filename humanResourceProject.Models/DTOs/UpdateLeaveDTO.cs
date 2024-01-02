@@ -29,6 +29,7 @@ namespace humanResourceProject.Models.DTOs
         [StringLength(500, ErrorMessage = "Açıklama en fazla 500 en az 5 karakter olmalıdır.", MinimumLength = 5)]
         public string Explanation { get; set; }
         public string LeaveNo { get; set; }
+        public string RejectReason { get; set; }
 
     }
 }

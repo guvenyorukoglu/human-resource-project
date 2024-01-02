@@ -180,8 +180,8 @@ namespace humanResourceProject.Presentation.Controllers
         }
 
         [Authorize(Roles = "Manager,CompanyManager")]
-        [HttpGet]
-        public async Task<IActionResult> RejectLeave(Guid id)
+        [HttpPost]
+        public async Task<IActionResult> RejectLeave(Guid id, string rejectReason)
         {
             var response = await _httpClient.GetAsync($"api/Leave/GetUpdateLeaveDTO/{id}");
 
@@ -191,6 +191,7 @@ namespace humanResourceProject.Presentation.Controllers
             var content = await response.Content.ReadAsStringAsync();
             var model = JsonConvert.DeserializeObject<UpdateLeaveDTO>(content);
             model.LeaveStatus = RequestStatus.Rejected;
+            model.RejectReason = rejectReason;
 
             var json = JsonConvert.SerializeObject(model);
             var contentDTO = new StringContent(json, Encoding.UTF8, "application/json");
