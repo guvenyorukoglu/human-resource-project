@@ -61,6 +61,8 @@ namespace humanResourceProject.Application.Services.Concrete.ExpenseServices
 
             _expenseWriteRepository.DetachEntity(updateExpense);
 
+            model = await _imageService.UploadExpenseImageToAzure(model);
+
             updateExpense = _mapper.Map<Expense>(model);
 
             updateExpense.Status = Domain.Enum.Status.Modified;

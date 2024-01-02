@@ -21,13 +21,7 @@ builder.Services.AddControllers();
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
     //options.UseSqlServer(builder.Configuration.GetConnectionString("MonitorEase:SqlDb"));   //Azure
-
-
-
-    options.UseSqlServer(builder.Configuration.GetConnectionString("TolgaSQLConnection")); //Local
-
-
-
+    options.UseSqlServer(builder.Configuration.GetConnectionString("GuvenSQLConnection")); //Local
 
 });
 

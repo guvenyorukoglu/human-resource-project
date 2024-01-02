@@ -169,10 +169,35 @@ namespace humanResourceProject.Presentation.Controllers
             if (!ModelState.IsValid)
                 return View(model);
 
-            var json = JsonConvert.SerializeObject(model);
-            var content = new StringContent(json, Encoding.UTF8, "application/json");
+            var multipartContent = new MultipartFormDataContent();
 
-            var response = await _httpClient.PutAsync($"api/Expense", content);
+            var properties = typeof(UpdateExpenseDTO).GetProperties();
+
+            foreach (var property in properties)
+            {
+                var value = property.GetValue(model)?.ToString() ?? string.Empty;
+                var stringContent = new StringContent(value, Encoding.UTF8, MediaTypeNames.Text.Plain);
+                multipartContent.Add(stringContent, property.Name);
+            }
+
+            if (model.UploadPath != null && model.UploadPath.Length > 0)
+            {
+                string fileExtension = Path.GetExtension(model.UploadPath.FileName).ToLower();
+
+                if (fileExtension != ".png" && fileExtension != ".jpg" && fileExtension != ".jpeg")
+                {
+                    ModelState.AddModelError(string.Empty, "Yüklediğiniz profil fotoğrafının uzantısı '.png', '.jpg' veya '.jpeg' olmalıdır.");
+                    return View(model);
+                }
+
+                var imageContent = new StreamContent(model.UploadPath.OpenReadStream());
+                multipartContent.Add(imageContent, "UploadPath", model.UploadPath.FileName);
+            }
+
+            //var json = JsonConvert.SerializeObject(model);
+            //var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            var response = await _httpClient.PutAsync($"api/Expense", multipartContent);
 
             if (response.IsSuccessStatusCode)
                 return RedirectToAction(nameof(MyExpenses));
