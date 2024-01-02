@@ -37,11 +37,12 @@
                         </ul>
                     </li>
                 }
+                <li>
+                    <a asp-action="Employees" asp-controller="Employee"><i class="fa fa-users"></i>Personeller</a>
+                </li>
                 @if (User.IsInRole("CompanyManager") || User.IsInRole("Manager"))
                 {
-                    <li>
-                        <a asp-action="Employees" asp-controller="Employee"><i class="fa fa-users"></i>Personeller</a>
-                    </li>
+
                     <li class="parent">
                         <a href="#"><i class="fa-solid fa-person-circle-exclamation"></i>Personel Talepleri</a>
                         <ul class="sub-menu">
@@ -75,7 +76,7 @@
                 <li>
                     <a href="#"><i class="fa fa-envelope"></i>E-posta</a>
                 </li>
-                
+
             </ul>
         </div>
     </div>
