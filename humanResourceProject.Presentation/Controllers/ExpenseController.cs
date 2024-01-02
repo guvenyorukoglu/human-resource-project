@@ -210,8 +210,8 @@ namespace humanResourceProject.Presentation.Controllers
         }
 
         [Authorize(Roles = "Manager,CompanyManager")]
-        [HttpGet]
-        public async Task<IActionResult> RejectExpense(Guid id)
+        [HttpPost]
+        public async Task<IActionResult> RejectExpense(Guid id, string rejectReason)
         {
             var response = await _httpClient.GetAsync($"api/Expense/GetUpdateExpenseDTO/{id}");
 
@@ -221,6 +221,7 @@ namespace humanResourceProject.Presentation.Controllers
             var content = await response.Content.ReadAsStringAsync();
             var model = JsonConvert.DeserializeObject<UpdateExpenseDTO>(content);
             model.ExpenseStatus = RequestStatus.Rejected;
+            model.RejectReason = rejectReason;
 
             var json = JsonConvert.SerializeObject(model);
             var contentDTO = new StringContent(json, Encoding.UTF8, "application/json");

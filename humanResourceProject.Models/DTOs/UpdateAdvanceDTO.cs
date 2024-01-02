@@ -30,5 +30,6 @@ namespace humanResourceProject.Models.DTOs
         public Currency Currency { get; set; }
         public DateTime CreateDate { get; set; }
         public string AdvanceNo { get; set; }
+        public string? RejectReason { get; set; }
     }
 }

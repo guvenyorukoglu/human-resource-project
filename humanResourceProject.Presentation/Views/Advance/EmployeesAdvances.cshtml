@@ -6,7 +6,7 @@
 }
 
 <head>
- 
+
 </head>
 <body>
     <div class="row">
@@ -108,15 +108,17 @@
                                                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                             </div>
                                                             <div class="modal-body">
-                                                                Avans talebini reddetmek istediğinize emin misiniz?
+                                                                <div class="form-group mb-3">Avans talebini reddetmek istediğinize emin iseniz sebebini yazmanız gerekmektedir.</div>
+                                                                <div class="form-group mb-3">
+                                                                    <label class="control-label">Reddetme Sebebi</label>
+                                                                    <textarea id="rejectReason" class="form-control mb-3" rows="8" required></textarea>
+                                                                    <span id="rejectValidation" class="text-danger"></span>
+                                                                    <input type="hidden" value="@item.Id" id="advanceId" />
+                                                                </div>
                                                             </div>
                                                             <div class="modal-footer">
                                                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>
-                                                                <a asp-action="RejectAdvance"
-                                                                   asp-controller="Advance"
-                                                                   asp-route-id="@item.Id">
-                                                                    <button type="button" class="btn btn-danger">Reddet</button>
-                                                                </a>
+                                                                <button id="rejectButton" type="button" class="btn btn-danger">Reddet</button>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -145,4 +147,40 @@
             </div>
         </div>
     </div>
+
+    <script>
+        $(document).ready(function () {
+            $('#rejectButton').on('click', function () {
+                var rejectReason = $('#rejectReason').val();
+                var advanceId = $('#advanceId').val();
+
+                // Sebebi boş bırakırsa hata mesajı ver
+                if (rejectReason.trim() === '') {
+                    $('#rejectValidation').text('Lütfen reddetme sebebinizi giriniz!');
+                    return; // Return et ki AJAX requesti yapmasın
+                } else {
+                    $('#rejectValidation').text(''); // Önceki hata mesajını temizle
+                }
+
+                // AJAX requesti yap
+                $.ajax({
+                    type: "POST",
+                    url: "/Advance/RejectAdvance",
+                    data: { id: advanceId, rejectReason: rejectReason },
+                    success: function (response) {
+                        // Handle success response as needed
+                        console.log("Request rejected successfully.");
+                        $('#rejectAdvanceModal').modal('hide');
+                        window.location.reload(); // Sayfayı yenile
+                    },
+                    error: function (error) {
+                        // Handle errors if any
+                        console.error("Error rejecting request:", error);
+                        // Optionally, display an error message or take corrective action
+                    }
+                });
+            });
+        });
+    </script>
+
 </body>

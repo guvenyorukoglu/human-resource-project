@@ -18,13 +18,15 @@ namespace humanResourceProject.API.Controllers
         private readonly IExpenseWriteService _expenseWriteService;
         private readonly IMailService _mailService;
         private readonly IAppUserReadService _appUserReadService;
+        private readonly IConfiguration _configuration;
 
-        public ExpenseController(IExpenseReadService expenseReadService, IExpenseWriteService expenseWriteService, IMailService mailService, IAppUserReadService appUserReadService)
+        public ExpenseController(IExpenseReadService expenseReadService, IExpenseWriteService expenseWriteService, IMailService mailService, IAppUserReadService appUserReadService, IConfiguration configuration)
         {
             _expenseReadService = expenseReadService;
             _expenseWriteService = expenseWriteService;
             _mailService = mailService;
             _appUserReadService = appUserReadService;
+            _configuration = configuration;
         }
 
         [HttpGet]
@@ -68,7 +70,7 @@ namespace humanResourceProject.API.Controllers
             {
                 model.ExpenseStatus = Domain.Enum.RequestStatus.Rejected;
                 string subject = "Masraf Reddi!";
-                string body = $"<p>Sayın {user.FirstName} {user.LastName},</p><p>{expense.CreateDate.ToShortDateString()} tarihli {expense.AmountOfExpense} {expense.Currency.GetDisplayName()} harcama talebiniz Reddedilmiştir.</p><br><hr><br><h3>Team Monitorease</h3>";
+                string body = $"<p>Sayın {user.FirstName} {user.LastName},</p><p>{expense.CreateDate.ToShortDateString()} tarihli {expense.AmountOfExpense} {expense.Currency.GetDisplayName()} harcama talebiniz reddedilmiştir.</p><p>Yöneticinizin reddetme sebebi:</p><p>{model.RejectReason}</p><br><hr><br><h3>Team Monitorease</h3>";
                 await _mailService.SendEmailAsync(user, recipientEmail, mailToName, subject, body);
                 //_mailService.SendApproveMail(user, action, $"Sayın {user.FirstName} {user.LastName} Avansın reddedildi");
             }
@@ -113,7 +115,7 @@ namespace humanResourceProject.API.Controllers
             string mailToName = $"{manager.FirstName} {manager.LastName}";
             string action = "";
             string subject = "Masraf Talebi!";
-            string body = $"<p>Sayın {manager.FirstName} {manager.LastName},</p><p>{employee.FirstName} {employee.LastName} tarafından {DateTime.Now.ToShortDateString()} tarihli {model.AmountOfExpense} {model.Currency.GetDisplayName()} masraf talebi yapılmıştır.</p><p>Uygulama üzerinden onaylama ya da reddetme işlemini yapabilirsiniz.</p><p>İyi çalışmalar dileriz.</p><br><hr><br><h3>Team Monitorease</h3>";
+            string body = $"<p>Sayın {manager.FirstName} {manager.LastName},</p><p>{employee.FirstName} {employee.LastName} tarafından {DateTime.Now.ToShortDateString()} tarihli {model.AmountOfExpense} {model.Currency.GetDisplayName()} masraf talebi yapılmıştır.</p><p>Uygulama üzerinden onaylama ya da reddetme işlemini yapabilirsiniz.</p><p>{_configuration["HomePage"]}</p><p>İyi çalışmalar dileriz.</p><br><hr><br><h3>Team Monitorease</h3>";
             await _mailService.SendEmailAsync(manager, recipientEmail, mailToName, subject, body);
             return Ok(result);
         }

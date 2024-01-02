@@ -4,7 +4,6 @@ using humanResourceProject.Application.Services.Abstract.IMailServices;
 using humanResourceProject.Domain.Entities.Concrete;
 using humanResourceProject.Models.DTOs;
 using Microsoft.AspNetCore.Mvc;
-using System.Runtime.InteropServices;
 
 namespace humanResourceProject.API.Controllers
 {
@@ -16,13 +15,15 @@ namespace humanResourceProject.API.Controllers
         private readonly ILeaveWriteService _leaveWriteService;
         private readonly IAppUserReadService _appUserReadService;
         private readonly IMailService _mailService;
+        private readonly IConfiguration _configuration;
 
-        public LeaveController(ILeaveReadService leaveReadService, ILeaveWriteService leaveWriteService, IAppUserReadService appUserReadService, IMailService mailService)
+        public LeaveController(ILeaveReadService leaveReadService, ILeaveWriteService leaveWriteService, IAppUserReadService appUserReadService, IMailService mailService, IConfiguration configuration)
         {
             _leaveReadService = leaveReadService;
             _leaveWriteService = leaveWriteService;
             _appUserReadService = appUserReadService;
             _mailService = mailService;
+            _configuration = configuration;
         }
 
         [HttpGet]
@@ -32,7 +33,7 @@ namespace humanResourceProject.API.Controllers
             return Ok(await _leaveReadService.GetAllLeaves());
         }
 
-      
+
 
         [HttpPut]
         [Route("UpdateStatus")]
@@ -63,7 +64,7 @@ namespace humanResourceProject.API.Controllers
             {
                 model.LeaveStatus = Domain.Enum.RequestStatus.Rejected;
                 string subject = "İzin Reddi!";
-                string body = $"<p>Sayın {user.FirstName} {user.LastName},</p><p>{user.CreateDate.ToShortDateString()} tarihinde oluşturduğunuz izin talebiniz; yöneticiniz {manager.FirstName} {manager.LastName} tarafından reddedildi.</p><p>İyi çalışmalar dileriz.</p><br><hr><br><h3>Team Monitorease</h3>";
+                string body = $"<p>Sayın {user.FirstName} {user.LastName},</p><p>{user.CreateDate.ToShortDateString()} tarihinde oluşturduğunuz izin talebiniz; yöneticiniz {manager.FirstName} {manager.LastName} tarafından reddedildi.</p><p>Yöneticinizin reddetme sebebi:</p><p>{model.RejectReason}</p><p>İyi çalışmalar dileriz.</p><br><hr><br><h3>Team Monitorease</h3>";
                 await _mailService.SendEmailAsync(user, recipientEmail, mailToName, subject, body);
                 //_mailService.SendApproveMail(user, action, $"Sayın {user.FirstName} {user.LastName} İznin maalesef reddedildi");
             }
@@ -108,7 +109,7 @@ namespace humanResourceProject.API.Controllers
             string mailToName = $"{manager.FirstName} {manager.LastName}";
             string action = "";
             string subject = "İzin Talebi!";
-            string body = $"<p>Sayın {manager.FirstName} {manager.LastName},</p><p>{employee.FirstName} {employee.LastName} tarafından {DateTime.Now.ToShortDateString()} tarihinde, {model.StartDateOfLeave.ToShortDateString()} ve {model.EndDateOfLeave.ToShortDateString()} tarihleri arasında {model.DaysOfLeave} günlük izin talebi yapılmıştır.</p><p>Uygulama üzerinden onaylama ya da reddetme işlemini yapabilirsiniz.</p><p>İyi çalışmalar dileriz.</p><br><hr><br><h3>Team Monitorease</h3>";
+            string body = $"<p>Sayın {manager.FirstName} {manager.LastName},</p><p>{employee.FirstName} {employee.LastName} tarafından {DateTime.Now.ToShortDateString()} tarihinde, {model.StartDateOfLeave.ToShortDateString()} ve {model.EndDateOfLeave.ToShortDateString()} tarihleri arasında {model.DaysOfLeave} günlük izin talebi yapılmıştır.</p><p>Uygulama üzerinden onaylama ya da reddetme işlemini yapabilirsiniz.</p><p>{_configuration["HomePage"]}</p><p>İyi çalışmalar dileriz.</p><br><hr><br><h3>Team Monitorease</h3>";
             await _mailService.SendEmailAsync(manager, recipientEmail, mailToName, subject, body);
             return Ok(result);
         }
