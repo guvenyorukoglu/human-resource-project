@@ -5,10 +5,6 @@
     Layout = "~/Views/Shared/_HRLayout.cshtml";
 }
 
-<head>
-
-
-</head>
 <body>
     <div class="row">
         @Html.Partial("_PanelPartial")
@@ -18,11 +14,65 @@
             <div class="pagination-container">
 
                 <script>
+                    var columnsToExport = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
                     $(document).ready(function () {
                         $('#leaverequests').DataTable({
                             "language": {
-                                "url": "//cdn.datatables.net/plug-ins/1.10.25/i18n/Turkish.json"
+                                "buttons": {
+                                    "copyTitle": "Panoya Kopyalandı",
+                                    "copySuccess": {
+                                        "_": "%d satır kopyalandı",
+                                        "1": "1 satır kopyalandı"
+                                    }
+                                },
+                                "url": "https://cdn.datatables.net/plug-ins/1.10.25/i18n/Turkish.json"
                             },
+                            dom: 'lBfrtip',
+                            "buttons": [
+                                'spacer',
+                                {
+                                    extend: 'copy',
+                                    text: 'Kopyala',
+
+                                },
+                                {
+                                    extend: 'print',
+                                    text: 'Yazdır',
+                                    exportOptions: {
+                                        columns: columnsToExport
+                                    }
+
+                                },
+                                {
+                                    extend: 'spacer',
+                                    style: 'bar',
+                                    text: 'Dışarı Aktar:'
+                                },
+
+                                {
+                                    extend: 'csv',
+                                    text: 'CSV',
+                                    exportOptions: {
+                                        columns: columnsToExport
+                                    }
+                                },
+                                {
+                                    extend: 'excel',
+                                    text: 'Excel',
+                                    exportOptions: {
+                                        columns: columnsToExport
+                                    }
+                                },
+                                {
+                                    extend: 'pdf',
+                                    text: 'Pdf',
+                                    orientation: 'landscape',
+                                    exportOptions: {
+                                        columns: columnsToExport
+                                    }
+                                },
+
+                            ],
                             "order": [
                                 [2, 'desc']
                             ],
@@ -121,12 +171,12 @@
                                                     </div>
                                                 </div>
                                                 <a>
-                                                <button type="button" class="btn btn-secondary btn-sm d-inline-flex bg-primary gap-1 align-items-center" data-bs-toggle="modal" data-bs-target="#approveLeaveModal">
+                                                    <button type="button" class="btn btn-secondary btn-sm d-inline-flex bg-primary gap-1 align-items-center" data-bs-toggle="modal" data-bs-target="#approveLeaveModal">
                                                         <i class="fa fa-check"></i><span>Onayla</span>
                                                     </button>
                                                 </a>
                                                 <a>
-                                                <button class="btn btn-danger btn-sm d-inline-flex gap-1 align-items-center" data-bs-toggle="modal" data-bs-target="#rejectLeaveModal">
+                                                    <button class="btn btn-danger btn-sm d-inline-flex gap-1 align-items-center" data-bs-toggle="modal" data-bs-target="#rejectLeaveModal">
                                                         <i class="fa fa-x"></i><span>Reddet</span>
                                                     </button>
                                                 </a>
