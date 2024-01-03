@@ -72,7 +72,7 @@
                             </button>
                             <ul class="dropdown-menu dropdown-menu-center">
                                 <li>
-                                    <a class="dropdown-item" asp-action="ProfileEmployee" asp-controller="Employee">Profil</a>
+                                    <a class="dropdown-item" asp-action="ProfileEmployee" asp-controller="Employee" asp-route-id="@User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value">Profil</a>
                                 </li>
                                 <li><a class="dropdown-item">Ayarlar</a></li>
                                 <li><hr class="dropdown-divider"></li>

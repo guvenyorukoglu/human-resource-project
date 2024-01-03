@@ -29,5 +29,14 @@ namespace humanResourceProject.Models.DTOs
         [PhoneValidations(ErrorMessage = "Lütfen geçerli bir telefon numarası giriniz!")]
         public string PhoneNumber { get; set; }
         public DateTime UpdateDate { get; set; } = DateTime.Now;
+        public string FullName { get; set; }
+        public string? Email { get; set; }
+        public string? JobTitle { get; set; }
+        public string IdentificationNumber { get; set; }
+        public DateTime Birthdate { get; set; }
+        public Gender Gender { get; set; }
+        public string? ManagerName { get; set; }
+        public string? ManagerEmail { get; set; }
+        public string? ManagerPhoneNumber { get; set; }
     }
 }

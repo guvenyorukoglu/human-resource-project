@@ -409,23 +409,23 @@ namespace humanResourceProject.Presentation.Controllers
             return View("Error");
         }
 
-        [HttpGet]
-        public async Task<IActionResult> EditProfile(Guid id)
-        {
-            var response = await _httpClient.GetAsync($"api/AppUser/GetUpdateProfileDTO/{id}");
+        //[HttpGet]
+        //public async Task<IActionResult> EditProfile(Guid id)
+        //{
+        //    var response = await _httpClient.GetAsync($"api/AppUser/GetUpdateProfileDTO/{id}");
 
-            if (response.IsSuccessStatusCode)
-            {
-                var content = await response.Content.ReadAsStringAsync();
-                var model = JsonConvert.DeserializeObject<UpdateProfileDTO>(content);
+        //    if (response.IsSuccessStatusCode)
+        //    {
+        //        var content = await response.Content.ReadAsStringAsync();
+        //        var model = JsonConvert.DeserializeObject<UpdateProfileDTO>(content);
 
-                return View(model);
-            }
-            return View("Error");
-        }
+        //        return View(model);
+        //    }
+        //    return View("Error");
+        //}
 
         [HttpPost]
-        public async Task<IActionResult> EditProfile(UpdateProfileDTO model)
+        public async Task<IActionResult> ProfileEmployee(UpdateProfileDTO model)
         {
             if (!ModelState.IsValid)
             {
@@ -440,7 +440,7 @@ namespace humanResourceProject.Presentation.Controllers
 
             if (response.IsSuccessStatusCode)
             {
-                return RedirectToAction("Home");
+                return RedirectToAction("ProfileEmployee","Employee");
             }
 
             ModelState.AddModelError(response.StatusCode.ToString(), "Bir hata oluştu.");
@@ -448,7 +448,7 @@ namespace humanResourceProject.Presentation.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> ProfileEmployee()
+        public async Task<IActionResult> ProfileEmployee(Guid Id)
         {
             if (User.IsInRole("Personel") || User.IsInRole("Manager"))
             {
@@ -457,7 +457,7 @@ namespace humanResourceProject.Presentation.Controllers
                 if (response.IsSuccessStatusCode)
                 {
                     var content = await response.Content.ReadAsStringAsync();
-                    var model = JsonConvert.DeserializeObject<ProfileEmployeeVM>(content);
+                    var model = JsonConvert.DeserializeObject<UpdateProfileDTO>(content);
                     return View(model);
                 }
                 return View("Error");
@@ -469,7 +469,7 @@ namespace humanResourceProject.Presentation.Controllers
                 if (response.IsSuccessStatusCode)
                 {
                     var content = await response.Content.ReadAsStringAsync();
-                    var model = JsonConvert.DeserializeObject<ProfileEmployeeVM>(content);
+                    var model = JsonConvert.DeserializeObject<UpdateProfileDTO>(content);
                     return View(model);
                 }
                 return View("Error");
