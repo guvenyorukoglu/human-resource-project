@@ -88,13 +88,13 @@
                     <thead>
                         <tr>
                             <th style="width: 8%">Avans No</th>
-                            <th style="width: 8%">Avans Tipi</th>
-                            <th style="width: 7%">Talep Tarihi</th>
-                            <th style="width: 10%">Avans Miktarı</th>
-                            <th style="width: 5%">Para Birimi</th>
                             <th style="width: 7%">Ad</th>
                             <th style="width: 7%">Soyad</th>
+                            <th style="width: 8%">Avans Tipi</th>
+                            <th style="width: 7%">Talep Tarihi</th>
                             <th style="width: 7%">Son Tarih</th>
+                            <th style="width: 10%">Avans Miktarı</th>
+                            <th style="width: 5%">Para Birimi</th>
                             <th style="width: 15%">Açıklama</th>
                             <th style="width: 8%">Statü</th>
                             <th style="width: 18%">İşlemler</th>
@@ -115,13 +115,13 @@
                                     var displayNameAdvanceStatus = displayAdvanceStatus?.GetName() ?? item.AdvanceStatus.ToString();
                                     <tr>
                                         <td>@item.AdvanceNo</td>
-                                        <td>@displayNameAdvanceType</td>
-                                        <td data-order="@item.CreateDate.ToString("yyyy-MM-dd")">@item.CreateDate.ToString("dd.MM.yyyy")</td>
-                                        <td>@item.AmountOfAdvance</td>
-                                        <td>@item.Currency</td>
                                         <td>@item.FirstName</td>
                                         <td>@item.LastName</td>
+                                        <td>@displayNameAdvanceType</td>
+                                        <td data-order="@item.CreateDate.ToString("yyyy-MM-dd")">@item.CreateDate.ToString("dd.MM.yyyy")</td>
                                         <td data-order="@item.ExpiryDate.ToString("yyyy-MM-dd")">@item.ExpiryDate.ToString("dd.MM.yyyy")</td>
+                                        <td>@item.AmountOfAdvance</td>
+                                        <td>@item.Currency</td>
                                         <td>@item.Explanation</td>
                                         <td>@displayNameAdvanceStatus</td>
                                         <td>

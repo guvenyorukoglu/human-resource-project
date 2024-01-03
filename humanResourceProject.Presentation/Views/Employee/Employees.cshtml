@@ -22,12 +22,6 @@
                         <button class="custom-button custom-button--create-entity"><i class="fa-solid fa-user-plus me-1"></i>Personel Ekle</button>
                     </a>
                 }
-                if (User.IsInRole("Manager"))
-                {
-                    <a asp-action="CreatePersonel" asp-controller="Employee">
-                        <button class="custom-button custom-button--create-entity"><i class="fa-solid fa-user-plus me-1"></i>Personel Ekle</button>
-                    </a>
-                }
 
                 <button id="changeView" onclick="toggleView()()" class="float-end custom-button custom-button--create-entity"><i class="fa-solid fa-address-card me-1"></i>Kart Görünümü</button>
 

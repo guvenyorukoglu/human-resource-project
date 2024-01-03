@@ -96,9 +96,9 @@
                             <th style="width: 8%">Harcama No</th>
                             <th style="width: 8%">Harcama Tipi</th>
                             <th style="width: 7%" data-order="desc">Talep Tarihi</th>
+                            <th style="width: 7%">Harcama Tarihi</th>
                             <th style="width: 10%">Harcama Miktarı</th>
                             <th style="width: 5%">Para Birimi</th>
-                            <th style="width: 7%">Harcama Tarihi</th>
                             <th style="width: 15%">Açıklama</th>
                             <th style="width: 8%">Yönetici</th>
                             <th style="width: 10%">Statü</th>
@@ -120,9 +120,9 @@
                                     <td>@item.ExpenseNo</td>
                                     <td>@displayNameExpenseType</td>
                                     <td data-order="@item.CreateDate.ToString("yyyy-MM-dd")">@item.CreateDate.ToString("dd.MM.yyyy")</td>
+                                    <td data-order="@item.DateOfExpense.ToString("yyyy-MM-dd")">@item.DateOfExpense.ToString("dd.MM.yyyy")</td>
                                     <td>@item.AmountOfExpense</td>
                                     <td>@item.Currency</td>
-                                    <td data-order="@item.DateOfExpense.ToString("yyyy-MM-dd")">@item.DateOfExpense.ToString("dd.MM.yyyy")</td>
                                     <td>@item.Explanation</td>
                                     <td>@item.ManagerFullName</td>
                                     <td>@displayNameExpenseStatus</td>
