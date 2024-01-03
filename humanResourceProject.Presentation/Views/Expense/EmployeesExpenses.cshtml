@@ -89,13 +89,13 @@
                     <thead>
                         <tr>
                             <th style="width: 7.5%">Harcama No</th>
-                            <th style="width: 7%">Harcama Tipi</th>
-                            <th style="width: 7%" data-order="desc">Talep Tarihi</th>
-                            <th style="width: 7.5%">Harcama Miktarı</th>
-                            <th style="width: 4%">Para Birimi</th>
                             <th style="width: 7%">Ad</th>
                             <th style="width: 7%">Soyad</th>
+                            <th style="width: 7%">Harcama Tipi</th>
+                            <th style="width: 7%" data-order="desc">Talep Tarihi</th>
                             <th style="width: 7%">Harcama Tarihi</th>
+                            <th style="width: 7.5%">Harcama Miktarı</th>
+                            <th style="width: 4%">Para Birimi</th>
                             <th style="width: 13%">Açıklama</th>
                             <th style="width: 8%">Statü</th>
                             <th style="width: 3%">Fiş</th>
@@ -117,13 +117,13 @@
                                     var displayNameExpenseStatus = displayExpenseStatus?.GetName() ?? item.ExpenseStatus.ToString();
                                     <tr>
                                         <td>@item.ExpenseNo</td>
-                                        <td>@displayNameExpenseType</td>
-                                        <td data-order="@item.CreateDate.ToString("yyyy-MM-dd")">@item.CreateDate.ToString("dd.MM.yyyy")</td>
-                                        <td>@item.AmountOfExpense</td>
-                                        <td>@item.Currency</td>
                                         <td>@item.FirstName</td>
                                         <td>@item.LastName</td>
+                                        <td>@displayNameExpenseType</td>
+                                        <td data-order="@item.CreateDate.ToString("yyyy-MM-dd")">@item.CreateDate.ToString("dd.MM.yyyy")</td>
                                         <td data-order="@item.DateOfExpense.ToString("yyyy-MM-dd")">@item.DateOfExpense.ToString("dd.MM.yyyy")</td>
+                                        <td>@item.AmountOfExpense</td>
+                                        <td>@item.Currency</td>
                                         <td>@item.Explanation</td>
                                         <td>@displayNameExpenseStatus</td>
                                         <td>
