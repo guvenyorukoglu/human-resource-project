@@ -135,7 +135,7 @@
                                     <td><span id="card-view-header">E-posta:&nbsp</span>@item.Email</td>
                                     <td class="card-gender"><span id="card-view-header">Cinsiyet:&nbsp</span>@displayName</td>
                                     <td><span id="card-view-header" style="font-weight:400;">Meslek:&nbsp</span>@item.Title</td>
-                                    @if (User.IsInRole("CompanyManager") || User.IsInRole("Manager"))
+                                    @if (User.IsInRole("CompanyManager"))
                                     {
                                         <td>
                                             <a asp-action="EditEmployee"
