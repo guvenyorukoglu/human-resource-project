@@ -1,7 +1,4 @@
-@using System.ComponentModel.DataAnnotations
-@using System.Reflection
-@using humanResourceProject.Domain.Enum
-@model humanResourceProject.Models.DTOs.UpdateProfileDTO
+@model UpdateProfileDTO
 
 @{
     ViewData["Title"] = "ProfileEmployee";
@@ -17,14 +14,15 @@
             <form asp-action="ProfileEmployee">
                 <div class="card shadow p-3 mb-5 bg-body rounded">
                     <div class="card-header d-flex gap-2 justify-content-center">
-                        <h3 class="card-title text-center mb-0">Profil Bilgileri</h3>
-                       @* <a asp-action="ProfileEmployee" asp-controller="Employee" asp-route-id="@User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value" class="d-flex justify-content-center align-items-center text-black fs-6"></a>
-                    </div>*@
+                        <h3 class="card-title text-center mb-0">Profil Bilgilerim</h3>
+                        @* <a asp-action="ProfileEmployee" asp-controller="Employee" asp-route-id="@User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value" class="d-flex justify-content-center align-items-center text-black fs-6"></a>
+                        </div>*@
+                    </div>
                     <div class="card-body">
 
                         <div class="row">
                             <div class="col-md-6">
-                                <div class="form-group">
+                                <div>
                                     <input asp-for="Id" type="hidden" class="form-control" />
                                     <span asp-validation-for="Id" class="text-danger"></span>
                                 </div>
@@ -36,39 +34,40 @@
                                 <div class="form-group">
                                     <input asp-for="Email" type="hidden" class="form-control" />
                                     <span class="form-label">Email</span>
-                                    <span class="form-control" >@Model.Email</span>
+                                    <span class="form-control">@Model.Email</span>
                                 </div>
                                 <div class="form-group">
-                                        <span class="form-label">Telefon Numarası</span>
-                                        @*<span class="form-control">@Model.Address</span>*@
-                                        <input value="@Model.PhoneNumber" asp-for="PhoneNumber" class="form-control" />
+                                    <span class="form-label">Telefon Numarası*</span>
+                                    @*<span class="form-control">@Model.Address</span>*@
+                                    <input value="@Model.PhoneNumber" asp-for="PhoneNumber" class="form-control" />
                                 </div>
-                                <div class="form-group">
-                                    <input asp-for="Birthdate" type="hidden" class="form-control" />
-                                    <span class="form-label">Doğum Tarihi</span>
-                                    <span class="form-control">@Model.Birthdate.ToShortDateString()</span>
-                                </div>
+
                                 <div class="form-group">
                                     <input asp-for="IdentificationNumber" type="hidden" class="form-control" />
-                                    <span class="form-label">TC No</span>
+                                    <span class="form-label">T.C. Kimlik Numarası</span>
                                     <span class="form-control">@Model.IdentificationNumber</span>
                                 </div>
-                                <div class="form-group">
-                                    @{
-                                        var enumTypeGender = typeof(Gender);
-                                        var enumValuesGender = enumTypeGender.GetEnumValues();
-                                        var displayAttributeGender = enumTypeGender.GetMember(Model.Gender.ToString())[0].GetCustomAttribute<DisplayAttribute>();
-                                        var displayNameGender = displayAttributeGender?.GetName() ?? Model.Gender.ToString();
-                                    }
-                                    <span class="form-label">Cinsiyet</span>
-                                    <span class="form-control">@displayNameGender</span>
-                                </div>
+
 
                             </div>
                             <div class="col-md-6">
+                                @if (User.IsInRole("Manager") || User.IsInRole("Personel"))
+                                {
+                                    <div class="form-group">
+                                        <span class="form-label">Pozisyon</span>
+                                        <span class="form-control">@(Model.JobTitle ?? "Atanmamış")</span>
+                                    </div>
+                                }
+                                else if (User.IsInRole("CompanyManager"))
+                                {
+                                    <div class="form-group">
+                                        <span class="form-label">Pozisyon</span>
+                                        <span class="form-control">Şirket Yöneticisi</span>
+                                    </div>
+                                }
 
                                 <div class="form-group">
-                                    <label asp-for="BloodGroup" class="control-label"></label>
+                                    <span class="form-label">Kan Grubu*</span>
                                     <select asp-for="BloodGroup" class="form-control">
                                         @{
                                             var enumType = typeof(BloodGroup);
@@ -92,24 +91,50 @@
                                     </select>
                                     <span asp-validation-for="BloodGroup" class="text-danger"></span>
                                 </div>
-
-
-                               @* <div class="form-group">
+                                <div class="form-group">
                                     @{
-                                        var enumType = typeof(BloodGroup);
-                                        var enumValues = enumType.GetEnumValues();
-                                        var displayAttribute = enumType.GetMember(Model.BloodGroup.ToString())[0].GetCustomAttribute<DisplayAttribute>();
-                                        var displayName = displayAttribute?.GetName() ?? Model.BloodGroup.ToString();
+                                        var enumTypeGender = typeof(Gender);
+                                        var enumValuesGender = enumTypeGender.GetEnumValues();
+                                        var displayAttributeGender = enumTypeGender.GetMember(Model.Gender.ToString())[0].GetCustomAttribute<DisplayAttribute>();
+                                        var displayNameGender = displayAttributeGender?.GetName() ?? Model.Gender.ToString();
                                     }
-                                    <span class="form-label">Kan Grubu</span>
-                                    <span class="form-control">@displayName</span>
+                                    <span class="form-label">Cinsiyet</span>
+                                    <span class="form-control">@displayNameGender</span>
+                                </div>
+                                <div class="form-group">
+                                    <input asp-for="Birthdate" type="hidden" class="form-control" />
+                                    <span class="form-label">Doğum Tarihi</span>
+                                    <span class="form-control">@Model.Birthdate.ToShortDateString()</span>
+                                </div>
+                                @* <div class="form-group">
+                                @{
+                                var enumType = typeof(BloodGroup);
+                                var enumValues = enumType.GetEnumValues();
+                                var displayAttribute = enumType.GetMember(Model.BloodGroup.ToString())[0].GetCustomAttribute<DisplayAttribute>();
+                                var displayName = displayAttribute?.GetName() ?? Model.BloodGroup.ToString();
+                                }
+                                <span class="form-label">Kan Grubu</span>
+                                <span class="form-control">@displayName</span>
                                 </div>*@
-                                @if (User.IsInRole("Manager") || User.IsInRole("Personel"))
-                                {
-                                    <div class="form-group">
-                                        <span class="form-label">Pozisyon</span>
-                                        <span class="form-control">@(Model.JobTitle??"Atanmamış")</span>
-                                    </div>
+
+
+                            </div>
+                            <div class="form-group">
+                                <span class="form-label">Adres*</span>
+                                @*<span class="form-control">@Model.Address</span>*@
+                                <input value="@Model.Address" asp-for="Address" class="form-control" />
+                            </div>
+
+                        </div>
+                        @if (User.IsInRole("Manager") || User.IsInRole("Personel"))
+                        {
+                            <div class="row">
+
+                                <div class="card-header d-flex gap-2 justify-content-center">
+                                    <h3 class="card-title text-center mb-0">Yönetici Bilgilerim</h3>
+                                </div>
+                                <div class="card-body">
+
                                     <div class="form-group">
                                         <span class="form-label">Yönetici Adı</span>
                                         <span class="form-control">@Model.ManagerName</span>
@@ -122,15 +147,12 @@
                                         <span class="form-label">Yönetici Telefon Numarası</span>
                                         <span class="form-control">@Model.ManagerPhoneNumber</span>
                                     </div>
-                                }
-                                <div class="form-group">
-                                    <span class="form-label">Adres</span>
-                                    @*<span class="form-control">@Model.Address</span>*@
-                                    <input value="@Model.Address" asp-for="Address" class="form-control" />
+
                                 </div>
                             </div>
-
-
+                        }
+                        <div class="mb-3">
+                            <label>*Güncellenebilir alan</label>
                         </div>
                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                         <div class="form-group text-center mt-4 d-grid">
@@ -148,7 +170,7 @@
 
 <style>
     body {
-        font-family: Arial, sans-serif;
+        /* font-family: Arial, sans-serif; */
         background-color: #f5f5f5;
     }
 
