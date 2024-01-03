@@ -13,7 +13,7 @@
             @if (Model != null)
             {
                 <a asp-action="CreateExpense" asp-controller="Expense" asp-route-id="@Guid.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value)">
-                    <button class="btn btn-success mb-3">Harcama Ekle</button>
+                    <button class="btn btn-secondary mb-3">Harcama Ekle</button>
                 </a>
             }
 
@@ -179,9 +179,6 @@
                         }
                     </tbody>
                 </table>
-                <div>
-                    <a asp-controller="Employee" asp-action="Home"><button class="btn btn-secondary mt-3">Ana Sayfaya Dön</button></a>
-                </div>
             </div>
         </div>
     </div>

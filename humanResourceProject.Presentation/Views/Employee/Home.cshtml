@@ -107,13 +107,13 @@
 </head>
 <body>
     <div class="row">
-        
+
         @Html.Partial("_PanelPartial")
-  
+
 
         <div class="aside scrollable  col-md-9 container">
             <div class="row text-center">
-                <div class="col-md-3 leave-info card">
+                <div class="col-md-4 leave-info card">
                     <h6>@title</h6>
 
                     <canvas class="mb-3" id="myChart" style="margin:0 auto; width:250px; "></canvas>
@@ -180,7 +180,7 @@
                                     if (activePoints.length > 0) {
                                         var clickedElementIndex = activePoints[0].index;
 
-                                        
+
                                         switch (clickedElementIndex) {
                                             case 0:
                                                 window.location.href = "/Leave/EmployeesLeaves.html";
@@ -216,8 +216,8 @@
 
                     </script>
 
-                   
-                    @if(User.IsInRole("Manager") || User.IsInRole("CompanyManager"))
+
+                    @if (User.IsInRole("Manager") || User.IsInRole("CompanyManager"))
                     {
                         <a asp-action="EmployeesLeaves" asp-controller="Leave" type="button" style="background-color:#FF6384; border: 2px solid black; border-radius: 5px;color:black;" id="numberOfPendingLeaves" class="numberOfPendingLeaves mt-1">
                             Bekleyen İzinler
@@ -246,17 +246,17 @@
                         </a>
                     }
 
-                    
+
 
                     <script>
                         function checkButtonColor(clickedButton) {
                             var buttonColor = window.getComputedStyle(clickedButton).backgroundColor;
 
-                         
+
                             var rgbLeaves = 'rgb(255, 99, 132)';
                             var rgbExpenses = 'rgb(54, 162, 235)';
                             var rgbAdvances = 'rgb(255, 205, 86)';
-                            
+
                             if (buttonColor === rgbLeaves) {
                                 window.location.href = "/Leave/EmployeesLeaves";
                             } else if (buttonColor === rgbExpenses) {
@@ -291,9 +291,9 @@
                 <div class="col-md-4 holiday-info card">
                     <div class="d-flex justify-content-center gap-2">
                         <h6>ŞİRKET BİLGİLERİ</h6>
-                        @if ( User.IsInRole("CompanyManager"))
+                        @if (User.IsInRole("CompanyManager"))
                         {
-                        <a asp-action="UpdateCompany" asp-controller="Company" asp-route-id="@User.Claims.FirstOrDefault(x => x.Type == "CompanyId").Value" class="text-white fs-6"><i class="fa fa-pen"></i></a>
+                            <a asp-action="UpdateCompany" asp-controller="Company" asp-route-id="@User.Claims.FirstOrDefault(x => x.Type == "CompanyId").Value" class="text-white fs-6"><i class="fa fa-pen"></i></a>
                         }
                     </div>
                     <div class="d-flex flex-column gap-2">
@@ -305,201 +305,58 @@
                     </div>
                 </div>
 
-               @* <div class="row text-center">*@
-                    <div class="col-md-3 upcoming-leave-info card">
-                        @if (User.IsInRole("Manager") || User.IsInRole("Personel"))
-                        {
-                            <h6>
-                                <a asp-action="MyLeaves" asp-controller="Leave">İZİNLERİM</a>
-                            </h6>
-                        }
-                        else if (User.IsInRole("CompanyManager"))
-                        {
-                            <h6>
-                                <a asp-action="EmployeesLeaves" asp-controller="Leave">ONAY BEKLEYEN İZİNLER</a>
-                            </h6>
-                        }
+                @* <div class="row text-center">*@
+                <div class="col-md-4 holiday-info card">
+                   <div class="d-flex justify-content-center gap-2">
+                        <h6>RESMİ TATİLLER</h6>
+                    </div>
+                     <table class="table table-striped table-borderless" id="tatilTable">
+                        <thead>
+                            <tr>
+                                <th>Tarih</th>
+                                <th>Tatil Adı</th>
+                            </tr>
+                        </thead>
+                        <tbody>
 
-                        <table class="table table-striped table-borderless">
-                            <thead>
-                                <tr>
-                                    <th style="width: 33%;">İzin No</th>
-                                    <th style="width: 33%;">İzin Gün Sayısı</th>
-                                    <th style="width: 33%;">İstek Tarihi</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @if (Model != null)
-                                {
-                                    int count = 0;
-                                    foreach (var leave in leaves)
-                                    {
-                                        if (count >= 5)
-                                        {
-                                            break;
-                                        }
+                        </tbody>
+                     </table>
+                </div>
 
-                                        if (leave != null)
-                                        {
-                                            <tr>
-                                                <td style="font-size: 16px; text-transform: uppercase;">@leave.LeaveNo</td>
-                                                <td style="font-size: 16px; text-transform: uppercase;">@leave.DaysOfLeave</td>
-                                                <td style="font-size: 16px; text-transform: uppercase;">@leave.CreateDate.ToShortDateString()</td>
-                                            </tr>
-                                            count++;
-                                        }
-                                    }
-                                }
-                            </tbody>
-                        </table>
-                        <hr />
-                        @if (Model != null && Model.AppUser != null)
-                        {
-                            <div class="d-flex gap-2 justify-content-center align-items-center">
-                                <span class="fw-bold">Kazanılan İzin Gün Sayısı:</span>
-                                <span>@Model.AppUser.EarnedLeaveDays</span>
+                <div id="calendarEventModal" class="modal fade" role="dialog">
+                    <div class="modal-dialog modal-md text-center">
+                        <!-- Modal content-->
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal">
+                                    &times;
+                                </button>
+                                <h4 class="modal-title">Etkinlik Oluştur</h4>
                             </div>
-                            <div class="d-flex gap-2 justify-content-center align-items-center">
-                                <span class="fw-bold">Kalan İzin Gün Sayısı:</span>
-                                <span>@Model.AppUser.RemainingLeaveDays</span>
+                            <div class="modal-body">
+                                <form action="" class="form-control">
+                                    <label for="Etkinlik">Etkinlik Adı</label>
+                                    <input type="text" />
+                                    <hr />
+                                    <label for="Etkinlik">Etkinlik Başlangıç Zamanı</label>
+                                    <input type="date" />
+                                    <hr />
+                                    <label for="Etkinlik">Etkinlik Bitiş Zamanı</label>
+                                    <input type="date" />
+                                    <hr />
+                                    <button class="btn btn-primary">Kaydet</button>
+                                </form>
                             </div>
-                        }
-                        else
-                        {
-                            <p>İzin bilgilerine erişilemiyor</p>
-                        }
-                    </div>
-
-                    <div class="col-md-4 upcoming-expense-info card">
-                        @if (User.IsInRole("Manager") || User.IsInRole("Personel"))
-                        {
-                            <h6>
-                                <a asp-action="MyExpenses" asp-controller="Expense">MASRAFLARIM</a>
-                            </h6>
-                        }
-                        else if (User.IsInRole("CompanyManager"))
-                        {
-                            <h6>
-                                <a asp-action="EmployeesExpenses" asp-controller="Expense">ONAY BEKLEYEN MASRAFLAR</a>
-                            </h6>
-                        }
-
-                        <table class="table table-striped table-borderless">
-                            <thead>
-                                <tr>
-                                    <th style="width: 33%;">Masraf No</th>
-                                    <th style="width: 33%;">Miktarı</th>
-                                    <th style="width: 33%;">İstek Tarihi</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @if (Model != null)
-                                {
-                                    int count = 0;
-                                    foreach (var expense in expenses)
-
-                                    {
-                                        if (count >= 5)
-                                        {
-                                            break;
-                                        }
-
-                                        if (expense != null)
-                                        {
-                                            <tr>
-                                                <td style="font-size: 16px;">@expense.ExpenseNo</td>
-                                                <td style="font-size: 16px;">@expense.AmountOfExpense</td>
-                                                <td style="font-size: 16px;">@expense.CreateDate.ToShortDateString()</td>
-                                            </tr>
-                                            count++;
-                                        }
-                                    }
-                                }
-                            </tbody>
-                        </table>
-                    </div>
-
-                    <div class="col-md-4 upcoming-advance-info card shadow-lg">
-                        @if (User.IsInRole("Manager") || User.IsInRole("Personel"))
-                        {
-                            <h6>
-                                <a asp-action="MyAdvances" asp-controller="Advance">AVANSLARIM</a>
-                            </h6>
-                        }
-                        else if (User.IsInRole("CompanyManager"))
-                        {
-                            <h6>
-                                <a asp-action="EmployeesAdvances" asp-controller="Advance">ONAY BEKLEYEN AVANSLAR</a>
-                            </h6>
-                        }
-
-                        <table class="table table-striped table-borderless">
-                            <thead>
-                                <tr>
-                                    <th style="width: 33%;">Avans No</th>
-                                    <th style="width: 33%;">Avans Miktarı</th>
-                                    <th style="width: 33%;">İstek Tarihi</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @if (Model != null)
-                                {
-                                    int count = 0;
-                                    foreach (var advance in advances)
-                                    {
-                                        if (count >= 5)
-                                        {
-                                            break;
-                                        }
-
-                                        if (advance != null)
-                                        {
-                                            <tr>
-                                                <td style="font-size: 16px;">@advance.AdvanceNo</td>
-                                                <td style="font-size: 16px;">@advance.AmountOfAdvance</td>
-                                                <td style="font-size: 16px;">@advance.CreateDate.ToShortDateString()</td>
-                                            </tr>
-                                            count++;
-                                        }
-                                    }
-                                }
-                            </tbody>
-                        </table>
-                    </div>
-                    <div id="calendarEventModal" class="modal fade" role="dialog">
-                        <div class="modal-dialog modal-md text-center">
-                            <!-- Modal content-->
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <button type="button" class="close" data-dismiss="modal">
-                                        &times;
-                                    </button>
-                                    <h4 class="modal-title">Etkinlik Oluştur</h4>
-                                </div>
-                                <div class="modal-body">
-                                    <form action="" class="form-control">
-                                        <label for="Etkinlik">Etkinlik Adı</label>
-                                        <input type="text" />
-                                        <hr />
-                                        <label for="Etkinlik">Etkinlik Başlangıç Zamanı</label>
-                                        <input type="date" />
-                                        <hr />
-                                        <label for="Etkinlik">Etkinlik Bitiş Zamanı</label>
-                                        <input type="date" />
-                                        <hr />
-                                        <button class="btn btn-primary">Kaydet</button>
-                                    </form>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-default" data-dismiss="modal">
-                                        Close
-                                    </button>
-                                </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">
+                                    Close
+                                </button>
                             </div>
                         </div>
                     </div>
                 </div>
-           @* </div>*@
+            </div>
+            @* </div>*@
         </div>
 
 </body>
