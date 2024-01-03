@@ -113,7 +113,7 @@
                             <th style="width: 10%">E-posta</th>
                             <th style="width: 7%">Cinsiyet</th>
                             <th style="width: 18%">Pozisyon</th>
-                            @if (User.IsInRole("CompanyManager") || User.IsInRole("Manager"))
+                            @if (User.IsInRole("CompanyManager"))
                             {
                                 <th style="width: 28%">İşlemler</th>
                             }
