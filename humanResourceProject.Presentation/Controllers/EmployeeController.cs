@@ -32,52 +32,26 @@ namespace humanResourceProject.Presentation.Controllers
 
         public async Task<IActionResult> Employees()
         {
-            Guid id = Guid.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value);
+            //Guid id = Guid.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value);
 
-            if (User.IsInRole("CompanyManager") || User.IsInRole("Personel")) // Şirket Yöneticisi veya personel ise şirketindeki personelleri getirir
+            Guid companyId = Guid.Parse(User.Claims.FirstOrDefault(x => x.Type == "CompanyId").Value);
+            var json = JsonConvert.SerializeObject(companyId);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            var response = await _httpClient.PostAsync($"api/AppUser/GetEmployeesByCompanyId/", content);
+            if (response.IsSuccessStatusCode)
             {
-                Guid companyId = Guid.Parse(User.Claims.FirstOrDefault(x => x.Type == "CompanyId").Value);
-                var json = JsonConvert.SerializeObject(companyId);
-                var content = new StringContent(json, Encoding.UTF8, "application/json");
+                var cont = await response.Content.ReadAsStringAsync();
+                var employees = JsonConvert.DeserializeObject<List<PersonelVM>>(cont);
 
-                var response = await _httpClient.PostAsync($"api/AppUser/GetEmployeesByCompanyId/", content);
-                if (response.IsSuccessStatusCode)
-                {
-                    var cont = await response.Content.ReadAsStringAsync();
-                    var employees = JsonConvert.DeserializeObject<List<PersonelVM>>(cont);
+                // Kendi bilgilerini çıkartır
+                //employees = employees.Except(employees.Where(x => x.Id == id)).ToList();
 
-                    // Kendi bilgilerini çıkartır
-                    employees = employees.Except(employees.Where(x => x.Id == id)).ToList();
+                return View(employees);
 
-                    return View(employees);
-
-                }
-                return View();
             }
-            else if (User.IsInRole("Manager")) // Departman Yöneticisi ise departmanındaki personelleri getirir
-            {
-                Guid managerId = Guid.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value);
-                var json = JsonConvert.SerializeObject(managerId);
-                var content = new StringContent(json, Encoding.UTF8, "application/json");
+            return View("Error");
 
-                var response = await _httpClient.PostAsync($"api/AppUser/GetEmployeesByManagerId/", content);
-                if (response.IsSuccessStatusCode)
-                {
-                    var cont = await response.Content.ReadAsStringAsync();
-                    var employees = JsonConvert.DeserializeObject<List<PersonelVM>>(cont);
-
-                    // Kendi bilgilerini çıkartır
-                    employees = employees.Except(employees.Where(x => x.Id == id)).ToList();
-
-                    return View(employees);
-
-                }
-                return View();
-            }
-            else
-            {
-                return View();
-            }
         }
 
         [HttpGet]
@@ -384,7 +358,7 @@ namespace humanResourceProject.Presentation.Controllers
 
                 var contentAppUser = await responseAppUser.Content.ReadAsStringAsync();
                 var dashboardAppUserVM = JsonConvert.DeserializeObject<AppUserVM>(contentAppUser);
-                
+
 
                 DashboardVM dashboardVM = new DashboardVM()
                 {
