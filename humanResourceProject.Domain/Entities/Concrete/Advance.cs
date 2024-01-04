@@ -13,6 +13,7 @@ namespace humanResourceProject.Domain.Entities.Concrete
         public DateTime ExpiryDate { get; set; }
         public Currency Currency { get; set; }
         public RequestStatus AdvanceStatus { get; set; } = RequestStatus.Pending;
+        public string? RejectReason { get; set; }
 
         public AppUser Employee { get; set; }
         public Guid EmployeeId { get; set; }

@@ -61,6 +61,10 @@ namespace humanResourceProject.Infrastructure.Migrations
                     b.Property<string>("Explanation")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("RejectReason")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
@@ -343,6 +347,10 @@ namespace humanResourceProject.Infrastructure.Migrations
                     b.Property<string>("FilePath")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("RejectReason")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
@@ -393,6 +401,47 @@ namespace humanResourceProject.Infrastructure.Migrations
                     b.ToTable("Jobs");
                 });
 
+            modelBuilder.Entity("humanResourceProject.Domain.Entities.Concrete.JobLog", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DateOfStart")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DateOfTermination")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DeleteDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("EmployeeId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("JobId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("ReasonForTermination")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("UpdateDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EmployeeId");
+
+                    b.ToTable("JobLogs");
+                });
+
             modelBuilder.Entity("humanResourceProject.Domain.Entities.Concrete.Leave", b =>
                 {
                     b.Property<Guid>("Id")
@@ -429,6 +478,10 @@ namespace humanResourceProject.Infrastructure.Migrations
                     b.Property<int>("LeaveType")
                         .HasColumnType("int");
 
+                    b.Property<string>("RejectReason")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
                     b.Property<DateTime>("StartDateOfLeave")
                         .HasColumnType("datetime2");
 
@@ -443,6 +496,93 @@ namespace humanResourceProject.Infrastructure.Migrations
                     b.HasIndex("EmployeeId");
 
                     b.ToTable("Leaves");
+                });
+
+            modelBuilder.Entity("humanResourceProject.Domain.Entities.Concrete.Possession", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Barcode")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("Brand")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<Guid>("CompanyId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DeleteDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Details")
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
+
+                    b.Property<string>("Model")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<int>("PossessionType")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("UpdateDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CompanyId");
+
+                    b.ToTable("Possessions");
+                });
+
+            modelBuilder.Entity("humanResourceProject.Domain.Entities.Concrete.PossessionLog", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DeleteDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("EmployeeId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("EndDateOfPossession")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("PossessionId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("StartDateOfPossession")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("UpdateDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EmployeeId");
+
+                    b.ToTable("PossessionLogs");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole<System.Guid>", b =>
@@ -639,6 +779,17 @@ namespace humanResourceProject.Infrastructure.Migrations
                     b.Navigation("Company");
                 });
 
+            modelBuilder.Entity("humanResourceProject.Domain.Entities.Concrete.JobLog", b =>
+                {
+                    b.HasOne("humanResourceProject.Domain.Entities.Concrete.AppUser", "AppUser")
+                        .WithMany("JobLogs")
+                        .HasForeignKey("EmployeeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("AppUser");
+                });
+
             modelBuilder.Entity("humanResourceProject.Domain.Entities.Concrete.Leave", b =>
                 {
                     b.HasOne("humanResourceProject.Domain.Entities.Concrete.AppUser", "Employee")
@@ -648,6 +799,28 @@ namespace humanResourceProject.Infrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("Employee");
+                });
+
+            modelBuilder.Entity("humanResourceProject.Domain.Entities.Concrete.Possession", b =>
+                {
+                    b.HasOne("humanResourceProject.Domain.Entities.Concrete.Company", "Company")
+                        .WithMany("Possessions")
+                        .HasForeignKey("CompanyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Company");
+                });
+
+            modelBuilder.Entity("humanResourceProject.Domain.Entities.Concrete.PossessionLog", b =>
+                {
+                    b.HasOne("humanResourceProject.Domain.Entities.Concrete.AppUser", "AppUser")
+                        .WithMany("PossessionLogs")
+                        .HasForeignKey("EmployeeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("AppUser");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
@@ -707,7 +880,11 @@ namespace humanResourceProject.Infrastructure.Migrations
 
                     b.Navigation("Expenses");
 
+                    b.Navigation("JobLogs");
+
                     b.Navigation("Leaves");
+
+                    b.Navigation("PossessionLogs");
 
                     b.Navigation("Supervisee");
                 });
@@ -719,6 +896,8 @@ namespace humanResourceProject.Infrastructure.Migrations
                     b.Navigation("Employees");
 
                     b.Navigation("Jobs");
+
+                    b.Navigation("Possessions");
                 });
 #pragma warning restore 612, 618
         }

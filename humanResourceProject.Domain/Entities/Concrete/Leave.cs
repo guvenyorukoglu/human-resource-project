@@ -13,6 +13,7 @@ namespace humanResourceProject.Domain.Entities.Concrete
         public string? Explanation { get; set; }
         public decimal DaysOfLeave { get; set; }
         public RequestStatus LeaveStatus { get; set; } = RequestStatus.Pending;
+        public string? RejectReason { get; set; }
 
         public AppUser Employee { get; set; }
         public Guid EmployeeId { get; set; }

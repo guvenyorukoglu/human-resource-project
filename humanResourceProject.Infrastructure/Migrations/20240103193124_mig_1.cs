@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace humanResourceProject.Infrastructure.Migrations
 {
-    public partial class mig1can : Migration
+    public partial class mig_1 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -168,6 +168,33 @@ namespace humanResourceProject.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Possessions",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Barcode = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    CompanyId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Brand = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Model = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Details = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: true),
+                    PossessionType = table.Column<int>(type: "int", nullable: false),
+                    CreateDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdateDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    DeleteDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Status = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Possessions", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Possessions_Companies_CompanyId",
+                        column: x => x.CompanyId,
+                        principalTable: "Companies",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Advances",
                 columns: table => new
                 {
@@ -179,6 +206,7 @@ namespace humanResourceProject.Infrastructure.Migrations
                     ExpiryDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Currency = table.Column<int>(type: "int", nullable: false),
                     AdvanceStatus = table.Column<int>(type: "int", nullable: false),
+                    RejectReason = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
                     EmployeeId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CreateDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdateDate = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -294,6 +322,7 @@ namespace humanResourceProject.Infrastructure.Migrations
                     Currency = table.Column<int>(type: "int", nullable: false),
                     FilePath = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ExpenseStatus = table.Column<int>(type: "int", nullable: false),
+                    RejectReason = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
                     EmployeeId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CreateDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdateDate = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -312,6 +341,32 @@ namespace humanResourceProject.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "JobLogs",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    JobId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    EmployeeId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    DateOfStart = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    DateOfTermination = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    ReasonForTermination = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
+                    CreateDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdateDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    DeleteDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Status = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_JobLogs", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_JobLogs_AspNetUsers_EmployeeId",
+                        column: x => x.EmployeeId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Leaves",
                 columns: table => new
                 {
@@ -323,6 +378,7 @@ namespace humanResourceProject.Infrastructure.Migrations
                     Explanation = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     DaysOfLeave = table.Column<decimal>(type: "decimal(4,1)", nullable: false),
                     LeaveStatus = table.Column<int>(type: "int", nullable: false),
+                    RejectReason = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
                     EmployeeId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CreateDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdateDate = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -334,6 +390,31 @@ namespace humanResourceProject.Infrastructure.Migrations
                     table.PrimaryKey("PK_Leaves", x => x.Id);
                     table.ForeignKey(
                         name: "FK_Leaves_AspNetUsers_EmployeeId",
+                        column: x => x.EmployeeId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "PossessionLogs",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    EmployeeId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    PossessionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    StartDateOfPossession = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    EndDateOfPossession = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    CreateDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdateDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    DeleteDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Status = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PossessionLogs", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_PossessionLogs_AspNetUsers_EmployeeId",
                         column: x => x.EmployeeId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
@@ -405,6 +486,11 @@ namespace humanResourceProject.Infrastructure.Migrations
                 column: "EmployeeId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_JobLogs_EmployeeId",
+                table: "JobLogs",
+                column: "EmployeeId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Jobs_CompanyId",
                 table: "Jobs",
                 column: "CompanyId");
@@ -413,6 +499,16 @@ namespace humanResourceProject.Infrastructure.Migrations
                 name: "IX_Leaves_EmployeeId",
                 table: "Leaves",
                 column: "EmployeeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PossessionLogs_EmployeeId",
+                table: "PossessionLogs",
+                column: "EmployeeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Possessions_CompanyId",
+                table: "Possessions",
+                column: "CompanyId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -442,10 +538,19 @@ namespace humanResourceProject.Infrastructure.Migrations
                 name: "Expenses");
 
             migrationBuilder.DropTable(
+                name: "JobLogs");
+
+            migrationBuilder.DropTable(
                 name: "Jobs");
 
             migrationBuilder.DropTable(
                 name: "Leaves");
+
+            migrationBuilder.DropTable(
+                name: "PossessionLogs");
+
+            migrationBuilder.DropTable(
+                name: "Possessions");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");

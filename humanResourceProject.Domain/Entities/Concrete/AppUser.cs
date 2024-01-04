@@ -35,6 +35,8 @@ namespace humanResourceProject.Domain.Entities.Concrete
         public ICollection<Expense>? Expenses { get; set; }
         public ICollection<Advance>? Advances { get; set; }
         public ICollection<Leave>? Leaves { get; set; }
+        public ICollection<JobLog>? JobLogs { get; set; }
+        public ICollection<PossessionLog>? PossessionLogs { get; set; }
 
         public AppUser Manager { get; set; }
         public Guid? ManagerId { get; set; }
