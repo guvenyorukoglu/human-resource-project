@@ -88,6 +88,12 @@ namespace humanResourceProject.Presentation.Controllers
         public async Task<IActionResult> CreateExpense(ExpenseDTO model)
         {
 
+            if (model.DateOfExpense.Date>DateTime.Now.Date)
+            {
+                ModelState.AddModelError("DateOfExpense", "Tarih bugünden sonraki bir tarih olmamalıdır.");
+                return View(model);
+            }
+
             if (!ModelState.IsValid)
             {
                 if (ModelState["ExpenseType"].Errors.Count > 0)
