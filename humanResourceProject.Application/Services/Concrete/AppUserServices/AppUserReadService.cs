@@ -29,6 +29,7 @@ namespace humanResourceProject.Application.Services.Concrete.AppUserServices
                                {
                                    EarnedLeaveDays = x.EarnedLeaveDays,
                                    RemainingLeaveDays = x.RemainingLeaveDays,
+                                   Gender = x.Gender,
                                },
                                               where: x => x.Id == id && (x.Status != Domain.Enum.Status.Inactive && x.Status != Domain.Enum.Status.Deleted),
                                                              include: x => x.Include(x => x.Company));

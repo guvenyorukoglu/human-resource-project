@@ -1,4 +1,4 @@
-﻿@model List<PersonelVM>
+@model List<PersonelVM>
 
 @{
     ViewData["Title"] = "Employees";
@@ -28,6 +28,7 @@
             }
             <div class="pagination-container">
 
+
                 <script>
                     var columnsToExport = [1, 2, 3, 4, 5, 6];
 
@@ -43,13 +44,16 @@
                                 },
                                 "url": "https://cdn.datatables.net/plug-ins/1.10.25/i18n/Turkish.json"
                             },
+
+
+
                             dom: 'lBfrtip',
                             "buttons": [
                                 'spacer',
                                 {
                                     extend: 'copy',
                                     text: 'Kopyala',
-                                 
+
                                 },
                                 {
                                     extend: 'print',
@@ -58,9 +62,7 @@
                                         columns: columnsToExport
                                     },
                                     //TODO cardviewda görünmesi için tablolarda headerlar var bunların yazdırılmaması gerekir
-                                    customize: function (win) {
-                                        $(win.document.body).find('#card-view-header').css('display', 'none');
-                                    }
+
 
                                 },
                                 {
@@ -72,7 +74,7 @@
                                 {
                                     extend: 'csv',
                                     text: 'CSV',
-                                     exportOptions: {
+                                    exportOptions: {
                                         columns: columnsToExport
                                     }
                                 },
@@ -91,7 +93,7 @@
                                         columns: columnsToExport
                                     }
                                 },
-                                                               
+
                             ],
                             "order": [
                                 [1, 'asc']
@@ -129,13 +131,15 @@
                                 var displayName = displayAttribute?.GetName() ?? item.Gender.ToString();
                                 <tr>
                                     <td><img class="card-image" src="@item.ImagePath" style="width:50px;" alt="profil-fotoğrafı" /></td>
-                                    <td><span id="card-view-header">Ad:&nbsp </span>@item.FirstName</td>
-                                    <td><span id="card-view-header">Soyad:&nbsp</span>@item.LastName</td>
-                                    <td><span id="card-view-header">Telefon:&nbsp</span>@item.PhoneNumber</td>
-                                    <td><span id="card-view-header">E-posta:&nbsp</span>@item.Email</td>
-                                    <td class="card-gender"><span id="card-view-header">Cinsiyet:&nbsp</span>@displayName</td>
-                                    <td><span id="card-view-header" style="font-weight:400;">Meslek:&nbsp</span>@item.Title</td>
+                                    <td><span id="card-view-header-name"></span>@item.FirstName</td>
+                                    <td><span id="card-view-header-lastname"></span>@item.LastName</td>
+                                    <td><span id="card-view-header-phone"></span>@item.PhoneNumber</td>
+                                    <td><span id="card-view-header-email"></span>@item.Email</td>
+                                    <td class="card-gender"><span id="card-view-header-gender"></span>@displayName</td>
+                                    <td><span id="card-view-header-job" style="font-weight:400;"></span>@item.Title</td>
+
                                     @if (User.IsInRole("CompanyManager"))
+
                                     {
                                         <td>
                                             <a asp-action="EditEmployee"
@@ -223,7 +227,10 @@
 
 
 <style>
-  
+
+
+
+
     .cards tbody tr {
         float: left;
         width: 30rem;
@@ -269,26 +276,95 @@
 
 
 
+
 <script>
     function toggleView() {
         var table = document.getElementById("employees");
         var buttonNameToChange = document.getElementById("changeView");
         var titles = document.querySelectorAll("#card-view-header");
-        var gender = document.querySelectorAll(".card-gender");
         var cardImage = document.querySelectorAll(".card-image");
+
+        var spanNames = document.querySelectorAll('#card-view-header-name');
+        var spanLastNames = document.querySelectorAll('#card-view-header-lastname');
+        var spanPhoneNumbers = document.querySelectorAll('#card-view-header-phone');
+        var spanEmails = document.querySelectorAll('#card-view-header-email');
+        var spanJobs = document.querySelectorAll('#card-view-header-job');
+        var spanGenders = document.querySelectorAll('#card-view-header-gender');
 
 
         if (table.classList.contains("cards")) {
+
+
+            spanNames.forEach(function (span) {
+                span.innerText = '';
+            });
+
+            spanLastNames.forEach(function (span) {
+                span.innerText = '';
+            });
+
+            spanPhoneNumbers.forEach(function (span) {
+                span.innerText = '';
+            });
+
+            spanEmails.forEach(function (span) {
+                span.innerText = '';
+            });
+
+            spanJobs.forEach(function (span) {
+                span.innerText = '';
+            });
+
+            spanGenders.forEach(function (span) {
+                span.innerText = '';
+            });
+
+
+
             table.classList.remove("cards");
             buttonNameToChange.innerHTML = '<i class="fa-solid fa-address-card me-1"></i>Kart Görünümü';
             cardImage.forEach(function (image) {
                 image.style.width = "50px";
             });
 
-
         } else {
             table.classList.add("cards");
             buttonNameToChange.innerHTML = '<i class="fa-solid fa-list me-1"></i>Liste Görünümü';
+
+
+            spanNames.forEach(function (span) {
+                span.innerText = 'Ad: ';
+                span.style.fontWeight = "bold";
+            });
+
+            spanLastNames.forEach(function (span) {
+                span.innerText = 'Soyad: ';
+                span.style.fontWeight = "bold";
+            });
+
+            spanPhoneNumbers.forEach(function (span) {
+                span.innerText = 'Telefon: ';
+                span.style.fontWeight = "bold";
+            });
+
+            spanEmails.forEach(function (span) {
+                span.innerText = 'E-posta: ';
+                span.style.fontWeight = "bold";
+            });
+
+            spanJobs.forEach(function (span) {
+                span.innerText = 'Pozisyon: ';
+                span.style.fontWeight = "bold";
+            });
+
+            spanGenders.forEach(function (span) {
+                span.innerText = 'Cinsiyet: ';
+                span.style.fontWeight = "bold";
+            });
+
+
+
+
             cardImage.forEach(function (image) {
                 image.style.width = "200px";
             });
@@ -296,9 +372,23 @@
         titles.forEach(function (title) {
             title.style.display = table.classList.contains("cards") ? "inline-block" : "none";
             title.style.fontWeight = table.classList.contains("cards") ? "bold" : "normal";
-
         });
-
     }
-</script>
 
+    document.addEventListener("DOMContentLoaded", function () {
+        $('#employees').on('draw.dt', function () {
+            var table = document.getElementById("employees");
+            var cardImage = document.querySelectorAll(".card-image");
+
+            if (table.classList.contains("cards")) {
+                cardImage.forEach(function (image) {
+                    image.style.width = "200px";
+                });
+            } else {
+                cardImage.forEach(function (image) {
+                    image.style.width = "50px";
+                });
+            }
+        });
+    });
+</script>
