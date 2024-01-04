@@ -46,7 +46,6 @@ namespace humanResourceProject.API.Controllers
 
             Advance advance = await _advanceReadService.GetSingleDefault(x => x.Id == model.Id);
             AppUser user = await _appUserReadService.GetSingleDefault(x => x.Id == advance.EmployeeId);
-            string action = "";
             string recipientEmail = user.Email;
             string mailToName = $"{user.FirstName} {user.LastName}";
             if (advance.AdvanceStatus == Domain.Enum.RequestStatus.Approved)
@@ -110,7 +109,6 @@ namespace humanResourceProject.API.Controllers
 
             string recipientEmail = manager.Email;
             string mailToName = $"{manager.FirstName} {manager.LastName}";
-            string action = "";
             string subject = "Avans Talebi!";
             string body = $"<p>Sayın {manager.FirstName} {manager.LastName},</p><p>{employee.FirstName} {employee.LastName} tarafından {DateTime.Now.ToShortDateString()} tarihinde {model.AmountOfAdvance} {model.Currency.GetDisplayName()} avans talebi yapılmıştır.</p><p>Uygulama üzerinden onaylama ya da reddetme işlemini yapabilirsiniz.</p><p>{_configuration["HomePage"]}</p><p>İyi çalışmalar dileriz.</p><br><hr><br><h3>Team Monitorease</h3>";
             await _mailService.SendEmailAsync(manager, recipientEmail, mailToName, subject, body);

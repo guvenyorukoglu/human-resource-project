@@ -13,6 +13,7 @@ namespace humanResourceProject.Infrastructure.EntityTypeConfig
             builder.Property(e => e.Explanation).IsRequired(false);
             builder.Property(e => e.FilePath).IsRequired(false);
             builder.Property(e => e.ExpenseNo).IsRequired().HasMaxLength(12).HasColumnOrder(2);
+            builder.Property(e => e.RejectReason).IsRequired(false).HasMaxLength(500);
             builder.HasOne(e => e.Employee).WithMany(e => e.Expenses).HasForeignKey(e => e.EmployeeId);
         }
     }

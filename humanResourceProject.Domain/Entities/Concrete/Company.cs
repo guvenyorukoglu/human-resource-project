@@ -22,6 +22,7 @@ namespace humanResourceProject.Domain.Entities.Concrete
         public ICollection<AppUser> Employees { get; set; }
         public ICollection<Department> Departments { get; set; }
         public ICollection<Job> Jobs { get; set; }
+        public ICollection<Possession> Possessions { get; set; }
 
         public DateTime CreateDate { get; set; }
         public DateTime? UpdateDate { get; set; }

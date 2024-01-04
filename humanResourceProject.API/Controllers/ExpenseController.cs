@@ -56,7 +56,6 @@ namespace humanResourceProject.API.Controllers
 
             Expense expense = await _expenseReadService.GetSingleDefault(x => x.Id == model.Id);
             AppUser user = await _appUserReadService.GetSingleDefault(x => x.Id == expense.EmployeeId);
-            string action = "";
             string recipientEmail = user.Email;
             string mailToName = $"{user.FirstName} {user.LastName}";
             if (expense.ExpenseStatus == Domain.Enum.RequestStatus.Approved)
@@ -113,7 +112,6 @@ namespace humanResourceProject.API.Controllers
             AppUser manager = await _appUserReadService.GetSingleDefault(x => x.Id == employee.ManagerId);
             string recipientEmail = manager.Email;
             string mailToName = $"{manager.FirstName} {manager.LastName}";
-            string action = "";
             string subject = "Masraf Talebi!";
             string body = $"<p>Sayın {manager.FirstName} {manager.LastName},</p><p>{employee.FirstName} {employee.LastName} tarafından {DateTime.Now.ToShortDateString()} tarihli {model.AmountOfExpense} {model.Currency.GetDisplayName()} masraf talebi yapılmıştır.</p><p>Uygulama üzerinden onaylama ya da reddetme işlemini yapabilirsiniz.</p><p>{_configuration["HomePage"]}</p><p>İyi çalışmalar dileriz.</p><br><hr><br><h3>Team Monitorease</h3>";
             await _mailService.SendEmailAsync(manager, recipientEmail, mailToName, subject, body);

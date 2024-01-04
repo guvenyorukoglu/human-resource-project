@@ -18,6 +18,7 @@ namespace humanResourceProject.Domain.Entities.Concrete
         public IFormFile? UploadPath { get; set; }
         public string? FilePath { get; set; }
         public RequestStatus ExpenseStatus { get; set; } = RequestStatus.Pending;
+        public string? RejectReason { get; set; }
 
         public AppUser Employee { get; set; }
         public Guid EmployeeId { get; set; }

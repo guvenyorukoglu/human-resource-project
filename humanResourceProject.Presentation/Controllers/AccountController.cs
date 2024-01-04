@@ -288,8 +288,10 @@ namespace humanResourceProject.Presentation.Controllers
             HttpResponseMessage response = await _httpClient.PostAsync("/api/Account/ResetPassword", content);
             if (response.IsSuccessStatusCode)
             {
-                ModelState.AddModelError("SuccessMessage", "Şifreniz başarılı bir şekilde yenilenmiştir.");
-                return View(model);
+                //ModelState.AddModelError("SuccessMessage", "Şifreniz başarılı bir şekilde yenilenmiştir.");
+                TempData["SuccessPasswordResetMessage"] = "Şifreniz başarılı bir şekilde yenilenmiştir.";
+                //return View(model);
+                return RedirectToAction(nameof(Login));
             }
             else
             {

@@ -8,16 +8,16 @@ namespace humanResourceProject.Models.DTOs
         [Required]
         public string Id { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Yeni şifre alanı boş geçilemez!")]
         [DataType(DataType.Password)]
         [PasswordValidations(ErrorMessage = "Şifre en az bir büyük harf, bir küçük harf, bir rakam ve bir özel karakterden oluşmalıdır.")]
         [Display(Name = "Yeni Şifre")]
         public string Password { get; set; }
 
+        [Required(ErrorMessage = "Yeni şifre tekrarı alanı boş geçilemez!")]
         [DataType(DataType.Password)]
         [Display(Name = "Yeni Şifre Tekrarı")]
         [Compare("Password", ErrorMessage = "Bir önceki girilen şifreyle aynı olmalıdır!")]
-
         public string ConfirmPassword { get; set; }
         [Required]
         public string Token { get; set; }
