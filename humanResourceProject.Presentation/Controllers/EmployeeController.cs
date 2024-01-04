@@ -57,6 +57,7 @@ namespace humanResourceProject.Presentation.Controllers
         [HttpGet]
         public async Task<IActionResult> CreatePersonel()
         {
+            
             Guid companyId = Guid.Parse(User.Claims.FirstOrDefault(x => x.Type == "CompanyId").Value);
             HttpResponseMessage messageJobs = await _httpClient.GetAsync($"api/Job/GetJobsByCompanyId/{companyId}");
             HttpResponseMessage messageDepartments = await _httpClient.GetAsync($"api/Department/GetDepartmentsByCompanyId/{companyId}");
@@ -115,69 +116,6 @@ namespace humanResourceProject.Presentation.Controllers
                 return View("Error");
             }
         }
-
-        [HttpGet]
-        public async Task<IActionResult> CreatePersonelManager()
-        {
-            Guid companyId = Guid.Parse(User.Claims.FirstOrDefault(x => x.Type == "CompanyId").Value);
-            HttpResponseMessage messageJobs = await _httpClient.GetAsync($"api/Job/GetJobsByCompanyId/{companyId}");
-            HttpResponseMessage messageDepartments = await _httpClient.GetAsync($"api/Department/GetDepartmentsByCompanyId/{companyId}");
-            HttpResponseMessage messageManagers = await _httpClient.GetAsync($"api/AppUser/GetManagersByCompanyId/{companyId}");
-
-            if (messageJobs.IsSuccessStatusCode && messageDepartments.IsSuccessStatusCode && messageManagers.IsSuccessStatusCode)
-            {
-                var jobsResponse = await messageJobs.Content.ReadAsStringAsync();
-                dynamic jobList = JsonConvert.DeserializeObject(jobsResponse);
-
-                foreach (var job in jobList)
-                {
-                    jobs.Add(new JobVM()
-                    {
-                        Id = job.id,
-                        Title = job.title,
-                        Description = job.description
-                    });
-                }
-
-                var departmentsResponse = await messageDepartments.Content.ReadAsStringAsync();
-                dynamic departmentList = JsonConvert.DeserializeObject(departmentsResponse);
-
-                foreach (var department in departmentList)
-                {
-                    departments.Add(new DepartmentVM()
-                    {
-                        Id = department.id,
-                        DepartmentName = department.departmentName,
-                        Description = department.description
-                    });
-                }
-
-                var managersResponse = await messageManagers.Content.ReadAsStringAsync();
-                dynamic managerList = JsonConvert.DeserializeObject(managersResponse);
-
-                foreach (var manager in managerList)
-                {
-                    managers.Add(new ManagerVM()
-                    {
-                        Id = manager.id,
-                        FullName = manager.fullName
-                    });
-                }
-
-                return View(new CreateEmployeeDTO()
-                {
-                    Departments = departments,
-                    Jobs = jobs,
-                    Managers = managers,
-                    CompanyId = companyId
-                });
-            }
-            else
-            {
-                return View("Error");
-            }
-        }
-
 
         [HttpPost]
         public async Task<IActionResult> CreatePersonel(CreateEmployeeDTO model, string JobsList, string DepartmentsList, string ManagersList)
@@ -198,69 +136,50 @@ namespace humanResourceProject.Presentation.Controllers
                 ModelState.AddModelError(string.Empty, "Lütfen tüm verileri doğru girdiğinizden emin olunuz!");
                 return View(model);
             }
-
             model.ImagePath = model.Gender == Domain.Enum.Gender.Female ? "https://ik.imagekit.io/7ypp4olwr/femaledefault.png?tr=h-200,w-200" : "https://ik.imagekit.io/7ypp4olwr/maledefault.png?tr=h-200,w-200";
 
             var json = JsonConvert.SerializeObject(model);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
+            if (model.UserRole.ToString() == "Personel")
+            {
 
-            var response = await _httpClient.PostAsync($"api/AppUser", content);
-            if (response.IsSuccessStatusCode)
-            {
-                return RedirectToAction(nameof(Employees));
+                var response = await _httpClient.PostAsync($"api/AppUser", content);
+                if (response.IsSuccessStatusCode)
+                {
+                    return RedirectToAction(nameof(Employees));
+                }
+                else
+                {
+                    ModelState.AddModelError(string.Empty, "Lütfen girdiğiniz verileri kontrol ediniz!");
+                    model.Jobs = JsonConvert.DeserializeObject<List<JobVM>>(JobsList);
+                    model.Departments = JsonConvert.DeserializeObject<List<DepartmentVM>>(DepartmentsList);
+                    model.Managers = JsonConvert.DeserializeObject<List<ManagerVM>>(ManagersList);
+                    return View(model);
+                }
+               
             }
-            else
+            if(model.UserRole.ToString()=="DepartmentManager")
             {
-                ModelState.AddModelError(string.Empty, "Lütfen girdiğiniz verileri kontrol ediniz!");
-                model.Jobs = JsonConvert.DeserializeObject<List<JobVM>>(JobsList);
-                model.Departments = JsonConvert.DeserializeObject<List<DepartmentVM>>(DepartmentsList);
-                model.Managers = JsonConvert.DeserializeObject<List<ManagerVM>>(ManagersList);
-                return View(model);
+                
+
+                var response = await _httpClient.PostAsync($"api/AppUser/CreatePersonelManager", content);
+                if (response.IsSuccessStatusCode)
+                {
+                    return RedirectToAction(nameof(Employees));
+                }
+                else
+                {
+                    ModelState.AddModelError(string.Empty, "Lütfen girdiğiniz verileri kontrol ediniz!");
+                    model.Jobs = JsonConvert.DeserializeObject<List<JobVM>>(JobsList);
+                    model.Departments = JsonConvert.DeserializeObject<List<DepartmentVM>>(DepartmentsList);
+                    model.Managers = JsonConvert.DeserializeObject<List<ManagerVM>>(ManagersList);
+                    return View(model);
+                }
             }
+            return View(model);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> CreatePersonelManager(CreateEmployeeDTO model, string JobsList, string DepartmentsList, string ManagersList)
-        {
-            if (!ModelState.IsValid)
-            {
-                if (ModelState["BloodGroup"].Errors.Count > 0)
-                {
-                    ModelState.AddModelError(string.Empty, "Kan grubunu seçiniz!");
-                }
-                if (ModelState["Gender"].Errors.Count > 0)
-                {
-                    ModelState.AddModelError(string.Empty, "Cinsiyet seçiniz!");
-                }
 
-                model.Jobs = JsonConvert.DeserializeObject<List<JobVM>>(JobsList);
-                model.Departments = JsonConvert.DeserializeObject<List<DepartmentVM>>(DepartmentsList);
-                model.Managers = JsonConvert.DeserializeObject<List<ManagerVM>>(ManagersList);
-                return View(model);
-            }
-
-            model.ImagePath = model.Gender == Domain.Enum.Gender.Female ? "https://ik.imagekit.io/7ypp4olwr/femaledefault.png?tr=h-200,w-200" : "https://ik.imagekit.io/7ypp4olwr/maledefault.png?tr=h-200,w-200";
-
-            var json = JsonConvert.SerializeObject(model);
-            var content = new StringContent(json, Encoding.UTF8, "application/json");
-
-            var response = await _httpClient.PostAsync($"api/AppUser/CreatePersonelManager", content);
-            if (response.IsSuccessStatusCode)
-            {
-                return RedirectToAction(nameof(Employees));
-            }
-            else
-            {
-                ModelState.AddModelError(string.Empty, "Lütfen girdiğiniz verileri kontrol ediniz!");
-                model.Jobs = JsonConvert.DeserializeObject<List<JobVM>>(JobsList);
-                model.Departments = JsonConvert.DeserializeObject<List<DepartmentVM>>(DepartmentsList);
-                model.Managers = JsonConvert.DeserializeObject<List<ManagerVM>>(ManagersList);
-                return View(model);
-            }
-
-
-
-        }
 
         [HttpGet]
         public async Task<IActionResult> DeleteEmployee(Guid id)
