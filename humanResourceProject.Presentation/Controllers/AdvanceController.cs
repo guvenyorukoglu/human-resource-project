@@ -85,6 +85,11 @@ namespace humanResourceProject.Presentation.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateAdvance(AdvanceDTO model)
         {
+            if(model.ExpiryDate < DateTime.Now)
+            {
+                ModelState.AddModelError("ExpiryDate", "Tarih bugünden önceki bir tarih olmamalıdır.");
+                return View(model);
+            }
             if (!ModelState.IsValid)
             {
                 if (ModelState["AdvanceType"].Errors.Count > 0)

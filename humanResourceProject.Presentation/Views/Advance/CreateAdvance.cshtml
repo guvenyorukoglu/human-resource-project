@@ -45,7 +45,7 @@
                         </div>
                         <div class="form-group mb-3">
                             <label asp-for="ExpiryDate" class="control-label"></label>
-                            <input value="@DateTime.Now.ToString("yyyy-MM-dd")" min="@DateTime.Now.ToString("yyyy-MM-dd")" type="date" asp-for="ExpiryDate" class="form-control" />
+                            <input value="yyyy-MM-dd" type="date" asp-for="ExpiryDate" class="form-control" />
                             <span asp-validation-for="ExpiryDate" class="text-danger"></span>
                         </div>
                         <div class="form-group mb-3">

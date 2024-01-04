@@ -1,13 +1,7 @@
 ﻿using humanResourceProject.Domain.Enum;
 using humanResourceProject.Models.Validations;
-using humanResourceProject.Models.VMs;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations;
 
 namespace humanResourceProject.Models.DTOs
 {
@@ -15,7 +9,8 @@ namespace humanResourceProject.Models.DTOs
     {
         public Guid Id { get; set; }
 
-
+        [Required(ErrorMessage = "Kan grubu alanı boş geçilemez!")]
+        [DisplayName("Kan Grubu*")]
         public BloodGroup BloodGroup { get; set; }
 
 
