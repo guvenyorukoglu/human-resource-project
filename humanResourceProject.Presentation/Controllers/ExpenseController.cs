@@ -1,11 +1,9 @@
-﻿using humanResourceProject.Domain.Entities.Concrete;
-using humanResourceProject.Domain.Enum;
+﻿using humanResourceProject.Domain.Enum;
 using humanResourceProject.Models.DTOs;
 using humanResourceProject.Models.VMs;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using System.Net.Http;
 using System.Net.Mime;
 using System.Security.Claims;
 using System.Text;
