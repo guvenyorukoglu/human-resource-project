@@ -78,5 +78,6 @@ namespace humanResourceProject.Models.DTOs
         public Guid ManagerId { get; set; }
         public List<ManagerVM>? Managers { get; set; }
         public Guid CompanyId { get; set; }
+        public UserRole UserRole { get; set; }
     }
 }
