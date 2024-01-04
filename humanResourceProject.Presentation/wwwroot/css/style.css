@@ -25,10 +25,9 @@ body {
 }
 
 .aside {
-    overflow-y: auto; 
-    height: 800px; 
-   width: 82%;
-    
+    overflow-y: auto;
+    height: 800px;
+    width: 82%;
     box-sizing: border-box;
 }
 
@@ -285,7 +284,12 @@ h6 {
 
 .leave-info {
     background-color: #f1d184;
+    background-image: url("../ImagesLogo/background.png");
+    opacity:0.9;
+
 }
+
+ 
 
 .calender {
     background-color: #75cfa6;
@@ -294,6 +298,10 @@ h6 {
 
 .holiday-info {
     background-color: #e48774;
+}
+
+.company-info {
+    background-color: #f1d184;
 }
 
 .upcoming-leave-info {
@@ -338,8 +346,9 @@ h6 {
 /* CHART */
 
 #myChart {
-    max-width: 300px;
-    max-height: 300px;
+    max-width: 250px;
+    max-height: 250px;
+
 }
 
 a {
@@ -365,3 +374,4 @@ a {
     font-size: 14px;
     transition: all 0.3s ease;
 }
+
