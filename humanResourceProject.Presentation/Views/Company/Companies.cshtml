@@ -230,6 +230,14 @@
                 });
             });
         </script>
+        @section Scripts {
+            @if (TempData["SuccessUpdateCompanyMessage"] != null)
+            {
+                <script>
+                    toastr["info"]("Şirket bilgileri güncellenmiştir.", "Başarılı");
+                </script>
+            }
+        }
 </body>
 
 
