@@ -1,4 +1,5 @@
 ﻿using humanResourceProject.Domain.Enum;
+using System.ComponentModel.DataAnnotations;
 
 namespace humanResourceProject.Models.VMs
 {

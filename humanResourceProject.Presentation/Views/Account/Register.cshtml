@@ -20,20 +20,26 @@
                                 <div class="col-md-6">
                                     <div class="form-group mb-3">
                                         <label asp-for="FirstName" class="control-label"></label>
-                                        <input asp-for="FirstName" class="form-control" />
+                                        <input id="FirstName" oninput="limits()" asp-for="FirstName" class="form-control" />
+                                        <input id="Count" type="hidden"></input>
+                                        <p id="LimitMessage" style="color: red;"></p>
                                         <span asp-validation-for="FirstName" class="text-danger"></span>
                                     </div>
 
                                     <div class="form-group mb-3">
                                         <label asp-for="MiddleName" class="control-label"></label>
-                                        <input asp-for="MiddleName" class="form-control" />
+                                        <input id="MiddleName" oninput="limit()" asp-for="MiddleName" class="form-control" />
+                                        <input id="char" type="hidden"></input>
+                                        <p id="MessageL" style="color: red;"></p>
                                         <span asp-validation-for="MiddleName" class="text-danger"></span>
 
                                     </div>
 
                                     <div class="form-group mb-3">
                                         <label asp-for="LastName" class="control-label"></label>
-                                        <input asp-for="LastName" class="form-control" />
+                                        <input id="LastName" oninput="limitChar()" asp-for="LastName" class="form-control" />
+                                        <input id="charC" type="hidden"></input>
+                                        <p id="Message" style="color: red;"></p>
                                         <span asp-validation-for="LastName" class="text-danger"></span>
                                     </div>
 
@@ -174,6 +180,71 @@
         var charLimitMessageElement = document.getElementById('charLimitMessage');
 
         var maxCharacters = 150; // Maksimum karakter sayısını belirle
+
+        var enteredText = inputElement.value;
+        var charCount = maxCharacters - enteredText.length;
+
+        charCountElement.innerText = 'Kalan Karakter Sayısı: ' + charCount;
+
+        if (charCount == 0) {
+            inputElement.value = enteredText.slice(0, maxCharacters);
+            charLimitMessageElement.innerText = 'Maksimum karakter sayısına ulaşıldı!';
+        } else {
+            charLimitMessageElement.innerText = '';
+        }
+    }
+</script>
+    <script>
+        function limits() {
+            var inputElement = document.getElementById('FirstName');
+        var charCountElement = document.getElementById('Count');
+            var charLimitMessageElement = document.getElementById('LimitMessage');
+
+        var maxCharacters = 20;
+
+            var enteredText = inputElement.value;
+            var Count = maxCharacters - enteredText.length;
+
+        charCountElement.innerText = 'Kalan Karakter Sayısı: ' + Count;
+
+            if (Count == 0) {
+                inputElement.value = enteredText.slice(0, maxCharacters);
+                charLimitMessageElement.innerText = 'Maksimum karakter sayısına ulaşıldı!';
+
+            } else {
+                charLimitMessageElement.innerText = '';
+            }
+        }
+ 
+</script>
+<script>
+    function limitChar() {
+        var inputElement = document.getElementById('LastName');
+        var charCountElement = document.getElementById('charC');
+        var charLimitMessageElement = document.getElementById('Message');
+
+        var maxCharacters = 30; // Maksimum karakter sayısını belirle
+
+        var enteredText = inputElement.value;
+        var charCount = maxCharacters - enteredText.length;
+
+        charCountElement.innerText = 'Kalan Karakter Sayısı: ' + charCount;
+
+        if (charCount == 0) {
+            inputElement.value = enteredText.slice(0, maxCharacters);
+            charLimitMessageElement.innerText = 'Maksimum karakter sayısına ulaşıldı!';
+        } else {
+            charLimitMessageElement.innerText = '';
+        }
+    }
+</script>
+<script>
+    function limit() {
+        var inputElement = document.getElementById('MiddleName');
+        var charCountElement = document.getElementById('char');
+        var charLimitMessageElement = document.getElementById('MessageL');
+
+        var maxCharacters = 30; // Maksimum karakter sayısını belirle
 
         var enteredText = inputElement.value;
         var charCount = maxCharacters - enteredText.length;

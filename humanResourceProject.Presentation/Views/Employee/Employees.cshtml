@@ -158,7 +158,7 @@
 
 
                                             <button class="m-1 btn btn-dark btn-sm d-inline-flex gap-1 align-items-center" data-bs-toggle="modal"
-                                                    data-bs-target="#fireEmployeeModal">
+                                                    data-bs-target="#fireEmployeeModal_@item.Id">
                                                 <i class="fa-solid fa-user-minus"></i><span class="ms-2">İşten Çıkart</span>
                                             </button>
 
@@ -187,7 +187,7 @@
                                             </div>
 
                                             @* Fire Employee modal *@
-                                            <div class="modal fade" id="fireEmployeeModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                            <div class="modal fade" id="fireEmployeeModal_@item.Id" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                                 <div class="modal-dialog">
                                                     <div class="modal-content">
                                                         <div class="modal-header">
@@ -400,20 +400,20 @@
 
     $(document).ready(function () {
         $(document).on('click', '#terminationButton', function () {
-            // var modalContent = $(this).closest('.modal-content');
-            // var terminationReason = modalContent.find('#reasonForTermination').val();
-            var terminationReason = $('#reasonForTermination').val();
-            // var employeeId = modalContent.find('#employeeId').val();
-            var employeeId = $('#employeeId').val();
+             var modalContent = $(this).closest('.modal-content');
+             var terminationReason = modalContent.find('#reasonForTermination').val();
+            //var terminationReason = $('#reasonForTermination').val();
+             var employeeId = modalContent.find('#employeeId').val();
+            //var employeeId = $('#employeeId').val();
 
             // Sebebi boş bırakırsa hata mesajı ver
             if (terminationReason.trim() === '') {
-                // modalContent.find('#terminationValidation').text('Lütfen personeli işten çıkarma sebebinizi giriniz!');
-                $('#terminationValidation').text('Lütfen personeli işten çıkarma sebebinizi giriniz!');
+                 modalContent.find('#terminationValidation').text('Lütfen personeli işten çıkarma sebebinizi giriniz!');
+                //$('#terminationValidation').text('Lütfen personeli işten çıkarma sebebinizi giriniz!');
                 return; // Return et ki AJAX requesti yapmasın
             } else {
-                // modalContent.find('#terminationValidation').text('');
-                $('#terminationValidation').text(''); // Önceki hata mesajını temizle
+                 modalContent.find('#terminationValidation').text('');
+                //$('#terminationValidation').text(''); // Önceki hata mesajını temizle
             }
 
             // AJAX requesti yap

@@ -8,10 +8,11 @@ namespace humanResourceProject.Models.DTOs
         [Required(ErrorMessage = "Departman adı alanı boş geçilemez!")]
         [DisplayName("Departman Adı*")]
         [RegularExpression(@"^[a-zA-ZğĞıİşŞüÜöÖçÇ\s]*$", ErrorMessage = "Yalnızca alfabetik karakterlere izin verilir.")]
+        [StringLength(100, ErrorMessage = "Departman adı  en fazla 100 karakter olmalıdır.")]
         public string DepartmentName { get; set; }
 
         [DisplayName("Departman Tanımı")]
-        [StringLength(200, ErrorMessage = "Departman tanımı en fazla 200 karakter olmalıdır.")]
+        [StringLength(500, ErrorMessage = "Departman tanımı en fazla 500 karakter olmalıdır.")]
         public string? Description { get; set; }
 
         public Guid CompanyId { get; set; }

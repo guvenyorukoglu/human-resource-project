@@ -28,17 +28,23 @@
 
                         <div class="form-group mb-3">
                             <label asp-for="Barcode" class="control-label"></label>
-                            <input value="@Model.Barcode" asp-for="Barcode" class="form-control" />
+                            <input id="Barcode" oninput="limitCharacters()" value="@Model.Barcode" asp-for="Barcode" class="form-control" />
+                            <input id="charCount" type="hidden"></input>
+                            <p id="charLimitMessage" style="color: red;"></p>
                             <span asp-validation-for="Barcode" class="text-danger"></span>
                         </div>
                         <div class="form-group mb-3">
                             <label asp-for="Brand" class="control-label"></label>
-                            <input value="@Model.Brand" asp-for="Brand" class="form-control" />
+                            <input id="Brand" oninput="limits()" value="@Model.Brand" asp-for="Brand" class="form-control" />
+                            <input id="Count" type="hidden"></input>
+                            <p id="LimitMessage" style="color: red;"></p>
                             <span asp-validation-for="Brand" class="text-danger"></span>
                         </div>
                         <div class="form-group mb-3">
                             <label asp-for="PossessionModel" class="control-label"></label>
-                            <input value="@Model.PossessionModel" asp-for="PossessionModel" class="form-control" />
+                            <input id="PossessionModel" oninput="limitChar()" value="@Model.PossessionModel" asp-for="PossessionModel" class="form-control" />
+                            <input id="charC" type="hidden"></input>
+                            <p id="Message" style="color: red;"></p>
                             <span asp-validation-for="PossessionModel" class="text-danger"></span>
                         </div>
                         <div class="form-group mb-3">
@@ -63,7 +69,9 @@
                         </div>
                         <div class="form-group mb-3">
                             <label asp-for="Details" class="control-label"></label>
-                            <input value="@Model.Details" asp-for="Details" class="form-control" />
+                            <input id="Details" oninput="limit()" value="@Model.Details" asp-for="Details" class="form-control" />
+                            <input id="char" type="hidden"></input>
+                            <p id="MessageL" style="color: red;"></p>
                             <span asp-validation-for="Details" class="text-danger"></span>
                         </div>
                         <div class="form-group mb-3">
@@ -82,4 +90,90 @@
             </form>
         </div>
     </div>
+    <script>
+        function limitCharacters() {
+            var inputElement = document.getElementById('Barcode');
+            var charCountElement = document.getElementById('charCount');
+            var charLimitMessageElement = document.getElementById('charLimitMessage');
+
+            var maxCharacters = 50; // Maksimum karakter sayısını belirle
+
+            var enteredText = inputElement.value;
+            var charCount = maxCharacters - enteredText.length;
+
+            charCountElement.innerText = 'Kalan Karakter Sayısı: ' + charCount;
+
+            if (charCount == 0) {
+                inputElement.value = enteredText.slice(0, maxCharacters);
+                charLimitMessageElement.innerText = 'Maksimum karakter sayısına ulaşıldı!';
+            } else {
+                charLimitMessageElement.innerText = '';
+            }
+        }
+    </script>
+    <script>
+        function limits() {
+            var inputElement = document.getElementById('Brand');
+            var charCountElement = document.getElementById('Count');
+            var charLimitMessageElement = document.getElementById('LimitMessage');
+
+            var maxCharacters = 50;
+
+            var enteredText = inputElement.value;
+            var Count = maxCharacters - enteredText.length;
+
+            charCountElement.innerText = 'Kalan Karakter Sayısı: ' + Count;
+
+            if (Count == 0) {
+                inputElement.value = enteredText.slice(0, maxCharacters);
+                charLimitMessageElement.innerText = 'Maksimum karakter sayısına ulaşıldı!';
+
+            } else {
+                charLimitMessageElement.innerText = '';
+            }
+        }
+
+    </script>
+    <script>
+        function limitChar() {
+            var inputElement = document.getElementById('PossessionModel');
+            var charCountElement = document.getElementById('charC');
+            var charLimitMessageElement = document.getElementById('Message');
+
+            var maxCharacters = 50; // Maksimum karakter sayısını belirle
+
+            var enteredText = inputElement.value;
+            var charCount = maxCharacters - enteredText.length;
+
+            charCountElement.innerText = 'Kalan Karakter Sayısı: ' + charCount;
+
+            if (charCount == 0) {
+                inputElement.value = enteredText.slice(0, maxCharacters);
+                charLimitMessageElement.innerText = 'Maksimum karakter sayısına ulaşıldı!';
+            } else {
+                charLimitMessageElement.innerText = '';
+            }
+        }
+    </script>
+    <script>
+        function limit() {
+            var inputElement = document.getElementById('Details');
+            var charCountElement = document.getElementById('char');
+            var charLimitMessageElement = document.getElementById('MessageL');
+
+            var maxCharacters = 250; // Maksimum karakter sayısını belirle
+
+            var enteredText = inputElement.value;
+            var charCount = maxCharacters - enteredText.length;
+
+            charCountElement.innerText = 'Kalan Karakter Sayısı: ' + charCount;
+
+            if (charCount == 0) {
+                inputElement.value = enteredText.slice(0, maxCharacters);
+                charLimitMessageElement.innerText = 'Maksimum karakter sayısına ulaşıldı!';
+            } else {
+                charLimitMessageElement.innerText = '';
+            }
+        }
+    </script>
 </body>

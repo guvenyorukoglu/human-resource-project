@@ -1,5 +1,6 @@
 ﻿using humanResourceProject.Domain.Entities.Abstract;
 using humanResourceProject.Domain.Enum;
+using System.ComponentModel.DataAnnotations;
 
 namespace humanResourceProject.Domain.Entities.Concrete
 {
@@ -13,6 +14,7 @@ namespace humanResourceProject.Domain.Entities.Concrete
         public DateTime ExpiryDate { get; set; }
         public Currency Currency { get; set; }
         public RequestStatus AdvanceStatus { get; set; } = RequestStatus.Pending;
+        [StringLength(500, ErrorMessage = "En fazla 500 karakter olmalıdır.")]
         public string? RejectReason { get; set; }
 
         public AppUser Employee { get; set; }
