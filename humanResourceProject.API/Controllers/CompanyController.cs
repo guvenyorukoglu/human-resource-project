@@ -18,14 +18,16 @@ namespace humanResourceProject.API.Controllers
         private readonly IMailService _mailService;
         private readonly IAppUserReadService _appUserReadService;
         private readonly IAppUserWriteService _appUserWriteService;
+        private readonly UserManager<AppUser> _userManager;
 
-        public CompanyController(ICompanyReadService companyReadService, ICompanyWriteService companyWriteService, IAppUserReadService appUserReadService, IMailService mailService, IAppUserWriteService appUserWriteService)
+        public CompanyController(ICompanyReadService companyReadService, ICompanyWriteService companyWriteService, IAppUserReadService appUserReadService, IMailService mailService, IAppUserWriteService appUserWriteService, UserManager<AppUser> userManager)
         {
             _companyReadService = companyReadService;
             _companyWriteService = companyWriteService;
             _appUserReadService = appUserReadService;
             _mailService = mailService;
             _appUserWriteService = appUserWriteService;
+            _userManager = userManager;
         }
 
         [HttpGet]
@@ -114,11 +116,14 @@ namespace humanResourceProject.API.Controllers
             {
                 user.Status = Domain.Enum.Status.Active;
                 await _appUserWriteService.Update(user);
+
+                string token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                string action = Url.Action("ConfirmEmail", "Account", new { id = user.Id, token }, Request.Scheme);
+
                 string subject = "Şirket Onayı!";
-                string body = $"<p>Sayın {user.FirstName} {user.LastName},</p><p>{company.CreateDate.ToShortDateString()} tarihli  {company.CompanyName} adlı şirket talebiniz onaylanmıştır.</p><p>Güzel günlerde kullanmanız dileğiyle.</p><br><hr><br><h3>Team Monitorease</h3>";
+                string body = $"<p>Sayın {user.FirstName} {user.LastName},</p><p>{company.CreateDate.ToShortDateString()} tarihli  {company.CompanyName} adlı şirket talebiniz onaylanmıştır.</p><p>Hesabınızı doğrulamak için <a href ='{action}'>buraya</a> tıklayınız.</p><p>Güzel günlerde kullanmanız dileğiyle.</p><br><hr><br><h3>Team Monitorease</h3>";
                 await _mailService.SendEmailAsync(user, recipientEmail, mailToName, subject, body);
 
-                 
             }
             else if (model.CompanyStatus == Domain.Enum.RequestStatus.Rejected)
             {

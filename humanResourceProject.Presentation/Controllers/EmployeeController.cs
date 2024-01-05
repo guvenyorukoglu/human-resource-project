@@ -366,7 +366,7 @@ namespace humanResourceProject.Presentation.Controllers
                 }
                 return View("Error");
             }
-            else if (User.IsInRole("CompanyManager"))
+            else if (User.IsInRole("CompanyManager") || User.IsInRole("SiteManager"))
             {
                 var companyManagerId = Guid.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value);
                 var response = await _httpClient.GetAsync($"api/AppUser/ProfileCompanyManager/{companyManagerId}");
