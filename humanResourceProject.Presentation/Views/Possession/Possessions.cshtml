@@ -197,7 +197,6 @@
                                             </div>
                                         </div>
 
-                                        @* Take Back Possession modal *@
                                         <div class="modal fade" id="takeBackPossessionModal_@item.Id" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                             <div class="modal-dialog">
                                                 <div class="modal-content">
@@ -221,7 +220,6 @@
                                             </div>
                                         </div>
 
-                                        @* Delete Possession modal *@
                                         <div class="modal fade" id="deletePossessionModal_@item.Id" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                             <div class="modal-dialog">
                                                 <div class="modal-content">
@@ -238,7 +236,7 @@
                                                         <a asp-action="DeletePossession"
                                                            asp-controller="Possession"
                                                            asp-route-id="@item.Id">
-                                                            <button type="button" class="btn btn-danger">Evet</button>
+                                                            <button type="button" class="btn btn-danger">Sil</button>
                                                         </a>
                                                     </div>
                                                 </div>
