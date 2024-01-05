@@ -42,7 +42,7 @@ namespace humanResourceProject.Presentation.Controllers
         [Authorize(Roles = "Manager,CompanyManager")]
         public async Task<IActionResult> EmployeesExpenses()
         {
-            if (User.IsInRole("Manager"))
+            if (User.IsInRole("Manager") || User.IsInRole("CompanyManager"))
             {
                 Guid managerId = Guid.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value);
                 var response = await _httpClient.GetAsync($"api/Expense/GetExpensesByManagerId/{managerId}");
@@ -54,19 +54,19 @@ namespace humanResourceProject.Presentation.Controllers
                 }
                 return View();
             }
-            else if (User.IsInRole("CompanyManager"))
-            {
-                Guid companyId = Guid.Parse(User.Claims.FirstOrDefault(x => x.Type == "CompanyId").Value);
-
-                var response = await _httpClient.GetAsync($"api/Expense/GetExpensesByCompanyId/{companyId}");
-                if (response.IsSuccessStatusCode)
-                {
-                    var cont = await response.Content.ReadAsStringAsync();
-                    var expenses = JsonConvert.DeserializeObject<List<ExpenseVM>>(cont);
-                    return View(expenses);
-                }
-                return View();
-            }
+            //else if (User.IsInRole("CompanyManager"))
+            //{
+            //    Guid companyId = Guid.Parse(User.Claims.FirstOrDefault(x => x.Type == "CompanyId").Value);
+                
+            //    var response = await _httpClient.GetAsync($"api/Expense/GetExpensesByCompanyId/{companyId}");
+            //    if (response.IsSuccessStatusCode)
+            //    {
+            //        var cont = await response.Content.ReadAsStringAsync();
+            //        var expenses = JsonConvert.DeserializeObject<List<ExpenseVM>>(cont);
+            //        return View(expenses);
+            //    }
+            //    return View();
+            //}
             return View();
         }
 

@@ -51,7 +51,7 @@ namespace humanResourceProject.Models.DTOs
 
         [Required(ErrorMessage = "Adres alanı boş geçilemez!")]
         [DisplayName("Adres*")]
-        [StringLength(200, ErrorMessage = "Adres en fazla 200 en az 5 karakter olmalıdır.", MinimumLength = 5)]
+        [StringLength(150, ErrorMessage = "Adres en fazla 150 en az 5 karakter olmalıdır.", MinimumLength = 5)]
         public string Address { get; set; }
 
         [Required(ErrorMessage = "TC kimlik numarası alanı boş geçilemez!")]

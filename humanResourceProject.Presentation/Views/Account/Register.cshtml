@@ -112,7 +112,9 @@
 
                                     <div class="form-group mb-3">
                                         <label asp-for="Address" class="control-label"></label>
-                                        <input asp-for="Address" class="form-control" />
+                                        <input id="Address" oninput="limitCharacters()" asp-for="Address" class="form-control" />
+                                        <input id="charCount" type="hidden"></input>
+                                        <p id="charLimitMessage" style="color: red;"></p>
                                         <span asp-validation-for="Address" class="text-danger"></span>
                                     </div>
                                 </div>
@@ -165,3 +167,24 @@
         </script>
     }
     }
+<script>
+    function limitCharacters() {
+        var inputElement = document.getElementById('Address');
+        var charCountElement = document.getElementById('charCount');
+        var charLimitMessageElement = document.getElementById('charLimitMessage');
+
+        var maxCharacters = 150; // Maksimum karakter sayısını belirle
+
+        var enteredText = inputElement.value;
+        var charCount = maxCharacters - enteredText.length;
+
+        charCountElement.innerText = 'Kalan Karakter Sayısı: ' + charCount;
+
+        if (charCount == 0) {
+            inputElement.value = enteredText.slice(0, maxCharacters);
+            charLimitMessageElement.innerText = 'Maksimum karakter sayısına ulaşıldı!';
+        } else {
+            charLimitMessageElement.innerText = '';
+        }
+    }
+</script>
