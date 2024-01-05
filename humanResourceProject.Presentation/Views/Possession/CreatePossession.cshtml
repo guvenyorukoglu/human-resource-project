@@ -1,0 +1,82 @@
+﻿@model PossessionDTO
+
+@{
+    ViewData["Title"] = "CreatePossession";
+    Layout = "~/Views/Shared/_HRLayout.cshtml";
+}
+<style>
+    ul {
+        list-style-type: none;
+        padding: 0;
+    }
+</style>
+
+<body>
+    <div class="row">
+        @Html.Partial("_PanelPartial")
+
+        <div class="col-md-4" style="margin: 50px auto">
+            <form asp-action="CreatePossession" asp-controller="Possession" method="post">
+                <div class="card shadow p-3 mb-5 bg-body rounded">
+                    <div class="card-header">
+                        <h1 class="card-title text-center">Yeni Zimmet Ekle</h1>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group mb-3">
+                            <label asp-for="Barcode" class="control-label"></label>
+                            <input asp-for="Barcode" class="form-control" />
+                            <span asp-validation-for="Barcode" class="text-danger"></span>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label asp-for="Brand" class="control-label"></label>
+                            <input asp-for="Brand" class="form-control" />
+                            <span asp-validation-for="Brand" class="text-danger"></span>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label asp-for="PossessionModel" class="control-label"></label>
+                            <input asp-for="PossessionModel" class="form-control" />
+                            <span asp-validation-for="PossessionModel" class="text-danger"></span>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label asp-for="PossessionType" class="control-label"></label>
+                            <select asp-for="PossessionType" class="form-control">
+                                @{
+                                    var enumType = typeof(PossessionType);
+                                    var enumValues = enumType.GetEnumValues();
+
+                                    foreach (var enumValue in enumValues)
+                                    {
+                                        var displayAttribute = enumType.GetMember(enumValue.ToString())[0].GetCustomAttribute<DisplayAttribute>();
+                                        var displayName = displayAttribute?.GetName() ?? enumValue.ToString();
+
+                                        <option value="@enumValue">@displayName</option>
+                                    }
+                                    <option value="-1" selected>Zimmet Tipi seçiniz!</option>
+                                }
+
+                            </select>
+                            @* <span asp-validation-for="PossessionType" class="text-danger"></span> *@
+                        </div>
+                        <div class="form-group mb-3">
+                            <label asp-for="Details" class="control-label"></label>
+                            <input asp-for="Details" class="form-control" />
+                            <span asp-validation-for="Details" class="text-danger"></span>
+                        </div>
+                        <div class="form-group mb-3">
+                            <input asp-for="CompanyId" type="hidden" class="form-control" />
+                        </div>
+                        <div class="mb-3">
+                            <label>*Zorunlu alan</label>
+                        </div>
+
+                        <div class="form-group mb-3 d-grid">
+                            <input type="submit" value="Ekle" class="btn btn-primary" />
+                        </div>
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+

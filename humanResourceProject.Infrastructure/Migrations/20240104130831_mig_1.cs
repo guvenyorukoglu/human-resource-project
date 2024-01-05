@@ -175,7 +175,7 @@ namespace humanResourceProject.Infrastructure.Migrations
                     Barcode = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     CompanyId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Brand = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    Model = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    PossessionModel = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     Details = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: true),
                     PossessionType = table.Column<int>(type: "int", nullable: false),
                     CreateDate = table.Column<DateTime>(type: "datetime2", nullable: false),

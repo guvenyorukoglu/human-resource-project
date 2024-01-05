@@ -11,11 +11,12 @@ namespace humanResourceProject.Presentation.Controllers
     public class DepartmentController : Controller
     {
         private readonly HttpClient _httpClient;
-        public DepartmentController()
+        private readonly IConfiguration _configuration;
+        public DepartmentController(IConfiguration configuration)
         {
+            _configuration = configuration;
             _httpClient = new HttpClient();
-            //_httpClient.BaseAddress = new Uri("https://monitoreaseapi.azurewebsites.net"); // Azure
-            _httpClient.BaseAddress = new Uri("https://localhost:7255/"); // Local
+            _httpClient.BaseAddress = new Uri(_configuration["BaseAddress"]);
         }
         public async Task<IActionResult> Departments()
         {

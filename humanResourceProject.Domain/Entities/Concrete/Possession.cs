@@ -9,7 +9,7 @@ namespace humanResourceProject.Domain.Entities.Concrete
         public string Barcode { get; set; }
         public Guid CompanyId { get; set; }
         public string Brand { get; set; }
-        public string Model { get; set; }
+        public string PossessionModel { get; set; }
         public string? Details { get; set; }
         public PossessionType PossessionType { get; set; }
         public Company Company { get; set; }
