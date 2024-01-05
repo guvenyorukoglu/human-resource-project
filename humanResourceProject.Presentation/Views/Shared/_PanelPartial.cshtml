@@ -132,12 +132,19 @@
                             </li>
                         </ul>
                     </li>
+                    <li>
+                        <a data-toggle="tooltip" title="Zimmetlerim" asp-action="MyPossessions" asp-controller="Possession"><i class="fa-solid fa-building-shield"></i></a>
+                    </li>
                 }
-                @if (User.IsInRole("CompanyManager") || User.IsInRole("Manager"))
+                @if (!User.IsInRole("SiteManager"))
                 {
                     <li>
                         <a data-toggle="tooltip" title="Personeller" asp-action="Employees" asp-controller="Employee"><i class="fa fa-users"></i></a>
                     </li>
+                }
+                @if (User.IsInRole("CompanyManager") || User.IsInRole("Manager"))
+                {
+
                     <li class="parent">
                         <a data-toggle="tooltip" title="Personel Talepleri" href="#"><i class="fa-solid fa-person-circle-exclamation"></i></a>
                         <ul class="sub-menu">
@@ -152,25 +159,36 @@
                             </li>
                         </ul>
                     </li>
-
+                }
+                @if (User.IsInRole("CompanyManager"))
+                {
                     <li>
                         <a data-toggle="tooltip" title="Departmanlar" asp-action="Departments" asp-controller="Department"><i class="fa-solid fa-building-user"></i></a>
                     </li>
                     <li>
                         <a data-toggle="tooltip" title="Pozisyonlar" asp-action="Jobs" asp-controller="Job"><i class="fa-solid fa-briefcase"></i></a>
                     </li>
-
+                    <li>
+                        <a data-toggle="tooltip" title="Zimmetler" asp-action="Possessions" asp-controller="Possession"><i class="fa-solid fa-building-shield"></i></a>
+                    </li>
                 }
 
-                <li>
-                    <a data-toggle="tooltip" title="Raporlar" href="#"><i class="fa fa-newspaper"></i></a>
+                @if (User.IsInRole("SiteManager"))
+                {
+                    <li>
+                        <a data-toggle="tooltip" title="Şirketler" asp-action="Companies" asp-controller="Company"><i class="fa-solid fa-building-user"></i></a>
+                    </li>
+                }
+
+                @* <li>
+                <a data-toggle="tooltip" title="Raporlar" href="#"><i class="fa fa-newspaper"></i></a>
                 </li>
                 <li>
-                    <a data-toggle="tooltip" title="Takvim" href="#"><i class="fa fa-calendar"></i></a>
+                <a data-toggle="tooltip" title="Takvim" href="#"><i class="fa fa-calendar"></i></a>
                 </li>
                 <li>
-                    <a data-toggle="tooltip" title="E-posta" href="#"><i class="fa fa-envelope"></i></a>
-                </li>
+                <a data-toggle="tooltip" title="E-posta" href="#"><i class="fa fa-envelope"></i></a>
+                </li> *@
 
             </ul>
         </div>

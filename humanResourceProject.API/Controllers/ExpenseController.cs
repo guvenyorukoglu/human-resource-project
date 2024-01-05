@@ -58,7 +58,7 @@ namespace humanResourceProject.API.Controllers
             string mailToName = $"{user.FirstName} {user.LastName}";
             if (expense.ExpenseStatus == Domain.Enum.RequestStatus.Approved)
             {
-                string subject = "Masraf Onayı!";
+                string subject = "Harcama Onayı!";
                 string body = $"<p>Sayın {user.FirstName} {user.LastName},</p><p>{expense.CreateDate.ToShortDateString()} tarihli ve {expense.ExpenseNo} numaralı {expense.AmountOfExpense} {expense.Currency.GetDisplayName()} harcama talebiniz onaylanmıştır.</p><p>Güzel günlerde kullanmanız dileğiyle.</p><br><hr><br><h3>Team Monitorease</h3>";
                 await _mailService.SendEmailAsync(user, recipientEmail, mailToName, subject, body);
                 //_mailService.SendApproveMail(user, action, $"Sayın {user.FirstName} {user.LastName} Avansın onaylandı. Güzel günlerde kullan");
@@ -66,7 +66,7 @@ namespace humanResourceProject.API.Controllers
             else if (model.ExpenseStatus == Domain.Enum.RequestStatus.Rejected)
             {
                 model.ExpenseStatus = Domain.Enum.RequestStatus.Rejected;
-                string subject = "Masraf Reddi!";
+                string subject = "Harcama Reddi!";
                 string body = $"<p>Sayın {user.FirstName} {user.LastName},</p><p>{expense.CreateDate.ToShortDateString()} tarihli ve {expense.ExpenseNo} numaralı {expense.AmountOfExpense} {expense.Currency.GetDisplayName()} harcama talebiniz reddedilmiştir.</p><p>Yöneticinizin reddetme sebebi:</p><p>{model.RejectReason}</p><br><hr><br><h3>Team Monitorease</h3>";
                 await _mailService.SendEmailAsync(user, recipientEmail, mailToName, subject, body);
                 //_mailService.SendApproveMail(user, action, $"Sayın {user.FirstName} {user.LastName} Avansın reddedildi");
@@ -110,8 +110,8 @@ namespace humanResourceProject.API.Controllers
             AppUser manager = await _appUserReadService.GetSingleDefault(x => x.Id == employee.ManagerId);
             string recipientEmail = manager.Email;
             string mailToName = $"{manager.FirstName} {manager.LastName}";
-            string subject = "Masraf Talebi!";
-            string body = $"<p>Sayın {manager.FirstName} {manager.LastName},</p><p>{employee.FirstName} {employee.LastName} tarafından {DateTime.Now.ToShortDateString()} tarihli {model.AmountOfExpense} {model.Currency.GetDisplayName()} masraf talebi yapılmıştır.</p><p>Uygulamaya giriş yaparak onaylama ya da reddetme işlemini yapabilirsiniz.</p><p>{_configuration["HomePage"]}</p><p>İyi çalışmalar dileriz.</p><br><hr><br><h3>Team Monitorease</h3>";
+            string subject = "Harcama Talebi!";
+            string body = $"<p>Sayın {manager.FirstName} {manager.LastName},</p><p>{employee.FirstName} {employee.LastName} tarafından {DateTime.Now.ToShortDateString()} tarihli {model.AmountOfExpense} {model.Currency.GetDisplayName()} harcama talebi yapılmıştır.</p><p>Uygulamaya giriş yaparak onaylama ya da reddetme işlemini yapabilirsiniz.</p><p>{_configuration["HomePage"]}</p><p>İyi çalışmalar dileriz.</p><br><hr><br><h3>Team Monitorease</h3>";
             await _mailService.SendEmailAsync(manager, recipientEmail, mailToName, subject, body);
             return Ok(result);
         }

@@ -14,7 +14,7 @@ namespace humanResourceProject.Presentation.Controllers
     {
         private readonly IConfiguration _configuration;
         private readonly HttpClient _httpClient;
-      
+
         public CompanyController(IConfiguration configuration)
         {
             _configuration = configuration;
@@ -111,7 +111,7 @@ namespace humanResourceProject.Presentation.Controllers
             if (response.IsSuccessStatusCode)
             {
                 TempData["SuccessUpdateCompanyMessage"] = "Şirket bilgileri güncellenmiştir.";
-                return RedirectToAction(nameof(Companies));
+                return RedirectToAction("Home", "Employee");
             }
             else
             {

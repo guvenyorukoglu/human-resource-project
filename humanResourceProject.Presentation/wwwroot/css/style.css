@@ -25,8 +25,8 @@ body {
 }
 
 .aside {
-    overflow-y: auto;
-    height: 800px;
+   /* overflow-y: auto;*/
+    /*height: 800px;*/
     width: 82%;
     box-sizing: border-box;
 }
@@ -161,10 +161,10 @@ h6 {
 .custom-button {
     align-items: center;
     text-align: center;
-    width: 10.5vw;
-    height: 6vh;
-    padding: 10px 40px;
-    border: none;
+    width: 10vw;
+    height: 5vh;
+    padding: 10px;
+    border: 1px solid transparent;
     font-size: 14px;
     font-weight: 600;
     cursor: pointer;
@@ -182,6 +182,7 @@ h6 {
 .custom-button--logout {
     margin-top: 50px;
     background-color: #A0AAFF;
+    padding: 10px 45px;
     color: #31374a;
 }
 
@@ -202,24 +203,43 @@ h6 {
 }
 
 .custom-button--create-entity {
-    background-color: #31374a;
+    background-color: #133a63;
+    border: 1px solid transparent;
+    padding: 10px 20px;
+    border-radius: 5px;
     color: snow;
+    cursor: pointer;
 }
 
     .custom-button--create-entity:hover {
         background-color: snow;
-        color: #31374a;
-        border: 1px solid #31374a;
+        color: #133a63;
+        border: 1px solid #133a63;
     }
 
     .custom-button--create-entity:active {
-        background-color: #31374a;
+        background-color: #133a63;
         color: snow;
-        border: 1px solid #31374a;
+        border: 1px solid #133a63;
     }
 
     .custom-button--create-entity:focus {
         outline: none;
+    }
+
+.btn-submit {
+    background-color: #133A63;
+    border: 1px solid transparent;
+    padding: 10px 20px;
+    border-radius: 5px;
+    color: #fff;
+    cursor: pointer;
+}
+
+    .btn-submit:hover {
+        background-color: snow;
+        color: #133a63;
+        border-color: #133a63;
     }
 /* PAGINATION */
 .pagination {
