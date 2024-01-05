@@ -110,8 +110,6 @@ namespace humanResourceProject.API.Controllers
                 return BadRequest(result.Errors);
 
             AppUser user = await _userManager.FindByEmailAsync(model.Email);
-
-            //string action = Url.Action("SetStatusActive", "Account", new { id = user.Id }, Request.Scheme);
             string action = _configuration["HomePage"];
             string mailToName = "Admin";
             string subject = "Yeni Kullanıcı Kayıt Oldu!";
