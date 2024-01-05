@@ -73,7 +73,7 @@
                         <div class="form-group mb-3">
                             <label asp-for="Explanation" class="control-label"></label>
                             <textarea id="Explanation" oninput="limitCharacters()" asp-for="Explanation" class="form-control" rows="8"></textarea>
-                            <p id="charCount">Kalan Karakter Sayısı: 500</p>
+                            <p id="charCount" class="small">Kalan Karakter Sayısı: 500</p>
                             <p id="charLimitMessage" style="color: red;"></p>
                             <span asp-validation-for="Explanation" class="text-danger"></span>
                         </div>
