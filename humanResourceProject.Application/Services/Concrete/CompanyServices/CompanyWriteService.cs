@@ -39,6 +39,7 @@ namespace humanResourceProject.Application.Services.Concrete.CompanyServices
             Company newCompany = _mapper.Map<Company>(model);
             newCompany.CreateDate = DateTime.Now;
             newCompany.Status = Status.Active;
+            newCompany.CompanyStatus = RequestStatus.Pending;
             if (await _writeRepository.Insert(newCompany))
                 return IdentityResult.Success;
             else
@@ -56,6 +57,7 @@ namespace humanResourceProject.Application.Services.Concrete.CompanyServices
             updatedCompany.NumberOfEmployees = model.NumberOfEmployees;
             updatedCompany.UpdateDate = DateTime.Now;
             updatedCompany.Status = Status.Modified;
+            updatedCompany.CompanyStatus = model.CompanyStatus;
 
             if (await _writeRepository.Update(updatedCompany))
                 return IdentityResult.Success;
