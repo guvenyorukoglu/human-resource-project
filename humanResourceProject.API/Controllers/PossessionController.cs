@@ -73,7 +73,13 @@ namespace humanResourceProject.API.Controllers
         {
             var result = await _possessionWriteService.UpdatePossession(model);
             if (!result.Succeeded)
-                return BadRequest(result.Errors);
+            {
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError(error.Code, error.Description);
+                }
+                return BadRequest(ModelState);
+            }
 
             return Ok("Güncellenmiştir.");
         }

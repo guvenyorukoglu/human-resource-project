@@ -12,6 +12,7 @@ namespace humanResourceProject.Presentation.Controllers
     
     public class CompanyController : Controller
     {
+        private readonly IConfiguration _configuration;
         private readonly HttpClient _httpClient;
         private readonly IConfiguration _configuration;
 
@@ -29,10 +30,8 @@ namespace humanResourceProject.Presentation.Controllers
 
             if (response.IsSuccessStatusCode)
             {
-
                 var json = await response.Content.ReadAsStringAsync();
                 var companies = JsonConvert.DeserializeObject<List<CompanyVM>>(json);
-
 
                 return View(companies);
             }
@@ -95,15 +94,13 @@ namespace humanResourceProject.Presentation.Controllers
 
         }
 
-
-
         [HttpPost]
         [Authorize(Roles = "CompanyManager")]
         public async Task<IActionResult> UpdateCompany(UpdateCompanyDTO model)
         {
             if (!ModelState.IsValid)
             {
-                TempData["Result"] = "modelinvalid";
+                ModelState.AddModelError(string.Empty, "Bir hata oluştu tekrar deneyiniz!");
                 return View(model);
             }
 
@@ -114,11 +111,14 @@ namespace humanResourceProject.Presentation.Controllers
 
             if (response.IsSuccessStatusCode)
             {
-                return RedirectToAction("Home","Employee");
+                TempData["SuccessUpdateCompanyMessage"] = "Şirket bilgileri güncellenmiştir.";
+                return RedirectToAction(nameof(Companies));
             }
-
-            ModelState.AddModelError(response.StatusCode.ToString(), "Bir hata oluştu.");
-            return View(model);
+            else
+            {
+                ModelState.AddModelError(string.Empty, "Bir hata oluştu!");
+                return View(model);
+            }
         }
 
         [HttpPost]
@@ -142,7 +142,7 @@ namespace humanResourceProject.Presentation.Controllers
                     var json = await getResponse.Content.ReadAsStringAsync();
                     var company = JsonSerializer.Deserialize<CompanyVM>(json);
 
-                    return View("Delete", company);
+                    return RedirectToAction(nameof(Companies));
                 }
                 else
                 {
@@ -150,8 +150,6 @@ namespace humanResourceProject.Presentation.Controllers
                 }
             }
         }
-
-
         
         [HttpGet]
         [Authorize(Roles = "SiteManager")]
@@ -167,7 +165,7 @@ namespace humanResourceProject.Presentation.Controllers
             var content = await response.Content.ReadAsStringAsync();
             var model2 = JsonConvert.DeserializeObject<UpdateCompanyDTO>(content);
             model2.CompanyStatus = RequestStatus.Approved;
-            model2.Status = Domain.Enum.Status.Active;
+            model2.Status = Status.Active;
             var json = JsonConvert.SerializeObject(model2);
             var model = new StringContent(json, Encoding.UTF8, "application/json");
 

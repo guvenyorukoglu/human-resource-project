@@ -140,6 +140,7 @@ namespace humanResourceProject.Presentation.Controllers
         {
             if (!ModelState.IsValid)
             {
+                ModelState.AddModelError(string.Empty, "Bir hata oluştu tekrar deneyiniz!");
                 return View(model);
             }
 
@@ -150,6 +151,7 @@ namespace humanResourceProject.Presentation.Controllers
 
             if (response.IsSuccessStatusCode)
             {
+                TempData["SuccessUpdatePossesionMessage"] = "Zimmet güncellenmiştir.";
                 return RedirectToAction(nameof(Possessions));
             }
             else
