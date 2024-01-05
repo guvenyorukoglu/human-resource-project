@@ -111,7 +111,7 @@
         @Html.Partial("_PanelPartial")
 
 
-        <div class="aside scrollable  col-md-9 container">
+        <div class="aside col-md-9 container">
             <div class="row text-center">
                 <div class="col-md-11 leave-info card">
 
@@ -281,7 +281,7 @@
                                 </a>
 
                             }
-                            else
+                            else if (User.IsInRole("Personel"))
                             {
 
                                 <a asp-action="MyLeaves" asp-controller="Leave" type="button" style="background-color:#FF6384; border: 2px solid black; border-radius: 5px;color:black;width:200px;height:30px;" id="numberOfPendingLeaves" class="numberOfPendingLeaves">
@@ -328,7 +328,6 @@
 
                
                 <div class="col-md-4">
-                    <div class="col-md-12">
                         <div class="card company-info">
                             <div class="card-header">
                                 <h5 class="card-title text-center mb-0">ŞİRKET BİLGİLERİ</h5>
@@ -348,13 +347,13 @@
                                     <div class="d-flex gap-2 align-items-center"><span class="fw-bold">Vergi Dairesi:</span><span>@Model.Company.TaxOffice</span></div>
                                 </div>
                             </div>
-                        </div>
+                        
                     </div>
 
 
 
 
-                    <div class="col-md-12 ">
+                    @* <div class="col-md-12 ">
                         <div class="card company-info">
                             <div class="card-header">
                                 <h5 class="card-title text-center mb-0">FİNANS BİLGİLERİ</h5>
@@ -370,7 +369,7 @@
                                 </table>
                             </div>
                         </div>
-                    </div>
+                    </div> *@
                 </div>
 
 
