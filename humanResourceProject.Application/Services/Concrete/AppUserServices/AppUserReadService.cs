@@ -54,11 +54,12 @@ namespace humanResourceProject.Application.Services.Concrete.AppUserServices
                     Email = x.Email,
                     PhoneNumber = x.PhoneNumber,
                     Gender = x.Gender,
-                    Title = x.Company.Jobs.FirstOrDefault(j => j.Id == x.JobId).Title
+                    Title = x.Company.Jobs.FirstOrDefault(j => j.Id == x.JobId).Title,
+                    Department = x.Company.Departments.FirstOrDefault(d => d.Id == x.DepartmentId).DepartmentName
                 },
                 where: x => x.CompanyId == companyId && (x.Status != Domain.Enum.Status.Inactive && x.Status != Domain.Enum.Status.Deleted),
                 orderBy: x => x.OrderBy(x => x.CreateDate),
-                include: x => x.Include(x => x.Company).ThenInclude(x => x.Jobs));
+                include: x => x.Include(x => x.Company).ThenInclude(x => x.Jobs).Include(x => x.Company).ThenInclude(x => x.Departments));
         }
 
         public async Task<List<PersonelVM>> GetEmployeesByManagerId(Guid managerId)
@@ -74,11 +75,12 @@ namespace humanResourceProject.Application.Services.Concrete.AppUserServices
                     Email = x.Email,
                     PhoneNumber = x.PhoneNumber,
                     Gender = x.Gender,
-                    Title = x.Company.Jobs.FirstOrDefault(j => j.Id == x.JobId).Title
+                    Title = x.Company.Jobs.FirstOrDefault(j => j.Id == x.JobId).Title,
+                    Department = x.Company.Departments.FirstOrDefault(d => d.Id == x.DepartmentId).DepartmentName
                 },
                 where: x => x.ManagerId == managerId && (x.Status != Domain.Enum.Status.Inactive && x.Status != Domain.Enum.Status.Deleted),
                 orderBy: x => x.OrderBy(x => x.CreateDate),
-                include: x => x.Include(x => x.Company).ThenInclude(x => x.Jobs));
+                include: x => x.Include(x => x.Company).ThenInclude(x => x.Jobs).Include(x => x.Company).ThenInclude(x => x.Departments));
         }
 
         public async Task<List<ManagerVM>> GetManagersByCompanyId(Guid companyId)

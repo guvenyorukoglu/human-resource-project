@@ -22,6 +22,6 @@ namespace humanResourceProject.Models.VMs
         public Expense? Expense { get; set; }   
         public List<Expense>? Expenses { get; set; }
         public Company Company { get; set; }
-
+        public string Department { get; set; }
     }
 }

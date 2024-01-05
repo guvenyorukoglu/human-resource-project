@@ -24,3 +24,18 @@ ul{
   padding: 0;
   margin: 0;
 }
+
+.btn-submit {
+    background-color: #133A63;
+    border: 1px solid transparent; 
+    padding: 10px 20px;
+    border-radius: 5px;
+    color: #fff;
+    cursor: pointer;
+}
+
+    .btn-submit:hover {
+        background-color: snow;
+        color: #133a63;
+        border-color: #133a63;
+    }
