@@ -128,8 +128,13 @@ namespace humanResourceProject.API.Controllers
         {
             var result = await _advanceWriteService.UpdateAdvance(model);
             if (!result.Succeeded)
-                return BadRequest(result.Errors);
-
+            {
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError(error.Code, error.Description);
+                }
+                return BadRequest(ModelState);
+            }
             Advance advance = await _advanceReadService.GetSingleDefault(x => x.Id == model.Id);
             AppUser employee = await _appUserReadService.GetSingleDefault(x => x.Id == model.EmployeeId);
             AppUser manager = await _appUserReadService.GetSingleDefault(x => x.Id == employee.ManagerId);

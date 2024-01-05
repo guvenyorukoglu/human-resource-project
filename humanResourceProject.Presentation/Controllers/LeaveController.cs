@@ -137,7 +137,10 @@ namespace humanResourceProject.Presentation.Controllers
         public async Task<IActionResult> UpdateLeave(UpdateLeaveDTO model)
         {
             if (!ModelState.IsValid)
+            {
+                ModelState.AddModelError(string.Empty, "Bir hata oluştu tekrar deneyiniz!");
                 return View(model);
+            }
 
             var json = JsonConvert.SerializeObject(model);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
@@ -145,10 +148,15 @@ namespace humanResourceProject.Presentation.Controllers
             var response = await _httpClient.PutAsync($"api/Leave", content);
 
             if (response.IsSuccessStatusCode)
+            {
+                TempData["SuccessUpdateLeaveMessage"] = "İzin talebiniz güncellenmiştir.";
                 return RedirectToAction(nameof(MyLeaves));
-
-            ModelState.AddModelError(response.StatusCode.ToString(), "Bir hata oluştu.");
-            return View(model);
+            }
+            else
+            {
+                ModelState.AddModelError("ModelInvalid", "Girilen bilgileri kontrol edin. Güncelleme başarısız!");
+                return View(model);
+            }
         }
 
         //LEAVE REQUESTS & CONTROLS
@@ -174,7 +182,6 @@ namespace humanResourceProject.Presentation.Controllers
             {
                 return RedirectToAction(nameof(EmployeesLeaves));
             }
-
             ModelState.AddModelError(httpResponse.StatusCode.ToString(), "Bir hata oluştu.");
             return View("Error");
         }

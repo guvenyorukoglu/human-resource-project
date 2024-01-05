@@ -53,8 +53,6 @@
                                     exportOptions: {
                                         columns: columnsToExport
                                     },
-                                    
-
                                 },
                                 {
                                     extend: 'spacer',
@@ -146,7 +144,7 @@
                                                         <a asp-action="DeleteDepartment"
                                                            asp-controller="Department"
                                                            asp-route-id="@item.Id">
-                                                            <button type="button" class="btn btn-primary">Evet</button>
+                                                            <button type="button" class="btn btn-danger">Sil</button>
                                                         </a>
                                                     </div>
                                                 </div>
@@ -158,10 +156,15 @@
                         }
                     </tbody>
                 </table>
-                @*                <div>
-                <a asp-controller="Employee" asp-action="Home"><button class="custom-button custom-button--create-entity">Ana Sayfaya Dön</button></a>
-                </div>*@
             </div>
         </div>
     </div>
+    @section Scripts {
+        @if (TempData["SuccessUpdateDepartmentMessage"] != null)
+        {
+            <script>
+                toastr["info"]("Departman tanımı güncellenmiştir.", "Başarılı");
+            </script>
+        }
+    }
 </body>

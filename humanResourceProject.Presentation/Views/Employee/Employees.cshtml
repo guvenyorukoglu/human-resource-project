@@ -15,9 +15,9 @@
             {
                 if (User.IsInRole("CompanyManager"))
                 {
-                  @*  <a asp-action="CreatePersonelManager" asp-controller="Employee">
-                        <button class="custom-button custom-button--create-entity"><i class="fa-solid fa-user-plus me-1"></i>Yönetici Ekle</button>
-                    </a>*@
+                    @*  <a asp-action="CreatePersonelManager" asp-controller="Employee">
+            <button class="custom-button custom-button--create-entity"><i class="fa-solid fa-user-plus me-1"></i>Yönetici Ekle</button>
+            </a>*@
                     <a asp-action="CreatePersonel" asp-controller="Employee">
                         <button class="custom-button custom-button--create-entity"><i class="fa-solid fa-user-plus me-1"></i>Personel Ekle</button>
                     </a>
@@ -221,6 +221,14 @@
             </div>
         </div>
     </div>
+    @section Scripts {
+        @if (TempData["SuccessUpdateEmployeeMessage"] != null)
+        {
+            <script>
+                toastr["info"]("Çalışanın profili güncellenmiştir.", "Başarılı");
+            </script>
+        }
+    }
 </body>
 
 
@@ -269,7 +277,6 @@
     #card-view-header {
         display: none;
     }
-
 </style>
 
 
