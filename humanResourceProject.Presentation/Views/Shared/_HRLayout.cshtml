@@ -61,7 +61,7 @@
                                 <li>
                                     <a class="dropdown-item" asp-action="ProfileEmployee" asp-controller="Employee" asp-route-id="@User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value">Profil</a>
                                 </li>
-                                <li><a class="dropdown-item">Ayarlar</a></li>
+                                @* <li><a class="dropdown-item">Ayarlar</a></li> *@
                                 <li><hr class="dropdown-divider"></li>
                                 <li><a class="dropdown-item" asp-controller="Account" asp-action="Logout" >Çıkış Yap</a></li>
                               

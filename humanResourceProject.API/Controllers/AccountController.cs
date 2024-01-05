@@ -111,7 +111,8 @@ namespace humanResourceProject.API.Controllers
 
             AppUser user = await _userManager.FindByEmailAsync(model.Email);
 
-            string action = Url.Action("SetStatusActive", "Account", new { id = user.Id }, Request.Scheme);
+            //string action = Url.Action("SetStatusActive", "Account", new { id = user.Id }, Request.Scheme);
+            string action = Url.Action(_configuration["HomePage"]);
             string mailToName = "Admin";
             string subject = "Yeni Kullanıcı Kayıt Oldu!";
             string body = $"<p>Merhaba Admin,</p><p>Yeni bir kullanıcı uygulamaya kayıt olmuştur.</p><p>Kullanıcının statüsünü aktif yapmak için <a href ='{action}'>buraya</a> tıklayınız.</p><br><hr><br><h3>Team Monitorease</h3>";
