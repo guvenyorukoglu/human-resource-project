@@ -73,7 +73,7 @@
                         <div class="form-group mb-3">
                             <label asp-for="Explanation" class="control-label"></label>
                             <textarea id="Explanation" oninput="limitCharacters()" asp-for="Explanation" class="form-control" rows="8"></textarea>
-                            <p id="charCount">Kalan Karakter Sayısı: 500</p>
+                            <p id="charCount" class="small">Kalan Karakter Sayısı: 500</p>
                             <p id="charLimitMessage" style="color: red;"></p>
                             <span asp-validation-for="Explanation" class="text-danger"></span>
                         </div>
@@ -96,7 +96,7 @@
                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                         <div class="text-center">
                             <div class="form-group mb-3 d-grid">
-                                <input type="submit" value="Oluştur" class="btn btn-primary" />
+                                <input type="submit" value="Oluştur" class="btn-submit" />
                             </div>
                             <div class="mb-5">
                                 <label title="@Model.ManagerEmail"><em class="fs-6 text-muted">Onaylaması gereken yönetici: <span class="text-uppercase">@Model.ManagerFullName</span></em></label>
