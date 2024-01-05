@@ -163,8 +163,15 @@
                 </div>
             </form>
         </div>
-
     </div>
+    @section Scripts {
+        @if (TempData["SuccessUpdateProfileMessage"] != null)
+        {
+            <script>
+                toastr["info"]("Profiliniz güncellenmiştir.", "Başarılı");
+            </script>
+        }
+    }
 </body>
 
 

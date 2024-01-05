@@ -176,8 +176,15 @@
                         }
                     </tbody>
                 </table>
-
             </div>
         </div>
     </div>
+    @section Scripts {
+        @if (TempData["SuccessUpdateLeaveMessage"] != null)
+        {
+            <script>
+                toastr["info"]("İzin talebiniz güncellenmiştir.", "Başarılı");
+            </script>
+        }
+    }
 </body>

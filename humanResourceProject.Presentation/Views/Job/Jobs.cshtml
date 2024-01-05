@@ -23,7 +23,9 @@
 
                 <script>
                     $(document).ready(function () {
-                        $('#jobs').DataTable();
+                        $('#jobs').DataTable({
+                            "language": { "url": "https://cdn.datatables.net/plug-ins/1.10.25/i18n/Turkish.json" }
+                        });
                     });
 
                 </script>
@@ -79,7 +81,7 @@
                                                         <a asp-action="DeleteJob"
                                                            asp-controller="Job"
                                                            asp-route-id="@item.Id">
-                                                            <button type="button" class="btn btn-primary">Evet</button>
+                                                            <button type="button" class="btn btn-danger">Sil</button>
                                                         </a>
                                                     </div>
                                                 </div>
@@ -91,10 +93,15 @@
                         }
                     </tbody>
                 </table>
-@*                <div>
-                    <a asp-controller="Employee" asp-action="Home"><button class="custom-button custom-button--create-entity">Ana Sayfaya Dön</button></a>
-                </div>*@
             </div>
         </div>
     </div>
+    @section Scripts {
+        @if (TempData["SuccessUpdateJobMessage"] != null)
+        {
+            <script>
+                toastr["info"]("İş tanımı güncellenmiştir.", "Başarılı");
+            </script>
+        }
+    }
 </body>
