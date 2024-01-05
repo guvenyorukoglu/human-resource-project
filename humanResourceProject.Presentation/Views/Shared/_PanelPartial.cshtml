@@ -1,4 +1,4 @@
-﻿@using System.Security.Claims;
+@using System.Security.Claims;
 
 <div class="panel col-md-1 col-lg-1">
     <button class="btn btn-sm float-end border-0 toggle-sidepanel" style="background-color:#A0AAFF;" onclick="hidePanel()"><i class="fa-solid fa-arrow-left"></i></button>
@@ -74,7 +74,14 @@
                     </li>
 
                 }
-                
+
+                @if(User.IsInRole("SiteManager"))
+                {
+                    <li>
+                        <a asp-action="Companies" asp-controller="Company"><i class="fa-solid fa-building-user"></i>Şirketler</a>
+                    </li>
+                }
+
                 <li>
                     <a href="#"><i class="fa fa-newspaper"></i>Raporlar</a>
                 </li>

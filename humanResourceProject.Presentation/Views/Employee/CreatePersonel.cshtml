@@ -35,6 +35,17 @@
                     <div class="card-body">
                         <div class="row">
                             <div class="col-md-6">
+
+                                <div class="form-group mb-3">
+
+                                   
+                                    Departman Yöneticisi: <input type="radio" asp-for="UserRole" value="DepartmentManager" />
+                                    <br />
+                                    Personel: <input type="radio" value="Personel" asp-for="UserRole" />
+                                </div>
+
+
+
                                 <div class="form-group mb-3">
                                     <label asp-for="FirstName" class="control-label"></label>
                                     <input asp-for="FirstName" class="form-control" />

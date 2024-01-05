@@ -51,7 +51,7 @@ namespace humanResourceProject.API.Controllers
             if (advance.AdvanceStatus == Domain.Enum.RequestStatus.Approved)
             {
                 string subject = "Avans Onayı!";
-                string body = $"<p>Sayın {user.FirstName} {user.LastName},</p><p>{advance.CreateDate.ToShortDateString()} tarihli {advance.AmountOfAdvance} {advance.Currency.GetDisplayName()} avans talebiniz onaylannıştır.</p><p>Güzel günlerde kullanmanız dileğiyle.</p><br><hr><br><h3>Team Monitorease</h3>";
+                string body = $"<p>Sayın {user.FirstName} {user.LastName},</p><p>{advance.CreateDate.ToShortDateString()} tarihli ve {advance.AdvanceNo} numaralı {advance.AmountOfAdvance} {advance.Currency.GetDisplayName()} avans talebiniz onaylanmıştır.</p><p>Güzel günlerde kullanmanız dileğiyle.</p><br><hr><br><h3>Team Monitorease</h3>";
                 await _mailService.SendEmailAsync(user, recipientEmail, mailToName, subject, body);
                 //_mailService.SendApproveMail(user, action, $"Sayın {user.FirstName} {user.LastName} Avansın onaylandı. Güzel günlerde kullan");
             }
@@ -59,7 +59,7 @@ namespace humanResourceProject.API.Controllers
             {
                 model.AdvanceStatus = Domain.Enum.RequestStatus.Rejected;
                 string subject = "Avans Reddi!";
-                string body = $"<p>Sayın {user.FirstName} {user.LastName},</p><p>{advance.CreateDate.ToShortDateString()} tarihli {advance.AmountOfAdvance} {advance.Currency.GetDisplayName()} avans talebiniz reddedilmiştir.</p><p>Yöneticinizin reddetme sebebi:</p><p>{model.RejectReason}</p><br><hr><br><h3>Team Monitorease</h3>";
+                string body = $"<p>Sayın {user.FirstName} {user.LastName},</p><p>{advance.CreateDate.ToShortDateString()} tarihli ve {advance.AdvanceNo} numaralı {advance.AmountOfAdvance} {advance.Currency.GetDisplayName()} avans talebiniz reddedilmiştir.</p><p>Yöneticinizin reddetme sebebi:</p><p>{model.RejectReason}</p><br><hr><br><h3>Team Monitorease</h3>";
                 await _mailService.SendEmailAsync(user, recipientEmail, mailToName, subject, body);
                 //_mailService.SendApproveMail(user, action, $"Sayın {user.FirstName} {user.LastName} Avansın reddedildi");
             }
@@ -109,8 +109,9 @@ namespace humanResourceProject.API.Controllers
 
             string recipientEmail = manager.Email;
             string mailToName = $"{manager.FirstName} {manager.LastName}";
+            string action = "";
             string subject = "Avans Talebi!";
-            string body = $"<p>Sayın {manager.FirstName} {manager.LastName},</p><p>{employee.FirstName} {employee.LastName} tarafından {DateTime.Now.ToShortDateString()} tarihinde {model.AmountOfAdvance} {model.Currency.GetDisplayName()} avans talebi yapılmıştır.</p><p>Uygulama üzerinden onaylama ya da reddetme işlemini yapabilirsiniz.</p><p>{_configuration["HomePage"]}</p><p>İyi çalışmalar dileriz.</p><br><hr><br><h3>Team Monitorease</h3>";
+            string body = $"<p>Sayın {manager.FirstName} {manager.LastName},</p><p>{employee.FirstName} {employee.LastName} tarafından {DateTime.Now.ToShortDateString()} tarihinde {model.AmountOfAdvance} {model.Currency.GetDisplayName()} avans talebi yapılmıştır.</p><p>Uygulamaya giriş yaparak onaylama ya da reddetme işlemini yapabilirsiniz.</p><p>{_configuration["HomePage"]}</p><p>İyi çalışmalar dileriz.</p><br><hr><br><h3>Team Monitorease</h3>";
             await _mailService.SendEmailAsync(manager, recipientEmail, mailToName, subject, body);
             return Ok(result);
         }
@@ -125,7 +126,25 @@ namespace humanResourceProject.API.Controllers
         [HttpPut]
         public async Task<IActionResult> UpdateAdvance([FromBody] UpdateAdvanceDTO model)
         {
-            return Ok(await _advanceWriteService.UpdateAdvance(model));
+            var result = await _advanceWriteService.UpdateAdvance(model);
+            if (!result.Succeeded)
+            {
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError(error.Code, error.Description);
+                }
+                return BadRequest(ModelState);
+            }
+            Advance advance = await _advanceReadService.GetSingleDefault(x => x.Id == model.Id);
+            AppUser employee = await _appUserReadService.GetSingleDefault(x => x.Id == model.EmployeeId);
+            AppUser manager = await _appUserReadService.GetSingleDefault(x => x.Id == employee.ManagerId);
+            string recipientEmail = manager.Email;
+            string mailToName = $"{manager.FirstName} {manager.LastName}";
+            string action = "";
+            string subject = "Avans Güncellendi!";
+            string body = $"<p>Sayın {manager.FirstName} {manager.LastName},</p><p>{employee.FirstName} {employee.LastName} tarafından {DateTime.Now.ToShortDateString()} tarihinde, {advance.AdvanceNo} numaralı avans talebinde güncelleme yapılmıştır.</p><p>Uygulamaya giriş yaparak onaylama ya da reddetme işlemini yapabilirsiniz.</p><p>{_configuration["HomePage"]}</p><p>İyi çalışmalar dileriz.</p><br><hr><br><h3>Team Monitorease</h3>";
+            await _mailService.SendEmailAsync(manager, recipientEmail, mailToName, subject, body);
+            return Ok(result);
         }
 
         [HttpDelete]

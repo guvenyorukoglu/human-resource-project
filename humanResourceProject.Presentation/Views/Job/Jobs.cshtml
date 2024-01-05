@@ -22,10 +22,71 @@
             <div class="pagination-container">
 
                 <script>
-                    $(document).ready(function () {
-                        $('#jobs').DataTable();
-                    });
+                    var columnsToExport = [0, 1];
 
+                    $(document).ready(function () {
+                        $('#jobs').DataTable({
+                            "language": {
+                                "buttons": {
+                                    "copyTitle": "Panoya Kopyalandı",
+                                    "copySuccess": {
+                                        "_": "%d satır kopyalandı",
+                                        "1": "1 satır kopyalandı"
+                                    }
+                                },
+                                "url": "https://cdn.datatables.net/plug-ins/1.10.25/i18n/Turkish.json"
+                            },
+                            dom: 'lBfrtip',
+                            "buttons": [
+                                'spacer',
+                                {
+                                    extend: 'copy',
+                                    text: 'Kopyala',
+
+                                },
+                                {
+                                    extend: 'print',
+                                    text: 'Yazdır',
+                                    exportOptions: {
+                                        columns: columnsToExport
+                                    },
+                                    
+                                },
+                                {
+                                    extend: 'spacer',
+                                    style: 'bar',
+                                    text: 'Dışarı Aktar:'
+                                },
+
+                                {
+                                    extend: 'csv',
+                                    text: 'CSV',
+                                    exportOptions: {
+                                        columns: columnsToExport
+                                    }
+                                },
+                                {
+                                    extend: 'excel',
+                                    text: 'Excel',
+                                    exportOptions: {
+                                        columns: columnsToExport
+                                    }
+                                },
+                                {
+                                    extend: 'pdf',
+                                    text: 'Pdf',
+                                    orientation: 'landscape',
+                                    exportOptions: {
+                                        columns: columnsToExport
+                                    }
+                                },
+
+                            ],
+                            "order": [
+                                [1, 'asc']
+                            ],
+                        });
+                    });
                 </script>
 
                 <table id="jobs"
@@ -79,7 +140,7 @@
                                                         <a asp-action="DeleteJob"
                                                            asp-controller="Job"
                                                            asp-route-id="@item.Id">
-                                                            <button type="button" class="btn btn-primary">Evet</button>
+                                                            <button type="button" class="btn btn-danger">Sil</button>
                                                         </a>
                                                     </div>
                                                 </div>
@@ -91,10 +152,15 @@
                         }
                     </tbody>
                 </table>
-@*                <div>
-                    <a asp-controller="Employee" asp-action="Home"><button class="custom-button custom-button--create-entity">Ana Sayfaya Dön</button></a>
-                </div>*@
             </div>
         </div>
     </div>
+    @section Scripts {
+        @if (TempData["SuccessUpdateJobMessage"] != null)
+        {
+            <script>
+                toastr["info"]("İş tanımı güncellenmiştir.", "Başarılı");
+            </script>
+        }
+    }
 </body>

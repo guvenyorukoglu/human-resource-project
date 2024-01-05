@@ -68,5 +68,7 @@ namespace humanResourceProject.Domain.Entities.Concrete
         public DateTime? UpdateDate { get; set; }
         public DateTime? DeleteDate { get; set; }
         public Status Status { get; set; } = Status.Inactive;
+        [NotMapped]
+        public UserRole UserRole { get; set; }
     }
 }

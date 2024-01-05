@@ -135,4 +135,12 @@
             </form>
         </div>
     </div>
+    @section Scripts {
+        @if (TempData["SuccessUpdateEmployeeMessage"] != null)
+        {
+            <script>
+                toastr["info"]("Çalışanın profili güncellenmiştir.", "Başarılı");
+            </script>
+        }
+    }
 </body>

@@ -62,7 +62,13 @@ namespace humanResourceProject.API.Controllers
         {
             var result = await _jobWriteService.UpdateJob(model);
             if (!result.Succeeded)
-                return BadRequest(result.Errors);
+            {
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError(error.Code, error.Description);
+                }
+                return BadRequest(ModelState);
+            }
 
             return Ok("Güncellenmiştir.");
         }
@@ -76,9 +82,6 @@ namespace humanResourceProject.API.Controllers
                 return BadRequest();
 
             return Ok("Silme işlemi gerçekleşti.");
- 
-
- 
         }
     }
 }

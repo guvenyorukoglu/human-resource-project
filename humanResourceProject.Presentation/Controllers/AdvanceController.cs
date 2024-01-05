@@ -1,9 +1,10 @@
-﻿using humanResourceProject.Domain.Enum;
+using humanResourceProject.Domain.Enum;
 using humanResourceProject.Models.DTOs;
 using humanResourceProject.Models.VMs;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using NuGet.Protocol.Plugins;
 using System.Security.Claims;
 using System.Text;
 
@@ -130,7 +131,6 @@ namespace humanResourceProject.Presentation.Controllers
                 var content = await response.Content.ReadAsStringAsync();
                 var updateAdvanceDTO = JsonConvert.DeserializeObject<UpdateAdvanceDTO>(content);
                 return View(updateAdvanceDTO);
-
             }
             return View("Error");
         }
@@ -139,7 +139,10 @@ namespace humanResourceProject.Presentation.Controllers
         public async Task<IActionResult> UpdateAdvance(UpdateAdvanceDTO model)
         {
             if (!ModelState.IsValid)
+            {
+                ModelState.AddModelError(string.Empty, "Bir hata oluştu tekrar deneyiniz!");
                 return View(model);
+            }
 
             var json = JsonConvert.SerializeObject(model);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
@@ -148,11 +151,14 @@ namespace humanResourceProject.Presentation.Controllers
 
             if (response.IsSuccessStatusCode)
             {
+                TempData["SuccessUpdateAdvanceMessage"] = "Avans talebiniz güncellenmiştir.";
                 return RedirectToAction(nameof(MyAdvances));
             }
-
-            ModelState.AddModelError(response.StatusCode.ToString(), "Bir hata oluştu.");
-            return View(model);
+            else
+            {
+                ModelState.AddModelError("ModelInvalid", "Girilen bilgileri kontrol edin. Güncelleme başarısız!");
+                return View(model);
+            }
         }
 
 

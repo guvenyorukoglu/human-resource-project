@@ -67,6 +67,7 @@ namespace humanResourceProject.Presentation.Controllers
 
         }
 
+        [HttpGet]
         public async Task<IActionResult> UpdateDepartment(Guid id)
         {
             var response = await _httpClient.GetAsync($"api/Department/GetUpdateDepartmentDTO/{id}");
@@ -86,6 +87,7 @@ namespace humanResourceProject.Presentation.Controllers
         {
             if (!ModelState.IsValid)
             {
+                ModelState.AddModelError(string.Empty, "Bir hata oluştu tekrar deneyiniz!");
                 return View(model);
             }
 
@@ -96,6 +98,7 @@ namespace humanResourceProject.Presentation.Controllers
 
             if (response.IsSuccessStatusCode)
             {
+                TempData["SuccessUpdateDepartmentMessage"] = "Departman tanımı güncellenmiştir.";
                 return RedirectToAction(nameof(Departments));
             }
             else
