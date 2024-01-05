@@ -11,7 +11,7 @@ namespace humanResourceProject.Models.DTOs
         public string Title { get; set; }
 
         [DisplayName("Pozisyon Tanımı")]
-        [StringLength(500, ErrorMessage = "Pozisyon tanımı en fazla 500 karakter olmalıdır.")]
+        [StringLength(150, ErrorMessage = "Pozisyon tanımı en fazla 150 karakter olmalıdır.")]
         public string? Description { get; set; }
         public Guid CompanyId { get; set; }
     }

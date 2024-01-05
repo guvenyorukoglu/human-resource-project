@@ -17,12 +17,16 @@
                         <form asp-action="RegisterCompany">
                             <div class="form-group mb-3">
                                 <label asp-for="CompanyName" class="control-label"></label>
-                                <input asp-for="CompanyName" class="form-control" />
+                                <input type ="text" id="CompanyName" oninput="limitCharacters()" asp-for="CompanyName" class="form-control" />
+                                <input id="charCount" type="hidden"></input>
+                                <p id="charLimitMessage" style="color: red;"></p>
                                 <span asp-validation-for="CompanyName" class="text-danger"></span>
                             </div>
                             <div class="form-group mb-3">
                                 <label asp-for="Address" class="control-label"></label>
-                                <input asp-for="Address" class="form-control" />
+                                <input type="text" id="Address" oninput="limits()" asp-for="Address" class="form-control" />
+                                <input id="Count" type="hidden"></input>
+                                <p id="LimitMessage" style="color: red;"></p>
                                 <span asp-validation-for="Address" class="text-danger"></span>
                             </div>
                             <div class="form-group mb-3">
@@ -85,3 +89,49 @@
         </script>
     }
 }
+<script>
+    function limits() {
+        var inputElement = document.getElementById('Address');
+        var CountElement = document.getElementById('Count');
+        var charLimitMessageElement = document.getElementById('LimitMessage');
+
+        var maxCharacters = 200;
+
+        var enteredText = inputElement.value;
+        var Count = maxCharacters - enteredText.length;
+
+        CountElement.innerText = 'Kalan Karakter Sayısı: ' + Count;
+
+        if (Count == 0) {
+            inputElement.value = enteredText.slice(0, Count);
+            charLimitMessageElement.innerText = 'Maksimum karakter sayısına ulaşıldı!';
+          
+        } else {
+            charLimitMessageElement.innerText = '';
+        }
+    }
+</script>
+
+
+<script>
+    function limitCharacters() {
+        var inputElement = document.getElementById('CompanyName');
+        var charCountElement = document.getElementById('charCount');
+        var charLimitMessageElement = document.getElementById('charLimitMessage');
+
+        var maxCharacters = 200;
+
+        var enteredText = inputElement.value;
+        var charCount = maxCharacters - enteredText.length;
+
+        charCountElement.innerText = 'Kalan Karakter Sayısı: ' + charCount;
+
+        if (charCount == 0) {
+            inputElement.value = enteredText.slice(0, maxCharacters);
+            charLimitMessageElement.innerText = 'Maksimum karakter sayısına ulaşıldı!';
+
+        } else {
+            charLimitMessageElement.innerText = '';
+        }
+    }
+</script>

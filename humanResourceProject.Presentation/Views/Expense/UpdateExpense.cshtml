@@ -65,7 +65,9 @@
                         </div>
                         <div class="form-group mb-3">
                             <label asp-for="Explanation" class="control-label"></label>
-                            <textarea value="@Model.Explanation" asp-for="Explanation" class="form-control"></textarea>
+                            <textarea id="Explanation" oninput="limitCharacters()" value="@Model.Explanation" asp-for="Explanation" class="form-control" rows="8"></textarea>
+                            <p id="charCount"></p>
+                            <p id="charLimitMessage" style="color: red;"></p>
                             <span asp-validation-for="Explanation" class="text-danger"></span>
                         </div>
                         <div class="form-group mb-3">
@@ -109,6 +111,27 @@
         if (dateInput) {
             dateInput.min = formattedFirstDayOfLastMonth;
             dateInput.max = currentDate.toISOString().split('T')[0];
+        }
+    </script>
+    <script>
+        function limitCharacters() {
+            var inputElement = document.getElementById('Explanation');
+            var charCountElement = document.getElementById('charCount');
+            var charLimitMessageElement = document.getElementById('charLimitMessage');
+
+            var maxCharacters = 500; // Maksimum karakter sayısını belirle
+
+            var enteredText = inputElement.value;
+            var charCount = maxCharacters - enteredText.length;
+
+            charCountElement.innerText = 'Kalan Karakter Sayısı: ' + charCount;
+
+            if (charCount == 0) {
+                inputElement.value = enteredText.slice(0, maxCharacters);
+                charLimitMessageElement.innerText = 'Maksimum karakter sayısına ulaşıldı!';
+            } else {
+                charLimitMessageElement.innerText = '';
+            }
         }
     </script>
 </body>

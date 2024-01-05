@@ -40,7 +40,7 @@ namespace humanResourceProject.Presentation.Controllers
         [Authorize(Roles = "Manager,CompanyManager")]
         public async Task<IActionResult> EmployeesAdvances()
         {
-            if (User.IsInRole("Manager"))
+            if (User.IsInRole("Manager") || User.IsInRole("CompanyManager"))
             {
                 Guid managerId = Guid.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value); 
 
@@ -53,19 +53,19 @@ namespace humanResourceProject.Presentation.Controllers
                 }
                 return View();
             }
-            else if (User.IsInRole("CompanyManager"))
-            {
-                Guid companyId = Guid.Parse(User.Claims.FirstOrDefault(x => x.Type == "CompanyId").Value);
+            //else if (User.IsInRole("CompanyManager"))
+            //{
+            //    Guid companyId = Guid.Parse(User.Claims.FirstOrDefault(x => x.Type == "CompanyId").Value);
 
-                var response = await _httpClient.GetAsync($"api/Advance/GetAdvancesByCompanyId/{companyId}");
-                if (response.IsSuccessStatusCode)
-                {
-                    var cont = await response.Content.ReadAsStringAsync();
-                    var advances = JsonConvert.DeserializeObject<List<AdvanceVM>>(cont);
-                    return View(advances);
-                }
-                return View();
-            }
+            //    var response = await _httpClient.GetAsync($"api/Advance/GetAdvancesByCompanyId/{companyId}");
+            //    if (response.IsSuccessStatusCode)
+            //    {
+            //        var cont = await response.Content.ReadAsStringAsync();
+            //        var advances = JsonConvert.DeserializeObject<List<AdvanceVM>>(cont);
+            //        return View(advances);
+            //    }
+            //    return View();
+            //}
             return View();
         }
 

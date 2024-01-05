@@ -12,7 +12,7 @@ namespace humanResourceProject.Models.DTOs
         public string DepartmentName { get; set; }
 
         [DisplayName("Departman Tanımı")]
-        [StringLength(500, ErrorMessage = "Departman tanımı en fazla 500 karakter olmalıdır.")]
+        [StringLength(200, ErrorMessage = "Departman tanımı en fazla 200 karakter olmalıdır.")]
         public string? Description { get; set; }
 
         public Guid CompanyId { get; set; }

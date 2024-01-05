@@ -30,7 +30,9 @@
                         </div>
                         <div class="form-group mb-3">
                             <label asp-for="Description" class="control-label"></label>
-                            <input asp-for="Description" class="form-control" />
+                            <input id="Description" oninput="limitCharacters()" asp-for="Description" class="form-control" />
+                            <input id="charCount" type="hidden"></input>
+                            <p id="charLimitMessage" style="color: red;"></p>
 
                         </div>
                         <div class="form-group mb-3">
@@ -53,5 +55,26 @@
             </div>*@
         </div>
     </div>
+    <script>
+        function limitCharacters() {
+            var inputElement = document.getElementById('Description');
+            var charCountElement = document.getElementById('charCount');
+            var charLimitMessageElement = document.getElementById('charLimitMessage');
+
+            var maxCharacters = 150; // Maksimum karakter sayısını belirle
+
+            var enteredText = inputElement.value;
+            var charCount = maxCharacters - enteredText.length;
+
+            charCountElement.innerText = 'Kalan Karakter Sayısı: ' + charCount;
+
+            if (charCount == 0) {
+                inputElement.value = enteredText.slice(0, maxCharacters);
+                charLimitMessageElement.innerText = 'Maksimum karakter sayısına ulaşıldı!';
+            } else {
+                charLimitMessageElement.innerText = '';
+            }
+        }
+    </script>
 </body>
 
