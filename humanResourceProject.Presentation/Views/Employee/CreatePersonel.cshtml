@@ -12,12 +12,12 @@
 
 <head>
 
- <style>
-     ul{
-         list-style-type: none;
-         padding: 0;
-     }
- </style>
+    <style>
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+    </style>
 
 </head>
 
@@ -36,13 +36,7 @@
                         <div class="row">
                             <div class="col-md-6">
 
-                                <div class="form-group mb-3">
 
-                                   
-                                    Departman Yöneticisi: <input type="radio" asp-for="UserRole" value="DepartmentManager" />
-                                    <br />
-                                    Personel: <input type="radio" value="Personel" asp-for="UserRole" />
-                                </div>
 
 
 
@@ -170,6 +164,14 @@
                                     </select>
                                     <span asp-validation-for="ManagerId" class="text-danger"></span>
                                 </div>
+                                <div class="form-group mb-3">
+                                    <label class="control-label d-block mb-1">Personel Rolü*:</label>
+                                    <div class="d-flex gap-2">
+                                        <span>Yönetici: <input type="radio" asp-for="UserRole" value="Manager" /></span>
+                                        <span>Personel: <input type="radio" asp-for="UserRole" value="Personel" /></span>
+                                    </div>
+                                    <span asp-validation-for="UserRole" class="text-danger"></span>
+                                </div>
                             </div>
                         </div>
                         <div class="mb-3">
@@ -183,12 +185,20 @@
                     </div>
                 </div>
             </form>
-         @*   <div>
-                <a asp-controller="Employee" asp-action="Home"><button class="btn btn-secondary">Ana Sayfaya Dön</button></a>
+            @*   <div>
+            <a asp-controller="Employee" asp-action="Home"><button class="btn btn-secondary">Ana Sayfaya Dön</button></a>
             </div>*@
         </div>
     </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const radioButtons = document.querySelectorAll('input[type="radio"][name="UserRole"]');
 
+            radioButtons.forEach(function (radio) {
+                radio.checked = false; // Unchecking both radio buttons
+            });
+        });
+    </script>
     <script>
         $(document).ready(function () {
             $('[data-toggle="tooltip"]').tooltip();

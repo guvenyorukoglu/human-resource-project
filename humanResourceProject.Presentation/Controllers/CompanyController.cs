@@ -9,20 +9,20 @@ using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace humanResourceProject.Presentation.Controllers
 {
-    [Authorize(Roles ="SiteManager")]
+    
     public class CompanyController : Controller
     {
         private readonly IConfiguration _configuration;
         private readonly HttpClient _httpClient;
+        private readonly IConfiguration _configuration;
 
         public CompanyController(IConfiguration configuration)
         {
             _configuration = configuration;
             _httpClient = new HttpClient();
             _httpClient.BaseAddress = new Uri(_configuration["BaseAddress"]);
-
         }
-
+        [Authorize(Roles = "SiteManager")]
         public async Task<IActionResult> Companies()
         {
 
@@ -41,12 +41,16 @@ namespace humanResourceProject.Presentation.Controllers
             }
         }
 
+
+
+        [AllowAnonymous]
         public IActionResult CreateCompany()
         {
             return View();
         }
 
         [HttpPost]
+        [AllowAnonymous]
         public async Task<IActionResult> CreateCompany(CompanyRegisterDTO model)
         {
 
@@ -73,6 +77,7 @@ namespace humanResourceProject.Presentation.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "CompanyManager")]
         public async Task<IActionResult> UpdateCompany(Guid id)
         {
 
@@ -90,6 +95,7 @@ namespace humanResourceProject.Presentation.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "CompanyManager")]
         public async Task<IActionResult> UpdateCompany(UpdateCompanyDTO model)
         {
             if (!ModelState.IsValid)
@@ -116,6 +122,7 @@ namespace humanResourceProject.Presentation.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "SiteManager")]
         public async Task<IActionResult> DeleteCompany(Guid id)
         {
             HttpResponseMessage response = await _httpClient.DeleteAsync($"/api/Company/{id}");
@@ -145,6 +152,7 @@ namespace humanResourceProject.Presentation.Controllers
         }
         
         [HttpGet]
+        [Authorize(Roles = "SiteManager")]
         public async Task<IActionResult> ApproveCompany(Guid id)
         {
             var response = await _httpClient.GetAsync($"api/Company/GetUpdateCompanyDTO/{id}");

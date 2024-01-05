@@ -18,6 +18,7 @@ namespace humanResourceProject.Models.DTOs
 
         [Required(ErrorMessage = "Şirket Adı alanı boş geçilemez!")]
         [DisplayName("Şirket Adı")]
+        [StringLength(100, ErrorMessage = "Şirket adı en fazla 100 en az 5 karakter olmalıdır.", MinimumLength = 5)]
         public string CompanyName { get; set; }
         [Required(ErrorMessage = "Adres alanı boş geçilemez!")]
         [DisplayName("Adres")]
