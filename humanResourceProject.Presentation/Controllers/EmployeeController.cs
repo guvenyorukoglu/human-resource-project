@@ -1,4 +1,3 @@
-using humanResourceProject.Domain.Entities.Concrete;
 using humanResourceProject.Models.DTOs;
 using humanResourceProject.Models.VMs;
 using Microsoft.AspNetCore.Authorization;
@@ -56,7 +55,7 @@ namespace humanResourceProject.Presentation.Controllers
         [HttpGet]
         public async Task<IActionResult> CreatePersonel()
         {
-            
+
             Guid companyId = Guid.Parse(User.Claims.FirstOrDefault(x => x.Type == "CompanyId").Value);
             HttpResponseMessage messageJobs = await _httpClient.GetAsync($"api/Job/GetJobsByCompanyId/{companyId}");
             HttpResponseMessage messageDepartments = await _httpClient.GetAsync($"api/Department/GetDepartmentsByCompanyId/{companyId}");
@@ -155,12 +154,10 @@ namespace humanResourceProject.Presentation.Controllers
                     model.Managers = JsonConvert.DeserializeObject<List<ManagerVM>>(ManagersList);
                     return View(model);
                 }
-               
-            }
-            if(model.UserRole.ToString()=="DepartmentManager")
-            {
-                
 
+            }
+            else if (model.UserRole.ToString() == "Manager")
+            {
                 var response = await _httpClient.PostAsync($"api/AppUser/CreatePersonelManager", content);
                 if (response.IsSuccessStatusCode)
                 {
@@ -175,6 +172,10 @@ namespace humanResourceProject.Presentation.Controllers
                     return View(model);
                 }
             }
+            model.Jobs = JsonConvert.DeserializeObject<List<JobVM>>(JobsList);
+            model.Departments = JsonConvert.DeserializeObject<List<DepartmentVM>>(DepartmentsList);
+            model.Managers = JsonConvert.DeserializeObject<List<ManagerVM>>(ManagersList);
+            ModelState.AddModelError(string.Empty, "Lütfen tüm verileri doğru girdiğinizden emin olunuz!");
             return View(model);
         }
 
@@ -343,7 +344,7 @@ namespace humanResourceProject.Presentation.Controllers
             if (response.IsSuccessStatusCode)
             {
                 TempData["SuccessUpdateProfileMessage"] = "Profiliniz güncellenmiştir.";
-                return RedirectToAction("ProfileEmployee","Employee");
+                return RedirectToAction("ProfileEmployee", "Employee");
             }
 
             ModelState.AddModelError(response.StatusCode.ToString(), "Bir hata oluştu.");

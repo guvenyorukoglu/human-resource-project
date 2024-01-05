@@ -103,7 +103,7 @@
         CountElement.innerText = 'Kalan Karakter Sayısı: ' + Count;
 
         if (Count == 0) {
-            inputElement.value = enteredText.slice(0, Count);
+            inputElement.value = enteredText.slice(0, maxCharacters);
             charLimitMessageElement.innerText = 'Maksimum karakter sayısına ulaşıldı!';
           
         } else {
@@ -119,7 +119,7 @@
         var charCountElement = document.getElementById('charCount');
         var charLimitMessageElement = document.getElementById('charLimitMessage');
 
-        var maxCharacters = 200;
+        var maxCharacters = 100;
 
         var enteredText = inputElement.value;
         var charCount = maxCharacters - enteredText.length;

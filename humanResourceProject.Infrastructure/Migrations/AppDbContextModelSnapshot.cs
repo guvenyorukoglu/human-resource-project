@@ -425,7 +425,8 @@ namespace humanResourceProject.Infrastructure.Migrations
                     b.Property<Guid>("EmployeeId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("JobId")
+                    b.Property<Guid?>("JobId")
+                        .IsRequired()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("ReasonForTermination")

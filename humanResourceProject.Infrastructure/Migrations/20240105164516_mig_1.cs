@@ -37,7 +37,8 @@ namespace humanResourceProject.Infrastructure.Migrations
                     CreateDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdateDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     DeleteDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    Status = table.Column<int>(type: "int", nullable: false)
+                    Status = table.Column<int>(type: "int", nullable: false),
+                    CompanyStatus = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {

@@ -93,10 +93,12 @@
                             <p id="charLimitMessage" style="color: red;"></p>
                             <span asp-validation-for="CompanyName" class="text-danger"></span>
                         </div>
-                  
+
                         <div class="form-group">
                             <label asp-for="Address" class="control-label"></label>
-                            <input value="@Model.Address" asp-for="Address" class="form-control" />
+                            <input value="@Model.Address" id="Address" oninput="limits()" asp-for="Address" class="form-control" />
+                            <input id="Count" type="hidden"></input>
+                            <p id="LimitMessage" style="color: red;"></p>
                             <span asp-validation-for="Address" class="text-danger"></span>
                         </div>
 
@@ -123,11 +125,6 @@
                     </div>
                 </div>
             </form>
-            <div class="text-center">
-                <a asp-controller="Employee" asp-action="Home" class="custom-button custom-button--create-entity">
-                    Anasayfaya Dön
-                </a>
-            </div>
         </div>
     </div>
     <script>
@@ -136,7 +133,7 @@
             var charCountElement = document.getElementById('charCount');
             var charLimitMessageElement = document.getElementById('charLimitMessage');
 
-            var maxCharacters = 200; // Maksimum karakter sayısını belirle
+            var maxCharacters = 100; // Maksimum karakter sayısını belirle
 
             var enteredText = inputElement.value;
             var charCount = maxCharacters - enteredText.length;
@@ -150,12 +147,32 @@
                 charLimitMessageElement.innerText = '';
             }
         }
+
+        function limits() {
+            var inputElement = document.getElementById('Address');
+            var CountElement = document.getElementById('Count');
+            var charLimitMessageElement = document.getElementById('LimitMessage');
+
+            var maxCharacters = 200;
+
+            var enteredText = inputElement.value;
+            var Count = maxCharacters - enteredText.length;
+
+            CountElement.innerText = 'Kalan Karakter Sayısı: ' + Count;
+
+            if (Count == 0) {
+                inputElement.value = enteredText.slice(0, maxCharacters);
+                charLimitMessageElement.innerText = 'Maksimum karakter sayısına ulaşıldı!';
+            } else {
+                charLimitMessageElement.innerText = '';
+            }
+        }
     </script>
 </body>
 
 @*<form asp-action="Update" asp-controller="Company" method="post" class="mx-auto">*@
 
-   @* <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+@* <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
     <div class="form-group text-center">
         <input asp-for="Id" class="form-control" type="hidden" />
