@@ -24,7 +24,7 @@ namespace humanResourceProject.Models.DTOs
         public DateTime CreateDate { get; set; }
         [Required(ErrorMessage = "İzin gün miktarı boş geçilemez!")]
         [DisplayName("İzinli Gün Miktarı*")]
-        [DaysOfLeaveValidations(ErrorMessage ="0.5'den büyük değer giriniz!")]
+        [DaysOfLeaveValidations(ErrorMessage = "Lütfen geçerli bir değer giriniz!")]
         public decimal DaysOfLeave { get; set; }
         [Required(ErrorMessage = "İzin açıklaması boş geçilemez!")]
         [DisplayName("İzin Açıklaması*")]
