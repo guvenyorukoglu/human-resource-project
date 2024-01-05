@@ -67,6 +67,12 @@
                         <a asp-action="Jobs" asp-controller="Job"><i class="fa-solid fa-briefcase"></i>Pozisyonlar</a>
                     </li>
                 }
+                @if(User.IsInRole("SiteManager"))
+                {
+                    <li>
+                        <a asp-action="Companies" asp-controller="Company"><i class="fa-solid fa-building-user"></i>Şirketler</a>
+                    </li>
+                }
                 <li>
                     <a href="#"><i class="fa fa-newspaper"></i>Raporlar</a>
                 </li>

@@ -1,3 +1,4 @@
+using humanResourceProject.Domain.Enum;
 using humanResourceProject.Models.DTOs;
 using humanResourceProject.Models.VMs;
 using Microsoft.AspNetCore.Authorization;
@@ -8,15 +9,13 @@ using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace humanResourceProject.Presentation.Controllers
 {
-    [Authorize(Roles = "CompanyManager")]
+    [Authorize(Roles ="SiteManager")]
     public class CompanyController : Controller
     {
         private readonly HttpClient _httpClient;
-        private readonly IConfiguration _configuration;
 
-        public CompanyController(IConfiguration configuration)
+        public CompanyController()
         {
-            _configuration = configuration;
             _httpClient = new HttpClient();
             //_httpClient.BaseAddress = new Uri("https://monitoreaseapi.azurewebsites.net"); // Azure
             _httpClient.BaseAddress = new Uri("https://localhost:7255/");
@@ -130,10 +129,8 @@ namespace humanResourceProject.Presentation.Controllers
             }
             else
             {
-                // Silme işlemi başarısız olursa, hata mesajını ModelState'e ekleyebilirsiniz.
                 ModelState.AddModelError(string.Empty, "Failed to delete the resource. Please try again.");
 
-                // Hata durumunda, mevcut sayfada kalabilir veya başka bir sayfaya yönlendirebilirsiniz.
                 HttpResponseMessage getResponse = await _httpClient.GetAsync($"/api/Company/{id}");
 
                 if (getResponse.IsSuccessStatusCode)
@@ -148,6 +145,59 @@ namespace humanResourceProject.Presentation.Controllers
                     return NotFound();
                 }
             }
+        }
+
+
+        
+        [HttpGet]
+        public async Task<IActionResult> ApproveCompany(Guid id)
+        {
+            var response = await _httpClient.GetAsync($"api/Company/GetUpdateCompanyDTO/{id}");
+
+            if (!response.IsSuccessStatusCode)
+            {
+                return View("Error");
+            }
+
+            var content = await response.Content.ReadAsStringAsync();
+            var model2 = JsonConvert.DeserializeObject<UpdateCompanyDTO>(content);
+            model2.CompanyStatus = RequestStatus.Approved;
+            model2.Status = Domain.Enum.Status.Active;
+            var json = JsonConvert.SerializeObject(model2);
+            var model = new StringContent(json, Encoding.UTF8, "application/json");
+
+            var httpResponse = await _httpClient.PutAsync($"api/Company/UpdateStatus", model);
+
+            if (httpResponse.IsSuccessStatusCode)
+                return RedirectToAction(nameof(Companies));
+
+            ModelState.AddModelError(httpResponse.StatusCode.ToString(), "Bir hata oluştu.");
+            return View("Error");
+        }
+
+        [Authorize(Roles = "SiteManager")]
+        [HttpPost]
+        public async Task<IActionResult> RejectCompany(Guid id, string rejectReason)
+        {
+            var response = await _httpClient.GetAsync($"api/Company/GetUpdateCompanyDTO/{id}");
+
+            if (!response.IsSuccessStatusCode)
+                return View("Error");
+
+            var content = await response.Content.ReadAsStringAsync();
+            var model2 = JsonConvert.DeserializeObject<UpdateCompanyDTO>(content);
+            model2.RejectReason = rejectReason;
+            model2.CompanyStatus = RequestStatus.Rejected;
+            var json = JsonConvert.SerializeObject(model2);
+            var model = new StringContent(json, Encoding.UTF8, "application/json");
+
+            var httpResponse = await _httpClient.PutAsync($"api/Company/UpdateStatus", model);
+
+            if (httpResponse.IsSuccessStatusCode)
+                return RedirectToAction(nameof(Companies));
+
+            ModelState.AddModelError(httpResponse.StatusCode.ToString(), "Bir hata oluştu.");
+            return View("Error");
         }
 
 

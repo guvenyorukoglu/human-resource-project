@@ -12,8 +12,8 @@ using humanResourceProject.Infrastructure.Context;
 namespace humanResourceProject.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240104113708_mig-1-can")]
-    partial class mig1can
+    [Migration("20240105090155_first")]
+    partial class first
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -234,6 +234,9 @@ namespace humanResourceProject.Infrastructure.Migrations
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
+
+                    b.Property<int>("CompanyStatus")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("CreateDate")
                         .HasColumnType("datetime2");

@@ -1,5 +1,6 @@
 using humanResourceProject.Domain.Entities.Abstract;
 using humanResourceProject.Domain.Enum;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace humanResourceProject.Domain.Entities.Concrete
 {
@@ -28,5 +29,6 @@ namespace humanResourceProject.Domain.Entities.Concrete
         public DateTime? UpdateDate { get; set; }
         public DateTime? DeleteDate { get; set; }
         public Status Status { get; set; } = Status.Active;
+        public RequestStatus CompanyStatus { get; set; }
     }
 }
