@@ -8,7 +8,7 @@ namespace humanResourceProject.Domain.Enum
 {
     public enum UserRole
     {
-        DepartmentManager,
+        Manager = 1,
         Personel
     }
 }

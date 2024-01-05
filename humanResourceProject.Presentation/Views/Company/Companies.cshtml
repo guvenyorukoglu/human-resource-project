@@ -18,7 +18,7 @@
 
 
                 <script>
-                    var columnsToExport = [1, 2, 3, 4, 5, 6];
+                    var columnsToExport = [0, 1, 2, 3, 4, 5, 6];
 
                     $(document).ready(function () {
                         $('#companies').DataTable({
@@ -95,11 +95,11 @@
                         <thead>
                             <tr>
                                 <th style="width: 4%">Şirket Adı</th>
-                                <th style="width: 8%">Personel Sayısı</th>
-                                <th style="width: 8%">Vergi numarası</th>
-                                <th style="width: 10%">Vergi Dairesi</th>
-                                <th style="width: 10%">Adres</th>
+                                <th style="width: 20%">Adres</th>
                                 <th style="width: 7%">Telefon Numarası</th>
+                                <th style="width: 10%">Vergi Dairesi</th>
+                                <th style="width: 8%">Vergi numarası</th>
+                                <th style="width: 5%">Personel Sayısı</th>
                                 <th style="width: 8%">Statü</th>
                                 <th style="width: 18%">İşlemler</th>
                             </tr>
@@ -112,11 +112,11 @@
 
                                 <tr>
                                     <td>@company.CompanyName</td>
-                                    <td>@company.NumberOfEmployees</td>
-                                    <td>@company.TaxNumber</td>
-                                    <td>@company.TaxOffice</td>
                                     <td>@company.Address</td>
                                     <td>@company.PhoneNumber</td>
+                                    <td>@company.TaxOffice</td>
+                                    <td>@company.TaxNumber</td>
+                                    <td>@company.NumberOfEmployees</td>
                                     <td>@displayNameRequestStatus</td>
                                     <td>
                                         @if (company.CompanyStatus == RequestStatus.Pending)
@@ -125,66 +125,66 @@
                                                 <i class="fa fa-check"></i><span>Onayla</span>
                                             </button>
 
-                                        <button class="btn btn-danger btn-sm d-inline-flex gap-1 align-items-center" data-bs-toggle="modal" data-bs-target="#rejectCompanyModal">
-                                            <i class="fa fa-x"></i><span>Reddet</span>
-                                        </button>
+                                            <button class="btn btn-danger btn-sm d-inline-flex gap-1 align-items-center" data-bs-toggle="modal" data-bs-target="#rejectCompanyModal">
+                                                <i class="fa fa-x"></i><span>Reddet</span>
+                                            </button>
 
-                                        <div class="modal fade" id="approveCompanyModal_@company.Id" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                            <div class="modal-dialog">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h5 class="modal-title" id="exampleModalLabel">Şirket Oluşturma talebi onaylama</h5>
-                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                    </div>
-                                                    <div class="modal-body">
-                                                        Şirket Oluşturma talebini istediğinize emin misiniz?
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>
-                                                        <a asp-action="ApproveCompany"
-                                                           asp-controller="Company"
-                                                           asp-route-id="@company.Id">
-                                                            <button type="button" class="btn btn-primary">Onaylıyorum</button>
-                                                        </a>
+                                            <div class="modal fade" id="approveCompanyModal_@company.Id" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title" id="exampleModalLabel">Şirket Oluşturma talebi onaylama</h5>
+                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            Şirket Oluşturma talebini istediğinize emin misiniz?
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>
+                                                            <a asp-action="ApproveCompany"
+                                                               asp-controller="Company"
+                                                               asp-route-id="@company.Id">
+                                                                <button type="button" class="btn btn-primary">Onaylıyorum</button>
+                                                            </a>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
 
-                                        <div class="modal fade" id="rejectCompanyModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                            <div class="modal-dialog">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h5 class="modal-title" id="exampleModalLabel"> Talebi Reddetme</h5>
-                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                    </div>
-                                                    <div class="modal-body">
-                                                        <div class="form-group mb-3">
-                                                            Şirket talebini reddetmek istediğinize emin iseniz sebebini yazmanız gerekmektedir.
+                                            <div class="modal fade" id="rejectCompanyModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title" id="exampleModalLabel"> Talebi Reddetme</h5>
+                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                         </div>
-                                                        <div class="form-group mb-3">
-                                                            <label class="control-label">Reddetme Sebebi</label>
-                                                            <textarea id="rejectReason" class="form-control mb-3" rows="8" required></textarea>
-                                                            <span id="rejectValidation" class="text-danger"></span>
-                                                            <input type="hidden" value="@company.Id" id="companyId" />
+                                                        <div class="modal-body">
+                                                            <div class="form-group mb-3">
+                                                                Şirket talebini reddetmek istediğinize emin iseniz sebebini yazmanız gerekmektedir.
+                                                            </div>
+                                                            <div class="form-group mb-3">
+                                                                <label class="control-label">Reddetme Sebebi</label>
+                                                                <textarea id="rejectReason" class="form-control mb-3" rows="8" required></textarea>
+                                                                <span id="rejectValidation" class="text-danger"></span>
+                                                                <input type="hidden" value="@company.Id" id="companyId" />
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                    <div class="modal-footer">
+                                                        <div class="modal-footer">
                                                             <div class="modal-footer">
                                                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>
                                                                 <button id="rejectButton" type="button" class="btn btn-danger">Reddet</button>
                                                             </div>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                        
+
                                         }
                                     </td>
                                 </tr>
                             }
 
-                            
+
                         </tbody>
                     </table>
 

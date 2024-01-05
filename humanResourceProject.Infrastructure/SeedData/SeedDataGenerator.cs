@@ -109,6 +109,7 @@ namespace humanResourceProject.Infrastructure.SeedData
                             .RuleFor(c => c.Address, f => f.Address.FullAddress())
                             .RuleFor(c => c.PhoneNumber, f => f.Phone.PhoneNumber("+90##########"))
                             .RuleFor(c => c.CreateDate, f => f.Date.Past(1))
+                            .RuleFor(c => c.CompanyStatus, f => RequestStatus.Approved)
                             .RuleFor(c => c.Status, f => f.Random.Bool(0.9f) ? Status.Active : (f.Random.Bool(0.5f) ? Status.Modified : (f.Random.Bool(0.25f) ? Status.Inactive : Status.Deleted)));
 
                         companies.Add(companyFake.Generate());

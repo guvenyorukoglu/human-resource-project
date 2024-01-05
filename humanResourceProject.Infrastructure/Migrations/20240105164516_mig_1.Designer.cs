@@ -12,8 +12,8 @@ using humanResourceProject.Infrastructure.Context;
 namespace humanResourceProject.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240105090155_first")]
-    partial class first
+    [Migration("20240105164516_mig_1")]
+    partial class mig_1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -427,7 +427,8 @@ namespace humanResourceProject.Infrastructure.Migrations
                     b.Property<Guid>("EmployeeId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("JobId")
+                    b.Property<Guid?>("JobId")
+                        .IsRequired()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("ReasonForTermination")
@@ -532,7 +533,7 @@ namespace humanResourceProject.Infrastructure.Migrations
                         .HasMaxLength(250)
                         .HasColumnType("nvarchar(250)");
 
-                    b.Property<string>("Model")
+                    b.Property<string>("PossessionModel")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
