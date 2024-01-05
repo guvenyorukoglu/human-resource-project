@@ -13,7 +13,7 @@
             @if (Model != null)
             {
                 <a asp-action="CreateExpense" asp-controller="Expense" asp-route-id="@Guid.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value)">
-                    <button class="btn btn-secondary mb-3">Harcama Ekle</button>
+                    <button class="custom-button custom-button--create-entity mb-3">Harcama Ekle</button>
                 </a>
             }
 
