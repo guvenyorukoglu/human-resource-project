@@ -6,7 +6,7 @@ namespace humanResourceProject.Domain.Entities.Concrete
     public class JobLog : IBaseEntity
     {
         public Guid Id { get; set; }
-        public Guid JobId { get; set; }
+        public Guid? JobId { get; set; }
         public Guid EmployeeId { get; set; }
         public DateTime DateOfStart { get; set; }
         public DateTime? DateOfTermination { get; set; }

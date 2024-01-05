@@ -115,7 +115,13 @@ namespace humanResourceProject.API.Controllers
             var result = await _appUserWriteService.Update(updatedPersonel);
 
             if (!result.Succeeded)
-                return BadRequest(result.Errors);
+            {
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError(error.Code, error.Description);
+                }
+                return BadRequest(ModelState);
+            }
 
             return Ok("Güncellenmiştir.");
         }
@@ -146,11 +152,11 @@ namespace humanResourceProject.API.Controllers
         }
 
 
-        [HttpGet]
-        [Route("FireEmployee/{id}")]
-        public async Task<IActionResult> FireEmployee(Guid id) // Personel İşten Çıkarma
+        [HttpPost]
+        [Route("FireEmployee")]
+        public async Task<IActionResult> FireEmployee([FromBody] FireEmployeeDTO model) // Personel İşten Çıkarma
         {
-            var result = await _appUserWriteService.FireEmployee(id);
+            var result = await _appUserWriteService.FireEmployee(model);
 
             if (!result.Succeeded)
                 return BadRequest();

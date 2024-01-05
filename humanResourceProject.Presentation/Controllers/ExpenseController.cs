@@ -13,13 +13,14 @@ namespace humanResourceProject.Presentation.Controllers
     [Authorize]
     public class ExpenseController : Controller
     {
+        private readonly IConfiguration _configuration;
         private readonly HttpClient _httpClient;
 
-        public ExpenseController()
+        public ExpenseController(IConfiguration configuration)
         {
+            _configuration = configuration;
             _httpClient = new HttpClient();
-            //_httpClient.BaseAddress = new Uri("https://monitoreaseapi.azurewebsites.net"); // Azure
-            _httpClient.BaseAddress = new Uri("https://localhost:7255/"); // Local
+            _httpClient.BaseAddress = new Uri(_configuration["BaseAddress"]);
         }
 
         [Authorize(Roles = "Manager,Personel")]
@@ -86,7 +87,7 @@ namespace humanResourceProject.Presentation.Controllers
         public async Task<IActionResult> CreateExpense(ExpenseDTO model)
         {
 
-            if (model.DateOfExpense.Date>DateTime.Now.Date)
+            if (model.DateOfExpense.Date > DateTime.Now.Date)
             {
                 ModelState.AddModelError("DateOfExpense", "Tarih bugünden sonraki bir tarih olmamalıdır.");
                 return View(model);
@@ -171,7 +172,10 @@ namespace humanResourceProject.Presentation.Controllers
         public async Task<IActionResult> UpdateExpense(UpdateExpenseDTO model)
         {
             if (!ModelState.IsValid)
+            {
+                ModelState.AddModelError(string.Empty, "Bir hata oluştu tekrar deneyiniz!");
                 return View(model);
+            }
 
             var multipartContent = new MultipartFormDataContent();
 
@@ -198,16 +202,18 @@ namespace humanResourceProject.Presentation.Controllers
                 multipartContent.Add(imageContent, "UploadPath", model.UploadPath.FileName);
             }
 
-            //var json = JsonConvert.SerializeObject(model);
-            //var content = new StringContent(json, Encoding.UTF8, "application/json");
-
             var response = await _httpClient.PutAsync($"api/Expense", multipartContent);
 
             if (response.IsSuccessStatusCode)
+            {
+                TempData["SuccessUpdateExpenseMessage"] = "Harcama talebiniz güncellenmiştir.";
                 return RedirectToAction(nameof(MyExpenses));
-
-            ModelState.AddModelError(response.StatusCode.ToString(), "Bir hata oluştu.");
-            return View(model);
+            }
+            else
+            {
+                ModelState.AddModelError("ModelInvalid", "Girilen bilgileri kontrol edin. Güncelleme başarısız!");
+                return View(model);
+            }
         }
 
         //Expense REQUESTS & CONTROLS
@@ -218,9 +224,7 @@ namespace humanResourceProject.Presentation.Controllers
             var response = await _httpClient.GetAsync($"api/Expense/GetUpdateExpenseDTO/{id}");
 
             if (!response.IsSuccessStatusCode)
-            {
                 return View("Error");
-            }
 
             var content = await response.Content.ReadAsStringAsync();
             var model = JsonConvert.DeserializeObject<UpdateExpenseDTO>(content);

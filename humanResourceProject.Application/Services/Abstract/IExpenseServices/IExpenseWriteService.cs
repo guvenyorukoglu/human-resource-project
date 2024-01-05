@@ -11,5 +11,6 @@ namespace humanResourceProject.Application.Services.Abstract.IExpenseServices
         Task<IdentityResult> UpdateExpense(UpdateExpenseDTO model);
 
         Task<IdentityResult> DeleteExpense(Guid id);
+
     }
 }

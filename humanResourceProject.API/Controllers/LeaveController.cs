@@ -124,8 +124,13 @@ namespace humanResourceProject.API.Controllers
         {
             var result = await _leaveWriteService.UpdateLeave(model);
             if (!result.Succeeded)
-                return BadRequest(result.Errors);
-
+            {
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError(error.Code, error.Description);
+                }
+                return BadRequest(ModelState);
+            }
             Leave leave = await _leaveReadService.GetSingleDefault(x => x.Id == model.Id);
             AppUser employee = await _appUserReadService.GetSingleDefault(x => x.Id == model.EmployeeId);
             AppUser manager = await _appUserReadService.GetSingleDefault(x => x.Id == employee.ManagerId);

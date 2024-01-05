@@ -22,8 +22,7 @@ namespace humanResourceProject.Presentation.Controllers
         {
             _configuration = configuration;
             _httpClient = new HttpClient();
-            //_httpClient.BaseAddress = new Uri("https://monitoreaseapi.azurewebsites.net"); // Azure
-            _httpClient.BaseAddress = new Uri("https://localhost:7255/"); // Local
+            _httpClient.BaseAddress = new Uri(_configuration["BaseAddress"]);
 
             jobs = new List<JobVM>();
             departments = new List<DepartmentVM>();
@@ -229,6 +228,7 @@ namespace humanResourceProject.Presentation.Controllers
             var response = await _httpClient.PutAsync($"api/AppUser", content);
             if (response.IsSuccessStatusCode)
             {
+                TempData["SuccessUpdateEmployeeMessage"] = "Çalışanın profili güncellenmiştir.";
                 return RedirectToAction(nameof(Employees));
             }
             else
@@ -238,10 +238,19 @@ namespace humanResourceProject.Presentation.Controllers
             }
         }
 
-        [HttpGet]
-        public async Task<IActionResult> FireEmployee(Guid id)
+        [HttpPost]
+        public async Task<IActionResult> FireEmployee(Guid employeeId, string terminationReason)
         {
-            var response = await _httpClient.GetAsync($"api/AppUser/FireEmployee/{id}");
+            FireEmployeeDTO model = new FireEmployeeDTO()
+            {
+                EmployeeId = employeeId,
+                ReasonForTermination = terminationReason
+            };
+
+            var json = JsonConvert.SerializeObject(model);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            var response = await _httpClient.PostAsync($"api/AppUser/FireEmployee/", content);
             if (response.IsSuccessStatusCode)
             {
                 return RedirectToAction(nameof(Employees));
@@ -333,6 +342,7 @@ namespace humanResourceProject.Presentation.Controllers
 
             if (response.IsSuccessStatusCode)
             {
+                TempData["SuccessUpdateProfileMessage"] = "Profiliniz güncellenmiştir.";
                 return RedirectToAction("ProfileEmployee","Employee");
             }
 

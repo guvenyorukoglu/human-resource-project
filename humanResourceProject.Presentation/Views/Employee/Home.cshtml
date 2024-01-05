@@ -268,7 +268,7 @@
                             @if (User.IsInRole("Manager") || User.IsInRole("CompanyManager"))
                             {
 
-                                <a asp-action="EmployeesLeaves" asp-controller="Leave" type="button" style="background-color:#FF6384; border: 2px solid black; border-radius: 5px;color:black;width:200px;height:30px;" id="numberOfPendingLeaves" class="numberOfPendingLeaves ">
+                                <a asp-action="EmployeesLeaves" asp-controller="Leave" type="button" style="background-color:#FF6384; border: 2px solid black; border-radius: 5px;color:black;width:200px;height:30px; line-height:30px;" id="numberOfPendingLeaves" class="numberOfPendingLeaves">
                                     Bekleyen İzinler
                                 </a>
 
@@ -284,15 +284,15 @@
                             else
                             {
 
-                                <a asp-action="MyLeaves" asp-controller="Leave" type="button" style="background-color:#FF6384; border: 2px solid black; border-radius: 5px;color:black" id="numberOfPendingLeaves" class="numberOfPendingLeaves mt-1">
+                                <a asp-action="MyLeaves" asp-controller="Leave" type="button" style="background-color:#FF6384; border: 2px solid black; border-radius: 5px;color:black;width:200px;height:30px;" id="numberOfPendingLeaves" class="numberOfPendingLeaves">
                                     Bekleyen İzinler
                                 </a>
 
-                                <a asp-action="MyExpenses" asp-controller="Expense" type="button" style="background-color:#36A2EB; border: 2px solid black; border-radius: 5px;color:black" id="numberOfPendingExpenses" class="numberOfPendingLeaves mt-1">
+                                <a asp-action="MyExpenses" asp-controller="Expense" type="button" style="background-color:#36A2EB; border: 2px solid black; border-radius: 5px;color:black;width:200px;height:30px;" id="numberOfPendingExpenses" class="numberOfPendingLeaves mt-4">
                                     Bekleyen Harcamalar
                                 </a>
 
-                                <a asp-action="MyAdvances" asp-controller="Advance" type="button" style="background-color:#FFCD56; border: 2px solid black; border-radius: 5px; color:black" id="numberOfPendingAdvances" class="numberOfPendingLeaves mt-1">
+                                <a asp-action="MyAdvances" asp-controller="Advance" type="button" style="background-color:#FFCD56; border: 2px solid black; border-radius: 5px; color:black;width:200px;height:30px;" id="numberOfPendingAdvances" class="numberOfPendingLeaves mt-4">
                                     Bekleyen Avanslar
                                 </a>
 

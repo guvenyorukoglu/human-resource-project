@@ -10,7 +10,7 @@ namespace humanResourceProject.Infrastructure.EntityTypeConfig
         {
             builder.Property(x => x.Barcode).IsRequired().HasMaxLength(50);
             builder.Property(x => x.Brand).IsRequired().HasMaxLength(50);
-            builder.Property(x => x.Model).IsRequired().HasMaxLength(50);
+            builder.Property(x => x.PossessionModel).IsRequired().HasMaxLength(50);
             builder.Property(x => x.Details).HasMaxLength(250);
             builder.Property(x => x.PossessionType).IsRequired();
             builder.Property(x => x.CompanyId).IsRequired();

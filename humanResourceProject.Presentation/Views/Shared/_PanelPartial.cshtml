@@ -1,4 +1,4 @@
-﻿@using System.Security.Claims;
+@using System.Security.Claims;
 
 <div class="panel col-md-1 col-lg-1">
     <button class="btn btn-sm float-end border-0 toggle-sidepanel" style="background-color:#A0AAFF;" onclick="hidePanel()"><i class="fa-solid fa-arrow-left"></i></button>
@@ -36,6 +36,9 @@
                             </li>
                         </ul>
                     </li>
+                    <li>
+                        <a asp-action="MyPossessions" asp-controller="Possession"><i class="fa-solid fa-building-shield"></i>Zimmetlerim</a>
+                    </li>
                 }
                 <li>
                     <a asp-action="Employees" asp-controller="Employee"><i class="fa fa-users"></i>Personeller</a>
@@ -66,7 +69,19 @@
                     <li>
                         <a asp-action="Jobs" asp-controller="Job"><i class="fa-solid fa-briefcase"></i>Pozisyonlar</a>
                     </li>
+                    <li>
+                        <a asp-action="Possessions" asp-controller="Possession"><i class="fa-solid fa-building-shield"></i>Zimmetler</a>
+                    </li>
+
                 }
+
+                @if(User.IsInRole("SiteManager"))
+                {
+                    <li>
+                        <a asp-action="Companies" asp-controller="Company"><i class="fa-solid fa-building-user"></i>Şirketler</a>
+                    </li>
+                }
+
                 <li>
                     <a href="#"><i class="fa fa-newspaper"></i>Raporlar</a>
                 </li>
@@ -136,7 +151,7 @@
                     </li>
 
                     <li>
-                        <a data-toggle="tooltip" title="Departmanlar"  asp-action="Departments" asp-controller="Department"><i class="fa-solid fa-building-user"></i></a>
+                        <a data-toggle="tooltip" title="Departmanlar" asp-action="Departments" asp-controller="Department"><i class="fa-solid fa-building-user"></i></a>
                     </li>
                     <li>
                         <a data-toggle="tooltip" title="Pozisyonlar" asp-action="Jobs" asp-controller="Job"><i class="fa-solid fa-briefcase"></i></a>
@@ -269,4 +284,3 @@
 
 </script>
 
- 

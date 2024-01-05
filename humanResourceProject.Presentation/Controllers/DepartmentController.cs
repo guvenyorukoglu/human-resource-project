@@ -11,11 +11,12 @@ namespace humanResourceProject.Presentation.Controllers
     public class DepartmentController : Controller
     {
         private readonly HttpClient _httpClient;
-        public DepartmentController()
+        private readonly IConfiguration _configuration;
+        public DepartmentController(IConfiguration configuration)
         {
+            _configuration = configuration;
             _httpClient = new HttpClient();
-            //_httpClient.BaseAddress = new Uri("https://monitoreaseapi.azurewebsites.net"); // Azure
-            _httpClient.BaseAddress = new Uri("https://localhost:7255/"); // Local
+            _httpClient.BaseAddress = new Uri(_configuration["BaseAddress"]);
         }
         public async Task<IActionResult> Departments()
         {
@@ -66,6 +67,7 @@ namespace humanResourceProject.Presentation.Controllers
 
         }
 
+        [HttpGet]
         public async Task<IActionResult> UpdateDepartment(Guid id)
         {
             var response = await _httpClient.GetAsync($"api/Department/GetUpdateDepartmentDTO/{id}");
@@ -85,6 +87,7 @@ namespace humanResourceProject.Presentation.Controllers
         {
             if (!ModelState.IsValid)
             {
+                ModelState.AddModelError(string.Empty, "Bir hata oluştu tekrar deneyiniz!");
                 return View(model);
             }
 
@@ -95,6 +98,7 @@ namespace humanResourceProject.Presentation.Controllers
 
             if (response.IsSuccessStatusCode)
             {
+                TempData["SuccessUpdateDepartmentMessage"] = "Departman tanımı güncellenmiştir.";
                 return RedirectToAction(nameof(Departments));
             }
             else

@@ -172,8 +172,15 @@
                         }
                     </tbody>
                 </table>
-
             </div>
         </div>
     </div>
+    @section Scripts {
+        @if (TempData["SuccessUpdateAdvanceMessage"] != null)
+        {
+            <script>
+                toastr["info"]("Avans talebiniz güncellenmiştir.", "Başarılı");
+            </script>
+        }
+    }
 </body>

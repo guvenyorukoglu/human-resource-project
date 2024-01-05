@@ -182,4 +182,12 @@
             </div>
         </div>
     </div>
+    @section Scripts {
+        @if (TempData["SuccessUpdateExpenseMessage"] != null)
+        {
+            <script>
+                toastr["info"]("Harcama talebiniz güncellenmiştir.", "Başarılı");
+            </script>
+        }
+    }
 </body>

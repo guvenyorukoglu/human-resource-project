@@ -5,7 +5,16 @@
     Layout = "~/Views/Shared/_HRLayout.cshtml";
 }
 <head>
+    @section Scripts {
+        <partial name="_ValidationScriptsPartial" />
 
+        @if (TempData["SuccessPasswordResetMessage"] != null)
+        {
+            <script>
+                toastr["success"]("Şifreniz başarılı bir şekilde yenilenmiştir.", "Başarılı");
+            </script>
+        }
+    }
 </head>
 <body>
     <div class="row">
