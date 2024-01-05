@@ -30,9 +30,15 @@ namespace humanResourceProject.Application.Services.Concrete.AppUserServices
                                    EarnedLeaveDays = x.EarnedLeaveDays,
                                    RemainingLeaveDays = x.RemainingLeaveDays,
                                    Gender = x.Gender,
+                                   Pozisyon = x.Company.Jobs.FirstOrDefault(j => j.Id == x.JobId).Title,
+                                   Departman = x.Company.Departments.FirstOrDefault(d => d.Id == x.DepartmentId).DepartmentName,
+                                   FullName = x.FirstName + " " + x.LastName,
+                                   Email = x.Email,
+                                   Address = x.Address,
+                                   PhoneNumber = x.PhoneNumber
                                },
-                                              where: x => x.Id == id && (x.Status != Domain.Enum.Status.Inactive && x.Status != Domain.Enum.Status.Deleted),
-                                                             include: x => x.Include(x => x.Company));
+                               where: x => x.Id == id && (x.Status != Domain.Enum.Status.Inactive && x.Status != Domain.Enum.Status.Deleted),
+                               include: x => x.Include(x => x.Company).ThenInclude(x => x.Jobs).Include(x => x.Company).ThenInclude(x => x.Departments));
         }
 
         public async Task<List<PersonelVM>> GetEmployeesByCompanyId(Guid companyId)
