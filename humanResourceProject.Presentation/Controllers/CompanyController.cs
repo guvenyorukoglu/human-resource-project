@@ -9,12 +9,11 @@ using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace humanResourceProject.Presentation.Controllers
 {
-    
+    [AllowAnonymous]
     public class CompanyController : Controller
     {
         private readonly IConfiguration _configuration;
         private readonly HttpClient _httpClient;
-        private readonly IConfiguration _configuration;
 
         public CompanyController(IConfiguration configuration)
         {
@@ -112,7 +111,7 @@ namespace humanResourceProject.Presentation.Controllers
             if (response.IsSuccessStatusCode)
             {
                 TempData["SuccessUpdateCompanyMessage"] = "Şirket bilgileri güncellenmiştir.";
-                return RedirectToAction(nameof(Companies));
+                return RedirectToAction("Home", "Employee");
             }
             else
             {
