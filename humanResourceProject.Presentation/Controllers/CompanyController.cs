@@ -14,6 +14,7 @@ namespace humanResourceProject.Presentation.Controllers
     {
         private readonly IConfiguration _configuration;
         private readonly HttpClient _httpClient;
+        private readonly IConfiguration _configuration;
 
         public CompanyController(IConfiguration configuration)
         {
