@@ -8,7 +8,16 @@ namespace humanResourceProject.Models.Validations
         {
             if (value is decimal daysOfLeave)
             {
-                return daysOfLeave >= 0.5m;
+                if (daysOfLeave % 0.5m != 0)
+                {
+                    return false;
+                }
+                if (daysOfLeave > 180 || daysOfLeave < 0)
+                {
+                    return false;
+                }
+               
+                return true;
             }
 
             return false;
