@@ -50,7 +50,7 @@
                         </div>
                         <div class="form-group mb-3">
                             <label asp-for="AmountOfAdvance" class="control-label"></label>
-                            <input type="number-decimal" min="1" asp-for="AmountOfAdvance" class="form-control" />
+                            <input type="number-decimal"  asp-for="AmountOfAdvance" class="form-control" />
                             <span asp-validation-for="AmountOfAdvance" class="text-danger"></span>
                         </div>
 
@@ -100,9 +100,6 @@
                     </div>
                 </div>
             </form>
-            <div>
-                <a asp-controller="Employee" asp-action="Home"><button class="btn btn-secondary">Ana Sayfaya Dön</button></a>
-            </div>
         </div>
     </div>
 </body>

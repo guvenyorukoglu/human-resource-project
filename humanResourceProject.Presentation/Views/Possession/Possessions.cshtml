@@ -1,0 +1,305 @@
+﻿@model List<PossessionVM>
+
+@{
+    ViewData["Title"] = "Possessions";
+    Layout = "~/Views/Shared/_HRLayout.cshtml";
+}
+
+<body>
+    <div class="row">
+        @Html.Partial("_PanelPartial")
+
+        <div class="aside container mt-5 col-md-9 col-sm-9">
+            <h3 class="text-center">Zimmetler</h3>
+
+            @if (User.IsInRole("CompanyManager"))
+            {
+                <a asp-action="CreatePossession" asp-controller="Possession">
+                    <button class="custom-button custom-button--create-entity">Zimmet Ekle</button>
+                </a>
+            }
+
+            <div class="pagination-container">
+
+                <script>
+                    var columnsToExport = [0, 1, 2, 3, 4, 5];
+
+                    $(document).ready(function () {
+                        $('#possessions').DataTable({
+                            "language": {
+                                "buttons": {
+                                    "copyTitle": "Panoya Kopyalandı",
+                                    "copySuccess": {
+                                        "_": "%d satır kopyalandı",
+                                        "1": "1 satır kopyalandı"
+                                    }
+                                },
+                                "url": "https://cdn.datatables.net/plug-ins/1.10.25/i18n/Turkish.json"
+                            },
+
+
+
+                            dom: 'lBfrtip',
+                            "buttons": [
+                                'spacer',
+                                {
+                                    extend: 'copy',
+                                    text: 'Kopyala',
+
+                                },
+                                {
+                                    extend: 'print',
+                                    text: 'Yazdır',
+                                    exportOptions: {
+                                        columns: columnsToExport
+                                    },
+                                    //TODO cardviewda görünmesi için tablolarda headerlar var bunların yazdırılmaması gerekir
+
+
+                                },
+                                {
+                                    extend: 'spacer',
+                                    style: 'bar',
+                                    text: 'Dışarı Aktar:'
+                                },
+
+                                {
+                                    extend: 'csv',
+                                    text: 'CSV',
+                                    exportOptions: {
+                                        columns: columnsToExport
+                                    }
+                                },
+                                {
+                                    extend: 'excel',
+                                    text: 'Excel',
+                                    exportOptions: {
+                                        columns: columnsToExport
+                                    }
+                                },
+                                {
+                                    extend: 'pdf',
+                                    text: 'Pdf',
+                                    orientation: 'landscape',
+                                    exportOptions: {
+                                        columns: columnsToExport
+                                    }
+                                },
+
+                            ],
+                            "order": [
+                                [1, 'asc']
+                            ],
+                        });
+                    });
+                </script>
+
+                <table id="possessions"
+                       class="display">
+                    <thead>
+                        <tr>
+                            <th style="width: 10%">Barkod No</th>
+                            <th style="width: 10%">Marka</th>
+                            <th style="width: 15%">Model</th>
+                            <th style="width: 20%">Açıklama</th>
+                            <th style="width: 10%">Zimmet Türü</th>
+                            <th style="width: 10%">Kime Zimmetli</th>
+                            <th style="width: 35%">İşlemler</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        @if (Model != null)
+                        {
+                            foreach (var item in Model)
+                            {
+                                var displayAttribute = typeof(PossessionType).GetMember(item.PossessionType.ToString())[0].GetCustomAttribute<DisplayAttribute>();
+                                var displayName = displayAttribute?.GetName() ?? item.PossessionType.ToString();
+
+                                <tr>
+                                    <td>@item.Barcode</td>
+                                    <td>@item.Brand</td>
+                                    <td>@item.PossessionModel</td>
+                                    <td>@item.Details</td>
+                                    <td>@displayName</td>
+                                    <td>@item.ToWhomItBelongs</td>
+                                    <td>
+                                        @if (item.ToWhomItBelongs == null)
+                                        {
+                                            <a asp-action="UpdatePossession"
+                                               asp-controller="Possession"
+                                               asp-route-id="@item.Id">
+                                                <button class="btn btn-secondary btn-sm d-inline-flex bg-primary align-items-center">
+                                                    <i class="fa fa-pen"></i><span class="ms-2">Düzenle</span>
+                                                </button>
+                                            </a>
+                                            <a asp-action="DeletePossession"
+                                               asp-controller="Possession"
+                                               data-bs-toggle="modal"
+                                               data-bs-target="#deletePossessionModal_@item.Id">
+                                                <button class="btn btn-danger btn-sm d-inline-flex gap-1 align-items-center">
+                                                    <i class="fa fa-trash"></i><span>Kaldır</span>
+                                                </button>
+                                            </a>
+                                            <a asp-action="AssignPossession"
+                                               asp-controller="Possession"
+                                               data-bs-toggle="modal"
+                                               data-bs-target="#assignPossessionModal_@item.Id">
+                                                <button class="btn btn-success btn-sm d-inline-flex gap-1 align-items-center">
+                                                    <i class="fa-solid fa-arrow-rotate-right"></i><span>Zimmeti Aktar</span>
+                                                </button>
+                                            </a>
+                                        }
+                                        else if (item.ToWhomItBelongs != null)
+                                        {
+                                            @* <a asp-action="DetailsPossession"
+                                               asp-controller="Possession"
+                                               asp-route-id="@item.Id">
+                                                <button class="btn btn-secondary btn-sm d-inline-flex bg-primary align-items-center">
+                                                    <i class="fa fa-pen"></i><span class="ms-2">Detaylar</span>
+                                                </button>
+                                            </a> *@
+                                            <a asp-action="TakeBackPossession"
+                                               asp-controller="Possession"
+                                               data-bs-toggle="modal"
+                                               data-bs-target="#takeBackPossessionModal_@item.Id">
+                                                <button class="btn btn-warning btn-sm d-inline-flex gap-1 align-items-center">
+                                                    <i class="fa-solid fa-rotate-left"></i><span>Zimmeti Teslim Al</span>
+                                                </button>
+                                            </a>
+                                        }
+                                        @* Assign Possession modal *@
+                                        <div class="modal fade" id="assignPossessionModal_@item.Id" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="exampleModalLabel">Zimmet Aktar</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <div class="mb-2">Lütfen zimmeti kime aktarmak istediğinizi seçiniz!</div>
+                                                        <input type="hidden" value="@item.Id" id="PossessionId" />
+                                                        <select id="employeeDropdown" class="form-select mb-2">
+                                                            @foreach (var employee in ViewBag.Employees)
+                                                            {
+                                                                <option value="@employee.Id">@employee.FirstName @employee.LastName</option>
+                                                            }
+                                                            <option value="-1" selected>Çalışan seçiniz!</option>
+                                                        </select>
+                                                        <span id="rejectValidation" class="text-danger"></span>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>
+                                                        <button id="assignPossessionButton" type="button" class="btn btn-success">Aktar</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        @* Take Back Possession modal *@
+                                        <div class="modal fade" id="takeBackPossessionModal_@item.Id" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="exampleModalLabel">Zimmet Teslim Al</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        Zimmeti teslim almak istediğinizden emin misiniz?
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>
+                                                        <a asp-action="TakeBackPossession"
+                                                           asp-controller="Possession"
+                                                           asp-route-id="@item.Id">
+                                                            <button type="button" class="btn btn-warning">Evet</button>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        @* Delete Possession modal *@
+                                        <div class="modal fade" id="deletePossessionModal_@item.Id" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="exampleModalLabel">Zimmet Silme</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        Zimmeti silmek istediğinizden emin misiniz?
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>
+                                                        <a asp-action="DeletePossession"
+                                                           asp-controller="Possession"
+                                                           asp-route-id="@item.Id">
+                                                            <button type="button" class="btn btn-danger">Evet</button>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        $(document).ready(function () {
+            $(document).on('click', '#assignPossessionButton', function () {
+                var modalContent = $(this).closest('.modal-content');
+                // Get the selected employeeId and itemId
+                var employeeId = modalContent.find('#employeeDropdown').val();
+                //var employeeId = $(this).closest('.modal-content').find('#employeeDropdown').val();
+                var itemId = modalContent.find('#PossessionId').val();
+
+                // Validate the dropdown value
+                if (employeeId === "-1") {
+                    modalContent.find('#rejectValidation').text('Lütfen bir personel seçiniz!');
+                    return; // Return et ki AJAX requesti yapmasın
+                } else {
+                    modalContent.find('#rejectValidation').text('');
+                }
+
+                // AJAX request to send data to the server
+                $.ajax({
+                    url: '/Possession/AssignPossession', // Replace with your actual endpoint
+                    method: 'POST', // Choose the appropriate HTTP method
+                    data: {
+                        employeeId: employeeId,
+                        itemId: itemId
+                    },
+                    success: function (response) {
+                        // Handle success response if needed
+                        toastr["success"](response.message, "Başarılı");
+                        modalContent.closest('.modal').modal('hide'); // Close the modal
+                        window.location.reload(); // Refresh the page
+                    },
+                    error: function (error) {
+                        toastr["error"](response.message, "Hata");
+                    }
+                });
+            });
+        });
+    </script>
+
+    @if (TempData["CreatePossessionMessage"] != null)
+    {
+        <partial name="_ValidationScriptsPartial" />
+        <script>
+            toastr["success"]("Zimmet başarılı bir şekilde oluşturulmuştur.", "Başarılı");
+        </script>
+    })
+</body>

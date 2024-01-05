@@ -196,7 +196,7 @@ namespace humanResourceProject.Infrastructure.SeedData
                                 .RuleFor(p => p.Id, f => f.Random.Guid())
                                 .RuleFor(p => p.Barcode, f => f.Commerce.Ean13())
                                 .RuleFor(p => p.Brand, f => f.Commerce.ProductAdjective())
-                                .RuleFor(p => p.Model, f => f.Commerce.ProductName())
+                                .RuleFor(p => p.PossessionModel, f => f.Commerce.ProductName())
                                 .RuleFor(p => p.Details, f => f.Lorem.Sentence())
                                 .RuleFor(p => p.PossessionType, f => f.PickRandom<PossessionType>())
                                 .RuleFor(p => p.CreateDate, f => f.Date.Past(1))

@@ -10,12 +10,13 @@ namespace humanResourceProject.Presentation.Controllers
     [Authorize(Roles = "SiteManager, CompanyManager")]
     public class JobController : Controller
     {
+        private readonly IConfiguration _configuration;
         private readonly HttpClient _httpClient;
-        public JobController()
+        public JobController(IConfiguration configuration)
         {
+            _configuration = configuration;
             _httpClient = new HttpClient();
-            //_httpClient.BaseAddress = new Uri("https://monitoreaseapi.azurewebsites.net"); // Azure
-            _httpClient.BaseAddress = new Uri("https://localhost:7255/"); // Local
+            _httpClient.BaseAddress = new Uri(_configuration["BaseAddress"]);
         }
         public async Task<IActionResult> Jobs()
         {

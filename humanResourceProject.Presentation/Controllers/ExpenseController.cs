@@ -13,13 +13,14 @@ namespace humanResourceProject.Presentation.Controllers
     [Authorize]
     public class ExpenseController : Controller
     {
+        private readonly IConfiguration _configuration;
         private readonly HttpClient _httpClient;
 
-        public ExpenseController()
+        public ExpenseController(IConfiguration configuration)
         {
+            _configuration = configuration;
             _httpClient = new HttpClient();
-            //_httpClient.BaseAddress = new Uri("https://monitoreaseapi.azurewebsites.net"); // Azure
-            _httpClient.BaseAddress = new Uri("https://localhost:7255/"); // Local
+            _httpClient.BaseAddress = new Uri(_configuration["BaseAddress"]);
         }
 
         [Authorize(Roles = "Manager,Personel")]
@@ -86,7 +87,7 @@ namespace humanResourceProject.Presentation.Controllers
         public async Task<IActionResult> CreateExpense(ExpenseDTO model)
         {
 
-            if (model.DateOfExpense.Date>DateTime.Now.Date)
+            if (model.DateOfExpense.Date > DateTime.Now.Date)
             {
                 ModelState.AddModelError("DateOfExpense", "Tarih bugünden sonraki bir tarih olmamalıdır.");
                 return View(model);

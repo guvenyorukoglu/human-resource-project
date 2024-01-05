@@ -17,8 +17,7 @@ namespace humanResourceProject.Presentation.Controllers
         public CompanyController()
         {
             _httpClient = new HttpClient();
-            //_httpClient.BaseAddress = new Uri("https://monitoreaseapi.azurewebsites.net"); // Azure
-            _httpClient.BaseAddress = new Uri("https://localhost:7255/");
+            _httpClient.BaseAddress = new Uri(_configuration["BaseAddress"]);
 
         }
 

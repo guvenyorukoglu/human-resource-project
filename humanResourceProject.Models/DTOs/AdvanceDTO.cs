@@ -12,7 +12,7 @@ namespace humanResourceProject.Models.DTOs
         public string ManagerEmail { get; set; }
         [Required(ErrorMessage = "Miktar alanı boş geçilemez!")]
         [DisplayName("Avans Miktarı*")]
-        [Range(100, 100000, ErrorMessage = "Avans miktarı 100 ile 100000 arasında olmalıdır.")]
+        //[Range(100, 100000, ErrorMessage = "Avans miktarı 100 ile 100000 arasında olmalıdır.")]
         public decimal AmountOfAdvance { get; set; }
         [Required(ErrorMessage = "Avans tarihi boş geçilemez!")]
         [DisplayName("Son İstenen Tarih*")]

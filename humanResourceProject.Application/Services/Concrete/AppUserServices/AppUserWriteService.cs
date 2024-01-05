@@ -10,9 +10,6 @@ using humanResourceProject.Domain.IRepository.BaseRepos;
 using humanResourceProject.Models.DTOs;
 using humanResourceProject.Models.VMs;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using System.Collections.Generic;
 
 
 namespace humanResourceProject.Application.Services.Concrete.AppUserServices
@@ -32,9 +29,11 @@ namespace humanResourceProject.Application.Services.Concrete.AppUserServices
         private readonly IImageService _imageService;
         private readonly IBaseReadRepository<Job> _jobReadRepository;
         private readonly IAppUserReadService _appUserReadService;
-
+        private readonly IBaseWriteRepository<JobLog> _jobLogWriteRepository;
+        private readonly IBaseReadRepository<JobLog> _jobLogReadRepository;
         private readonly IDepartmentReadService _departmentReadService;
-        public AppUserWriteService(IBaseWriteRepository<AppUser> writeRepository, IBaseReadRepository<AppUser> readRepository, IMapper mapper, UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, IImageService imageService, IBaseReadRepository<Advance> advanceReadRepository, IBaseReadRepository<Leave> leaveReadRepository, IBaseReadRepository<Expense> expenseReadRepository, IBaseWriteRepository<Advance> advanceWriteRepository, IBaseWriteRepository<Expense> expenseWriteRepository, IBaseWriteRepository<Leave> leaveWriteRepository, IBaseReadRepository<Job> jobReadRepository, IDepartmentReadService departmentReadService, IAppUserReadService appUserReadService) : base(writeRepository, readRepository)
+        private readonly IMailService _mailService;
+        public AppUserWriteService(IBaseWriteRepository<AppUser> writeRepository, IBaseReadRepository<AppUser> readRepository, IMapper mapper, UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, IImageService imageService, IBaseReadRepository<Advance> advanceReadRepository, IBaseReadRepository<Leave> leaveReadRepository, IBaseReadRepository<Expense> expenseReadRepository, IBaseWriteRepository<Advance> advanceWriteRepository, IBaseWriteRepository<Expense> expenseWriteRepository, IBaseWriteRepository<Leave> leaveWriteRepository, IBaseReadRepository<Job> jobReadRepository, IDepartmentReadService departmentReadService, IAppUserReadService appUserReadService, IBaseWriteRepository<JobLog> jobLogWriteRepository, IBaseReadRepository<JobLog> jobLogReadRepository, IMailService mailService) : base(writeRepository, readRepository)
         {
             _writeRepository = writeRepository;
             _readRepository = readRepository;
@@ -50,6 +49,9 @@ namespace humanResourceProject.Application.Services.Concrete.AppUserServices
             _jobReadRepository = jobReadRepository;
             _departmentReadService = departmentReadService;
             _appUserReadService = appUserReadService;
+            _jobLogWriteRepository = jobLogWriteRepository;
+            _jobLogReadRepository = jobLogReadRepository;
+            _mailService = mailService;
         }
 
         public async Task<UpdateUserDTO> GetUpdateUserDTOById(Guid id)
@@ -75,7 +77,7 @@ namespace humanResourceProject.Application.Services.Concrete.AppUserServices
 
             return updateUserDTO;
         }
-         public async Task<UpdateProfileDTO> GetUpdateProfileDTOById(Guid id)
+        public async Task<UpdateProfileDTO> GetUpdateProfileDTOById(Guid id)
         {
             AppUser appUser = _readRepository.GetSingleDefault(x => x.Id == id).Result;
             if (appUser == null)
@@ -98,6 +100,18 @@ namespace humanResourceProject.Application.Services.Concrete.AppUserServices
             if (result.Succeeded)
             {
                 await _userManager.AddToRoleAsync(newUser, "Personel");
+                JobLog jobLog = new JobLog
+                {
+                    EmployeeId = newUser.Id,
+                    JobId = newUser.JobId,      //TODO: JobId null olmamalı (hem userda hem de JobLogda)
+                    DateOfStart = DateTime.Now, //TODO: işe başlama tarihi input olarak alınmalı
+                    DateOfTermination = null,
+                    Status = Status.Active,
+                    CreateDate = DateTime.Now
+                };
+                var response = await _jobLogWriteRepository.Insert(jobLog);
+                if (!response)
+                    return IdentityResult.Failed();
             }
             return result;
         }
@@ -113,8 +127,19 @@ namespace humanResourceProject.Application.Services.Concrete.AppUserServices
             IdentityResult result = await _userManager.CreateAsync(newUser, model.Password);
             if (result.Succeeded)
             {
-
                 await _userManager.AddToRoleAsync(newUser, "Manager");
+                JobLog jobLog = new JobLog
+                {
+                    EmployeeId = newUser.Id,
+                    JobId = newUser.JobId,      //TODO: JobId null olmamalı (hem userda hem de JobLogda)
+                    DateOfStart = DateTime.Now, //TODO: işe başlama tarihi input olarak alınmalı
+                    DateOfTermination = null,
+                    Status = Status.Active,
+                    CreateDate = DateTime.Now
+                };
+                var response = await _jobLogWriteRepository.Insert(jobLog);
+                if (!response)
+                    return IdentityResult.Failed();
 
             }
             return result;
@@ -143,6 +168,23 @@ namespace humanResourceProject.Application.Services.Concrete.AppUserServices
             if (userBeUpdated == null)
                 return IdentityResult.Failed();
 
+
+            if (model.JobId != Guid.Empty && userBeUpdated.JobId == Guid.Empty)
+            {
+                // Kullanıcıya iş atandıysa JobLog tablosuna kayıt atılır (ilk kaydı yapılırken null atandıysa)
+                JobLog jobLog = await _jobLogReadRepository.GetSingleDefault(x => x.EmployeeId == userBeUpdated.Id && x.JobId == Guid.Empty && x.DateOfTermination == null);
+
+                if (jobLog != null)
+                {
+                    jobLog.JobId = model.JobId;
+                    jobLog.DateOfStart = DateTime.Now;
+                    jobLog.Status = Status.Active;
+                    jobLog.UpdateDate = DateTime.Now;
+                    await _jobLogWriteRepository.Update(jobLog);
+                }
+
+            }
+
             userBeUpdated.FirstName = model.FirstName.Trim() ?? userBeUpdated.FirstName;
             userBeUpdated.MiddleName = model.MiddleName ?? "";
             userBeUpdated.LastName = model.LastName.Trim() ?? userBeUpdated.LastName;
@@ -164,7 +206,9 @@ namespace humanResourceProject.Application.Services.Concrete.AppUserServices
 
             var result = await _writeRepository.Update(userBeUpdated);
             if (result)
+            {
                 return IdentityResult.Success;
+            }
             else
                 return IdentityResult.Failed();
 
@@ -208,19 +252,19 @@ namespace humanResourceProject.Application.Services.Concrete.AppUserServices
             user.Status = Status.Deleted;
             user.DeleteDate = DateTime.Now;
             var result = await _writeRepository.Delete(user.Id);
-            
+
             if (result)
                 return IdentityResult.Success;
             else
                 return IdentityResult.Failed();
         }
 
-        public async Task<IdentityResult> FireEmployee(Guid id)
+        public async Task<IdentityResult> FireEmployee(FireEmployeeDTO model)
         {
-            AppUser user = await _readRepository.GetSingleDefault(x => x.Id == id);
-            List<Advance>? advanceList = await _advanceReadRepository.GetDefaults(x => x.EmployeeId == id);
-            List<Expense>? expenseList = await _expenseReadRepository.GetDefaults(x => x.EmployeeId == id);
-            List<Leave>? leaveList = await _leaveReadRepository.GetDefaults(x => x.EmployeeId == id);                        
+            AppUser user = await _readRepository.GetSingleDefault(x => x.Id == model.EmployeeId);
+            List<Advance>? advanceList = await _advanceReadRepository.GetDefaults(x => x.EmployeeId == model.EmployeeId);
+            List<Expense>? expenseList = await _expenseReadRepository.GetDefaults(x => x.EmployeeId == model.EmployeeId);
+            List<Leave>? leaveList = await _leaveReadRepository.GetDefaults(x => x.EmployeeId == model.EmployeeId);
 
             foreach (var item in advanceList)
             {
@@ -228,8 +272,6 @@ namespace humanResourceProject.Application.Services.Concrete.AppUserServices
                 item.AdvanceStatus = RequestStatus.Deleted;
                 await _advanceWriteRepository.Update(item);
             }
-
-
             foreach (var item in expenseList)
             {
                 item.Status = Status.Inactive;
@@ -244,9 +286,28 @@ namespace humanResourceProject.Application.Services.Concrete.AppUserServices
                 await _leaveWriteRepository.Update(item);
             }
 
+            JobLog jobLog = await _jobLogReadRepository.GetSingleDefault(x => x.EmployeeId == model.EmployeeId && x.DateOfTermination == null);
+            jobLog.DateOfTermination = DateTime.Now;
+            jobLog.Status = Status.Inactive;
+            jobLog.UpdateDate = DateTime.Now;
+            jobLog.ReasonForTermination = model.ReasonForTermination;
+            await _jobLogWriteRepository.Update(jobLog);
+
             user.Status = Status.Inactive;
             user.UpdateDate = DateTime.Now;
-            return await _userManager.UpdateAsync(user);
+
+            var result = await _userManager.UpdateAsync(user);
+            if (result.Succeeded)
+            {
+                string recipientEmail = user.Email;
+                string mailToName = $"{user.FullName}";
+                string subject = "İşten Çıkarılma Hk.";
+                string body = $"<p>Sayın {user.FullName},</p><p>{((DateTime)jobLog.DateOfTermination).ToShortDateString()} tarihinde iş akdiniz sonlandırılmıştır.İşten çıkarılma sebebiniz;</p><p>{jobLog.ReasonForTermination}</p><p>olarak belirtilmiştir.</p><br><hr><br><h3>Team Monitorease</h3>";
+                await _mailService.SendEmailAsync(user, recipientEmail, mailToName, subject, body);
+                return IdentityResult.Success;
+            }
+            else
+                return IdentityResult.Failed(); 
         }
 
         public async Task<IdentityResult> UpdateProfile(UpdateProfileDTO model)

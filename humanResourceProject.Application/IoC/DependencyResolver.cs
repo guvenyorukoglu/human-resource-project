@@ -11,6 +11,8 @@ using humanResourceProject.Application.Services.Abstract.IImageServices;
 using humanResourceProject.Application.Services.Abstract.IJobServices;
 using humanResourceProject.Application.Services.Abstract.ILeaveServices;
 using humanResourceProject.Application.Services.Abstract.IMailServices;
+using humanResourceProject.Application.Services.Abstract.IPossessionLogServices;
+using humanResourceProject.Application.Services.Abstract.IPossessionServices;
 using humanResourceProject.Application.Services.Concrete.AdvanceServices;
 using humanResourceProject.Application.Services.Concrete.AppUserServices;
 using humanResourceProject.Application.Services.Concrete.BaseServices;
@@ -22,6 +24,8 @@ using humanResourceProject.Application.Services.Concrete.ImageServices;
 using humanResourceProject.Application.Services.Concrete.JobServices;
 using humanResourceProject.Application.Services.Concrete.LeaveServices;
 using humanResourceProject.Application.Services.Concrete.MailServices;
+using humanResourceProject.Application.Services.Concrete.PossessionLogServices;
+using humanResourceProject.Application.Services.Concrete.PossessionServices;
 using humanResourceProject.Domain.Entities.Concrete;
 using humanResourceProject.Domain.IRepository.BaseRepos;
 using humanResourceProject.Infrastructure.Repositories.AdvanceRepos;
@@ -29,8 +33,11 @@ using humanResourceProject.Infrastructure.Repositories.AppUserRepos;
 using humanResourceProject.Infrastructure.Repositories.CompanyRepos;
 using humanResourceProject.Infrastructure.Repositories.DepartmentRepos;
 using humanResourceProject.Infrastructure.Repositories.ExpenseRepo;
+using humanResourceProject.Infrastructure.Repositories.JobLogRepos;
 using humanResourceProject.Infrastructure.Repositories.JobRepos;
 using humanResourceProject.Infrastructure.Repositories.LeaveRepos;
+using humanResourceProject.Infrastructure.Repositories.PossessionLogRepos;
+using humanResourceProject.Infrastructure.Repositories.PossessionRepos;
 
 namespace humanResourceProject.Application.IoC
 {
@@ -64,6 +71,12 @@ namespace humanResourceProject.Application.IoC
             builder.RegisterType<LeaveReadService>().As<ILeaveReadService>().InstancePerLifetimeScope();
             builder.RegisterType<LeaveWriteService>().As<ILeaveWriteService>().InstancePerLifetimeScope();
 
+            builder.RegisterType<PossessionReadService>().As<IPossessionReadService>().InstancePerLifetimeScope();
+            builder.RegisterType<PossessionWriteService>().As<IPossessionWriteService>().InstancePerLifetimeScope();
+
+            builder.RegisterType<PossessionLogReadService>().As<IPossessionLogReadService>().InstancePerLifetimeScope();
+            builder.RegisterType<PossessionLogWriteService>().As<IPossessionLogWriteService>().InstancePerLifetimeScope();
+
             builder.RegisterType<BaseWriteService<AppUser>>().As<IBaseWriteService<AppUser>>().InstancePerLifetimeScope();
             builder.RegisterType<BaseWriteService<Company>>().As<IBaseWriteService<Company>>().InstancePerLifetimeScope();
             builder.RegisterType<BaseWriteService<Advance>>().As<IBaseWriteService<Advance>>().InstancePerLifetimeScope();
@@ -71,6 +84,7 @@ namespace humanResourceProject.Application.IoC
             builder.RegisterType<BaseWriteService<Expense>>().As<IBaseWriteService<Expense>>().InstancePerLifetimeScope();
             builder.RegisterType<BaseWriteService<Job>>().As<IBaseWriteService<Job>>().InstancePerLifetimeScope();
             builder.RegisterType<BaseWriteService<Leave>>().As<IBaseWriteService<Leave>>().InstancePerLifetimeScope();
+            builder.RegisterType<BaseWriteService<Possession>>().As<IBaseWriteService<Possession>>().InstancePerLifetimeScope();
 
             builder.RegisterType<BaseReadService<AppUser>>().As<IBaseReadService<AppUser>>().InstancePerLifetimeScope();
             builder.RegisterType<BaseReadService<Company>>().As<IBaseReadService<Company>>().InstancePerLifetimeScope();
@@ -79,6 +93,7 @@ namespace humanResourceProject.Application.IoC
             builder.RegisterType<BaseReadService<Expense>>().As<IBaseReadService<Expense>>().InstancePerLifetimeScope();
             builder.RegisterType<BaseReadService<Job>>().As<IBaseReadService<Job>>().InstancePerLifetimeScope();
             builder.RegisterType<BaseReadService<Leave>>().As<IBaseReadService<Leave>>().InstancePerLifetimeScope();
+            builder.RegisterType<BaseReadService<Possession>>().As<IBaseReadService<Possession>>().InstancePerLifetimeScope();
 
 
 
@@ -104,6 +119,14 @@ namespace humanResourceProject.Application.IoC
             builder.RegisterType<LeaveReadRepository>().As<IBaseReadRepository<Leave>>().InstancePerLifetimeScope();
             builder.RegisterType<LeaveWriteRepository>().As<IBaseWriteRepository<Leave>>().InstancePerLifetimeScope();
 
+            builder.RegisterType<JobLogReadRepository>().As<IBaseReadRepository<JobLog>>().InstancePerLifetimeScope();
+            builder.RegisterType<JobLogWriteRepository>().As<IBaseWriteRepository<JobLog>>().InstancePerLifetimeScope();
+
+            builder.RegisterType<PossessionReadRepository>().As<IBaseReadRepository<Possession>>().InstancePerLifetimeScope();
+            builder.RegisterType<PossessionWriteRepository>().As<IBaseWriteRepository<Possession>>().InstancePerLifetimeScope();
+
+            builder.RegisterType<PossessionLogReadRepository>().As<IBaseReadRepository<PossessionLog>>().InstancePerLifetimeScope();
+            builder.RegisterType<PossessionLogWriteRepository>().As<IBaseWriteRepository<PossessionLog>>().InstancePerLifetimeScope();
 
             //Mapper
             builder.RegisterType<Mapper>().As<IMapper>().InstancePerLifetimeScope();

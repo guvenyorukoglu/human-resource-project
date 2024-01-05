@@ -1,6 +1,5 @@
-﻿using humanResourceProject.Domain.Enum;
+﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel;
 
 namespace humanResourceProject.Models.DTOs
 {
