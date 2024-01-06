@@ -31,14 +31,14 @@ namespace humanResourceProject.Models.DTOs
         public IFormFile? UploadPath { get; set; }
         public string? FilePath { get; set; }
 
-        [Required(ErrorMessage = "Masraf türü alanı boş geçilemez!")]
-        [DisplayName("Masraf Türü*")]
+        [Required(ErrorMessage = "Harcama türü alanı boş geçilemez!")]
+        [DisplayName("Harcama Türü*")]
         public ExpenseType ExpenseType { get; set; }
 
         public RequestStatus ExpenseStatus { get; set; }
 
-        [Required(ErrorMessage = "Masraf tarihi alanı boş geçilemez!")]
-        [DisplayName("Masraf Tarihi*")]
+        [Required(ErrorMessage = "Harcama tarihi alanı boş geçilemez!")]
+        [DisplayName("Harcama Tarihi*")]
        
         public DateTime DateOfExpense { get; set; }
         public string ManagerFullName { get; set; }

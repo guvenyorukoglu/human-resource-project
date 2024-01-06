@@ -73,7 +73,7 @@ namespace humanResourceProject.Application.Services.Concrete.AppUserServices
 
             updateUserDTO.Departments = _departmentReadService.GetDepartmentsByCompanyId(appUser.CompanyId).Result;
 
-            updateUserDTO.Managers = _appUserReadService.GetManagersByCompanyId(appUser.CompanyId).Result;
+            updateUserDTO.Managers = _appUserReadService.GetManagersByCompanyId(appUser.CompanyId).Result.Where(x => x.Id != appUser.Id).ToList();
 
             return updateUserDTO;
         }

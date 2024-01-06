@@ -11,11 +11,11 @@
 
         @Html.Partial("_PanelPartial")
 
-        <div class="col-md-4" style="margin: 0 auto">
+        <div class="col-md-4" style="margin: 35px auto">
             <form asp-action="UpdateAdvance">
                 <div class="card shadow p-3 mb-5 bg-body rounded">
                     <div class="card-header">
-                        <h1 class="card-title">Avans Güncelle</h1>
+                        <h3 class="card-title">AVANS GÜNCELLE</h3>
                     </div>
                     <div class="card-body">
                         <div class="form-group mb-3">
@@ -32,7 +32,7 @@
                                         <option value="@enumValue">@displayName</option>
 
                                     }
-                                    <option value="" disabled>Avans Tipi seçiniz!</option>
+                                    <option value="" disabled>Avans Türü seçiniz!</option>
                                 }
 
                             </select>

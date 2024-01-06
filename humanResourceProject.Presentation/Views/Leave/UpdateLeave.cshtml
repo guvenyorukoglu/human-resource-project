@@ -16,7 +16,7 @@
             <form asp-action="UpdateLeave">
                 <div class="card shadow p-3 mb-5 bg-body rounded">
                     <div class="card-header">
-                        <h1 class="card-title">İzin Güncelleme</h1>
+                        <h1 class="card-title">İZİN GÜNCELLEME</h1>
                     </div>
                     <div class="card-body">
                         <div class="form-group mb-3">
@@ -33,7 +33,7 @@
                                         <option value="@enumValue">@displayName</option>
 
                                     }
-                                    <option value="" disabled>İzin Tipi seçiniz!</option>
+                                    <option value="" disabled>İzin Türü seçiniz!</option>
                                 }
 
                             </select>
@@ -41,12 +41,12 @@
                         </div>
                         <div class="form-group  mb-3">
                             <label asp-for="StartDateOfLeave" class="control-label"></label>
-                            <input value="@Model.StartDateOfLeave.ToString("yyyy-MM-dd")" min="@DateTime.Now" type="date" asp-for="StartDateOfLeave" class="form-control" />
+                            <input value="@Model.StartDateOfLeave.ToString("yyyy-MM-dd")"  type="date" asp-for="StartDateOfLeave" class="form-control" />
                             <span id="startDate" asp-validation-for="StartDateOfLeave" class="text-danger"></span>
                         </div>
                         <div class="form-group  mb-3">
                             <label asp-for="EndDateOfLeave" class="control-label"></label>
-                            <input value="@Model.EndDateOfLeave.ToString("yyyy-MM-dd")" min="@DateTime.Now" type="date" asp-for="EndDateOfLeave" class="form-control" />
+                            <input value="@Model.EndDateOfLeave.ToString("yyyy-MM-dd")"  type="date" asp-for="EndDateOfLeave" class="form-control" />
                             <span id="endDate" asp-validation-for="EndDateOfLeave" class="text-danger"></span>
                         </div>
                         <div class="form-group  mb-3">

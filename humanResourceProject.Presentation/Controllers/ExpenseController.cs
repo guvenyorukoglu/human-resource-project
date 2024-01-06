@@ -97,7 +97,7 @@ namespace humanResourceProject.Presentation.Controllers
             {
                 if (ModelState["ExpenseType"].Errors.Count > 0)
                 {
-                    ModelState.AddModelError(string.Empty, "Masraf türünü seçiniz!");
+                    ModelState.AddModelError(string.Empty, "Harcama türünü seçiniz!");
                 }
                 if (ModelState["Currency"].Errors.Count > 0)
                 {

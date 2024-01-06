@@ -27,8 +27,8 @@ namespace humanResourceProject.Models.DTOs
         [StringLength(250, ErrorMessage = "Detaylar alanı en fazla 250 karakter olmalıdır.")]
 
         public string? Details { get; set; }
-        [Required(ErrorMessage = "Zimmet tipi alanı boş geçilemez!")]
-        [DisplayName("Zimmet Tipi*")]
+        [Required(ErrorMessage = "Zimmet türü alanı boş geçilemez!")]
+        [DisplayName("Zimmet Türü*")]
         public PossessionType PossessionType { get; set; }
     }
 }
