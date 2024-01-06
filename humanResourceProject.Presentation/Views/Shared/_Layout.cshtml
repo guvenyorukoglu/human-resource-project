@@ -27,7 +27,8 @@
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light border-bottom box-shadow mb-3" style="background-color: #133a63;z-index:999">
             <div class="container">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index" style="font-weight: bold; color:white;">
-                    <img src="~/ImagesLogo/logo.png" alt="Monitorease Logo" style="width: 50px; margin-right: 10px;"> Monitorease
+                    <img src="~/ImagesLogo/logo.png" alt="Monitorease Logo" style="width: 50px; margin-right: 10px;"> 
+                    <span style="letter-spacing: 1.5px;">MONITOR</span><span style="font-weight:300; letter-spacing: 1.5px;">EASE</span>
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
@@ -50,13 +51,13 @@
                         else
                         {
                             <li class="nav-item ms-auto">
-                                <a class="nav-link text-white" asp-area="" asp-controller="Account" asp-action="Login">Giriş Yap</a>
+                                <a class="nav-link text-white fs-6 header-link me-2" style="font-weight: 300; letter-spacing: 1.1px;" asp-area="" asp-controller="Account" asp-action="Login">GİRİŞ</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-white" asp-area="" asp-controller="Home" asp-action="hakkimizda">Hakkımızda</a>
+                                <a class="nav-link text-white fs-6 header-link me-2" style="font-weight: 300; letter-spacing: 1.1px;" asp-area="" asp-controller="Home" asp-action="hakkimizda">HAKKIMIZDA</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-white" asp-area="" asp-controller="Home" asp-action="Iletisim">İletişim</a>
+                                <a class="nav-link text-white fs-6 header-link me-2" style="font-weight: 300; letter-spacing: 1.1px;" asp-area="" asp-controller="Home" asp-action="Iletisim">İLETİŞİM</a>
                             </li>
                         }
 
