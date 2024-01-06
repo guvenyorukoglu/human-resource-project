@@ -18,11 +18,11 @@
     <div class="row">
         @Html.Partial("_PanelPartial")
 
-        <div class="col-md-4" style="margin: 50px auto">
+        <div class="col-md-4" style="margin: 35px auto">
             <form asp-action="UpdatePossession" asp-controller="Possession" method="post">
                 <div class="card shadow p-3 mb-5 bg-body rounded">
                     <div class="card-header">
-                        <h1 class="card-title text-center">Zimmet Güncelle</h1>
+                        <h1 class="card-title text-center">ZİMMET GÜNCELLE</h1>
                     </div>
                     <div class="card-body">
 
@@ -69,7 +69,7 @@
                         </div>
                         <div class="form-group mb-3">
                             <label asp-for="Details" class="control-label"></label>
-                            <input id="Details" oninput="limit()" value="@Model.Details" asp-for="Details" class="form-control" />
+                            <textarea id="Details" oninput="limit()" value="@Model.Details" asp-for="Details" class="form-control" rows="8"></textarea>
                             <input id="char" type="hidden"></input>
                             <p id="MessageL" style="color: red;"></p>
                             <span asp-validation-for="Details" class="text-danger"></span>

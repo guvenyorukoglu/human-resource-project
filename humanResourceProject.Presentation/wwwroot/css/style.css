@@ -250,7 +250,15 @@ h6 {
     text-align: center;
     color: #222;
     letter-spacing: 1.1px;
-}}
+}
+
+.card-title{
+    font-size: 20px;
+    font-weight: 700;
+    text-align: center;
+    color: #222;
+    letter-spacing: 1.1px;
+}
 /* PAGINATION */
 .pagination {
     display: flex;
