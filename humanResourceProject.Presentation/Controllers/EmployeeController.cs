@@ -140,7 +140,6 @@ namespace humanResourceProject.Presentation.Controllers
             var content = new StringContent(json, Encoding.UTF8, "application/json");
             if (model.UserRole.ToString() == "Personel")
             {
-
                 var response = await _httpClient.PostAsync($"api/AppUser", content);
                 if (response.IsSuccessStatusCode)
                 {
@@ -245,12 +244,13 @@ namespace humanResourceProject.Presentation.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> FireEmployee(Guid employeeId, string terminationReason)
+        public async Task<IActionResult> FireEmployee(Guid employeeId, string terminationReason, DateTime terminationDate)
         {
             FireEmployeeDTO model = new FireEmployeeDTO()
             {
                 EmployeeId = employeeId,
-                ReasonForTermination = terminationReason
+                ReasonForTermination = terminationReason,
+                TerminationDate = terminationDate
             };
 
             var json = JsonConvert.SerializeObject(model);

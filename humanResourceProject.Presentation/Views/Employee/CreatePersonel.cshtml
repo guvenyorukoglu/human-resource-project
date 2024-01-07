@@ -140,21 +140,6 @@
                                     </select>
                                     @* <span asp-validation-for="Gender" class="text-danger"></span> *@
                                 </div>
-
-                                <div class="form-group mb-3">
-                                    <label asp-for="JobId" class="control-label"></label>
-                                    <div class="d-flex flex-row gap-2">
-                                        <select asp-for="JobId" asp-items="@Model.Jobs.Select(job => new SelectListItem { Text = job.Title, Value = job.Id.ToString() })" class="form-control">
-                                            <option value="" disabled selected>Pozisyon seçiniz!</option>
-                                        </select>
-                                        <a asp-action="CreateJob" asp-controller="Job"><button type="button" class="btn btn-success" data-bs-toggle="tooltip" data-bs-placement="right" title="Yeni Posizyon Ekle"><i class="fa-solid fa-plus"></i></button></a>
-                                    </div>
-                                    <span asp-validation-for="JobId" class="text-danger"></span>
-                                </div>
-
-
-
-
                                 <div class="form-group mb-3">
                                     <label asp-for="DepartmentId" class="control-label"></label>
                                     <div class="d-flex flex-row gap-2">
@@ -165,7 +150,21 @@
                                     </div>
                                     <span asp-validation-for="DepartmentId" class="text-danger"></span>
                                 </div>
-
+                                <div class="form-group mb-3">
+                                    <label asp-for="JobId" class="control-label"></label>
+                                    <div class="d-flex flex-row gap-2">
+                                        <select asp-for="JobId" asp-items="@Model.Jobs.Select(job => new SelectListItem { Text = job.Title, Value = job.Id.ToString() })" class="form-control">
+                                            <option value="" disabled selected>Pozisyon seçiniz!</option>
+                                        </select>
+                                        <a asp-action="CreateJob" asp-controller="Job"><button type="button" class="btn btn-success" data-bs-toggle="tooltip" data-bs-placement="right" title="Yeni Posizyon Ekle"><i class="fa-solid fa-plus"></i></button></a>
+                                    </div>
+                                    <span asp-validation-for="JobId" class="text-danger"></span>
+                                </div>
+                                <div class="form-group mb-3">
+                                    <label asp-for="StartDateOfEmployment" class="control-label"></label>
+                                    <input value="@DateTime.Now.ToString("yyyy-MM-dd")" max="@DateTime.Now.ToString("yyyy-MM-dd")" asp-for="StartDateOfEmployment" type="date" class="form-control" />
+                                    <span asp-validation-for="StartDateOfEmployment" class="text-danger"></span>
+                                </div>
                                 <div class="form-group mb-3">
                                     <label asp-for="ManagerId" class="control-label"></label>
                                     <select asp-for="ManagerId" asp-items="@Model.Managers.Select(manager => new SelectListItem { Text = manager.FullName, Value = manager.Id.ToString() })" class="form-control">
@@ -173,14 +172,15 @@
                                     </select>
                                     <span asp-validation-for="ManagerId" class="text-danger"></span>
                                 </div>
-                                <div class="form-group mb-3">
-                                    <label class="control-label d-block mb-1">Personel Rolü*:</label>
-                                    <div class="d-flex gap-2">
-                                        <span>Yönetici: <input type="radio" asp-for="UserRole" value="Manager" /></span>
-                                        <span>Personel: <input type="radio" asp-for="UserRole" value="Personel" /></span>
-                                    </div>
-                                    <span asp-validation-for="UserRole" class="text-danger"></span>
+                                
+                            </div>
+                            <div class="form-group mb-3 d-flex gap-2">
+                                <label class="control-label">Personel Rolü*:</label>
+                                <div class="d-flex gap-3">
+                                    <span>Yönetici: <input type="radio" asp-for="UserRole" value="Manager" /></span>
+                                    <span>Personel: <input type="radio" asp-for="UserRole" value="Personel" /></span>
                                 </div>
+                                <span asp-validation-for="UserRole" class="text-danger"></span>
                             </div>
                         </div>
                         <div class="mb-3">
