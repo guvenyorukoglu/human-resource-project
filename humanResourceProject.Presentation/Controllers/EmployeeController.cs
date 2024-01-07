@@ -230,7 +230,7 @@ namespace humanResourceProject.Presentation.Controllers
             var response = await _httpClient.PutAsync($"api/AppUser", content);
             if (response.IsSuccessStatusCode)
             {
-                TempData["SuccessUpdateEmployeeMessage"] = "Çalışanın profili güncellenmiştir.";
+                TempData["SuccessUpdateEmployeeMessage"] = "Personel profili güncellenmiştir.";
                 return RedirectToAction(nameof(Employees));
             }
             else
@@ -359,7 +359,7 @@ namespace humanResourceProject.Presentation.Controllers
         [HttpGet]
         public async Task<IActionResult> ProfileEmployee(Guid Id)
         {
-            if (User.IsInRole("Personel") || User.IsInRole("Manager"))
+            if (!User.IsInRole("SiteManager"))
             {
                 var employeeId = Guid.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value);
                 var response = await _httpClient.GetAsync($"api/AppUser/ProfileEmployee/{employeeId}");
@@ -371,7 +371,7 @@ namespace humanResourceProject.Presentation.Controllers
                 }
                 return View("Error");
             }
-            else if (User.IsInRole("CompanyManager") || User.IsInRole("SiteManager"))
+            else
             {
                 var companyManagerId = Guid.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value);
                 var response = await _httpClient.GetAsync($"api/AppUser/ProfileCompanyManager/{companyManagerId}");
@@ -383,12 +383,6 @@ namespace humanResourceProject.Presentation.Controllers
                 }
                 return View("Error");
             }
-            else
-            {
-                return View("Error");
-            }
-
-
         }
     }
 

@@ -189,5 +189,12 @@
                 toastr["info"]("Harcama talebiniz güncellenmiştir.", "Başarılı");
             </script>
         }
+
+        @if (TempData["ManagerIdEmptyMessage"] != null)
+        {
+            <script>
+                toastr["warning"]("Yöneticiniz henüz atanmadığı için şuanda harcama ekleyemezsiniz! Eğer yöneticinizin atandığını düşünüyorsanız, lütfen çıkış yapıp tekrar giriş yapınız.", "Uyarı");
+            </script>
+        }
     }
 </body>

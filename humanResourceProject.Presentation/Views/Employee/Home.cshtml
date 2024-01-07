@@ -363,7 +363,7 @@
                                 <div class="card-header d-flex justify-content-center gap-2">
                                     <h5 class="card-title text-center mb-0">KİŞİSEL BİLGİLERİM</h5>
                                     <div>
-                                        <a asp-action="ProfileEmployee" asp-controller="Employee" asp-route-id="@User.Claims.FirstOrDefault(x => x.Type == "CompanyId").Value" class="text-black-50 fs-6"><i class="fa fa-pen"></i></a>
+                                        <a asp-action="ProfileEmployee" asp-controller="Employee" asp-route-id="@User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value" class="text-black-50 fs-6"><i class="fa fa-pen"></i></a>
 
                                     </div>
                                 </div>
