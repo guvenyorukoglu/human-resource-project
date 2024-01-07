@@ -198,7 +198,11 @@
                                                             </button>
                                                         </div>
                                                         <div class="modal-body">
-                                                            <div class="form-group mb-3">Personeli işten çıkarmak istediğinize emin iseniz sebebini yazmanız gerekmektedir.</div>
+                                                            <div class="form-group mb-3">Lütfen işten çıkış tarihini ve sebebini belirtiniz!</div>
+                                                            <div class="form-group mb-3">
+                                                                <label class="control-label mb-2">İşten Çıkış Tarihi</label>
+                                                                <input id="terminationDate" value="yyyy-MM-dd" max="@DateTime.Now.ToString("yyyy-MM-dd")" type="date" class="form-control" />
+                                                            </div>
                                                             <div class="form-group mb-3">
                                                                 <label class="control-label mb-2">İşten Çıkarma Sebebi</label>
                                                                 <textarea id="reasonForTermination" class="form-control mb-3" rows="8" required></textarea>
@@ -227,7 +231,7 @@
         @if (TempData["SuccessUpdateEmployeeMessage"] != null)
         {
             <script>
-                toastr["info"]("Çalışanın profili güncellenmiştir.", "Başarılı");
+                toastr["info"]("Personel profili güncellenmiştir.", "Başarılı");
             </script>
         }
     }
@@ -417,6 +421,7 @@
             // var terminationReason = $('#reasonForTermination').val();
             var employeeId = modalContent.find('#employeeId').val();
             // var employeeId = $('#employeeId').val();
+            var terminationDate = modalContent.find('#terminationDate').val();
 
             // Sebebi boş bırakırsa hata mesajı ver
             if (terminationReason.trim() === '') {
@@ -434,7 +439,8 @@
                 url: "/Employee/FireEmployee",
                 data: {
                     employeeId: employeeId,
-                    terminationReason: terminationReason
+                    terminationReason: terminationReason,
+                    terminationDate: terminationDate
                 },
                 success: function (response) {
                     // Handle success response as needed

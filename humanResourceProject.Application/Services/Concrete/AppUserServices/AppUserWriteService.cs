@@ -104,7 +104,7 @@ namespace humanResourceProject.Application.Services.Concrete.AppUserServices
                 {
                     EmployeeId = newUser.Id,
                     JobId = newUser.JobId,      //TODO: JobId null olmamalı (hem userda hem de JobLogda)
-                    DateOfStart = DateTime.Now, //TODO: işe başlama tarihi input olarak alınmalı
+                    DateOfStart = model.StartDateOfEmployment, //TODO: işe başlama tarihi input olarak alınmalı
                     DateOfTermination = null,
                     Status = Status.Active,
                     CreateDate = DateTime.Now
@@ -132,7 +132,7 @@ namespace humanResourceProject.Application.Services.Concrete.AppUserServices
                 {
                     EmployeeId = newUser.Id,
                     JobId = newUser.JobId,      //TODO: JobId null olmamalı (hem userda hem de JobLogda)
-                    DateOfStart = DateTime.Now, //TODO: işe başlama tarihi input olarak alınmalı
+                    DateOfStart = model.StartDateOfEmployment, //TODO: işe başlama tarihi input olarak alınmalı
                     DateOfTermination = null,
                     Status = Status.Active,
                     CreateDate = DateTime.Now
@@ -287,7 +287,7 @@ namespace humanResourceProject.Application.Services.Concrete.AppUserServices
             }
 
             JobLog jobLog = await _jobLogReadRepository.GetSingleDefault(x => x.EmployeeId == model.EmployeeId && x.DateOfTermination == null);
-            jobLog.DateOfTermination = DateTime.Now;
+            jobLog.DateOfTermination = model.TerminationDate;
             jobLog.Status = Status.Inactive;
             jobLog.UpdateDate = DateTime.Now;
             jobLog.ReasonForTermination = model.ReasonForTermination;
