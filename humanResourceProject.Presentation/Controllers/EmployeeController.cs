@@ -144,6 +144,7 @@ namespace humanResourceProject.Presentation.Controllers
                 var response = await _httpClient.PostAsync($"api/AppUser", content);
                 if (response.IsSuccessStatusCode)
                 {
+                    TempData["SuccessCreateProfileMessage"] = "Şirketinize Personel Eklenmiştir.";
                     return RedirectToAction(nameof(Employees));
                 }
                 else
@@ -161,6 +162,7 @@ namespace humanResourceProject.Presentation.Controllers
                 var response = await _httpClient.PostAsync($"api/AppUser/CreatePersonelManager", content);
                 if (response.IsSuccessStatusCode)
                 {
+                    TempData["SuccessCreateProfileMessage"] = "Şirketinize Personel Eklenmiştir.";
                     return RedirectToAction(nameof(Employees));
                 }
                 else
@@ -188,6 +190,7 @@ namespace humanResourceProject.Presentation.Controllers
 
             if (response.IsSuccessStatusCode)
             {
+                TempData["SuccessDeleteProfileMessage"] = "Şirketinize Personel silinmiştir.";
                 return RedirectToAction("Employees");
             }
 
@@ -254,6 +257,7 @@ namespace humanResourceProject.Presentation.Controllers
             var response = await _httpClient.PostAsync($"api/AppUser/FireEmployee/", content);
             if (response.IsSuccessStatusCode)
             {
+                TempData["SuccessFireEmployee"] = "Personelinizi işten çıkardınız.";
                 return RedirectToAction(nameof(Employees));
             }
             return View("Error");

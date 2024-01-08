@@ -134,7 +134,10 @@ namespace humanResourceProject.Presentation.Controllers
             var response = await _httpClient.PostAsync($"api/Expense/CreateExpense", multipartContent);
 
             if (response.IsSuccessStatusCode)
+            {
+                TempData["SuccessCreateExpenseMessage"] = "Harcama talebiniz oluşturulmuştur.";
                 return RedirectToAction(nameof(MyExpenses));
+            }
             else
             {
                 ModelState.AddModelError(response.StatusCode.ToString(), "Bir hata oluştu.");
@@ -148,8 +151,10 @@ namespace humanResourceProject.Presentation.Controllers
             var response = await _httpClient.DeleteAsync($"api/Expense/DeleteExpense/{id}");
 
             if (response.IsSuccessStatusCode)
+            {
+                TempData["SuccessDeleteExpenseMessage"] = "Harcama talebiniz silinmiştir.";
                 return RedirectToAction(nameof(MyExpenses));
-
+            }
             return View("Error");
         }
 
@@ -236,8 +241,10 @@ namespace humanResourceProject.Presentation.Controllers
             var httpResponse = await _httpClient.PutAsync($"api/Expense/UpdateStatus", contentDTO);
 
             if (httpResponse.IsSuccessStatusCode)
+            {
+                TempData["SuccessApproveExpense"] = "Personelinizin masraf talebini onayladınız.";
                 return RedirectToAction(nameof(EmployeesExpenses));
-
+            }
             ModelState.AddModelError(httpResponse.StatusCode.ToString(), "Bir hata oluştu.");
             return View("Error");
         }
@@ -262,8 +269,10 @@ namespace humanResourceProject.Presentation.Controllers
             var httpResponse = await _httpClient.PutAsync($"api/Expense/UpdateStatus", contentDTO);
 
             if (httpResponse.IsSuccessStatusCode)
+            {
+                TempData["SuccessRejectExpense"] = "Personelinizin masraf talebini reddettiniz.";
                 return RedirectToAction(nameof(EmployeesExpenses));
-
+            }
             ModelState.AddModelError(httpResponse.StatusCode.ToString(), "Bir hata oluştu.");
             return View("Error");
         }

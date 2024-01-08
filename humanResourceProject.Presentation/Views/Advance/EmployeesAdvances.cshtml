@@ -230,4 +230,19 @@
             });
         });
     </script>
+    @section Scripts {
+        @if (TempData["SuccessApproveAdvance"] != null)
+        {
+            <script>
+                toastr["success"]("Personelinizin avans talebini onayladınız.", "Başarılı");
+            </script>
+        }
+        @if (TempData["SuccessRejectAdvance"] != null)
+        {
+            <script>
+                toastr["success"]("Personelinizin avans talebini reddettiniz.", "Başarılı");
+            </script>
+        }
+
+    }
 </body>

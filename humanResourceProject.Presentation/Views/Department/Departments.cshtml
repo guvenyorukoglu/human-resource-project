@@ -166,5 +166,13 @@
                 toastr["info"]("Departman tanımı güncellenmiştir.", "Başarılı");
             </script>
         }
+        @if (TempData["SuccessCreateDepartmentMessage"] != null)
+        {
+            <script>
+
+                toastr["success"]("Departman ekleme işlemi başarılı.", "Başarılı");
+
+            </script>
+        }
     }
 </body>

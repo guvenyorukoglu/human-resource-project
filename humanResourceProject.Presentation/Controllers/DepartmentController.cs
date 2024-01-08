@@ -57,6 +57,7 @@ namespace humanResourceProject.Presentation.Controllers
 
             if (response.IsSuccessStatusCode)
             {
+                TempData["SuccessCreateDepartmentMessage"] = "Şirketinize Departman Eklenmiştir.";
                 return RedirectToAction(nameof(Departments));
             }
             else

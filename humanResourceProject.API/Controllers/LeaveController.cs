@@ -68,7 +68,7 @@ namespace humanResourceProject.API.Controllers
                 //_mailService.SendApproveMail(user, action, $"Sayın {user.FirstName} {user.LastName} İznin maalesef reddedildi");
             }
 
-            return Ok();
+            return Ok("success");
         }
 
         [HttpGet]

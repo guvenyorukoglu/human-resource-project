@@ -100,8 +100,10 @@ namespace humanResourceProject.Presentation.Controllers
 
             var response = await _httpClient.PostAsync($"api/Leave", content);
             if (response.IsSuccessStatusCode)
+            {
+                TempData["SuccessCreateLeaveMessage"] = "İzin talebiniz oluşturulmuştur.";
                 return RedirectToAction(nameof(MyLeaves));
-
+            }
             else
             {
                 ModelState.AddModelError(response.StatusCode.ToString(), "Bir hata oluştu.");
@@ -115,8 +117,11 @@ namespace humanResourceProject.Presentation.Controllers
             var response = await _httpClient.DeleteAsync($"api/Leave/DeleteLeave/{id}");
 
             if (response.IsSuccessStatusCode)
+            {
+                TempData["SuccessDeleteLeaveMessage"] = "İzin talebiniz silinmiştir.";
+                
                 return RedirectToAction(nameof(MyLeaves));
-
+            }
             return View("Error");
         }
 
@@ -181,6 +186,7 @@ namespace humanResourceProject.Presentation.Controllers
 
             if (httpResponse.IsSuccessStatusCode)
             {
+                TempData["SuccessApproveLeave"] = "Personelinizin izin talebini onayladınız.";
                 return RedirectToAction(nameof(EmployeesLeaves));
             }
             ModelState.AddModelError(httpResponse.StatusCode.ToString(), "Bir hata oluştu.");
@@ -207,8 +213,10 @@ namespace humanResourceProject.Presentation.Controllers
             var httpResponse = await _httpClient.PutAsync($"api/Leave/UpdateStatus", contentDTO);
 
             if (httpResponse.IsSuccessStatusCode)
+            {
+                TempData["success"] = "Personelinizin izin talebini reddettiniz.";
                 return RedirectToAction(nameof(EmployeesLeaves));
-
+            }
             ModelState.AddModelError(httpResponse.StatusCode.ToString(), "Bir hata oluştu.");
             return View("Error");
         }

@@ -100,6 +100,7 @@
                                 <th style="width: 10%">Vergi Dairesi</th>
                                 <th style="width: 8%">Vergi numarası</th>
                                 <th style="width: 5%">Personel Sayısı</th>
+                                <th style="width: 5%">İsim</th>
                                 <th style="width: 8%">Statü</th>
                                 <th style="width: 18%">İşlemler</th>
                             </tr>
@@ -117,6 +118,7 @@
                                     <td>@company.TaxOffice</td>
                                     <td>@company.TaxNumber</td>
                                     <td>@company.NumberOfEmployees</td>
+                                    <td>@company.FirstName</td>
                                     <td>@displayNameRequestStatus</td>
                                     <td>
                                         @if (company.CompanyStatus == RequestStatus.Pending)

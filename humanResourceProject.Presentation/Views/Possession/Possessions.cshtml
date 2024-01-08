@@ -257,6 +257,12 @@
                 <script>
                     toastr["info"]("Zimmet güncellenmiştir.", "Başarılı");
                 </script>
+            } 
+            @if (TempData["CreatePossessionMessage"] != null)
+            {
+                <script>
+                    toastr["success"]("Zimmet başarıyla oluşturuldu .", "Başarılı");
+                </script>
             }
         }
     </div>

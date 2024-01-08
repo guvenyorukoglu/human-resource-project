@@ -186,5 +186,21 @@
                 toastr["info"]("İzin talebiniz güncellenmiştir.", "Başarılı");
             </script>
         }
+        @if (TempData["SuccessCreateLeaveMessage"] != null)
+        {
+            <script>
+
+                toastr["success"]("İzin talebiniz oluşturulmuştur", "Başarılı");
+
+            </script>
+        }
+        @if (TempData["SuccessDeleteLeaveMessage"] != null)
+        {
+            <script>
+
+                toastr["success"]("İzin talebiniz silinmiştir.", "Başarılı");
+
+            </script>
+        }
     }
 </body>

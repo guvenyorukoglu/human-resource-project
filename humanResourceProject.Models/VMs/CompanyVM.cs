@@ -15,5 +15,9 @@ namespace humanResourceProject.Models.VMs
         public Status Status { get; set; }
         public string? RejectReason { get; set; }
         public RequestStatus CompanyStatus { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+
+       
     }
 }

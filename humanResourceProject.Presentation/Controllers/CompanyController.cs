@@ -41,7 +41,6 @@ namespace humanResourceProject.Presentation.Controllers
         }
 
 
-
         [AllowAnonymous]
         public IActionResult CreateCompany()
         {

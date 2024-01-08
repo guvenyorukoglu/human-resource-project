@@ -182,5 +182,21 @@
                 toastr["info"]("Avans talebiniz güncellenmiştir.", "Başarılı");
             </script>
         }
+        @if (TempData["SuccessCreateAdvanceMessage"] != null)
+        {
+            <script>
+
+                toastr["success"]("Avans talebiniz oluşturulmuştur", "Başarılı");
+
+            </script>
+        }
+        @if (TempData["SuccessDeleteAdvanceMessage"] != null)
+        {
+            <script>
+
+                toastr["success"]("Avans talebiniz silinmiştir.", "Başarılı");
+
+            </script>
+        }
     }
 </body>
