@@ -11,12 +11,12 @@ namespace humanResourceProject.Models.DTOs
         [Required(ErrorMessage = "İsim alanı boş geçilemez!")]
         [DisplayName("İsim*")]
         [RegularExpression(@"^[a-zA-ZğĞıİşŞüÜöÖçÇ]*$", ErrorMessage = "Yalnızca alfabetik karakterlere izin verilir.")]
-        [StringLength(20, ErrorMessage = "İsim en fazla 20 en az 5 karakter olmalıdır.", MinimumLength = 5)]
+        [StringLength(20, ErrorMessage = "İsim en fazla 20 en az 3 karakter olmalıdır.", MinimumLength = 3)]
         public string FirstName { get; set; }
 
         [DisplayName("İkinci İsim")]
         [RegularExpression(@"^[a-zA-ZğĞıİşŞüÜöÖçÇ]*$", ErrorMessage = "Yalnızca alfabetik karakterlere izin verilir.")]
-        [StringLength(30, ErrorMessage = "İsim en fazla 30 karakter olmalıdır.", MinimumLength = 5)]
+        [StringLength(30, ErrorMessage = "İsim en fazla 30 karakter olmalıdır.", MinimumLength = 3)]
         public string? MiddleName { get; set; }
 
         [Required(ErrorMessage = "Soyisim alanı boş geçilemez!")]

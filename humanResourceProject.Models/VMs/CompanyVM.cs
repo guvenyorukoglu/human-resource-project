@@ -1,4 +1,4 @@
-﻿using humanResourceProject.Domain.Entities.Concrete;
+using humanResourceProject.Domain.Entities.Concrete;
 using humanResourceProject.Domain.Enum;
 
 namespace humanResourceProject.Models.VMs
@@ -16,6 +16,11 @@ namespace humanResourceProject.Models.VMs
         public Status Status { get; set; }
         public string? RejectReason { get; set; }
         public RequestStatus CompanyStatus { get; set; }
+
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+
         public ICollection<AppUser> Employees { get; set; }
+
     }
 }

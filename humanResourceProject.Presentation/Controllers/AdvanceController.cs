@@ -107,6 +107,7 @@ namespace humanResourceProject.Presentation.Controllers
             var response = await _httpClient.PostAsync($"api/Advance", content);
             if (response.IsSuccessStatusCode)
             {
+                TempData["SuccessCreateAdvanceMessage"] = "Avans talebiniz oluşturulmuştur.";
                 return RedirectToAction(nameof(MyAdvances));
             }
             else
@@ -123,6 +124,7 @@ namespace humanResourceProject.Presentation.Controllers
 
             if (response.IsSuccessStatusCode)
             {
+                TempData["SuccessDeleteAdvanceMessage"] = "Avans talebiniz silinmiştir."; 
                 return RedirectToAction(nameof(MyAdvances));
             }
 
@@ -195,6 +197,7 @@ namespace humanResourceProject.Presentation.Controllers
 
             if (httpResponse.IsSuccessStatusCode)
             {
+                TempData["SuccessApproveAdvance"] = "Personelinizin avans talebini onayladınız.";
                 return RedirectToAction(nameof(EmployeesAdvances));
             }
 
@@ -225,6 +228,7 @@ namespace humanResourceProject.Presentation.Controllers
 
             if (httpResponse.IsSuccessStatusCode)
             {
+                TempData["SuccessRejectAdvance"] = "Personelinizin avans talebini reddettiniz.";
                 return RedirectToAction(nameof(EmployeesAdvances));
             }
 

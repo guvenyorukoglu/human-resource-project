@@ -220,7 +220,16 @@
                         // Handle success response as needed
                         console.log("Request rejected successfully.");
                         $('#rejectLeaveModal').modal('hide');
-                        window.location.reload(); // Sayfayı yenile
+                        if(response=="success"){
+                            toastr["success"]("Personelin izin talebi reddedilmiştir.", "Başarılı");
+                            setTimeout(function(){
+                            window.location.reload(); // Sayfayı yenile
+                            }, 3000);
+                        }
+                        else{
+                            toastr["error"]("Personelin izin talebini reddetme işlemi başarısız oldu. Tekrar deneyiniz.", "Başarılı");
+                        }
+                            )
                     },
                     error: function (error) {
                         // Handle errors if any
@@ -231,5 +240,14 @@
             });
         });
     </script>
-
+    @section Scripts {
+        @if (TempData["SuccessApproveLeave"] != null)
+        {
+            <script>
+                toastr["success"]("Personelinizin izin talebini onayladınız.", "Başarılı");
+            </script>
+        }
+      
+       
+    }
 </body>

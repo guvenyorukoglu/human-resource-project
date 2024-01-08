@@ -162,5 +162,13 @@
                 toastr["info"]("İş tanımı güncellenmiştir.", "Başarılı");
             </script>
         }
+        @if (TempData["SuccessCreateJobMessage"] != null)
+        {
+            <script>
+
+                toastr["success"]("Pozisyon ekleme işlemi başarılı.", "Başarılı");
+
+            </script>
+        }
     }
 </body>

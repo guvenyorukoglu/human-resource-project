@@ -57,6 +57,7 @@ namespace humanResourceProject.Presentation.Controllers
 
             if (response.IsSuccessStatusCode)
             {
+                TempData["SuccessCreateJobMessage"] = "Şirketinize Pozisyon Eklenmiştir.";
                 return RedirectToAction(nameof(Jobs));
             }
             else

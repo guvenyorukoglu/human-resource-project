@@ -187,10 +187,27 @@
             </script>
         }
 
+        @if (TempData["SuccessCreateLeaveMessage"] != null)
+        {
+            <script>
+
+                toastr["success"]("İzin talebiniz oluşturulmuştur", "Başarılı");
+
+            </script>
+        }
+        @if (TempData["SuccessDeleteLeaveMessage"] != null)
+        {
+            <script>
+
+                toastr["success"]("İzin talebiniz silinmiştir.", "Başarılı");
+
+
+
         @if (TempData["ManagerIdEmptyMessage"] != null)
         {
             <script>
                 toastr["warning"]("Yöneticiniz henüz atanmadığı için şuanda harcama ekleyemezsiniz! Eğer yöneticinizin atandığını düşünüyorsanız, lütfen çıkış yapıp tekrar giriş yapınız.", "Uyarı");
+
             </script>
         }
     }

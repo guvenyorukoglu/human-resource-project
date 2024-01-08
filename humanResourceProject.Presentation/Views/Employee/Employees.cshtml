@@ -241,9 +241,42 @@
                 toastr["warning"]("İşten çıkarmak istenilen personelin üzerinde zimmetler bulunmaktadır. Lütfen öncelikle zimmetleri personelden teslim alınız.", "Uyarı");
             </script>
         }
-    }
-</body>
+        @if (TempData["SuccessCreateProfileMessage"] != null)
+        {
+            <script>
 
+                toastr["success"]("Şirketinize personel eklenmiştir.", "Başarılı");
+                
+            </script>
+        } 
+        @if (TempData["SuccessDeleteProfileMessage"] != null)
+        {
+            <script>
+
+                toastr["success"]("Personel silinmiştir.", "Başarılı");
+                
+            </script>
+        }
+        @if (TempData["SuccessFireEmployee"] != null)
+        {
+            <script>
+
+                toastr["success"]("Personel işten çıkarılmıştır.", "Başarılı");
+                
+            </script>
+        }
+
+    }
+
+</body>
+@*@section Scripts {
+        @if (TempData["SuccessCreateProfileMessage"] != null)
+        {
+            <script>
+                toastr["info"]("Profiliniz güncellenmiştir.", "Başarılı");
+            </script>
+        }
+    }*@
 
 <style>
 

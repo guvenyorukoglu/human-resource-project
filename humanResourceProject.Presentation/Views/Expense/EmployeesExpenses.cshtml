@@ -245,5 +245,19 @@
             });
         });
     </script>
+    @section Scripts {
+        @if (TempData["SuccessApproveExpense"] != null)
+        {
+            <script>
+                toastr["success"]("Personelinizin masraf talebini onayladınız.", "Başarılı");
+            </script>
+        }
+        @if (TempData["SuccessRejectExpense"] != null)
+        {
+            <script>
+                toastr["success"]("Personelinizin masraf talebini reddettiniz.", "Başarılı");
+            </script>
+        }
 
+    }
 </body>
