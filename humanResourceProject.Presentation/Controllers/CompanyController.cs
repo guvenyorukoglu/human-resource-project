@@ -186,13 +186,13 @@ namespace humanResourceProject.Presentation.Controllers
                 return View("Error");
 
             var content = await response.Content.ReadAsStringAsync();
-            var model2 = JsonConvert.DeserializeObject<UpdateCompanyDTO>(content);
-            model2.RejectReason = rejectReason;
-            model2.CompanyStatus = RequestStatus.Rejected;
-            var json = JsonConvert.SerializeObject(model2);
-            var model = new StringContent(json, Encoding.UTF8, "application/json");
+            var updateCompanyDTO = JsonConvert.DeserializeObject<UpdateCompanyDTO>(content);
+            updateCompanyDTO.RejectReason = rejectReason;
+            updateCompanyDTO.CompanyStatus = RequestStatus.Rejected;
+            var json = JsonConvert.SerializeObject(updateCompanyDTO);
+            var contentUpdateCompanyDTO = new StringContent(json, Encoding.UTF8, "application/json");
 
-            var httpResponse = await _httpClient.PutAsync($"api/Company/UpdateStatus", model);
+            var httpResponse = await _httpClient.PutAsync($"api/Company/UpdateStatus", contentUpdateCompanyDTO);
 
             if (httpResponse.IsSuccessStatusCode)
                 return RedirectToAction(nameof(Companies));

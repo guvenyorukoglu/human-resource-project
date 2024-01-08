@@ -33,7 +33,9 @@ namespace humanResourceProject.Application.Services.Concrete.AppUserServices
         private readonly IBaseReadRepository<JobLog> _jobLogReadRepository;
         private readonly IDepartmentReadService _departmentReadService;
         private readonly IMailService _mailService;
-        public AppUserWriteService(IBaseWriteRepository<AppUser> writeRepository, IBaseReadRepository<AppUser> readRepository, IMapper mapper, UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, IImageService imageService, IBaseReadRepository<Advance> advanceReadRepository, IBaseReadRepository<Leave> leaveReadRepository, IBaseReadRepository<Expense> expenseReadRepository, IBaseWriteRepository<Advance> advanceWriteRepository, IBaseWriteRepository<Expense> expenseWriteRepository, IBaseWriteRepository<Leave> leaveWriteRepository, IBaseReadRepository<Job> jobReadRepository, IDepartmentReadService departmentReadService, IAppUserReadService appUserReadService, IBaseWriteRepository<JobLog> jobLogWriteRepository, IBaseReadRepository<JobLog> jobLogReadRepository, IMailService mailService) : base(writeRepository, readRepository)
+        private readonly IBaseReadRepository<Company> _companyReadRepository;
+        private readonly IBaseWriteRepository<Company> _companyWriteRepository;
+        public AppUserWriteService(IBaseWriteRepository<AppUser> writeRepository, IBaseReadRepository<AppUser> readRepository, IMapper mapper, UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, IImageService imageService, IBaseReadRepository<Advance> advanceReadRepository, IBaseReadRepository<Leave> leaveReadRepository, IBaseReadRepository<Expense> expenseReadRepository, IBaseWriteRepository<Advance> advanceWriteRepository, IBaseWriteRepository<Expense> expenseWriteRepository, IBaseWriteRepository<Leave> leaveWriteRepository, IBaseReadRepository<Job> jobReadRepository, IDepartmentReadService departmentReadService, IAppUserReadService appUserReadService, IBaseWriteRepository<JobLog> jobLogWriteRepository, IBaseReadRepository<JobLog> jobLogReadRepository, IMailService mailService, IBaseReadRepository<Company> companyReadRepository, IBaseWriteRepository<Company> companyWriteRepository) : base(writeRepository, readRepository)
         {
             _writeRepository = writeRepository;
             _readRepository = readRepository;
@@ -52,6 +54,8 @@ namespace humanResourceProject.Application.Services.Concrete.AppUserServices
             _jobLogWriteRepository = jobLogWriteRepository;
             _jobLogReadRepository = jobLogReadRepository;
             _mailService = mailService;
+            _companyReadRepository = companyReadRepository;
+            _companyWriteRepository = companyWriteRepository;
         }
 
         public async Task<UpdateUserDTO> GetUpdateUserDTOById(Guid id)
@@ -158,7 +162,15 @@ namespace humanResourceProject.Application.Services.Concrete.AppUserServices
             IdentityResult result = await _userManager.CreateAsync(newUser, model.Password);
 
             if (result.Succeeded)
+            {
                 await _userManager.AddToRoleAsync(newUser, "CompanyManager");
+                Company company = await _companyReadRepository.GetSingleDefault(x => x.Id == model.CompanyId);
+                company.ContactFullName = newUser.FullName;
+                company.ContactEmail = newUser.Email;
+                company.ContactPhoneNumber = newUser.PhoneNumber;
+
+                await _companyWriteRepository.Update(company);
+            }
 
             return result;
         }

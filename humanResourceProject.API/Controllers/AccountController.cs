@@ -112,9 +112,10 @@ namespace humanResourceProject.API.Controllers
             AppUser user = await _userManager.FindByEmailAsync(model.Email);
             string action = _configuration["HomePage"];
             string mailToName = "Admin";
-            string subject = "Yeni Kullanıcı Kayıt Oldu!";
-            string body = $"<p>Merhaba Admin,</p><p>Yeni bir kullanıcı uygulamaya kayıt olmuştur.</p><p>Kullanıcının statüsünü aktif yapmak için <a href ='{action}'>buraya</a> tıklayınız.</p><br><hr><br><h3>Team Monitorease</h3>";
-            string recipientEmail = "cantokhay@gmail.com";
+            string subject = "Yeni Şirket Kaydı!";
+            string body = $"<p>Merhaba Admin,</p><p>Yeni bir şirket Monitorease'e kayıt oldu.</p><p>Kayıt olan şirketin detaylarını görmek için lütfen <a href ='{action}'>siteye</a> giriş yapınız.</p><br><hr><br><h3>Team Monitorease</h3>";
+            //string recipientEmail = "cantokhay@gmail.com";
+            string recipientEmail = "yorukoglu.guven@gmail.com";
             await _mailService.SendEmailAsync(user, recipientEmail, mailToName, subject, body);
             //await _mailService.SendUserRegisteredEmail(user, action);
 

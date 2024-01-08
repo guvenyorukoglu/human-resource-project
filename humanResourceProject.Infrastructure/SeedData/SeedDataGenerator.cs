@@ -108,7 +108,7 @@ namespace humanResourceProject.Infrastructure.SeedData
                             .RuleFor(c => c.TaxNumber, f => f.Random.ReplaceNumbers($"##########"))
                             .RuleFor(c => c.TaxOffice, f => f.Address.City())
                             .RuleFor(c => c.Address, f => f.Address.FullAddress())
-                            .RuleFor(c => c.PhoneNumber, f => f.Phone.PhoneNumber("+90##########"))
+                            .RuleFor(c => c.PhoneNumber, f => f.Phone.PhoneNumber("##########"))
                             .RuleFor(c => c.CreateDate, f => f.Date.Past(1))
                             .RuleFor(c => c.CompanyStatus, f => RequestStatus.Approved)
                             .RuleFor(c => c.Status, f => f.Random.Bool(0.9f) ? Status.Active : (f.Random.Bool(0.5f) ? Status.Modified : (f.Random.Bool(0.25f) ? Status.Inactive : Status.Deleted)));
@@ -248,7 +248,7 @@ namespace humanResourceProject.Infrastructure.SeedData
                             .RuleFor(e => e.UserName, (f, e) => e.Email)
                             .RuleFor(e => e.NormalizedUserName, (f, e) => e.UserName.ToUpperInvariant())
                             .RuleFor(e => e.Address, f => f.Address.FullAddress())
-                            .RuleFor(e => e.PhoneNumber, f => f.Phone.PhoneNumber("+90##########"))
+                            .RuleFor(e => e.PhoneNumber, f => f.Phone.PhoneNumber("##########"))
                             .RuleFor(e => e.IdentificationNumber, f => f.Random.ReplaceNumbers($"###########"))
                             .RuleFor(e => e.BloodGroup, f => f.PickRandom<BloodGroup>())
                             .RuleFor(e => e.Birthdate, f => f.Date.Between(DateTime.Now.AddYears(-40), DateTime.Now.AddYears(-18)))
@@ -537,7 +537,7 @@ namespace humanResourceProject.Infrastructure.SeedData
                         .RuleFor(e => e.UserName, (f, e) => e.Email)
                         .RuleFor(e => e.NormalizedUserName, (f, e) => e.UserName.ToUpperInvariant())
                         .RuleFor(e => e.Address, f => f.Address.FullAddress())
-                        .RuleFor(e => e.PhoneNumber, f => f.Phone.PhoneNumber("+90##########"))
+                        .RuleFor(e => e.PhoneNumber, f => f.Phone.PhoneNumber("##########"))
                         .RuleFor(e => e.IdentificationNumber, f => f.Random.ReplaceNumbers($"###########"))
                         .RuleFor(e => e.BloodGroup, f => f.PickRandom<BloodGroup>())
                         .RuleFor(e => e.Birthdate, f => f.Date.Past(50))
@@ -594,7 +594,7 @@ namespace humanResourceProject.Infrastructure.SeedData
                     .RuleFor(e => e.UserName, (f, e) => e.Email)
                     .RuleFor(e => e.NormalizedUserName, (f, e) => e.UserName.ToUpperInvariant())
                     .RuleFor(e => e.Address, f => f.Address.FullAddress())
-                    .RuleFor(e => e.PhoneNumber, f => f.Phone.PhoneNumber("+90##########"))
+                    .RuleFor(e => e.PhoneNumber, f => f.Phone.PhoneNumber("##########"))
                     .RuleFor(e => e.IdentificationNumber, f => f.Random.ReplaceNumbers($"###########"))
                     .RuleFor(e => e.BloodGroup, f => f.PickRandom<BloodGroup>())
                     .RuleFor(e => e.Birthdate, f => f.Date.Between(DateTime.Now.AddYears(-65), DateTime.Now.AddYears(-35)))
@@ -662,7 +662,7 @@ namespace humanResourceProject.Infrastructure.SeedData
                     TaxNumber = "1234567890",
                     TaxOffice = "İstanbul",
                     Address = "İstanbul",
-                    PhoneNumber = "+901234567890",
+                    PhoneNumber = "5439876543",
                     CreateDate = DateTime.Now,
                     Status = Status.Active
                 };
@@ -692,7 +692,7 @@ namespace humanResourceProject.Infrastructure.SeedData
                     Gender = Gender.Male,
                     JobId = Guid.Empty,
                     Address = "İstanbul",
-                    PhoneNumber = "901234567890",
+                    PhoneNumber = "5559876543",
                     CreateDate = DateTime.Now,
                     Status = Status.Active,
                     UserName = "SiteManager",
