@@ -14,8 +14,8 @@ namespace humanResourceProject.Models.DTOs
         [StringLength(500, ErrorMessage = "Açıklama en fazla 500 en az 5 karakter olmalıdır.", MinimumLength = 5)]
         public string? Explanation { get; set; }
         [Required(ErrorMessage = "Miktar alanı boş geçilemez!")]
-        [DisplayName("Harcama Miktarı*")]
-        [Range(1, 100000, ErrorMessage = "Harcama miktarı 1 ile 100000 arasında olmalıdır.")]
+        [DisplayName("Masraf Miktarı*")]
+        [Range(1, 100000, ErrorMessage = "Masraf miktarı 1 ile 100000 arasında olmalıdır.")]
         public decimal AmountOfExpense { get; set; }
         //public DateTime? UpdateDate { get; set; }
         //public Status Status { get; set; }
