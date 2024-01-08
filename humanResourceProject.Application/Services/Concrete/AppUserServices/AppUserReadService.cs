@@ -128,12 +128,17 @@ namespace humanResourceProject.Application.Services.Concrete.AppUserServices
             await _signInManager.SignOutAsync();
         }
 
-        public async Task<ProfileEmployeeVM> ProfileEmployee(Guid employeeId)
+        public async Task<UpdateProfileDTO> ProfileEmployee(Guid employeeId)
         {
-            ProfileEmployeeVM profileEmployeeVM = await _readRepository.GetFilteredFirstOrDefault(
-                select: x => new ProfileEmployeeVM()
+            AppUser appUser = await _readRepository.GetSingleDefault(x => x.Id == employeeId);
+
+            if(appUser.ManagerId == null)
+            {
+                UpdateProfileDTO profileEmployeeDTO = await _readRepository.GetFilteredFirstOrDefault(
+                select: x => new UpdateProfileDTO()
                 {
-                    FullName = x.FirstName + " " + x.LastName,
+                    Id = employeeId,
+                    FullName = x.FullName,
                     Email = x.Email,
                     Address = x.Address,
                     PhoneNumber = x.PhoneNumber,
@@ -142,15 +147,39 @@ namespace humanResourceProject.Application.Services.Concrete.AppUserServices
                     BloodGroup = x.BloodGroup,
                     Birthdate = x.Birthdate,
                     Gender = x.Gender,
-                    ManagerName = x.Manager.FirstName + " " + x.Manager.LastName,
-                    ManagerEmail = x.Manager.Email,
-                    ManagerPhoneNumber = x.Manager.PhoneNumber
 
                 },
-                where: x => x.Id == employeeId, 
-                include: x => x.Include(x => x.Manager).Include(x => x.Company).ThenInclude(x => x.Jobs));
+                where: x => x.Id == employeeId,
+                include: x => x.Include(x => x.Company).ThenInclude(x => x.Jobs)
+                );
 
-            return profileEmployeeVM;
+                return profileEmployeeDTO;
+            }
+            else
+            {
+                UpdateProfileDTO profileEmployeeDTO = await _readRepository.GetFilteredFirstOrDefault(
+                    select: x => new UpdateProfileDTO()
+                    {
+                        Id = employeeId,
+                        FullName = x.FirstName + " " + x.LastName,
+                        Email = x.Email,
+                        Address = x.Address,
+                        PhoneNumber = x.PhoneNumber,
+                        JobTitle = x.Company.Jobs.FirstOrDefault(j => j.Id == x.JobId).Title,
+                        IdentificationNumber = x.IdentificationNumber,
+                        BloodGroup = x.BloodGroup,
+                        Birthdate = x.Birthdate,
+                        Gender = x.Gender,
+                        ManagerName = x.Manager != null ? x.Manager.FirstName + " " + x.Manager.LastName : null,
+                        ManagerEmail = x.Manager != null ? x.Manager.Email : null,
+                        ManagerPhoneNumber = x.Manager != null ? x.Manager.PhoneNumber : null
+
+                    },
+                    where: x => x.Id == employeeId,
+                    include: x => x.Include(x => x.Manager).Include(x => x.Company).ThenInclude(x => x.Jobs));
+
+                return profileEmployeeDTO;
+            }
         }
 
         public async Task<ProfileEmployeeVM> ProfileCompanyManager(Guid companyManagerId)
@@ -158,6 +187,7 @@ namespace humanResourceProject.Application.Services.Concrete.AppUserServices
             ProfileEmployeeVM profileEmployeeVM = await _readRepository.GetFilteredFirstOrDefault(
                 select: x => new ProfileEmployeeVM()
                 {
+                    Id = companyManagerId,
                     FullName = x.FirstName + " " + x.LastName,
                     Email = x.Email,
                     Address = x.Address,

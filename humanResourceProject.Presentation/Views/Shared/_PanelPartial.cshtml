@@ -20,7 +20,7 @@
                 <li>
                     <a asp-action="Home" asp-controller="Employee"><i class="fa-solid fa-calendar-days"></i>Dashboard</a>
                 </li>
-                @if (User.IsInRole("Personel") || User.IsInRole("Manager"))
+                @if (!User.IsInRole("SiteManager"))
                 {
                     <li class="parent">
                         <a href="#"><i class="fa-solid fa-hand-holding"></i>Taleplerim</a>
@@ -32,16 +32,13 @@
                                 <a asp-action="MyAdvances" asp-controller="Advance"><i class="fa-solid fa-sack-dollar"></i> Avans Taleplerim</a>
                             </li>
                             <li>
-                                <a asp-action="MyExpenses" asp-controller="Expense"><i class="fa-solid fa-file-invoice-dollar"></i> Harcama Taleplerim</a>
+                                <a asp-action="MyExpenses" asp-controller="Expense"><i class="fa-solid fa-file-invoice-dollar"></i> Masraf Taleplerim</a>
                             </li>
                         </ul>
                     </li>
                     <li>
                         <a asp-action="MyPossessions" asp-controller="Possession"><i class="fa-solid fa-building-shield"></i>Zimmetlerim</a>
                     </li>
-                }
-                @if (!User.IsInRole("SiteManager"))
-                {
                     <li>
                         <a asp-action="Employees" asp-controller="Employee"><i class="fa fa-users"></i>Personeller</a>
                     </li>
@@ -59,7 +56,7 @@
                                 <a asp-action="EmployeesAdvances" asp-controller="Advance"><i class="fa-solid fa-sack-dollar"></i> Personel Avans Talepleri</a>
                             </li>
                             <li>
-                                <a asp-action="EmployeesExpenses" asp-controller="Expense"><i class="fa-solid fa-file-invoice-dollar"></i> Personel Harcama Talepleri</a>
+                                <a asp-action="EmployeesExpenses" asp-controller="Expense"><i class="fa-solid fa-file-invoice-dollar"></i> Personel Masraf Talepleri</a>
                             </li>
                         </ul>
                     </li>

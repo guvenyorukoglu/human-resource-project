@@ -22,8 +22,8 @@ namespace humanResourceProject.Models.DTOs
         public DateTime ExpiryDate { get; set; }
         public RequestStatus AdvanceStatus { get; set; }
 
-        [Required(ErrorMessage = "Avans tipi alanı boş geçilemez!")]
-        [DisplayName("Avans Tipi*")]
+        [Required(ErrorMessage = "Avans türü alanı boş geçilemez!")]
+        [DisplayName("Avans Türü*")]
         public AdvanceType AdvanceType { get; set; }
         [Required(ErrorMessage = "Para birimi alanı boş geçilemez!")]
         [DisplayName("Para Birimi*")]

@@ -17,7 +17,7 @@ namespace humanResourceProject.Models.VMs
         public ExpenseType ExpenseType { get; set; }
         public string Explanation { get; set; }
         public string? FilePath { get; set; }
-        [DisplayName("Masraf Fotoğrafı")]
+        [DisplayName("Harcama Fotoğrafı")]
         public IFormFile? UploadPath { get; set; }
         public RequestStatus ExpenseStatus { get; set; }
         public DateTime CreateDate { get; set; }

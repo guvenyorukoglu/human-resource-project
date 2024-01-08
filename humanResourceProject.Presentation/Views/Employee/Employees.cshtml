@@ -10,7 +10,7 @@
         @Html.Partial("_PanelPartial")
 
         <div class="aside container mt-5 col-md-9 col-sm-9">
-            <h3 class="text-center">Personeller</h3>
+            <h3 class="heading-list">PERSONELLER</h3>
             @if (Model != null)
             {
                 if (User.IsInRole("CompanyManager"))
@@ -30,7 +30,7 @@
 
 
                 <script>
-                    var columnsToExport = [1, 2, 3, 4, 5, 6,7];
+                    var columnsToExport = [1, 2, 3, 4, 5, 6, 7];
 
                     $(document).ready(function () {
                         $('#employees').DataTable({
@@ -61,7 +61,7 @@
                                     exportOptions: {
                                         columns: columnsToExport
                                     },
-                                    
+
                                 },
                                 {
                                     extend: 'spacer',
@@ -198,7 +198,11 @@
                                                             </button>
                                                         </div>
                                                         <div class="modal-body">
-                                                            <div class="form-group mb-3">Personeli işten çıkarmak istediğinize emin iseniz sebebini yazmanız gerekmektedir.</div>
+                                                            <div class="form-group mb-3">Lütfen işten çıkış tarihini ve sebebini belirtiniz!</div>
+                                                            <div class="form-group mb-3">
+                                                                <label class="control-label mb-2">İşten Çıkış Tarihi</label>
+                                                                <input id="terminationDate" value="yyyy-MM-dd" max="@DateTime.Now.ToString("yyyy-MM-dd")" type="date" class="form-control" />
+                                                            </div>
                                                             <div class="form-group mb-3">
                                                                 <label class="control-label mb-2">İşten Çıkarma Sebebi</label>
                                                                 <textarea id="reasonForTermination" class="form-control mb-3" rows="8" required></textarea>
@@ -227,7 +231,14 @@
         @if (TempData["SuccessUpdateEmployeeMessage"] != null)
         {
             <script>
-                toastr["info"]("Çalışanın profili güncellenmiştir.", "Başarılı");
+                toastr["info"]("Personel profili güncellenmiştir.", "Başarılı");
+            </script>
+        }
+
+        @if (TempData["EmployeeHasPossessionsMessage"] != null)
+        {
+            <script>
+                toastr["warning"]("İşten çıkarmak istenilen personelin üzerinde zimmetler bulunmaktadır. Lütfen öncelikle zimmetleri personelden teslim alınız.", "Uyarı");
             </script>
         }
     }
@@ -417,6 +428,7 @@
             // var terminationReason = $('#reasonForTermination').val();
             var employeeId = modalContent.find('#employeeId').val();
             // var employeeId = $('#employeeId').val();
+            var terminationDate = modalContent.find('#terminationDate').val();
 
             // Sebebi boş bırakırsa hata mesajı ver
             if (terminationReason.trim() === '') {
@@ -434,16 +446,26 @@
                 url: "/Employee/FireEmployee",
                 data: {
                     employeeId: employeeId,
-                    terminationReason: terminationReason
+                    terminationReason: terminationReason,
+                    terminationDate: terminationDate
                 },
                 success: function (response) {
-                    // Handle success response as needed
                     modalContent.closest('.modal').modal('hide');
-                    // $('#fireEmployeeModal').modal('hide');
-                    window.location.reload(); // Sayfayı yenile
+                    if (response === "success") {
+                        toastr["success"]("Personel işten çıkartılmıştır.", "Başarılı");
+                        setTimeout(function () {
+                            window.location.reload();
+                        }, 3000);
+                    } else {
+                        toastr["error"]("Bir hata oluştu. İşlem gerçekleştirilemedi.", "Hata");
+                    }
                 },
-                error: function (error) {
-                    // Handle errors if any
+                error: function (xhr, status, error) {
+                    if (xhr.status === 400 && xhr.responseText === "possessions") {
+                        toastr["warning"]("İşten çıkarmak istenilen personelin üzerinde zimmetler bulunmaktadır. Lütfen öncelikle zimmetleri personelden teslim alınız.", "Uyarı");
+                    } else {
+                        toastr["error"]("Bir hata oluştu. İşlem gerçekleştirilemedi.", "Hata");
+                    }
                     console.error("Error rejecting request:", error);
                     // Optionally, display an error message or take corrective action
                 }

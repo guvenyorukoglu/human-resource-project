@@ -241,6 +241,24 @@ h6 {
         color: #133a63;
         border-color: #133a63;
     }
+
+.heading-list{
+    margin-top: 20px;
+    margin-bottom: 30px;
+    font-size: 20px;
+    font-weight: 700;
+    text-align: center;
+    color: #222;
+    letter-spacing: 1.1px;
+}
+
+.card-title{
+    font-size: 20px;
+    font-weight: 700;
+    text-align: center;
+    color: #222;
+    letter-spacing: 1.1px;
+}
 /* PAGINATION */
 .pagination {
     display: flex;
