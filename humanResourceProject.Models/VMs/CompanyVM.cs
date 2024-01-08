@@ -17,8 +17,9 @@ namespace humanResourceProject.Models.VMs
         public string? RejectReason { get; set; }
         public RequestStatus CompanyStatus { get; set; }
 
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
+        public string ContactFullName { get; set; }
+        public string ContactEmail { get; set; }
+        public string ContactPhoneNumber { get; set; }
 
         public ICollection<AppUser> Employees { get; set; }
 

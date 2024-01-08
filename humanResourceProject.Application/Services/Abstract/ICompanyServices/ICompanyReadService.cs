@@ -7,5 +7,7 @@ namespace humanResourceProject.Application.Services.Abstract.ICompanyServices
     public interface ICompanyReadService : IBaseReadService<Company>
     {
         Task<CompanyVM> GetCompanyVM(Guid id);
+
+        Task<List<CompanyVM>> GetCompanies();
     }
 }

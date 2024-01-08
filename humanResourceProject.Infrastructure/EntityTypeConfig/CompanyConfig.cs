@@ -13,6 +13,9 @@ namespace humanResourceProject.Infrastructure.EntityTypeConfig
             builder.Property(c => c.TaxOffice).IsRequired().HasMaxLength(50);
             builder.Property(c => c.Address).IsRequired().HasMaxLength(200);
             builder.Property(c => c.PhoneNumber).IsRequired().HasMaxLength(13);
+            builder.Property(c => c.ContactFullName).IsRequired(false).HasMaxLength(100);
+            builder.Property(c => c.ContactPhoneNumber).IsRequired(false).HasMaxLength(13);
+            builder.Property(c => c.ContactEmail).IsRequired(false).HasMaxLength(100);
 
             base.Configure(builder);
         }

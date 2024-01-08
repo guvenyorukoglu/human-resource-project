@@ -36,6 +36,14 @@ namespace humanResourceProject.API.Controllers
             var list = await _companyReadService.GetAll();
             return Ok(list);
         }
+        
+        [HttpGet]
+        [Route("GetCompanies")]
+        public async Task<IActionResult> GetCompanies()
+        {
+            var companiesVM = await _companyReadService.GetCompanies();
+            return Ok(companiesVM);
+        }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> CompanyById(Guid id)
@@ -121,7 +129,7 @@ namespace humanResourceProject.API.Controllers
                 string action = Url.Action("ConfirmEmail", "Account", new { id = user.Id, token }, Request.Scheme);
 
                 string subject = "Şirket Onayı!";
-                string body = $"<p>Sayın {user.FirstName} {user.LastName},</p><p>{company.CreateDate.ToShortDateString()} tarihli  {company.CompanyName} adlı şirket talebiniz onaylanmıştır.</p><p>Hesabınızı doğrulamak için <a href ='{action}'>buraya</a> tıklayınız.</p><p>Güzel günlerde kullanmanız dileğiyle.</p><br><hr><br><h3>Team Monitorease</h3>";
+                string body = $"<p>Sayın {user.FirstName} {user.LastName},</p><p>{company.CreateDate.ToShortDateString()} tarihinde oluşturulan {company.CompanyName} adlı şirketinizin kayıt talebi Monitorease tarafından onaylanmıştır.</p><p>Hesabınızı doğrulamak için <a href ='{action}'>buraya</a> tıklayınız.</p><p>Güzel günlerde kullanmanız dileğiyle.</p><br><hr><br><h3>Team Monitorease</h3>";
                 await _mailService.SendEmailAsync(user, recipientEmail, mailToName, subject, body);
 
             }
@@ -131,7 +139,7 @@ namespace humanResourceProject.API.Controllers
                 await _appUserWriteService.Update(user);
                 model.CompanyStatus = Domain.Enum.RequestStatus.Rejected;
                 string subject = "Şirket Reddi!";
-                string body = $"<p>Sayın {user.FirstName} {user.LastName},</p><p>{company.CreateDate.ToShortDateString()} tarihli {company.CompanyName} adlı şirket talebiniz reddedilmiştir.</p><p>Yöneticinin reddetme sebebi:</p><p>{model.RejectReason}</p><br><hr><br><h3>Team Monitorease</h3>";
+                string body = $"<p>Sayın {user.FirstName} {user.LastName},</p><p>{company.CreateDate.ToShortDateString()} tarihinde oluşturulan {company.CompanyName} adlı şirketinizin kayıt talebi Monitorease tarafından reddedilmiştir.</p><p>Reddedilme sebebi:</p><p>{model.RejectReason}</p><p>olarak belirtilmiştir.</p><br><hr><br><h3>Team Monitorease</h3>";
                 await _mailService.SendEmailAsync(user, recipientEmail, mailToName, subject, body);
                 
             }

@@ -19,6 +19,9 @@ namespace humanResourceProject.Domain.Entities.Concrete
         public string TaxOffice { get; set; }
         public string Address { get; set; }
         public string PhoneNumber { get; set; }
+        public string? ContactFullName { get; set; }
+        public string? ContactPhoneNumber { get; set; }
+        public string? ContactEmail { get; set; }
 
         public ICollection<AppUser> Employees { get; set; }
         public ICollection<Department> Departments { get; set; }

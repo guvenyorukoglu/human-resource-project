@@ -92,6 +92,7 @@ namespace humanResourceProject.Infrastructure.SeedData
                 await CreateRequestsAsync(maxAdvanceCountPerManager, maxExpenseCountPerManager, maxLeaveCountPerManager, maxAdvanceCountPerEmployee, maxExpenseCountPerEmployee, maxLeaveCountPerEmployee);
                 await CreateJobLogsAsync(maxJobLogPerManager, maxJobLogPerEmployee);
                 await CreatePossessionLogsAsync(maxPossessionLogPerManager, maxPossessionLogPerEmployee);
+                context.UpdateRange(companies);
                 await context.SaveChangesAsync();
 
                 await CreateSiteManagerAsync(serviceScope);
@@ -107,7 +108,7 @@ namespace humanResourceProject.Infrastructure.SeedData
                             .RuleFor(c => c.TaxNumber, f => f.Random.ReplaceNumbers($"##########"))
                             .RuleFor(c => c.TaxOffice, f => f.Address.City())
                             .RuleFor(c => c.Address, f => f.Address.FullAddress())
-                            .RuleFor(c => c.PhoneNumber, f => f.Phone.PhoneNumber("+90##########"))
+                            .RuleFor(c => c.PhoneNumber, f => f.Phone.PhoneNumber("##########"))
                             .RuleFor(c => c.CreateDate, f => f.Date.Past(1))
                             .RuleFor(c => c.CompanyStatus, f => RequestStatus.Approved)
                             .RuleFor(c => c.Status, f => f.Random.Bool(0.9f) ? Status.Active : (f.Random.Bool(0.5f) ? Status.Modified : (f.Random.Bool(0.25f) ? Status.Inactive : Status.Deleted)));
@@ -247,7 +248,7 @@ namespace humanResourceProject.Infrastructure.SeedData
                             .RuleFor(e => e.UserName, (f, e) => e.Email)
                             .RuleFor(e => e.NormalizedUserName, (f, e) => e.UserName.ToUpperInvariant())
                             .RuleFor(e => e.Address, f => f.Address.FullAddress())
-                            .RuleFor(e => e.PhoneNumber, f => f.Phone.PhoneNumber("+90##########"))
+                            .RuleFor(e => e.PhoneNumber, f => f.Phone.PhoneNumber("##########"))
                             .RuleFor(e => e.IdentificationNumber, f => f.Random.ReplaceNumbers($"###########"))
                             .RuleFor(e => e.BloodGroup, f => f.PickRandom<BloodGroup>())
                             .RuleFor(e => e.Birthdate, f => f.Date.Between(DateTime.Now.AddYears(-40), DateTime.Now.AddYears(-18)))
@@ -487,7 +488,7 @@ namespace humanResourceProject.Infrastructure.SeedData
                         }
                     }
 
-                    foreach(var employee in appUsers)
+                    foreach (var employee in appUsers)
                     {
                         int randomPossessionLogCount = random.Next(0, maxPossessionLogPerEmployee);
                         for (int i = 0; i < randomPossessionLogCount; i++)
@@ -536,7 +537,7 @@ namespace humanResourceProject.Infrastructure.SeedData
                         .RuleFor(e => e.UserName, (f, e) => e.Email)
                         .RuleFor(e => e.NormalizedUserName, (f, e) => e.UserName.ToUpperInvariant())
                         .RuleFor(e => e.Address, f => f.Address.FullAddress())
-                        .RuleFor(e => e.PhoneNumber, f => f.Phone.PhoneNumber("+90##########"))
+                        .RuleFor(e => e.PhoneNumber, f => f.Phone.PhoneNumber("##########"))
                         .RuleFor(e => e.IdentificationNumber, f => f.Random.ReplaceNumbers($"###########"))
                         .RuleFor(e => e.BloodGroup, f => f.PickRandom<BloodGroup>())
                         .RuleFor(e => e.Birthdate, f => f.Date.Past(50))
@@ -556,6 +557,10 @@ namespace humanResourceProject.Infrastructure.SeedData
 
                 await userManager.CreateAsync(companyManagerUser, password);
                 await userManager.AddToRoleAsync(companyManagerUser, "CompanyManager");
+
+                company.ContactFullName = companyManagerUser.FirstName + " " + (companyManagerUser.MiddleName ?? string.Empty) + " " + companyManagerUser.LastName;
+                company.ContactEmail = companyManagerUser.Email;
+                company.ContactPhoneNumber = companyManagerUser.PhoneNumber;
             }
         }
 
@@ -589,7 +594,7 @@ namespace humanResourceProject.Infrastructure.SeedData
                     .RuleFor(e => e.UserName, (f, e) => e.Email)
                     .RuleFor(e => e.NormalizedUserName, (f, e) => e.UserName.ToUpperInvariant())
                     .RuleFor(e => e.Address, f => f.Address.FullAddress())
-                    .RuleFor(e => e.PhoneNumber, f => f.Phone.PhoneNumber("+90##########"))
+                    .RuleFor(e => e.PhoneNumber, f => f.Phone.PhoneNumber("##########"))
                     .RuleFor(e => e.IdentificationNumber, f => f.Random.ReplaceNumbers($"###########"))
                     .RuleFor(e => e.BloodGroup, f => f.PickRandom<BloodGroup>())
                     .RuleFor(e => e.Birthdate, f => f.Date.Between(DateTime.Now.AddYears(-65), DateTime.Now.AddYears(-35)))
@@ -657,7 +662,7 @@ namespace humanResourceProject.Infrastructure.SeedData
                     TaxNumber = "1234567890",
                     TaxOffice = "İstanbul",
                     Address = "İstanbul",
-                    PhoneNumber = "+901234567890",
+                    PhoneNumber = "5439876543",
                     CreateDate = DateTime.Now,
                     Status = Status.Active
                 };
@@ -687,7 +692,7 @@ namespace humanResourceProject.Infrastructure.SeedData
                     Gender = Gender.Male,
                     JobId = Guid.Empty,
                     Address = "İstanbul",
-                    PhoneNumber = "901234567890",
+                    PhoneNumber = "5559876543",
                     CreateDate = DateTime.Now,
                     Status = Status.Active,
                     UserName = "SiteManager",
@@ -700,6 +705,13 @@ namespace humanResourceProject.Infrastructure.SeedData
 
                 await userManager.CreateAsync(siteManager, password);
                 await userManager.AddToRoleAsync(siteManager, "SiteManager");
+
+                company.ContactFullName = siteManager.FirstName + " " + (siteManager.MiddleName ?? string.Empty) + " " + siteManager.LastName;
+                company.ContactEmail = siteManager.Email;
+                company.ContactPhoneNumber = siteManager.PhoneNumber;
+
+                _context.Companies.Update(company);
+                await _context.SaveChangesAsync();
             }
         }
 

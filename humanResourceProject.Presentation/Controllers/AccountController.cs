@@ -144,6 +144,8 @@ namespace humanResourceProject.Presentation.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(LoginDTO model)
         {
+            bool rememberMe = model.RememberMe;
+
             if (!ModelState.IsValid)
             {
                 return View(model);
@@ -186,7 +188,17 @@ namespace humanResourceProject.Presentation.Controllers
                 ClaimsIdentity identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
                 ClaimsPrincipal principal = new ClaimsPrincipal(identity);
 
-                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
+                AuthenticationProperties authenticationProperties = null;
+                if (rememberMe)
+                {
+                    authenticationProperties = new AuthenticationProperties
+                    {
+                        IsPersistent = true,
+                        ExpiresUtc = DateTimeOffset.Now.Add(TimeSpan.FromDays(1))
+                    };
+                }
+
+                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal, authenticationProperties);
 
                 return Redirect(model.ReturnUrl ?? "/");
             }
