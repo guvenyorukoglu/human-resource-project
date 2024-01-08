@@ -10,7 +10,7 @@
         @Html.Partial("_PanelPartial")
 
         <div class="aside container mt-5 col-md-9 col-sm-9">
-            <h3 class="text-center">Zimmetler</h3>
+            <h3 class="heading-list">ZİMMETLER</h3>
 
             @if (User.IsInRole("CompanyManager"))
             {
@@ -185,7 +185,7 @@
                                                             {
                                                                 <option value="@employee.Id">@employee.FirstName @employee.LastName</option>
                                                             }
-                                                            <option value="-1" selected>Çalışan seçiniz!</option>
+                                                            <option value="-1" selected>Personel seçiniz!</option>
                                                         </select>
                                                         <span id="rejectValidation" class="text-danger"></span>
                                                     </div>

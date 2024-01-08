@@ -22,7 +22,7 @@ namespace humanResourceProject.Presentation.Controllers
             _httpClient.BaseAddress = new Uri(_configuration["BaseAddress"]);
         }
 
-        [Authorize(Roles = "Manager,Personel")]
+        [Authorize(Roles = "Manager,Personel,CompanyManager")]
         public async Task<IActionResult> MyLeaves()
         {
             Guid employeeId = Guid.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value);
@@ -34,7 +34,7 @@ namespace humanResourceProject.Presentation.Controllers
                 var leaves = JsonConvert.DeserializeObject<List<LeavePersonnelVM>>(cont);
                 return View(leaves);
             }
-            return View();
+            return View("Error");
         }
 
         [Authorize(Roles = "Manager,CompanyManager")]
@@ -72,6 +72,14 @@ namespace humanResourceProject.Presentation.Controllers
         [HttpGet]
         public async Task<IActionResult> CreateLeave(Guid id)
         {
+            var managerId = Guid.Parse(User.Claims.FirstOrDefault(x => x.Type == "ManagerId").Value);
+
+            if (managerId == Guid.Empty)
+            {
+                TempData["ManagerIdEmptyMessage"] = "Yöneticiniz henüz atanmadığı için şuanda izin ekleyemezsiniz!";
+                return RedirectToAction(nameof(MyLeaves));
+            }
+
             var response = await _httpClient.GetAsync($"api/Leave/GetLeaveDTO/{id}");
             if (response.IsSuccessStatusCode)
             {
@@ -79,7 +87,7 @@ namespace humanResourceProject.Presentation.Controllers
                 var leaveDTO = JsonConvert.DeserializeObject<LeaveDTO>(cont);
                 return View(leaveDTO);
             }
-            return View();
+            return View("Error");
         }
 
         [HttpPost]

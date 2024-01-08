@@ -83,5 +83,8 @@ namespace humanResourceProject.Models.DTOs
         public Guid CompanyId { get; set; }
         [Required(ErrorMessage = "Personel rolü alanı boş geçilemez!")]
         public string UserRole { get; set; }
+        [Required(ErrorMessage ="İşe başlama tarihini seçiniz!")]
+        [DisplayName("İşe Başlama Tarihi*")]
+        public DateTime StartDateOfEmployment { get; set; }
     }
 }

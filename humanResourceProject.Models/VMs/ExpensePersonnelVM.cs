@@ -18,7 +18,7 @@ namespace humanResourceProject.Models.VMs
         [DisplayName("Harcama Tarihi*")]
         public DateTime DateOfExpense { get; set; }
         public string FilePath { get; set; }
-        [DisplayName("Masraf Fotoğrafı")]
+        [DisplayName("Harcama Fotoğrafı")]
         public IFormFile? UploadPath { get; set; }
         public RequestStatus ExpenseStatus { get; set; }
         public Guid EmployeeId { get; set; }

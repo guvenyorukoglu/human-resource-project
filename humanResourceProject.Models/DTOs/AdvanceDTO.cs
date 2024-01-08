@@ -18,8 +18,8 @@ namespace humanResourceProject.Models.DTOs
         [DisplayName("Son İstenen Tarih*")]
         //[AdvanceMinDateTimeValidations(ErrorMessage = "Avansı şu anki tarihten önce talep edemezsin.")]
         public DateTime ExpiryDate { get; set; }
-        [Required(ErrorMessage = "Avans tipi alanı boş geçilemez!")]
-        [DisplayName("Avans Tipi*")]
+        [Required(ErrorMessage = "Avans türü alanı boş geçilemez!")]
+        [DisplayName("Avans Türü*")]
         public AdvanceType AdvanceType { get; set; }
         [Required(ErrorMessage = "Açıklama alanı boş geçilemez!")]
         [DisplayName("Açıklama*")]

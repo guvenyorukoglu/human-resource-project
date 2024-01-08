@@ -9,8 +9,8 @@ namespace humanResourceProject.Models.DTOs
     {
         public Guid Id { get; set; }
         public Guid EmployeeId { get; set; }
-        [Required(ErrorMessage = "İzin tipi alanı boş geçilemez!")]
-        [DisplayName("İzin Tipi*")]
+        [Required(ErrorMessage = "İzin türü alanı boş geçilemez!")]
+        [DisplayName("İzin Türü*")]
         public LeaveType LeaveType { get; set; }
         [Required(ErrorMessage = "İzin başlangıç tarihi boş geçilemez!")]
         [DisplayName("İzin Başlangıç Tarihi*")]

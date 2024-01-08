@@ -22,7 +22,7 @@ namespace humanResourceProject.Application.Services.Concrete.PossessionLogServic
             PossessionLog possessionLog = await _readRepository.GetDefault(x => x.EmployeeId == model.EmployeeId && x.PossessionId == model.PossessionId && x.EndDateOfPossession == null);
 
             if (possessionLog != null)
-                return IdentityResult.Failed(new IdentityError { Description = "Bu zimmet zaten bu çalışana atanmış." });
+                return IdentityResult.Failed(new IdentityError { Description = "Bu zimmet zaten bu personele atanmış." });
 
             var result = await _writeRepository.Insert(new PossessionLog
             {

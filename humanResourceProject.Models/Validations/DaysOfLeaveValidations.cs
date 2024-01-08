@@ -12,7 +12,7 @@ namespace humanResourceProject.Models.Validations
                 {
                     return false;
                 }
-                if (daysOfLeave > 180 || daysOfLeave < 0)
+                if (daysOfLeave > 180 || daysOfLeave <= 0)
                 {
                     return false;
                 }

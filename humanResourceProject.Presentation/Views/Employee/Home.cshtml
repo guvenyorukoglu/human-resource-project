@@ -217,7 +217,7 @@
 
                                     document.getElementById("numberOfPendingLeaves").innerHTML = "Bekleyen İzinler: " + @numberOfPendingLeaves;
 
-                                    document.getElementById("numberOfPendingExpenses").innerHTML = "Bekleyen Harcamalar: " + @numberOfPendingExpenses
+                                    document.getElementById("numberOfPendingExpenses").innerHTML = "Bekleyen Masraflar: " + @numberOfPendingExpenses
 
                                         document.getElementById("numberOfPendingAdvances").innerHTML = "Bekleyen Avanslar: " + @numberOfPendingAdvances;
 
@@ -273,7 +273,7 @@
                                 </a>
 
                                 <a asp-action="EmployeesExpenses" asp-controller="Expense" type="button" style="background-color:#36A2EB; border: 2px solid black; border-radius: 5px;color:black;width:200px;height:30px;" id="numberOfPendingExpenses" class="numberOfPendingLeaves  mt-4">
-                                    Bekleyen Harcamalar
+                                    Bekleyen Masraflar
                                 </a>
 
                                 <a asp-action="EmployeesAdvances" asp-controller="Advance" type="button" style="background-color:#FFCD56; border: 2px solid black; border-radius: 5px;color:black;width:200px;height:30px;" id="numberOfPendingAdvances" class="numberOfPendingLeaves  mt-4">
@@ -289,7 +289,7 @@
                                 </a>
 
                                 <a asp-action="MyExpenses" asp-controller="Expense" type="button" style="background-color:#36A2EB; border: 2px solid black; border-radius: 5px;color:black;width:200px;height:30px;" id="numberOfPendingExpenses" class="numberOfPendingLeaves mt-4">
-                                    Bekleyen Harcamalar
+                                    Bekleyen Masraflar
                                 </a>
 
                                 <a asp-action="MyAdvances" asp-controller="Advance" type="button" style="background-color:#FFCD56; border: 2px solid black; border-radius: 5px; color:black;width:200px;height:30px;" id="numberOfPendingAdvances" class="numberOfPendingLeaves mt-4">
@@ -319,22 +319,26 @@
                     </div>
                 </div>
 
+                <div class="col-md-12 row dashboard-below">
+
+                  
+
                 @if (!User.IsInRole("SiteManager"))
                 {
-                    <div class="col-md-4 calender card">
+                    <div class="col-md-4 calender card me-4">
                         <div id="calendar" style="width: 100%"></div>
                     </div>
                 }
                 else
                 {
-                    <div class="col-md-6 calender card">
+                    <div class="col-md-6 calender card me-4">
                         <div id="calendar" style="width: 100%"></div>
                     </div>
                 }
 
                 @if (!User.IsInRole("SiteManager"))
                 {
-                    <div class="col-md-4 d-flex flex-column gap-2 align-content-between">
+                    <div class="col-md-4 d-flex flex-column gap-2 align-content-between ms-1 me-3">
                         <div class="col-md-12 ">
                             <div class="card company-info">
                                 <div class="card-header d-flex justify-content-center gap-2">
@@ -363,20 +367,22 @@
                                 <div class="card-header d-flex justify-content-center gap-2">
                                     <h5 class="card-title text-center mb-0">KİŞİSEL BİLGİLERİM</h5>
                                     <div>
-                                        <a asp-action="ProfileEmployee" asp-controller="Employee" asp-route-id="@Guid.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value)" class="text-black-50 fs-6"><i class="fa fa-pen"></i></a>
+
+                                        <a asp-action="ProfileEmployee" asp-controller="Employee" asp-route-id="@User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value" class="text-black-50 fs-6"><i class="fa fa-pen"></i></a>
+
 
                                     </div>
                                 </div>
                                 <div class="card-body">
                                     <div class="d-flex flex-column gap-2">
-                                        <div class="d-flex gap-2 align-items-center text-start"><i class="fa-solid fa-user"></i><span>@Model.AppUser.FullName</span></div>
+                                        @*<div class="d-flex gap-2 align-items-center text-start"><i class="fa-solid fa-user"></i><span>@Model.AppUser.FullName</span></div>*@
                                         <div class="d-flex gap-2 align-items-center text-start"><i class="fa-solid fa-at"></i><span>@Model.AppUser.Email</span></div>
                                         <div class="d-flex gap-2 align-items-center text-start"><i class="fa-solid fa-phone"></i><span>@Model.AppUser.PhoneNumber</span></div>
                                         <div class="d-flex gap-2 align-items-center text-start"><i class="fa-solid fa-location-dot"></i><span>@Model.AppUser.Address</span></div>
                                         @if (User.IsInRole("Personel") || User.IsInRole("Manager"))
                                         {
-                                            <div class="d-flex gap-2 align-items-center text-start"><i class="fa-solid fa-building-user"></i><span>@Model.AppUser.Departman</span></div>
-                                            <div class="d-flex gap-2 align-items-center text-start"><i class="fa-solid fa-suitcase"></i><span>@Model.AppUser.Pozisyon</span></div>
+                                            @*<div class="d-flex gap-2 align-items-center text-start"><i class="fa-solid fa-building-user"></i><span>@Model.AppUser.Departman</span></div>*@
+                                            @*<div class="d-flex gap-2 align-items-center text-start"><i class="fa-solid fa-suitcase"></i><span>@Model.AppUser.Pozisyon</span></div>*@
                                             <div class="d-flex gap-2 align-items-center text-start"><span class="fw-bold">Kazanılmış İzin Gün Sayısı:</span><span>@Model.AppUser.EarnedLeaveDays</span></div>
                                             <div class="d-flex gap-2 align-items-center text-start"><span class="fw-bold">Kalan İzin Gün Sayısı:</span><span>@Model.AppUser.RemainingLeaveDays</span></div>
                                         }
@@ -512,6 +518,8 @@
                     </div>
                 }
 
+
+                </div>
 
                     <div id="calendarEventModal" class="modal fade" role="dialog">
                         <div class="modal-dialog modal-md text-center">

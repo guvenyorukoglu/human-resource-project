@@ -140,7 +140,6 @@ namespace humanResourceProject.Presentation.Controllers
             var content = new StringContent(json, Encoding.UTF8, "application/json");
             if (model.UserRole.ToString() == "Personel")
             {
-
                 var response = await _httpClient.PostAsync($"api/AppUser", content);
                 if (response.IsSuccessStatusCode)
                 {
@@ -223,6 +222,7 @@ namespace humanResourceProject.Presentation.Controllers
                 model.Departments = JsonConvert.DeserializeObject<List<DepartmentVM>>(DepartmentsList);
                 model.Managers = JsonConvert.DeserializeObject<List<ManagerVM>>(ManagersList);
 
+
                 return View(model);
             }
 
@@ -232,35 +232,57 @@ namespace humanResourceProject.Presentation.Controllers
             var response = await _httpClient.PutAsync($"api/AppUser", content);
             if (response.IsSuccessStatusCode)
             {
-                TempData["SuccessUpdateEmployeeMessage"] = "Çalışanın profili güncellenmiştir.";
+                TempData["SuccessUpdateEmployeeMessage"] = "Personel profili güncellenmiştir.";
                 return RedirectToAction(nameof(Employees));
             }
             else
             {
                 ModelState.AddModelError(response.StatusCode.ToString(), "Bir hata oluştu.");
+                // Listeleri tekrar doldur
+                model.Jobs = JsonConvert.DeserializeObject<List<JobVM>>(JobsList);
+                model.Departments = JsonConvert.DeserializeObject<List<DepartmentVM>>(DepartmentsList);
+                model.Managers = JsonConvert.DeserializeObject<List<ManagerVM>>(ManagersList);
                 return View(model);
             }
         }
 
         [HttpPost]
-        public async Task<IActionResult> FireEmployee(Guid employeeId, string terminationReason)
+        public async Task<IActionResult> FireEmployee(Guid employeeId, string terminationReason, DateTime terminationDate)
         {
-            FireEmployeeDTO model = new FireEmployeeDTO()
+            var responsePossession = await _httpClient.GetAsync($"api/Possession/GetPossessionsByEmployeeId/{employeeId}");
+            if (responsePossession.IsSuccessStatusCode)
             {
-                EmployeeId = employeeId,
-                ReasonForTermination = terminationReason
-            };
+                var contentPossession = await responsePossession.Content.ReadAsStringAsync();
+                var possessions = JsonConvert.DeserializeObject<List<PersonelPossessionVM>>(contentPossession);
+                if (possessions.Count > 0)
+                {
+                    return StatusCode(400, "possessions");
+                }
 
-            var json = JsonConvert.SerializeObject(model);
-            var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-            var response = await _httpClient.PostAsync($"api/AppUser/FireEmployee/", content);
-            if (response.IsSuccessStatusCode)
-            {
-                TempData["SuccessFireEmployee"] = "Personelinizi işten çıkardınız.";
-                return RedirectToAction(nameof(Employees));
+                FireEmployeeDTO model = new FireEmployeeDTO()
+                {
+                    EmployeeId = employeeId,
+                    ReasonForTermination = terminationReason,
+                    TerminationDate = terminationDate
+                };
+
+                var json = JsonConvert.SerializeObject(model);
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+                var response = await _httpClient.PostAsync($"api/AppUser/FireEmployee/", content);
+                if (response.IsSuccessStatusCode)
+                {
+                    return Ok("success");
+                }
+                return View("Error");
             }
-            return View("Error");
+            else
+            {
+
+                return View("Error");
+
+            }
         }
 
         [HttpGet]
@@ -306,8 +328,8 @@ namespace humanResourceProject.Presentation.Controllers
                     MyPendingLeavesCount = dashboardLeaveVM.MyLeaves.Where(x => x.LeaveStatus == Domain.Enum.RequestStatus.Pending).Count(),
                     MyPendingAdvancesCount = dashboardAdvanceVM.MyAdvances.Where(x => x.AdvanceStatus == Domain.Enum.RequestStatus.Pending).Count(),
                     MyPendingExpensesCount = dashboardExpenseVM.MyExpenses.Where(x => x.ExpenseStatus == Domain.Enum.RequestStatus.Pending).Count(),
-                    
-                    
+
+
                 };
 
                 return View(dashboardVM);
@@ -358,7 +380,7 @@ namespace humanResourceProject.Presentation.Controllers
         [HttpGet]
         public async Task<IActionResult> ProfileEmployee(Guid Id)
         {
-            if (User.IsInRole("Personel") || User.IsInRole("Manager"))
+            if (!User.IsInRole("SiteManager"))
             {
                 var employeeId = Guid.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value);
                 var response = await _httpClient.GetAsync($"api/AppUser/ProfileEmployee/{employeeId}");
@@ -370,7 +392,7 @@ namespace humanResourceProject.Presentation.Controllers
                 }
                 return View("Error");
             }
-            else if (User.IsInRole("CompanyManager") || User.IsInRole("SiteManager"))
+            else
             {
                 var companyManagerId = Guid.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value);
                 var response = await _httpClient.GetAsync($"api/AppUser/ProfileCompanyManager/{companyManagerId}");
@@ -382,12 +404,6 @@ namespace humanResourceProject.Presentation.Controllers
                 }
                 return View("Error");
             }
-            else
-            {
-                return View("Error");
-            }
-
-
         }
     }
 

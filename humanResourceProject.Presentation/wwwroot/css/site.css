@@ -25,9 +25,19 @@ ul{
   margin: 0;
 }
 
+.header-link {
+    transition: color 3s ease-in-out;
+    border-bottom: 1px solid transparent;
+}
+
+    .header-link:hover {
+        border-bottom: 1px solid #5E6ED1;
+        /*transform: scale(1.05);*/
+    }
+
 .btn-submit {
     background-color: #133A63;
-    border: 1px solid transparent; 
+    border: 1px solid transparent;
     padding: 10px 20px;
     border-radius: 5px;
     color: #fff;
@@ -39,3 +49,11 @@ ul{
         color: #133a63;
         border-color: #133a63;
     }
+
+.card-title {
+    font-size: 20px;
+    font-weight: 700;
+    text-align: center;
+    color: #222;
+    letter-spacing: 1.1px;
+}

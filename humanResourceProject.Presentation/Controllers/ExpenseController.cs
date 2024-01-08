@@ -23,7 +23,7 @@ namespace humanResourceProject.Presentation.Controllers
             _httpClient.BaseAddress = new Uri(_configuration["BaseAddress"]);
         }
 
-        [Authorize(Roles = "Manager,Personel")]
+        [Authorize(Roles = "Manager,Personel,CompanyManager")]
         public async Task<IActionResult> MyExpenses()
         {
             Guid employeeId = Guid.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value);
@@ -36,7 +36,7 @@ namespace humanResourceProject.Presentation.Controllers
                 return View(expenses);
 
             }
-            return View();
+            return View("Error");
         }
 
         [Authorize(Roles = "Manager,CompanyManager")]
@@ -73,6 +73,14 @@ namespace humanResourceProject.Presentation.Controllers
         [HttpGet]
         public async Task<IActionResult> CreateExpense(Guid id)
         {
+            var managerId = Guid.Parse(User.Claims.FirstOrDefault(x => x.Type == "ManagerId").Value);
+
+            if (managerId == Guid.Empty)
+            {
+                TempData["ManagerIdEmptyMessage"] = "Yöneticiniz henüz atanmadığı için şuanda harcama ekleyemezsiniz!";
+                return RedirectToAction(nameof(MyExpenses));
+            }
+
             var response = await _httpClient.GetAsync($"api/Expense/GetExpenseDTO/{id}");
             if (response.IsSuccessStatusCode)
             {
@@ -80,7 +88,7 @@ namespace humanResourceProject.Presentation.Controllers
                 var expenseDTO = JsonConvert.DeserializeObject<ExpenseDTO>(cont);
                 return View(expenseDTO);
             }
-            return View();
+            return View("Error");
         }
 
         [HttpPost]
@@ -97,7 +105,7 @@ namespace humanResourceProject.Presentation.Controllers
             {
                 if (ModelState["ExpenseType"].Errors.Count > 0)
                 {
-                    ModelState.AddModelError(string.Empty, "Masraf türünü seçiniz!");
+                    ModelState.AddModelError(string.Empty, "Harcama türünü seçiniz!");
                 }
                 if (ModelState["Currency"].Errors.Count > 0)
                 {

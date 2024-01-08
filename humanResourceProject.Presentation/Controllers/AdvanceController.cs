@@ -23,7 +23,7 @@ namespace humanResourceProject.Presentation.Controllers
             _httpClient.BaseAddress = new Uri(_configuration["BaseAddress"]);
         }
 
-        [Authorize(Roles = "Manager,Personel")]
+        [Authorize(Roles = "Manager,Personel,CompanyManager")]
         public async Task<IActionResult> MyAdvances()
         {
             Guid employeeId = Guid.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value);
@@ -36,7 +36,7 @@ namespace humanResourceProject.Presentation.Controllers
                 return View(advances);
 
             }
-            return View();
+            return View("Error");
         }
 
         [Authorize(Roles = "Manager,CompanyManager")]
@@ -61,6 +61,15 @@ namespace humanResourceProject.Presentation.Controllers
         [HttpGet]
         public async Task<IActionResult> CreateAdvance(Guid id)
         {
+            var managerId = Guid.Parse(User.Claims.FirstOrDefault(x => x.Type == "ManagerId").Value);
+
+            if(managerId == Guid.Empty)
+            {
+                TempData["ManagerIdEmptyMessage"] = "Yöneticiniz henüz atanmadığı için şuanda avans ekleyemezsiniz!";
+                return RedirectToAction(nameof(MyAdvances));
+            }
+
+
             var response = await _httpClient.GetAsync($"api/Advance/GetAdvanceDTO/{id}");
             if (response.IsSuccessStatusCode)
             {
@@ -68,7 +77,7 @@ namespace humanResourceProject.Presentation.Controllers
                 var advanceDTO = JsonConvert.DeserializeObject<AdvanceDTO>(cont);
                 return View(advanceDTO);
             }
-            return View();
+            return View("Error");
         }
 
         [HttpPost]
@@ -76,7 +85,7 @@ namespace humanResourceProject.Presentation.Controllers
         {
             if (model.ExpiryDate < DateTime.Now)
             {
-                ModelState.AddModelError("ExpiryDate", "Tarih bugünden önceki bir tarih olmamalıdır.");
+                ModelState.AddModelError("ExpiryDate", "Lütfen ileri bir tarih seçiniz.");
                 return View(model);
             }
             if (!ModelState.IsValid)

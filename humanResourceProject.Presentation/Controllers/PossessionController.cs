@@ -48,7 +48,7 @@ namespace humanResourceProject.Presentation.Controllers
             return View("Error");
         }
 
-        [Authorize(Roles = "Manager, Personel")]
+        [Authorize(Roles = "Manager, Personel, CompanyManager")]
         public async Task<IActionResult> MyPossessions()
         {
             Guid employeeId = Guid.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value);
