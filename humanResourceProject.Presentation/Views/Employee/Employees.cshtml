@@ -30,7 +30,7 @@
 
 
                 <script>
-                    var columnsToExport = [1, 2, 3, 4, 5, 6,7];
+                    var columnsToExport = [1, 2, 3, 4, 5, 6, 7];
 
                     $(document).ready(function () {
                         $('#employees').DataTable({
@@ -61,7 +61,7 @@
                                     exportOptions: {
                                         columns: columnsToExport
                                     },
-                                    
+
                                 },
                                 {
                                     extend: 'spacer',
@@ -232,6 +232,13 @@
         {
             <script>
                 toastr["info"]("Personel profili güncellenmiştir.", "Başarılı");
+            </script>
+        }
+
+        @if (TempData["EmployeeHasPossessionsMessage"] != null)
+        {
+            <script>
+                toastr["warning"]("İşten çıkarmak istenilen personelin üzerinde zimmetler bulunmaktadır. Lütfen öncelikle zimmetleri personelden teslim alınız.", "Uyarı");
             </script>
         }
     }
@@ -443,13 +450,22 @@
                     terminationDate: terminationDate
                 },
                 success: function (response) {
-                    // Handle success response as needed
                     modalContent.closest('.modal').modal('hide');
-                    // $('#fireEmployeeModal').modal('hide');
-                    window.location.reload(); // Sayfayı yenile
+                    if (response === "success") {
+                        toastr["success"]("Personel işten çıkartılmıştır.", "Başarılı");
+                        setTimeout(function () {
+                            window.location.reload();
+                        }, 3000);
+                    } else {
+                        toastr["error"]("Bir hata oluştu. İşlem gerçekleştirilemedi.", "Hata");
+                    }
                 },
-                error: function (error) {
-                    // Handle errors if any
+                error: function (xhr, status, error) {
+                    if (xhr.status === 400 && xhr.responseText === "possessions") {
+                        toastr["warning"]("İşten çıkarmak istenilen personelin üzerinde zimmetler bulunmaktadır. Lütfen öncelikle zimmetleri personelden teslim alınız.", "Uyarı");
+                    } else {
+                        toastr["error"]("Bir hata oluştu. İşlem gerçekleştirilemedi.", "Hata");
+                    }
                     console.error("Error rejecting request:", error);
                     // Optionally, display an error message or take corrective action
                 }
