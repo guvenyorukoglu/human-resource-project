@@ -246,22 +246,38 @@ namespace humanResourceProject.Presentation.Controllers
         [HttpPost]
         public async Task<IActionResult> FireEmployee(Guid employeeId, string terminationReason, DateTime terminationDate)
         {
-            FireEmployeeDTO model = new FireEmployeeDTO()
+            var responsePossession = await _httpClient.GetAsync($"api/Possession/GetPossessionsByEmployeeId/{employeeId}");
+            if (responsePossession.IsSuccessStatusCode)
             {
-                EmployeeId = employeeId,
-                ReasonForTermination = terminationReason,
-                TerminationDate = terminationDate
-            };
+                var contentPossession = await responsePossession.Content.ReadAsStringAsync();
+                var possessions = JsonConvert.DeserializeObject<List<PersonelPossessionVM>>(contentPossession);
+                if (possessions.Count > 0)
+                {
+                    return StatusCode(400, "possessions");
+                }
 
-            var json = JsonConvert.SerializeObject(model);
-            var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-            var response = await _httpClient.PostAsync($"api/AppUser/FireEmployee/", content);
-            if (response.IsSuccessStatusCode)
-            {
-                return RedirectToAction(nameof(Employees));
+                FireEmployeeDTO model = new FireEmployeeDTO()
+                {
+                    EmployeeId = employeeId,
+                    ReasonForTermination = terminationReason,
+                    TerminationDate = terminationDate
+                };
+
+                var json = JsonConvert.SerializeObject(model);
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+                var response = await _httpClient.PostAsync($"api/AppUser/FireEmployee/", content);
+                if (response.IsSuccessStatusCode)
+                {
+                    return Ok("success");
+                }
+                return View("Error");
             }
-            return View("Error");
+            else
+            {
+                return View("Error");
+            }
         }
 
         [HttpGet]
@@ -307,8 +323,8 @@ namespace humanResourceProject.Presentation.Controllers
                     MyPendingLeavesCount = dashboardLeaveVM.MyLeaves.Where(x => x.LeaveStatus == Domain.Enum.RequestStatus.Pending).Count(),
                     MyPendingAdvancesCount = dashboardAdvanceVM.MyAdvances.Where(x => x.AdvanceStatus == Domain.Enum.RequestStatus.Pending).Count(),
                     MyPendingExpensesCount = dashboardExpenseVM.MyExpenses.Where(x => x.ExpenseStatus == Domain.Enum.RequestStatus.Pending).Count(),
-                    
-                    
+
+
                 };
 
                 return View(dashboardVM);
