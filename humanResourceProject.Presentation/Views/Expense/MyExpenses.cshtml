@@ -9,7 +9,9 @@
         @Html.Partial("_PanelPartial")
 
         <div class="aside container mt-5 col-md-9 col-sm-9">
+
             <h3 class="text-center">Masraf Taleplerim</h3>
+
             @if (Model != null)
             {
                 <a asp-action="CreateExpense" asp-controller="Expense" asp-route-id="@Guid.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value)">
@@ -93,8 +95,10 @@
                        class="display">
                     <thead>
                         <tr>
+
                             <th style="width: 8%">Masraf No</th>
                             <th style="width: 8%">Masraf Tipi</th>
+
                             <th style="width: 6%" data-order="desc">Talep Tarihi</th>
                             <th style="width: 6%">Masraf Tarihi</th>
                             <th style="width: 9%">Masraf Miktarı</th>
@@ -187,6 +191,13 @@
         {
             <script>
                 toastr["info"]("Masraf talebiniz güncellenmiştir.", "Başarılı");
+            </script>
+        }
+
+        @if (TempData["ManagerIdEmptyMessage"] != null)
+        {
+            <script>
+                toastr["warning"]("Yöneticiniz henüz atanmadığı için şuanda harcama ekleyemezsiniz! Eğer yöneticinizin atandığını düşünüyorsanız, lütfen çıkış yapıp tekrar giriş yapınız.", "Uyarı");
             </script>
         }
     }

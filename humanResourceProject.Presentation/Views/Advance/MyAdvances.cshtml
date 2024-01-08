@@ -11,12 +11,14 @@
         @Html.Partial("_PanelPartial")
 
         <div class="aside container mt-5 col-md-9 col-sm-9">
-            <h3 class="text-center">Avans Taleplerim</h3>
+            <h3 class="heading-list">AVANS TALEPLERİM</h3>
             @if (Model != null)
             {
-                <a asp-action="CreateAdvance" asp-controller="Advance" asp-route-id="@Guid.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value)">
-                    <button class="custom-button custom-button--create-entity mb-3">Avans Ekle</button>
-                </a>
+
+                    <a asp-action="CreateAdvance" asp-controller="Advance" asp-route-id="@Guid.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value)">
+                        <button class="custom-button custom-button--create-entity mb-3">Avans Ekle</button>
+                    </a>
+
             }
 
             <div class="pagination-container">
@@ -96,7 +98,7 @@
                     <thead>
                         <tr>
                             <th style="width: 8%">Avans No</th>
-                            <th style="width: 8%">Avans Tipi</th>
+                            <th style="width: 8%">Avans Türü</th>
                             <th style="width: 7%">Talep Tarihi</th>
                             <th style="width: 7%">Son İstenen Tarih</th>
                             <th style="width: 10%">Avans Miktarı</th>
@@ -180,6 +182,13 @@
         {
             <script>
                 toastr["info"]("Avans talebiniz güncellenmiştir.", "Başarılı");
+            </script>
+        }
+
+        @if (TempData["ManagerIdEmptyMessage"] != null)
+        {
+            <script>
+                toastr["warning"]("Yöneticiniz henüz atanmadığı için şuanda avans ekleyemezsiniz! Eğer yöneticinizin atandığını düşünüyorsanız, lütfen çıkış yapıp tekrar giriş yapınız.", "Uyarı");
             </script>
         }
     }

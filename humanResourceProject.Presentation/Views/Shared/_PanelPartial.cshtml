@@ -20,7 +20,7 @@
                 <li>
                     <a asp-action="Home" asp-controller="Employee"><i class="fa-solid fa-calendar-days"></i>Dashboard</a>
                 </li>
-                @if (User.IsInRole("Personel") || User.IsInRole("Manager"))
+                @if (!User.IsInRole("SiteManager"))
                 {
                     <li class="parent">
                         <a href="#"><i class="fa-solid fa-hand-holding"></i>Taleplerim</a>
@@ -39,9 +39,6 @@
                     <li>
                         <a asp-action="MyPossessions" asp-controller="Possession"><i class="fa-solid fa-building-shield"></i>Zimmetlerim</a>
                     </li>
-                }
-                @if (!User.IsInRole("SiteManager"))
-                {
                     <li>
                         <a asp-action="Employees" asp-controller="Employee"><i class="fa fa-users"></i>Personeller</a>
                     </li>

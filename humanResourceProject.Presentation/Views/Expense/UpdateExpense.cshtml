@@ -21,11 +21,13 @@
 
         @Html.Partial("_PanelPartial")
 
-        <div class="col-md-4" style="margin: 0 auto">
+        <div class="col-md-4" style="margin: 35px auto">
             <form asp-action="UpdateExpense" asp-controller="Expense" method="post" enctype="multipart/form-data">
                 <div class="card shadow p-3 mb-5 bg-body rounded">
                     <div class="card-header">
+
                         <h1 class="text-center">Masraf Güncelle</h1>
+
                     </div>
                     <div class="card-body">
                         <div class="form-group mb-3">
@@ -40,7 +42,9 @@
                                         var displayName = displayAttribute?.GetName() ?? enumValue.ToString();
                                         <option value="@enumValue">@displayName</option>
                                     }
+
                                     <option value="" disabled>Masraf tipi seçiniz!</option>
+
                                 }
                             </select>
                             <span asp-validation-for="ExpenseType" class="text-danger"></span>
