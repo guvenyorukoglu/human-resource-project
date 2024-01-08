@@ -319,22 +319,26 @@
                     </div>
                 </div>
 
+                <div class="col-md-12 row dashboard-below">
+
+                  
+
                 @if (!User.IsInRole("SiteManager"))
                 {
-                    <div class="col-md-4 calender card">
+                    <div class="col-md-4 calender card me-4">
                         <div id="calendar" style="width: 100%"></div>
                     </div>
                 }
                 else
                 {
-                    <div class="col-md-6 calender card">
+                    <div class="col-md-6 calender card me-4">
                         <div id="calendar" style="width: 100%"></div>
                     </div>
                 }
 
                 @if (!User.IsInRole("SiteManager"))
                 {
-                    <div class="col-md-4 d-flex flex-column gap-2 align-content-between">
+                    <div class="col-md-4 d-flex flex-column gap-2 align-content-between ms-1 me-3">
                         <div class="col-md-12 ">
                             <div class="card company-info">
                                 <div class="card-header d-flex justify-content-center gap-2">
@@ -369,14 +373,14 @@
                                 </div>
                                 <div class="card-body">
                                     <div class="d-flex flex-column gap-2">
-                                        <div class="d-flex gap-2 align-items-center text-start"><i class="fa-solid fa-user"></i><span>@Model.AppUser.FullName</span></div>
+                                        @*<div class="d-flex gap-2 align-items-center text-start"><i class="fa-solid fa-user"></i><span>@Model.AppUser.FullName</span></div>*@
                                         <div class="d-flex gap-2 align-items-center text-start"><i class="fa-solid fa-at"></i><span>@Model.AppUser.Email</span></div>
                                         <div class="d-flex gap-2 align-items-center text-start"><i class="fa-solid fa-phone"></i><span>@Model.AppUser.PhoneNumber</span></div>
                                         <div class="d-flex gap-2 align-items-center text-start"><i class="fa-solid fa-location-dot"></i><span>@Model.AppUser.Address</span></div>
                                         @if (User.IsInRole("Personel") || User.IsInRole("Manager"))
                                         {
-                                            <div class="d-flex gap-2 align-items-center text-start"><i class="fa-solid fa-building-user"></i><span>@Model.AppUser.Departman</span></div>
-                                            <div class="d-flex gap-2 align-items-center text-start"><i class="fa-solid fa-suitcase"></i><span>@Model.AppUser.Pozisyon</span></div>
+                                            @*<div class="d-flex gap-2 align-items-center text-start"><i class="fa-solid fa-building-user"></i><span>@Model.AppUser.Departman</span></div>*@
+                                            @*<div class="d-flex gap-2 align-items-center text-start"><i class="fa-solid fa-suitcase"></i><span>@Model.AppUser.Pozisyon</span></div>*@
                                             <div class="d-flex gap-2 align-items-center text-start"><span class="fw-bold">Kazanılmış İzin Gün Sayısı:</span><span>@Model.AppUser.EarnedLeaveDays</span></div>
                                             <div class="d-flex gap-2 align-items-center text-start"><span class="fw-bold">Kalan İzin Gün Sayısı:</span><span>@Model.AppUser.RemainingLeaveDays</span></div>
                                         }
@@ -512,6 +516,8 @@
                     </div>
                 }
 
+
+                </div>
 
                     <div id="calendarEventModal" class="modal fade" role="dialog">
                         <div class="modal-dialog modal-md text-center">
