@@ -92,6 +92,7 @@ namespace humanResourceProject.Infrastructure.SeedData
                 await CreateRequestsAsync(maxAdvanceCountPerManager, maxExpenseCountPerManager, maxLeaveCountPerManager, maxAdvanceCountPerEmployee, maxExpenseCountPerEmployee, maxLeaveCountPerEmployee);
                 await CreateJobLogsAsync(maxJobLogPerManager, maxJobLogPerEmployee);
                 await CreatePossessionLogsAsync(maxPossessionLogPerManager, maxPossessionLogPerEmployee);
+                context.UpdateRange(companies);
                 await context.SaveChangesAsync();
 
                 await CreateSiteManagerAsync(serviceScope);
@@ -487,7 +488,7 @@ namespace humanResourceProject.Infrastructure.SeedData
                         }
                     }
 
-                    foreach(var employee in appUsers)
+                    foreach (var employee in appUsers)
                     {
                         int randomPossessionLogCount = random.Next(0, maxPossessionLogPerEmployee);
                         for (int i = 0; i < randomPossessionLogCount; i++)
@@ -556,6 +557,10 @@ namespace humanResourceProject.Infrastructure.SeedData
 
                 await userManager.CreateAsync(companyManagerUser, password);
                 await userManager.AddToRoleAsync(companyManagerUser, "CompanyManager");
+
+                company.ContactFullName = companyManagerUser.FirstName + " " + (companyManagerUser.MiddleName ?? string.Empty) + " " + companyManagerUser.LastName;
+                company.ContactEmail = companyManagerUser.Email;
+                company.ContactPhoneNumber = companyManagerUser.PhoneNumber;
             }
         }
 
@@ -700,6 +705,13 @@ namespace humanResourceProject.Infrastructure.SeedData
 
                 await userManager.CreateAsync(siteManager, password);
                 await userManager.AddToRoleAsync(siteManager, "SiteManager");
+
+                company.ContactFullName = siteManager.FirstName + " " + (siteManager.MiddleName ?? string.Empty) + " " + siteManager.LastName;
+                company.ContactEmail = siteManager.Email;
+                company.ContactPhoneNumber = siteManager.PhoneNumber;
+
+                _context.Companies.Update(company);
+                await _context.SaveChangesAsync();
             }
         }
 

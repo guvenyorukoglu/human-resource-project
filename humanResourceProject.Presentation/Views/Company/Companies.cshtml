@@ -1,6 +1,4 @@
-﻿@using humanResourceProject.Models.VMs;
-
-@model List<CompanyVM>
+﻿@model List<CompanyVM>
 
 @{
     ViewData["Title"] = "Companies";
@@ -94,15 +92,15 @@
                     <table id="companies" class="display">
                         <thead>
                             <tr>
-                                <th style="width: 4%">Şirket Adı</th>
-                                <th style="width: 20%">Adres</th>
+                                <th style="width: 8%">Şirket Adı</th>
+                                <th style="width: 15%">Adres</th>
                                 <th style="width: 7%">Telefon Numarası</th>
-                                <th style="width: 10%">Vergi Dairesi</th>
-                                <th style="width: 8%">Vergi numarası</th>
                                 <th style="width: 5%">Personel Sayısı</th>
-                                <th style="width: 5%">İsim</th>
+                                <th style="width: 5%">Sorumlu Kişi</th>
+                                <th style="width: 5%">Sorumlu Telefon Numarası</th>
+                                <th style="width: 5%">Sorumlu Email</th>
                                 <th style="width: 8%">Statü</th>
-                                <th style="width: 18%">İşlemler</th>
+                                <th style="width: 25%">İşlemler</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -115,19 +113,23 @@
                                     <td>@company.CompanyName</td>
                                     <td>@company.Address</td>
                                     <td>@company.PhoneNumber</td>
-                                    <td>@company.TaxOffice</td>
-                                    <td>@company.TaxNumber</td>
                                     <td>@company.NumberOfEmployees</td>
-                                    <td>@company.FirstName</td>
+                                    <td>@company.ContactFullName</td>
+                                    <td>@company.ContactPhoneNumber</td>
+                                    <td>@company.ContactEmail</td>
                                     <td>@displayNameRequestStatus</td>
                                     <td>
                                         @if (company.CompanyStatus == RequestStatus.Pending)
                                         {
-                                            <button class="btn btn-secondary btn-sm d-inline-flex bg-primary gap-1 align-items-center" data-bs-toggle="modal" data-bs-target="#approveCompanyModal_@company.Id">
+                                            <button class="btn btn-secondary btn-sm d-inline-flex gap-1 align-items-center text-white" data-bs-toggle="modal" data-bs-target="#detailCompanyModal_@company.Id">
+                                                <i class="fa-solid fa-circle-info"></i><span>Detaylar</span>
+                                            </button>
+
+                                            <button class="btn bg-primary btn-sm d-inline-flex  gap-1 align-items-center text-white" data-bs-toggle="modal" data-bs-target="#approveCompanyModal_@company.Id">
                                                 <i class="fa fa-check"></i><span>Onayla</span>
                                             </button>
 
-                                            <button class="btn btn-danger btn-sm d-inline-flex gap-1 align-items-center" data-bs-toggle="modal" data-bs-target="#rejectCompanyModal">
+                                            <button class="btn btn-danger btn-sm d-inline-flex gap-1 align-items-center text-white" data-bs-toggle="modal" data-bs-target="#rejectCompanyModal">
                                                 <i class="fa fa-x"></i><span>Reddet</span>
                                             </button>
 
@@ -135,11 +137,11 @@
                                                 <div class="modal-dialog">
                                                     <div class="modal-content">
                                                         <div class="modal-header">
-                                                            <h5 class="modal-title" id="exampleModalLabel">Şirket Oluşturma talebi onaylama</h5>
+                                                            <h5 class="modal-title" id="exampleModalLabel">Şirket Talebi Onaylama</h5>
                                                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                         </div>
                                                         <div class="modal-body">
-                                                            Şirket Oluşturma talebini istediğinize emin misiniz?
+                                                            Şirket oluşturma talebini onaylamak istediğinize emin misiniz?
                                                         </div>
                                                         <div class="modal-footer">
                                                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>
@@ -153,11 +155,71 @@
                                                 </div>
                                             </div>
 
+                                            <div class="modal fade" id="detailCompanyModal_@company.Id" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                <div class="modal-dialog modal-lg">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title" id="exampleModalLabel">Şirket Detayları</h5>
+                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <div class="row">
+                                                                <div class="col-md-6">
+                                                                    <div class="form-group mb-3">
+                                                                        <label class="control-label fw-bold mb-1">Şirket Adı</label>
+                                                                        <span class="form-control">@company.CompanyName</span>
+                                                                    </div>
+
+                                                                    <div class="form-group mb-3">
+                                                                        <label class="control-label fw-bold mb-1">Şirket Telefon Numarası</label>
+                                                                        <span class="form-control">@company.PhoneNumber</span>
+                                                                    </div>
+                                                                    <div class="form-group mb-3">
+                                                                        <label class="control-label fw-bold mb-1">Şirket Vergi Dairesi</label>
+                                                                        <span class="form-control">@company.TaxOffice</span>
+                                                                    </div>
+                                                                    <div class="form-group mb-3">
+                                                                        <label class="control-label fw-bold mb-1">Şirket Vergi Numarası</label>
+                                                                        <span class="form-control">@company.TaxNumber</span>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-6">
+                                                                    <div class="form-group mb-3">
+                                                                        <label class="control-label fw-bold mb-1">Şirket Sorumlusu</label>
+                                                                        <span class="form-control">@company.ContactFullName</span>
+                                                                    </div>
+                                                                    <div class="form-group mb-3">
+                                                                        <label class="control-label fw-bold mb-1">Şirket Sorumlusu Telefon Numarası</label>
+                                                                        <span class="form-control">@company.ContactPhoneNumber</span>
+                                                                    </div>
+                                                                    <div class="form-group mb-3">
+                                                                        <label class="control-label fw-bold mb-1">Şirket Sorumlusu Email Adresi</label>
+                                                                        <span class="form-control">@company.ContactEmail</span>
+                                                                    </div>
+
+                                                                    <div class="form-group mb-3">
+                                                                        <label class="control-label fw-bold mb-1">Şirket Personel Sayısı</label>
+                                                                        <span class="form-control">@company.NumberOfEmployees</span>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="form-group mb-3">
+                                                                    <label class="control-label fw-bold mb-1">Şirket Adresi</label>
+                                                                    <span class="form-control">@company.Address</span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
                                             <div class="modal fade" id="rejectCompanyModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                                 <div class="modal-dialog">
                                                     <div class="modal-content">
                                                         <div class="modal-header">
-                                                            <h5 class="modal-title" id="exampleModalLabel"> Talebi Reddetme</h5>
+                                                            <h5 class="modal-title" id="exampleModalLabel">Şirket Talebi Reddetme</h5>
                                                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                         </div>
                                                         <div class="modal-body">
@@ -232,7 +294,7 @@
                 });
             });
         </script>
-        
+
 </body>
 
 

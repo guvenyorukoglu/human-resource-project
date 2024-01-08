@@ -36,6 +36,14 @@ namespace humanResourceProject.API.Controllers
             var list = await _companyReadService.GetAll();
             return Ok(list);
         }
+        
+        [HttpGet]
+        [Route("GetCompanies")]
+        public async Task<IActionResult> GetCompanies()
+        {
+            var companiesVM = await _companyReadService.GetCompanies();
+            return Ok(companiesVM);
+        }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> CompanyById(Guid id)

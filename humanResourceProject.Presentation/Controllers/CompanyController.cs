@@ -25,7 +25,7 @@ namespace humanResourceProject.Presentation.Controllers
         public async Task<IActionResult> Companies()
         {
 
-            HttpResponseMessage response = await _httpClient.GetAsync("/api/Company");
+            HttpResponseMessage response = await _httpClient.GetAsync("/api/Company/GetCompanies");
 
             if (response.IsSuccessStatusCode)
             {
