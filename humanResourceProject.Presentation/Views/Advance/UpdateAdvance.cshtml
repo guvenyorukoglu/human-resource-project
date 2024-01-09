@@ -39,8 +39,13 @@
                             <span asp-validation-for="AdvanceType" class="text-danger"></span>
                         </div>
                         <div class="form-group mb-3">
+                            <label asp-for="ExpiryDate" class="control-label"></label>
+                            <input value="@Model.ExpiryDate.ToString("yyyy-MM-dd")" type="date" asp-for="ExpiryDate" class="form-control" />
+                            <span asp-validation-for="ExpiryDate" class="text-danger"></span>
+                        </div>
+                        <div class="form-group mb-3">
                             <label asp-for="AmountOfAdvance" class="control-label"></label>
-                            <input type="text" id="AmountOfAdvance" asp-for="AmountOfAdvance" class="form-control" onblur="validateAmount()" />
+                            <input id="AmountOfAdvance" asp-for="AmountOfAdvance" class="form-control" onblur="validateAmount()" />
                             <span asp-validation-for="AmountOfAdvance" class="text-danger"></span>
                         </div>
                         <div class="form-group mb-3">
@@ -60,11 +65,7 @@
                             </select>
                             <span asp-validation-for="Currency" class="text-danger"></span>
                         </div>
-                        <div class="form-group mb-3">
-                            <label asp-for="ExpiryDate" class="control-label"></label>
-                            <input value="@Model.ExpiryDate.ToString("yyyy-MM-dd")" type="date" asp-for="ExpiryDate" class="form-control" />
-                            <span asp-validation-for="ExpiryDate" class="text-danger"></span>
-                        </div>
+                        
                         <div class="form-group mb-3">
                             <label asp-for="Explanation" class="control-label"></label>
                             <textarea id="Explanation" oninput="limitCharacters()" asp-for="Explanation" class="form-control" rows="8"></textarea>
@@ -110,27 +111,30 @@
             var inputElement = document.getElementById('AmountOfAdvance');
             var inputValue = inputElement.value;
 
-            inputValue = inputValue.replace(/,/g, '.');
+            var hasComma = inputValue.includes(',');
+
+            if (hasComma) {
+                
+                var parts = inputValue.split(',');
+
+                parts[1] = parts[1].replace(/,/g, '.');
+
+                inputValue = parts.join('.');
+            }
 
             var isValid = /^(\d+(\.\d{0,2})?)$/.test(inputValue);
 
             if (isValid) {
-                var numericValue = parseFloat(inputValue);
 
-                inputValue = numericValue.toLocaleString(undefined, {
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 2
-                });
-
-                inputElement.value = inputValue;
-
-                if (numericValue < 100 || numericValue > 100000) {
+                if (inputValue < 100 || inputValue > 100000) {
                     isValid = false;
                 }
+
+                inputElement.value = inputValue;
             }
 
             if (!isValid) {
-                inputElement.setCustomValidity("Yanlış değer girildi. Lütfen 100 ile 100.000 arasında bir para miktarı giriniz.");
+                inputElement.setCustomValidity("Lütfen 100 ile 100000 arasında bir para miktarı giriniz.");
             } else {
                 inputElement.setCustomValidity("");
             }

@@ -67,18 +67,18 @@ namespace humanResourceProject.Models.DTOs
 
         [Required(ErrorMessage = "Pozisyon alanı boş geçilemez!")]
         [DisplayName("Pozisyon*")]
-        public Guid JobId { get; set; }
+        public Guid? JobId { get; set; }
         public List<JobVM>? Jobs { get; set; }
 
         public string? ImagePath { get; set; }
 
         [Required(ErrorMessage = "Departman alanı boş geçilemez!")]
         [DisplayName("Departman*")]
-        public Guid DepartmentId { get; set; }
+        public Guid? DepartmentId { get; set; }
         public List<DepartmentVM>? Departments { get; set; }
 
-        [Required(ErrorMessage = "Yönetici alanı boş geçilemez!")]
-        [DisplayName("Yönetici*")]
+        //[Required(ErrorMessage = "Yöneticisi alanı boş geçilemez!")]
+        [DisplayName("Yöneticisi")]
         public Guid ManagerId { get; set; }
         public List<ManagerVM>? Managers { get; set; }
         public Guid CompanyId { get; set; }

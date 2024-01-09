@@ -119,7 +119,7 @@ namespace humanResourceProject.Application.Services.Concrete.AppUserServices
             if (appUser == null || appUser.Status == Domain.Enum.Status.Inactive || appUser.Status == Domain.Enum.Status.Deleted)
                 return SignInResult.Failed;
 
-            var result = await _signInManager.PasswordSignInAsync(appUser, model.Password, false, false);
+            var result = await _signInManager.PasswordSignInAsync(appUser, model.Password, model.RememberMe, false);
             return result;
         }
 

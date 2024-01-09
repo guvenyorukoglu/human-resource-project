@@ -159,7 +159,7 @@
         @if (TempData["SuccessUpdateJobMessage"] != null)
         {
             <script>
-                toastr["info"]("İş tanımı güncellenmiştir.", "Başarılı");
+                toastr["success"]("Pozisyon güncelleme işlemi başarılı.", "Başarılı");
             </script>
         }
         @if (TempData["SuccessCreateJobMessage"] != null)
@@ -167,6 +167,14 @@
             <script>
 
                 toastr["success"]("Pozisyon ekleme işlemi başarılı.", "Başarılı");
+
+            </script>
+        }
+        @if (TempData["SuccessDeleteJobMessage"] != null)
+        {
+            <script>
+
+                toastr["success"]("Pozisyon kaldırma işlemi başarılı.", "Başarılı");
 
             </script>
         }

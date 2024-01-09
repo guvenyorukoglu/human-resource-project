@@ -5,6 +5,7 @@ using humanResourceProject.Domain.Entities.Concrete;
 using humanResourceProject.Models.DTOs;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.OpenApi.Extensions;
+using System.Globalization;
 
 namespace humanResourceProject.API.Controllers
 {
@@ -25,6 +26,7 @@ namespace humanResourceProject.API.Controllers
             _mailService = mailService;
             _appUserReadService = appUserReadService;
             _configuration = configuration;
+            Thread.CurrentThread.CurrentCulture = new CultureInfo("tr-TR");
         }
 
         [HttpGet]

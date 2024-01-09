@@ -163,7 +163,7 @@
         @if (TempData["SuccessUpdateDepartmentMessage"] != null)
         {
             <script>
-                toastr["info"]("Departman tanımı güncellenmiştir.", "Başarılı");
+                toastr["success"]("Departman güncelleme işlemi başarılı.", "Başarılı");
             </script>
         }
         @if (TempData["SuccessCreateDepartmentMessage"] != null)
@@ -171,6 +171,14 @@
             <script>
 
                 toastr["success"]("Departman ekleme işlemi başarılı.", "Başarılı");
+
+            </script>
+        }
+        @if (TempData["SuccessDeleteDepartmentMessage"] != null)
+        {
+            <script>
+
+                toastr["success"]("Departman kaldırma işlemi başarılı.", "Başarılı");
 
             </script>
         }

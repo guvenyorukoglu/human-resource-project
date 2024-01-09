@@ -219,7 +219,14 @@
                         // Handle success response as needed
                         console.log("Request rejected successfully.");
                         $('#rejectAdvanceModal').modal('hide');
-                        window.location.reload(); // Sayfayı yenile
+                        if (response === "success") {
+                            toastr["success"]("Avans talebi başarılı bir şekilde reddedilmiştir.", "Başarılı");
+                            setTimeout(function () {
+                                window.location.reload();
+                            }, 3000);
+                        } else {
+                            toastr["error"]("Bir hata oluştu. İşlem gerçekleştirilemedi.", "Hata");
+                        }
                     },
                     error: function (error) {
                         // Handle errors if any
@@ -235,12 +242,6 @@
         {
             <script>
                 toastr["success"]("Personelinizin avans talebini onayladınız.", "Başarılı");
-            </script>
-        }
-        @if (TempData["SuccessRejectAdvance"] != null)
-        {
-            <script>
-                toastr["success"]("Personelinizin avans talebini reddettiniz.", "Başarılı");
             </script>
         }
 

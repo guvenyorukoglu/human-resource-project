@@ -115,6 +115,7 @@ namespace humanResourceProject.Presentation.Controllers
 
             if (response.IsSuccessStatusCode)
             {
+                TempData["SuccessDeleteDepartmentMessage"] = "Departman kaldırılmıştır.";
                 return RedirectToAction(nameof(Departments));
             }
 

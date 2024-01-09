@@ -172,16 +172,14 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <a>
-                                                    <button type="button" class="btn btn-secondary btn-sm d-inline-flex bg-primary gap-1 align-items-center" data-bs-toggle="modal" data-bs-target="#approveLeaveModal">
-                                                        <i class="fa fa-check"></i><span>Onayla</span>
-                                                    </button>
-                                                </a>
-                                                <a>
-                                                    <button class="btn btn-danger btn-sm d-inline-flex gap-1 align-items-center" data-bs-toggle="modal" data-bs-target="#rejectLeaveModal">
-                                                        <i class="fa fa-x"></i><span>Reddet</span>
-                                                    </button>
-                                                </a>
+
+                                                <button type="button" class="btn btn-secondary btn-sm d-inline-flex bg-primary gap-1 align-items-center" data-bs-toggle="modal" data-bs-target="#approveLeaveModal">
+                                                    <i class="fa fa-check"></i><span>Onayla</span>
+                                                </button>
+
+                                                <button class="btn btn-danger btn-sm d-inline-flex gap-1 align-items-center" data-bs-toggle="modal" data-bs-target="#rejectLeaveModal">
+                                                    <i class="fa fa-x"></i><span>Reddet</span>
+                                                </button>
                                             }
                                         </td>
                                     </tr>
@@ -190,8 +188,8 @@
                         }
                     </tbody>
                 </table>
-@*                <div>
-                    <a asp-controller="Employee" asp-action="Home"><button class="btn btn-secondary">Ana Sayfaya Dön</button></a>
+                @*                <div>
+                <a asp-controller="Employee" asp-action="Home"><button class="btn btn-secondary">Ana Sayfaya Dön</button></a>
                 </div>*@
             </div>
         </div>
@@ -220,16 +218,16 @@
                         // Handle success response as needed
                         console.log("Request rejected successfully.");
                         $('#rejectLeaveModal').modal('hide');
-                        if(response=="success"){
-                            toastr["success"]("Personelin izin talebi reddedilmiştir.", "Başarılı");
-                            setTimeout(function(){
-                            window.location.reload(); // Sayfayı yenile
+                        if (response === "success") {
+                            toastr["success"]("İzin talebi başarılı bir şekilde reddedilmiştir.", "Başarılı");
+                            setTimeout(function () {
+                                window.location.reload(); // Sayfayı yenile
                             }, 3000);
                         }
-                        else{
-                            toastr["error"]("Personelin izin talebini reddetme işlemi başarısız oldu. Tekrar deneyiniz.", "Başarılı");
+                        else {
+                            toastr["error"]("Bir hata oluştu. İşlem gerçekleştirilemedi.", "Hata");
                         }
-                            )
+
                     },
                     error: function (error) {
                         // Handle errors if any
@@ -247,7 +245,7 @@
                 toastr["success"]("Personelinizin izin talebini onayladınız.", "Başarılı");
             </script>
         }
-      
-       
+
+
     }
 </body>

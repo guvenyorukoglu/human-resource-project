@@ -12,7 +12,7 @@ using humanResourceProject.Infrastructure.Context;
 namespace humanResourceProject.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240108195520_mig_1")]
+    [Migration("20240109130458_mig_1")]
     partial class mig_1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

@@ -255,13 +255,13 @@
             @if (TempData["SuccessUpdatePossesionMessage"] != null)
             {
                 <script>
-                    toastr["info"]("Zimmet güncellenmiştir.", "Başarılı");
+                    toastr["success"]("Zimmet güncellenmiştir.", "Başarılı");
                 </script>
             } 
             @if (TempData["CreatePossessionMessage"] != null)
             {
                 <script>
-                    toastr["success"]("Zimmet başarıyla oluşturuldu .", "Başarılı");
+                    toastr["success"]("Zimmet başarıyla oluşturuldu.", "Başarılı");
                 </script>
             }
         }

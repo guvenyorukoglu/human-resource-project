@@ -228,8 +228,7 @@ namespace humanResourceProject.Presentation.Controllers
 
             if (httpResponse.IsSuccessStatusCode)
             {
-                TempData["SuccessRejectAdvance"] = "Personelinizin avans talebini reddettiniz.";
-                return RedirectToAction(nameof(EmployeesAdvances));
+                return Ok("success");
             }
 
             ModelState.AddModelError(httpResponse.StatusCode.ToString(), "Bir hata oluştu.");

@@ -190,14 +190,14 @@
         @if (TempData["SuccessUpdateExpenseMessage"] != null)
         {
             <script>
-                toastr["info"]("Masraf talebiniz güncellenmiştir.", "Başarılı");
+                toastr["success"]("Masraf talebiniz güncellenmiştir.", "Başarılı");
             </script>
         }
 
         @if (TempData["ManagerIdEmptyMessage"] != null)
         {
             <script>
-                toastr["warning"]("Yöneticiniz henüz atanmadığı için şuanda harcama ekleyemezsiniz! Eğer yöneticinizin atandığını düşünüyorsanız, lütfen çıkış yapıp tekrar giriş yapınız.", "Uyarı");
+                toastr["warning"]("Yöneticiniz henüz atanmadığı için şuanda masraf ekleyemezsiniz! Eğer yöneticinizin atandığını düşünüyorsanız, lütfen çıkış yapıp tekrar giriş yapınız.", "Uyarı");
             </script>
         }
         @if (TempData["SuccessCreateExpenseMessage"] != null)
@@ -212,8 +212,7 @@
         {
             <script>
 
-                toastr["error"]("Masraf talebiniz silinmiştir.", "Başarılı");
-                @*toastr["success"]("Masraf talebiniz silinmiştir.", "Başarılı");*@
+                toastr["success"]("Masraf talebiniz silinmiştir.", "Başarılı");
 
             </script>
         }

@@ -103,6 +103,13 @@ namespace humanResourceProject.Presentation.Controllers
                 return View(model);
             }
 
+            if( model.DaysOfLeave > (decimal)(model.EndDateOfLeave - model.StartDateOfLeave).TotalDays)
+            {
+                ModelState.AddModelError(string.Empty, "Lütfen geçerli bir izin gün sayısı giriniz!");
+                return View(model);
+            }
+
+
             var json = JsonConvert.SerializeObject(model);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
 
@@ -153,6 +160,12 @@ namespace humanResourceProject.Presentation.Controllers
             if (!ModelState.IsValid)
             {
                 ModelState.AddModelError(string.Empty, "Bir hata oluştu tekrar deneyiniz!");
+                return View(model);
+            }
+
+            if (model.DaysOfLeave > (decimal)(model.EndDateOfLeave - model.StartDateOfLeave).TotalDays)
+            {
+                ModelState.AddModelError(string.Empty, "Lütfen geçerli bir izin gün sayısı giriniz!");
                 return View(model);
             }
 
@@ -222,8 +235,7 @@ namespace humanResourceProject.Presentation.Controllers
 
             if (httpResponse.IsSuccessStatusCode)
             {
-                TempData["success"] = "Personelinizin izin talebini reddettiniz.";
-                return RedirectToAction(nameof(EmployeesLeaves));
+                return Ok("success");
             }
             ModelState.AddModelError(httpResponse.StatusCode.ToString(), "Bir hata oluştu.");
             return View("Error");

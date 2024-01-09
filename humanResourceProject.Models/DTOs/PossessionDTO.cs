@@ -6,10 +6,10 @@ namespace humanResourceProject.Models.DTOs
 {
     public class PossessionDTO
     {
-        //TODO: Add validation for barcode
+
         [Required(ErrorMessage = "Barkod alanı boş geçilemez!")]
         [DisplayName("Barkod*")]
-        [StringLength(50, ErrorMessage = "Barkod numarası en fazla 50 karakter olmalıdır.")]
+        [RegularExpression(@"^\d{13}$", ErrorMessage = "Barkod numarası 13 rakamdan oluşmalıdır.")]
         public string Barcode { get; set; }
         public Guid CompanyId { get; set; }
 
