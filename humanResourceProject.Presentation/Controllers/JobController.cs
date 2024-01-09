@@ -99,7 +99,7 @@ namespace humanResourceProject.Presentation.Controllers
 
             if (response.IsSuccessStatusCode)
             {
-                TempData["SuccessUpdateJobMessage"] = "İş tanımı güncellenmiştir.";
+                TempData["SuccessUpdateJobMessage"] = "Pozisyon güncellenmiştir.";
                 return RedirectToAction(nameof(Jobs));
             }
             else
@@ -115,6 +115,7 @@ namespace humanResourceProject.Presentation.Controllers
 
             if (response.IsSuccessStatusCode)
             {
+                TempData["SuccessDeleteJobMessage"] = "Pozisyon kaldırılmıştır.";
                 return RedirectToAction(nameof(Jobs));
             }
 

@@ -6,6 +6,7 @@ using humanResourceProject.Models.DTOs;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Globalization;
 
 namespace humanResourceProject.API.Controllers
 {
@@ -28,6 +29,7 @@ namespace humanResourceProject.API.Controllers
             _mailService = mailService;
             _appUserWriteService = appUserWriteService;
             _userManager = userManager;
+            Thread.CurrentThread.CurrentCulture = new CultureInfo("tr-TR");
         }
 
         [HttpGet]

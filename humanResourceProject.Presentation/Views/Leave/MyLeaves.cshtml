@@ -183,7 +183,7 @@
         @if (TempData["SuccessUpdateLeaveMessage"] != null)
         {
             <script>
-                toastr["info"]("İzin talebiniz güncellenmiştir.", "Başarılı");
+                toastr["success"]("İzin talebiniz güncellenmiştir.", "Başarılı");
             </script>
         }
 
@@ -206,7 +206,7 @@
         @if (TempData["ManagerIdEmptyMessage"] != null)
         {
             <script>
-                toastr["warning"]("Yöneticiniz henüz atanmadığı için şuanda harcama ekleyemezsiniz! Eğer yöneticinizin atandığını düşünüyorsanız, lütfen çıkış yapıp tekrar giriş yapınız.", "Uyarı");
+                toastr["warning"]("Yöneticiniz henüz atanmadığı için şuanda masraf ekleyemezsiniz! Eğer yöneticinizin atandığını düşünüyorsanız, lütfen çıkış yapıp tekrar giriş yapınız.", "Uyarı");
 
             </script>
         }

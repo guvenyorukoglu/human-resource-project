@@ -526,6 +526,10 @@ namespace humanResourceProject.Infrastructure.SeedData
                 //var departmentsOfTheCompany = departments.Where(x => x.CompanyId == company.Id).ToList();
                 //Guid companyManagerDepartmentId = departments.SingleOrDefault(x => x.DepartmentName == "President & Managing Director" && x.CompanyId == company.Id).Id;
 
+                Random rnd = new Random();
+                int earnedLeave = rnd.Next(30, 120);
+                int remainingLeave = rnd.Next(0, earnedLeave);
+
                 var companyManagerFake = new Faker<AppUser>()
                         .RuleFor(e => e.Id, f => f.Random.Guid())
                         .RuleFor(e => e.FirstName, f => f.Name.FirstName())
@@ -542,8 +546,8 @@ namespace humanResourceProject.Infrastructure.SeedData
                         .RuleFor(e => e.BloodGroup, f => f.PickRandom<BloodGroup>())
                         .RuleFor(e => e.Birthdate, f => f.Date.Past(50))
                         .RuleFor(e => e.Gender, Gender.Male)
-                        .RuleFor(e => e.EarnedLeaveDays, 999)
-                        .RuleFor(e => e.RemainingLeaveDays, 999)
+                        .RuleFor(e => e.EarnedLeaveDays, earnedLeave)
+                        .RuleFor(e => e.RemainingLeaveDays, remainingLeave)
                         .RuleFor(c => c.CreateDate, f => f.Date.Past(1))
                         .RuleFor(e => e.Status, _ => Status.Active)
                         .RuleFor(e => e.ImagePath, "https://ik.imagekit.io/7ypp4olwr/companymanager.png?tr=h-200,w-200")
@@ -696,7 +700,7 @@ namespace humanResourceProject.Infrastructure.SeedData
                     CreateDate = DateTime.Now,
                     Status = Status.Active,
                     UserName = "SiteManager",
-                    ImagePath = "https://ik.imagekit.io/7ypp4olwr/admin.jpeg?tr=h-200,w-200",
+                    ImagePath = "https://ik.imagekit.io/7ypp4olwr/admin.png?tr=h-200,w-200",
                     Email = email,
                     DepartmentId = Guid.Empty,
                     CompanyId = company.Id,

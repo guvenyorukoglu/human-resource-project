@@ -119,12 +119,72 @@
                                     <td>@company.ContactEmail</td>
                                     <td>@displayNameRequestStatus</td>
                                     <td>
+                                        <button class="btn btn-secondary btn-sm d-inline-flex gap-1 align-items-center text-white" data-bs-toggle="modal" data-bs-target="#detailCompanyModal_@company.Id">
+                                            <i class="fa-solid fa-circle-info"></i><span>Detaylar</span>
+                                        </button>
+
+                                        <div class="modal fade" id="detailCompanyModal_@company.Id" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog modal-lg">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="exampleModalLabel">Şirket Detayları</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <div class="row">
+                                                            <div class="col-md-6">
+                                                                <div class="form-group mb-3">
+                                                                    <label class="control-label fw-bold mb-1">Şirket Adı</label>
+                                                                    <span class="form-control">@company.CompanyName</span>
+                                                                </div>
+
+                                                                <div class="form-group mb-3">
+                                                                    <label class="control-label fw-bold mb-1">Şirket Telefon Numarası</label>
+                                                                    <span class="form-control">@company.PhoneNumber</span>
+                                                                </div>
+                                                                <div class="form-group mb-3">
+                                                                    <label class="control-label fw-bold mb-1">Şirket Vergi Dairesi</label>
+                                                                    <span class="form-control">@company.TaxOffice</span>
+                                                                </div>
+                                                                <div class="form-group mb-3">
+                                                                    <label class="control-label fw-bold mb-1">Şirket Vergi Numarası</label>
+                                                                    <span class="form-control">@company.TaxNumber</span>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <div class="form-group mb-3">
+                                                                    <label class="control-label fw-bold mb-1">Şirket Sorumlusu</label>
+                                                                    <span class="form-control">@company.ContactFullName</span>
+                                                                </div>
+                                                                <div class="form-group mb-3">
+                                                                    <label class="control-label fw-bold mb-1">Şirket Sorumlusu Telefon Numarası</label>
+                                                                    <span class="form-control">@company.ContactPhoneNumber</span>
+                                                                </div>
+                                                                <div class="form-group mb-3">
+                                                                    <label class="control-label fw-bold mb-1">Şirket Sorumlusu Email Adresi</label>
+                                                                    <span class="form-control">@company.ContactEmail</span>
+                                                                </div>
+
+                                                                <div class="form-group mb-3">
+                                                                    <label class="control-label fw-bold mb-1">Şirket Personel Sayısı</label>
+                                                                    <span class="form-control">@company.NumberOfEmployees</span>
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group mb-3">
+                                                                <label class="control-label fw-bold mb-1">Şirket Adresi</label>
+                                                                <span class="form-control">@company.Address</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
                                         @if (company.CompanyStatus == RequestStatus.Pending)
                                         {
-                                            <button class="btn btn-secondary btn-sm d-inline-flex gap-1 align-items-center text-white" data-bs-toggle="modal" data-bs-target="#detailCompanyModal_@company.Id">
-                                                <i class="fa-solid fa-circle-info"></i><span>Detaylar</span>
-                                            </button>
-
                                             <button class="btn bg-primary btn-sm d-inline-flex  gap-1 align-items-center text-white" data-bs-toggle="modal" data-bs-target="#approveCompanyModal_@company.Id">
                                                 <i class="fa fa-check"></i><span>Onayla</span>
                                             </button>
@@ -150,66 +210,6 @@
                                                                asp-route-id="@company.Id">
                                                                 <button type="button" class="btn btn-primary">Onaylıyorum</button>
                                                             </a>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div class="modal fade" id="detailCompanyModal_@company.Id" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                                <div class="modal-dialog modal-lg">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <h5 class="modal-title" id="exampleModalLabel">Şirket Detayları</h5>
-                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                        </div>
-                                                        <div class="modal-body">
-                                                            <div class="row">
-                                                                <div class="col-md-6">
-                                                                    <div class="form-group mb-3">
-                                                                        <label class="control-label fw-bold mb-1">Şirket Adı</label>
-                                                                        <span class="form-control">@company.CompanyName</span>
-                                                                    </div>
-
-                                                                    <div class="form-group mb-3">
-                                                                        <label class="control-label fw-bold mb-1">Şirket Telefon Numarası</label>
-                                                                        <span class="form-control">@company.PhoneNumber</span>
-                                                                    </div>
-                                                                    <div class="form-group mb-3">
-                                                                        <label class="control-label fw-bold mb-1">Şirket Vergi Dairesi</label>
-                                                                        <span class="form-control">@company.TaxOffice</span>
-                                                                    </div>
-                                                                    <div class="form-group mb-3">
-                                                                        <label class="control-label fw-bold mb-1">Şirket Vergi Numarası</label>
-                                                                        <span class="form-control">@company.TaxNumber</span>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-md-6">
-                                                                    <div class="form-group mb-3">
-                                                                        <label class="control-label fw-bold mb-1">Şirket Sorumlusu</label>
-                                                                        <span class="form-control">@company.ContactFullName</span>
-                                                                    </div>
-                                                                    <div class="form-group mb-3">
-                                                                        <label class="control-label fw-bold mb-1">Şirket Sorumlusu Telefon Numarası</label>
-                                                                        <span class="form-control">@company.ContactPhoneNumber</span>
-                                                                    </div>
-                                                                    <div class="form-group mb-3">
-                                                                        <label class="control-label fw-bold mb-1">Şirket Sorumlusu Email Adresi</label>
-                                                                        <span class="form-control">@company.ContactEmail</span>
-                                                                    </div>
-
-                                                                    <div class="form-group mb-3">
-                                                                        <label class="control-label fw-bold mb-1">Şirket Personel Sayısı</label>
-                                                                        <span class="form-control">@company.NumberOfEmployees</span>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="form-group mb-3">
-                                                                    <label class="control-label fw-bold mb-1">Şirket Adresi</label>
-                                                                    <span class="form-control">@company.Address</span>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="modal-footer">
-                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>
                                                         </div>
                                                     </div>
                                                 </div>

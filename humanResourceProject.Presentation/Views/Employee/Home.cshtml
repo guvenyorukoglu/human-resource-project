@@ -379,10 +379,10 @@
                                         <div class="d-flex gap-2 align-items-center text-start"><i class="fa-solid fa-at"></i><span>@Model.AppUser.Email</span></div>
                                         <div class="d-flex gap-2 align-items-center text-start"><i class="fa-solid fa-phone"></i><span>@Model.AppUser.PhoneNumber</span></div>
                                         <div class="d-flex gap-2 align-items-center text-start"><i class="fa-solid fa-location-dot"></i><span>@Model.AppUser.Address</span></div>
-                                        @if (User.IsInRole("Personel") || User.IsInRole("Manager"))
+                                            @if (!User.IsInRole("SiteManager"))
                                         {
-                                            @*<div class="d-flex gap-2 align-items-center text-start"><i class="fa-solid fa-building-user"></i><span>@Model.AppUser.Departman</span></div>*@
-                                            @*<div class="d-flex gap-2 align-items-center text-start"><i class="fa-solid fa-suitcase"></i><span>@Model.AppUser.Pozisyon</span></div>*@
+                                            <div class="d-flex gap-2 align-items-center text-start"><i class="fa-solid fa-building-user"></i><span>@(Model.AppUser.Departman??"Atanmamış")</span></div>
+                                                <div class="d-flex gap-2 align-items-center text-start"><i class="fa-solid fa-suitcase"></i><span>@(Model.AppUser.Pozisyon??"Atanmamış")</span></div>
                                             <div class="d-flex gap-2 align-items-center text-start"><span class="fw-bold">Kazanılmış İzin Gün Sayısı:</span><span>@Model.AppUser.EarnedLeaveDays</span></div>
                                             <div class="d-flex gap-2 align-items-center text-start"><span class="fw-bold">Kalan İzin Gün Sayısı:</span><span>@Model.AppUser.RemainingLeaveDays</span></div>
                                         }
@@ -559,7 +559,7 @@
             @if (TempData["SuccessUpdateCompanyMessage"] != null)
             {
                 <script>
-                    toastr["info"]("Şirket bilgileri güncellenmiştir.", "Başarılı");
+                    toastr["success"]("Şirket bilgileri güncellenmiştir.", "Başarılı");
                 </script>
             }
         }

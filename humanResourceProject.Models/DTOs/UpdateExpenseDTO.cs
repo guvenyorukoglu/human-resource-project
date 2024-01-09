@@ -15,11 +15,11 @@ namespace humanResourceProject.Models.DTOs
         public string Explanation { get; set; }
         [Required(ErrorMessage = "Miktar alanı boş geçilemez!")]
         [DisplayName("Masraf Miktarı*")]
-        [Range(1, 100000, ErrorMessage = "Masraf miktarı 1 ile 100000 arasında olmalıdır.")]
+        //[Range(1, 100000, ErrorMessage = "Masraf miktarı 1 ile 100000 arasında olmalıdır.")]
         public decimal AmountOfExpense { get; set; }
         public RequestStatus ExpenseStatus { get; set; }
-        [Required(ErrorMessage = "Harcama türü alanı boş geçilemez!")]
-        [DisplayName("Harcama Türü*")]
+        [Required(ErrorMessage = "Masraf türü alanı boş geçilemez!")]
+        [DisplayName("Masraf Türü*")]
         public ExpenseType ExpenseType { get; set; }
         [Required(ErrorMessage = "Para birimi alanı boş geçilemez!")]
         [DisplayName("Para Birimi*")]
@@ -27,11 +27,11 @@ namespace humanResourceProject.Models.DTOs
 
         public string? FilePath { get; set; }
 
-        [Required(ErrorMessage = "Harcama tarihi alanı boş geçilemez!")]
-        [DisplayName("Harcama Tarihi*")]
+        [Required(ErrorMessage = "Masraf tarihi alanı boş geçilemez!")]
+        [DisplayName("Masraf Tarihi*")]
         public DateTime DateOfExpense { get; set; }
         //[Required(ErrorMessage = "Dosya alanı boş geçilemez!")]
-        [DisplayName("Dosya*")]
+        [DisplayName("Dosya")]
         public IFormFile? UploadPath { get; set; }
         public DateTime CreateDate { get; set; }
         public string ExpenseNo { get; set; }

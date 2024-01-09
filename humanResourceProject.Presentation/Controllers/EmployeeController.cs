@@ -134,6 +134,14 @@ namespace humanResourceProject.Presentation.Controllers
                 ModelState.AddModelError(string.Empty, "Lütfen tüm verileri doğru girdiğinizden emin olunuz!");
                 return View(model);
             }
+            if(model.JobId == Guid.Empty || model.DepartmentId == Guid.Empty)
+            {
+                model.Jobs = JsonConvert.DeserializeObject<List<JobVM>>(JobsList);
+                model.Departments = JsonConvert.DeserializeObject<List<DepartmentVM>>(DepartmentsList);
+                model.Managers = JsonConvert.DeserializeObject<List<ManagerVM>>(ManagersList);
+                ModelState.AddModelError(string.Empty, "Lütfen pozisyon ve departman bilgisinin girildiğinden emin olunuz!");
+                return View(model);
+            }
             model.ImagePath = model.Gender == Domain.Enum.Gender.Female ? "https://ik.imagekit.io/7ypp4olwr/femaledefault.png?tr=h-200,w-200" : "https://ik.imagekit.io/7ypp4olwr/maledefault.png?tr=h-200,w-200";
 
             var json = JsonConvert.SerializeObject(model);
@@ -215,7 +223,7 @@ namespace humanResourceProject.Presentation.Controllers
         {
             if (!ModelState.IsValid)
             {
-                TempData["Result"] = "modelinvalid";
+                TempData["modelinvalid"] = "modelinvalid";
 
                 // Listeleri tekrar doldur
                 model.Jobs = JsonConvert.DeserializeObject<List<JobVM>>(JobsList);

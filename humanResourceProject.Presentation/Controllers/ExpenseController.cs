@@ -77,7 +77,7 @@ namespace humanResourceProject.Presentation.Controllers
 
             if (managerId == Guid.Empty)
             {
-                TempData["ManagerIdEmptyMessage"] = "Yöneticiniz henüz atanmadığı için şuanda harcama ekleyemezsiniz!";
+                TempData["ManagerIdEmptyMessage"] = "Yöneticiniz henüz atanmadığı için şuanda Masraf ekleyemezsiniz!";
                 return RedirectToAction(nameof(MyExpenses));
             }
 
@@ -97,7 +97,7 @@ namespace humanResourceProject.Presentation.Controllers
 
             if (model.DateOfExpense.Date > DateTime.Now.Date)
             {
-                ModelState.AddModelError("DateOfExpense", "Tarih bugünden sonraki bir tarih olmamalıdır.");
+                ModelState.AddModelError("DateOfExpense", "Gelecekteki bir tarih seçilemez!");
                 return View(model);
             }
 
@@ -105,11 +105,15 @@ namespace humanResourceProject.Presentation.Controllers
             {
                 if (ModelState["ExpenseType"].Errors.Count > 0)
                 {
-                    ModelState.AddModelError(string.Empty, "Harcama türünü seçiniz!");
+                    ModelState.AddModelError(string.Empty, "Masraf türünü seçiniz!");
                 }
                 if (ModelState["Currency"].Errors.Count > 0)
                 {
                     ModelState.AddModelError(string.Empty, "Para birimini seçiniz!");
+                }
+                if (ModelState["UploadPath"].Errors.Count > 0)
+                {
+                    ModelState.AddModelError(string.Empty, "Lütfen dosya yükleyiniz!");
                 }
                 return View(model);
             }
@@ -143,7 +147,7 @@ namespace humanResourceProject.Presentation.Controllers
 
             if (response.IsSuccessStatusCode)
             {
-                TempData["SuccessCreateExpenseMessage"] = "Harcama talebiniz oluşturulmuştur.";
+                TempData["SuccessCreateExpenseMessage"] = "Masraf talebiniz oluşturulmuştur.";
                 return RedirectToAction(nameof(MyExpenses));
             }
             else
@@ -160,7 +164,7 @@ namespace humanResourceProject.Presentation.Controllers
 
             if (response.IsSuccessStatusCode)
             {
-                TempData["SuccessDeleteExpenseMessage"] = "Harcama talebiniz silinmiştir.";
+                TempData["SuccessDeleteExpenseMessage"] = "Masraf talebiniz silinmiştir.";
                 return RedirectToAction(nameof(MyExpenses));
             }
             return View("Error");
@@ -219,7 +223,7 @@ namespace humanResourceProject.Presentation.Controllers
 
             if (response.IsSuccessStatusCode)
             {
-                TempData["SuccessUpdateExpenseMessage"] = "Harcama talebiniz güncellenmiştir.";
+                TempData["SuccessUpdateExpenseMessage"] = "Masraf talebiniz güncellenmiştir.";
                 return RedirectToAction(nameof(MyExpenses));
             }
             else
@@ -278,8 +282,7 @@ namespace humanResourceProject.Presentation.Controllers
 
             if (httpResponse.IsSuccessStatusCode)
             {
-                TempData["SuccessRejectExpense"] = "Personelinizin masraf talebini reddettiniz.";
-                return RedirectToAction(nameof(EmployeesExpenses));
+                return Ok("success");
             }
             ModelState.AddModelError(httpResponse.StatusCode.ToString(), "Bir hata oluştu.");
             return View("Error");

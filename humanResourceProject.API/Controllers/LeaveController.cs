@@ -4,6 +4,7 @@ using humanResourceProject.Application.Services.Abstract.IMailServices;
 using humanResourceProject.Domain.Entities.Concrete;
 using humanResourceProject.Models.DTOs;
 using Microsoft.AspNetCore.Mvc;
+using System.Globalization;
 
 namespace humanResourceProject.API.Controllers
 {
@@ -24,6 +25,7 @@ namespace humanResourceProject.API.Controllers
             _appUserReadService = appUserReadService;
             _mailService = mailService;
             _configuration = configuration;
+            Thread.CurrentThread.CurrentCulture = new CultureInfo("tr-TR");
         }
 
         [HttpGet]

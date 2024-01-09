@@ -10,6 +10,7 @@ using humanResourceProject.Domain.IRepository.BaseRepos;
 using humanResourceProject.Models.DTOs;
 using humanResourceProject.Models.VMs;
 using Microsoft.AspNetCore.Identity;
+using System.Globalization;
 
 
 namespace humanResourceProject.Application.Services.Concrete.AppUserServices
@@ -56,6 +57,7 @@ namespace humanResourceProject.Application.Services.Concrete.AppUserServices
             _mailService = mailService;
             _companyReadRepository = companyReadRepository;
             _companyWriteRepository = companyWriteRepository;
+            Thread.CurrentThread.CurrentCulture = new CultureInfo("tr-TR");
         }
 
         public async Task<UpdateUserDTO> GetUpdateUserDTOById(Guid id)
@@ -100,6 +102,7 @@ namespace humanResourceProject.Application.Services.Concrete.AppUserServices
             AppUser newUser = _mapper.Map<AppUser>(model);
             newUser.UserName = newUser.Email;
             newUser.CreateDate = DateTime.Now;
+            newUser.ManagerId = model.ManagerId == Guid.Empty ? null : model.ManagerId;
             IdentityResult result = await _userManager.CreateAsync(newUser, model.Password);
             if (result.Succeeded)
             {
@@ -128,6 +131,7 @@ namespace humanResourceProject.Application.Services.Concrete.AppUserServices
             AppUser newUser = _mapper.Map<AppUser>(model);
             newUser.UserName = newUser.Email;
             newUser.CreateDate = DateTime.Now;
+            newUser.ManagerId = model.ManagerId == Guid.Empty ? null : model.ManagerId;
             IdentityResult result = await _userManager.CreateAsync(newUser, model.Password);
             if (result.Succeeded)
             {
@@ -212,7 +216,7 @@ namespace humanResourceProject.Application.Services.Concrete.AppUserServices
             userBeUpdated.Gender = model.Gender;
             userBeUpdated.JobId = model.JobId;
             userBeUpdated.DepartmentId = model.DepartmentId;
-            userBeUpdated.ManagerId = model.ManagerId;
+            userBeUpdated.ManagerId = model.ManagerId == Guid.Empty ? null : model.ManagerId;
             userBeUpdated.UpdateDate = DateTime.Now;
             userBeUpdated.Status = Status.Modified;
 
@@ -314,7 +318,7 @@ namespace humanResourceProject.Application.Services.Concrete.AppUserServices
                 string recipientEmail = user.Email;
                 string mailToName = $"{user.FullName}";
                 string subject = "İşten Çıkarılma Hk.";
-                string body = $"<p>Sayın {user.FullName},</p><p>{((DateTime)jobLog.DateOfTermination).ToShortDateString()} tarihinde iş akdiniz sonlandırılmıştır.İşten çıkarılma sebebiniz;</p><p>{jobLog.ReasonForTermination}</p><p>olarak belirtilmiştir.</p><br><hr><br><h3>Team Monitorease</h3>";
+                string body = $"<p>Sayın {user.FullName},</p><p>{((DateTime)jobLog.DateOfTermination).ToShortDateString()} tarihinde iş akdiniz sonlandırılmıştır. İşten çıkarılma sebebiniz;</p><p>{jobLog.ReasonForTermination}</p><p>olarak belirtilmiştir.</p><br><hr><br><h3>Team Monitorease</h3>";
                 await _mailService.SendEmailAsync(user, recipientEmail, mailToName, subject, body);
                 return IdentityResult.Success;
             }

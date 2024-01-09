@@ -39,18 +39,18 @@
                                         var displayName = displayAttribute?.GetName() ?? enumValue.ToString();
                                         <option value="@enumValue">@displayName</option>
                                     }
-                                    <option value="-1" selected>Harcama türü seçiniz!</option>
+                                    <option value="-1" selected>Masraf türü seçiniz!</option>
                                 }
                             </select>
                         </div>
                         <div class="form-group mb-3">
                             <label asp-for="DateOfExpense" class="control-label"></label>
-                            <input type="date" asp-for="DateOfExpense" class="form-control" value="yyyy-MM-dd" />
+                            <input type="date" asp-for="DateOfExpense" min="@DateTime.Now" class="form-control" value="yyyy-MM-dd" />
                             <span asp-validation-for="DateOfExpense" class="text-danger"></span>
                         </div>
                         <div class="form-group mb-3">
                             <label asp-for="AmountOfExpense" class="control-label"></label>
-                            <input type="text" id="AmountOfExpense" asp-for="AmountOfExpense" class="form-control" onblur="validateAmount()" />
+                            <input id="AmountOfExpense" asp-for="AmountOfExpense" class="form-control" onblur="validateAmount()" />
                             <span asp-validation-for="AmountOfExpense" class="text-danger"></span>
                         </div>
                         <div class="form-group mb-3">
@@ -94,7 +94,7 @@
                         </div>
                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                         <div class="text-center">
-                            <div class="form-group mb-3 d-grid">
+                            <div class="form-group mt-3 mb-3 d-grid">
                                 <input type="submit" value="Oluştur" class="btn-submit" />
                             </div>
                             <div class="mb-5">
@@ -134,27 +134,30 @@
             var inputElement = document.getElementById('AmountOfExpense');
             var inputValue = inputElement.value;
 
-            inputValue = inputValue.replace(/,/g, '.');
+            var hasComma = inputValue.includes(',');
+
+            if (hasComma) {
+
+                var parts = inputValue.split(',');
+
+                parts[1] = parts[1].replace(/,/g, '.');
+
+                inputValue = parts.join('.');
+            }
 
             var isValid = /^(\d+(\.\d{0,2})?)$/.test(inputValue);
 
             if (isValid) {
-                var numericValue = parseFloat(inputValue);
 
-                inputValue = numericValue.toLocaleString(undefined, {
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 2
-                });
-
-                inputElement.value = inputValue;
-
-                if (numericValue < 100 || numericValue > 100000) {
+                if (inputValue < 1 || inputValue > 100000) {
                     isValid = false;
                 }
+
+                inputElement.value = inputValue;
             }
 
             if (!isValid) {
-                inputElement.setCustomValidity("Yanlış değer girildi. Lütfen 100 ile 100.000 arasında bir para miktarı giriniz.");
+                inputElement.setCustomValidity("Lütfen 1 ile 100000 arasında bir para miktarı giriniz.");
             } else {
                 inputElement.setCustomValidity("");
             }

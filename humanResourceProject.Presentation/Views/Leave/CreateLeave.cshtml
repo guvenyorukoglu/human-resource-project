@@ -74,7 +74,7 @@
                         </div>
                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                         <div class="text-center">
-                            <div class="form-group mb-3 d-grid">
+                            <div class="form-group mt-3 mb-3 d-grid">
                                 <input type="submit" value="Oluştur" class="btn-submit" />
                             </div>
                             <div class="mb-5">
@@ -157,16 +157,18 @@
             return differenceInDays;
         }
         function validateLeaveDays() {
-            const daysOfLeaveInput = document.querySelector('input[name="DaysOfLeave"]');
+            const daysOfLeaveInput = document.querySelector('input[name="DaysOfLeave"]').text().replace(',', '.');
             const startDateInput = document.querySelector('input[name="StartDateOfLeave"]');
             const endDateInput = document.querySelector('input[name="EndDateOfLeave"]');
+            console.log(daysOfLeaveInput);
 
             const startDate = startDateInput.value;
             const endDate = endDateInput.value;
             const daysDifference = calculateDateDifference(startDate, endDate);
 
             // Get the value of entered leave days
-            const enteredLeaveDays = parseFloat(daysOfLeaveInput.value);
+            const enteredLeaveDays = parseFloat(daysOfLeaveInput)
+            console.log(enteredLeaveDays);
 
             // Check if entered leave days are greater than the difference between start and end dates
             if (enteredLeaveDays > daysDifference) {

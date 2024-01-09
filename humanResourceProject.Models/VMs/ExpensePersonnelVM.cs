@@ -13,12 +13,12 @@ namespace humanResourceProject.Models.VMs
         [StringLength(500, ErrorMessage = "Açıklama en fazla 500 en az 5 karakter olmalıdır.", MinimumLength = 5)]
         public string Explanation { get; set; }
         [Required(ErrorMessage = "Miktar alanı boş geçilemez!")]
-        [DisplayName("Harcama Miktarı*")]
+        [DisplayName("Masraf Miktarı*")]
         public decimal AmountOfExpense { get; set; }
-        [DisplayName("Harcama Tarihi*")]
+        [DisplayName("Masraf Tarihi*")]
         public DateTime DateOfExpense { get; set; }
         public string FilePath { get; set; }
-        [DisplayName("Harcama Fotoğrafı")]
+        [DisplayName("Masraf Fotoğrafı")]
         public IFormFile? UploadPath { get; set; }
         public RequestStatus ExpenseStatus { get; set; }
         public Guid EmployeeId { get; set; }
